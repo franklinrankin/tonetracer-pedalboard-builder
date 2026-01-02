@@ -443,11 +443,11 @@ export function GenreStarterKit() {
   const onBoardCategories = new Set(board.slots.map(s => s.pedal.category));
   const onBoardSubtypes = new Set(board.slots.map(s => s.pedal.subtype));
   
-  // Generate essential steps based on genre
+  // Generate essential steps based on genre's recommended categories
   const generateSteps = (): StarterKitStep[] => {
     const steps: StarterKitStep[] = [];
     
-    // Step 1: Tuner (always)
+    // Step 1: Tuner (always first)
     const tunerPedals = allPedals.filter(p => p.subtype === 'Tuner' && p.fits);
     if (tunerPedals.length > 0) {
       const education = getPedalEducation('Tuner');
@@ -464,23 +464,25 @@ export function GenreStarterKit() {
       });
     }
     
-    // Add steps based on genre section targets
-    for (const [category, target] of Object.entries(genre.sectionTargets)) {
-      if (!target) continue;
-      
-      const categoryInfo = CATEGORY_INFO[category as Category];
+    // Add steps based on genre's recommended categories (in order)
+    for (const category of genre.recommendedCategories) {
+      const categoryInfo = CATEGORY_INFO[category];
       
       // Get pedals for this category, prioritizing preferred subtypes
       const categoryPedals = allPedals.filter(p => 
         p.category === category && p.fits
       );
       
+      // First try preferred subtypes for this genre
       const preferredPedals = categoryPedals.filter(p => 
         genre.preferredSubtypes.includes(p.subtype || '')
       );
       
+      // Fall back to all category pedals if no preferred matches
+      const pedalsToUse = preferredPedals.length > 0 ? preferredPedals : categoryPedals;
+      
       // Sort by price (mid-range first for beginners)
-      const sortedPedals = [...preferredPedals].sort((a, b) => {
+      const sortedPedals = [...pedalsToUse].sort((a, b) => {
         const aMidRange = Math.abs(a.reverbPrice - 100);
         const bMidRange = Math.abs(b.reverbPrice - 100);
         return aMidRange - bMidRange;
@@ -490,11 +492,30 @@ export function GenreStarterKit() {
         const primarySubtype = sortedPedals[0].subtype || categoryInfo.displayName;
         const education = getPedalEducation(primarySubtype);
         
+        // Get description based on category
+        const getCategoryDescription = (cat: Category): string => {
+          const descriptions: Record<Category, string> = {
+            gain: 'Drive and distortion for your tone',
+            dynamics: 'Control your dynamics and sustain',
+            filter: 'Shape your tone with filtering effects',
+            eq: 'Fine-tune your frequencies',
+            modulation: 'Add movement and texture to your sound',
+            delay: 'Create echoes and rhythmic repeats',
+            reverb: 'Add space and ambience',
+            pitch: 'Shift and harmonize your pitch',
+            volume: 'Control your volume and expression',
+            utility: 'Essential tools for your signal chain',
+            amp: 'Amp and cab simulation',
+            synth: 'Synth and special effects',
+          };
+          return descriptions[cat] || `${categoryInfo.displayName} pedal`;
+        };
+        
         steps.push({
           id: `${category}-${primarySubtype}`,
           name: primarySubtype,
-          description: `${categoryInfo.displayName} pedal for your ${genre.name} sound`,
-          category: category as Category,
+          description: getCategoryDescription(category),
+          category: category,
           subtype: primarySubtype,
           pedals: sortedPedals.slice(0, 3),
           education: education ? {

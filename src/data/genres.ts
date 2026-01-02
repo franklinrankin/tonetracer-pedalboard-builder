@@ -7,6 +7,8 @@ export interface GenreProfile {
   icon: string;
   color: string;
   artists: string[];
+  // Recommended pedal categories for this genre (in order of importance)
+  recommendedCategories: Category[];
   // Target section scores (what this genre typically needs)
   sectionTargets: Partial<Record<Category, { min: number; ideal: number; max: number }>>;
   // Preferred pedal subtypes
@@ -30,13 +32,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🎸',
     color: '#3b82f6',
     artists: ['Stevie Ray Vaughan', 'B.B. King', 'John Mayer', 'Gary Clark Jr.'],
+    recommendedCategories: ['gain', 'dynamics', 'delay', 'reverb', 'eq'],
     sectionTargets: {
       gain: { min: 3, ideal: 8, max: 12 },
       dynamics: { min: 4, ideal: 7, max: 10 },
+      delay: { min: 2, ideal: 5, max: 8 },
       reverb: { min: 2, ideal: 5, max: 8 },
-      modulation: { min: 0, ideal: 3, max: 6 },
+      eq: { min: 2, ideal: 5, max: 8 },
     },
-    preferredSubtypes: ['Overdrive', 'Boost', 'Compressor', 'Wah'],
+    preferredSubtypes: ['Overdrive', 'Boost', 'Compressor', 'Wah', 'Analog', 'Spring', 'Parametric'],
     keywords: ['warm', 'smooth', 'bluesy', 'expressive', 'dynamic'],
     characteristics: {
       gainLevel: 'low',
@@ -52,13 +56,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🤘',
     color: '#ef4444',
     artists: ['Led Zeppelin', 'AC/DC', 'The Rolling Stones', 'Foo Fighters'],
+    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'utility'],
     sectionTargets: {
       gain: { min: 8, ideal: 15, max: 20 },
       modulation: { min: 2, ideal: 5, max: 8 },
       delay: { min: 2, ideal: 5, max: 8 },
       reverb: { min: 2, ideal: 5, max: 8 },
+      utility: { min: 2, ideal: 5, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Distortion', 'Phaser', 'Chorus', 'Wah'],
+    preferredSubtypes: ['Overdrive', 'Distortion', 'Phaser', 'Chorus', 'Wah', 'Analog', 'Tape', 'Tuner', 'ABY'],
     keywords: ['classic', 'crunchy', 'punchy', 'rock', 'powerful'],
     characteristics: {
       gainLevel: 'medium',
@@ -74,13 +80,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🔥',
     color: '#1f2937',
     artists: ['Metallica', 'Slipknot', 'Gojira', 'Meshuggah'],
+    recommendedCategories: ['gain', 'dynamics', 'eq', 'utility', 'amp'],
     sectionTargets: {
       gain: { min: 18, ideal: 25, max: 30 },
       dynamics: { min: 5, ideal: 8, max: 12 },
       eq: { min: 4, ideal: 7, max: 10 },
-      volume: { min: 5, ideal: 8, max: 10 },
+      utility: { min: 4, ideal: 8, max: 12 },
+      amp: { min: 3, ideal: 6, max: 10 },
     },
-    preferredSubtypes: ['Distortion', 'Boost', 'Gate', 'Compressor', 'Graphic'],
+    preferredSubtypes: ['Distortion', 'Boost', 'Gate', 'Compressor', 'Graphic', 'Parametric', 'Cab Sim', 'Amp Sim'],
     keywords: ['high-gain', 'metal', 'tight', 'aggressive', 'heavy'],
     characteristics: {
       gainLevel: 'extreme',
@@ -91,18 +99,20 @@ export const GENRES: GenreProfile[] = [
   },
   {
     id: 'indie',
-    name: 'Indie / Alternative',
+    name: 'Alternative',
     description: 'Textured tones with creative modulation and spatial effects',
     icon: '🌙',
     color: '#8b5cf6',
     artists: ['Radiohead', 'Arctic Monkeys', 'Tame Impala', 'The Strokes'],
+    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'utility'],
     sectionTargets: {
       gain: { min: 4, ideal: 10, max: 15 },
       modulation: { min: 5, ideal: 10, max: 15 },
       delay: { min: 5, ideal: 9, max: 13 },
       reverb: { min: 5, ideal: 9, max: 13 },
+      utility: { min: 2, ideal: 5, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Chorus', 'Tremolo', 'Tape', 'Digital'],
+    preferredSubtypes: ['Overdrive', 'Fuzz', 'Chorus', 'Tremolo', 'Phaser', 'Tape', 'Digital', 'Looper', 'ABY'],
     keywords: ['textured', 'creative', 'indie', 'alternative', 'dreamy'],
     characteristics: {
       gainLevel: 'low',
@@ -118,13 +128,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🌊',
     color: '#ec4899',
     artists: ['My Bloody Valentine', 'Slowdive', 'Ride', 'Nothing'],
+    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'pitch'],
     sectionTargets: {
       gain: { min: 8, ideal: 16, max: 22 },
       modulation: { min: 10, ideal: 14, max: 15 },
       delay: { min: 8, ideal: 12, max: 15 },
       reverb: { min: 12, ideal: 15, max: 15 },
+      pitch: { min: 3, ideal: 6, max: 10 },
     },
-    preferredSubtypes: ['Fuzz', 'Distortion', 'Chorus', 'Flanger', 'Ambient', 'Multi'],
+    preferredSubtypes: ['Fuzz', 'Distortion', 'Chorus', 'Flanger', 'Vibrato', 'Ambient', 'Multi', 'Shimmer', 'Octave', 'Shifter'],
     keywords: ['ambient', 'dreamy', 'lush', 'wall of sound', 'ethereal'],
     characteristics: {
       gainLevel: 'medium',
@@ -140,14 +152,15 @@ export const GENRES: GenreProfile[] = [
     icon: '✨',
     color: '#06b6d4',
     artists: ['Explosions in the Sky', 'Sigur Rós', 'Mogwai', 'Hammock'],
+    recommendedCategories: ['modulation', 'delay', 'reverb', 'pitch', 'utility'],
     sectionTargets: {
-      gain: { min: 2, ideal: 6, max: 12 },
       modulation: { min: 6, ideal: 10, max: 15 },
       delay: { min: 10, ideal: 14, max: 15 },
       reverb: { min: 12, ideal: 15, max: 15 },
-      volume: { min: 5, ideal: 8, max: 10 },
+      pitch: { min: 3, ideal: 6, max: 10 },
+      utility: { min: 5, ideal: 10, max: 15 },
     },
-    preferredSubtypes: ['Overdrive', 'Tremolo', 'Tape', 'Multi', 'Ambient', 'Volume', 'Looper'],
+    preferredSubtypes: ['Overdrive', 'Tremolo', 'Chorus', 'Tape', 'Multi', 'Ambient', 'Shimmer', 'Octave', 'Volume', 'Looper', 'ABY'],
     keywords: ['ambient', 'atmospheric', 'ethereal', 'expansive', 'cinematic'],
     characteristics: {
       gainLevel: 'low',
@@ -163,13 +176,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🤠',
     color: '#f59e0b',
     artists: ['Brad Paisley', 'Keith Urban', 'Brent Mason', 'Vince Gill'],
+    recommendedCategories: ['gain', 'dynamics', 'delay', 'reverb', 'volume'],
     sectionTargets: {
       gain: { min: 2, ideal: 5, max: 8 },
       dynamics: { min: 6, ideal: 10, max: 15 },
       delay: { min: 3, ideal: 6, max: 9 },
       reverb: { min: 2, ideal: 5, max: 8 },
+      volume: { min: 5, ideal: 8, max: 10 },
     },
-    preferredSubtypes: ['Compressor', 'Boost', 'Overdrive', 'Analog', 'Digital'],
+    preferredSubtypes: ['Compressor', 'Boost', 'Overdrive', 'Analog', 'Digital', 'Spring', 'Volume', 'Expression'],
     keywords: ['twang', 'chicken', 'clean', 'compressed', 'country'],
     characteristics: {
       gainLevel: 'clean',
@@ -185,13 +200,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🎷',
     color: '#6366f1',
     artists: ['Pat Metheny', 'John Scofield', 'Julian Lage', 'Kurt Rosenwinkel'],
+    recommendedCategories: ['gain', 'dynamics', 'reverb', 'eq', 'volume'],
     sectionTargets: {
       gain: { min: 0, ideal: 3, max: 6 },
       dynamics: { min: 3, ideal: 6, max: 10 },
       reverb: { min: 2, ideal: 5, max: 8 },
       eq: { min: 3, ideal: 6, max: 10 },
+      volume: { min: 3, ideal: 6, max: 10 },
     },
-    preferredSubtypes: ['Boost', 'Compressor', 'Chorus', 'Parametric'],
+    preferredSubtypes: ['Boost', 'Compressor', 'Chorus', 'Parametric', 'Spring', 'Volume', 'Expression'],
     keywords: ['warm', 'clean', 'jazz', 'smooth', 'articulate'],
     characteristics: {
       gainLevel: 'clean',
@@ -207,13 +224,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🕺',
     color: '#10b981',
     artists: ['Nile Rodgers', 'Prince', 'Cory Wong', 'John Mayer'],
+    recommendedCategories: ['dynamics', 'filter', 'modulation', 'gain', 'utility'],
     sectionTargets: {
-      gain: { min: 2, ideal: 6, max: 10 },
-      filter: { min: 5, ideal: 8, max: 10 },
       dynamics: { min: 5, ideal: 9, max: 15 },
+      filter: { min: 5, ideal: 8, max: 10 },
       modulation: { min: 3, ideal: 6, max: 10 },
+      gain: { min: 2, ideal: 6, max: 10 },
+      utility: { min: 2, ideal: 5, max: 10 },
     },
-    preferredSubtypes: ['Compressor', 'Wah', 'Envelope', 'Auto-Wah', 'Phaser', 'Chorus'],
+    preferredSubtypes: ['Compressor', 'Wah', 'Envelope', 'Auto-Wah', 'Phaser', 'Chorus', 'Overdrive', 'Boost', 'Tuner', 'ABY'],
     keywords: ['funky', 'quack', 'dynamic', 'groove', 'envelope'],
     characteristics: {
       gainLevel: 'clean',
@@ -229,6 +248,7 @@ export const GENRES: GenreProfile[] = [
     icon: '🎹',
     color: '#7c3aed',
     artists: ['Dream Theater', 'Tool', 'Porcupine Tree', 'Animals as Leaders'],
+    recommendedCategories: ['gain', 'modulation', 'delay', 'pitch', 'utility'],
     sectionTargets: {
       gain: { min: 10, ideal: 18, max: 25 },
       modulation: { min: 6, ideal: 12, max: 15 },
@@ -236,7 +256,7 @@ export const GENRES: GenreProfile[] = [
       pitch: { min: 5, ideal: 8, max: 10 },
       utility: { min: 6, ideal: 12, max: 15 },
     },
-    preferredSubtypes: ['Overdrive', 'Distortion', 'Multi', 'Harmonizer', 'Shifter', 'Loop Switcher'],
+    preferredSubtypes: ['Overdrive', 'Distortion', 'Boost', 'Multi', 'Chorus', 'Phaser', 'Harmonizer', 'Shifter', 'Whammy', 'Loop Switcher', 'Looper'],
     keywords: ['versatile', 'complex', 'progressive', 'technical', 'dynamic'],
     characteristics: {
       gainLevel: 'high',
@@ -252,6 +272,7 @@ export const GENRES: GenreProfile[] = [
     icon: '🙏',
     color: '#0ea5e9',
     artists: ['Lincoln Brewster', 'The War on Drugs', 'Hillsong', 'Bethel'],
+    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'volume'],
     sectionTargets: {
       gain: { min: 4, ideal: 10, max: 15 },
       modulation: { min: 5, ideal: 9, max: 13 },
@@ -259,7 +280,7 @@ export const GENRES: GenreProfile[] = [
       reverb: { min: 10, ideal: 14, max: 15 },
       volume: { min: 5, ideal: 8, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Tremolo', 'Tape', 'Multi', 'Ambient', 'Volume'],
+    preferredSubtypes: ['Overdrive', 'Boost', 'Tremolo', 'Chorus', 'Tape', 'Multi', 'Ambient', 'Shimmer', 'Volume', 'Expression'],
     keywords: ['shimmer', 'ambient', 'lush', 'swell', 'worship'],
     characteristics: {
       gainLevel: 'low',
@@ -275,14 +296,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🔮',
     color: '#f43f5e',
     artists: ['Sonic Youth', 'Nine Inch Nails', 'St. Vincent', 'Battles'],
+    recommendedCategories: ['gain', 'pitch', 'filter', 'modulation', 'utility'],
     sectionTargets: {
       gain: { min: 8, ideal: 18, max: 28 },
-      synth: { min: 6, ideal: 10, max: 10 },
       pitch: { min: 5, ideal: 9, max: 10 },
+      filter: { min: 4, ideal: 7, max: 10 },
       modulation: { min: 8, ideal: 13, max: 15 },
-      delay: { min: 6, ideal: 11, max: 15 },
+      utility: { min: 6, ideal: 10, max: 15 },
     },
-    preferredSubtypes: ['Fuzz', 'Synth', 'Fuzz/Synth', 'Shifter', 'Whammy', 'Special', 'Glitch'],
+    preferredSubtypes: ['Fuzz', 'Distortion', 'Synth', 'Fuzz/Synth', 'Shifter', 'Whammy', 'Harmonizer', 'Wah', 'Envelope', 'Special', 'Glitch', 'Looper', 'ABY'],
     keywords: ['experimental', 'noise', 'synth', 'glitch', 'weird', 'unconventional'],
     characteristics: {
       gainLevel: 'high',
@@ -329,4 +351,3 @@ export function calculateGenreFit(
 
   return targetCount > 0 ? (totalFit / targetCount) * 100 : 0;
 }
-
