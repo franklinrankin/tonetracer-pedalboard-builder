@@ -55,52 +55,57 @@ function calculatePedalStatus(
   // Check if this pedal is already on the board
   const isOnBoard = currentSlots.some(s => s.pedal.id === pedal.id);
   
-  // Budget check
-  const costWithPedal = currentCost + pedal.reverbPrice;
-  if (costWithPedal > constraints.maxBudget) {
-    reasons.push({
-      type: 'budget',
-      message: `Over budget by $${costWithPedal - constraints.maxBudget}`,
-      value: costWithPedal,
-      limit: constraints.maxBudget,
-    });
+  // Budget check (skip if applyAfterBudget is true)
+  if (!constraints.applyAfterBudget) {
+    const costWithPedal = currentCost + pedal.reverbPrice;
+    if (costWithPedal > constraints.maxBudget) {
+      reasons.push({
+        type: 'budget',
+        message: `Over budget by $${costWithPedal - constraints.maxBudget}`,
+        value: costWithPedal,
+        limit: constraints.maxBudget,
+      });
+    }
   }
   
-  // Size check (simplified - just checking area)
-  const maxArea = constraints.maxWidthMm * constraints.maxDepthMm;
-  const pedalArea = pedal.widthMm * pedal.depthMm;
-  const areaWithPedal = currentArea + pedalArea;
-  if (areaWithPedal > maxArea * 0.85) { // 85% usable area accounting for spacing
-    reasons.push({
-      type: 'size',
-      message: `Board area exceeded`,
-      value: areaWithPedal,
-      limit: maxArea * 0.85,
-    });
+  // Size checks (skip if applyAfterSize is true)
+  if (!constraints.applyAfterSize) {
+    // Size check (simplified - just checking area)
+    const maxArea = constraints.maxWidthMm * constraints.maxDepthMm;
+    const pedalArea = pedal.widthMm * pedal.depthMm;
+    const areaWithPedal = currentArea + pedalArea;
+    if (areaWithPedal > maxArea * 0.85) { // 85% usable area accounting for spacing
+      reasons.push({
+        type: 'size',
+        message: `Board area exceeded`,
+        value: areaWithPedal,
+        limit: maxArea * 0.85,
+      });
+    }
+    
+    // Width check
+    if (pedal.widthMm > constraints.maxWidthMm) {
+      reasons.push({
+        type: 'width',
+        message: `Too wide by ${formatInches(pedal.widthMm - constraints.maxWidthMm)}"`,
+        value: pedal.widthMm,
+        limit: constraints.maxWidthMm,
+      });
+    }
+    
+    // Depth check
+    if (pedal.depthMm > constraints.maxDepthMm) {
+      reasons.push({
+        type: 'depth',
+        message: `Too deep by ${formatInches(pedal.depthMm - constraints.maxDepthMm)}"`,
+        value: pedal.depthMm,
+        limit: constraints.maxDepthMm,
+      });
+    }
   }
   
-  // Width check
-  if (pedal.widthMm > constraints.maxWidthMm) {
-    reasons.push({
-      type: 'width',
-      message: `Too wide by ${formatInches(pedal.widthMm - constraints.maxWidthMm)}"`,
-      value: pedal.widthMm,
-      limit: constraints.maxWidthMm,
-    });
-  }
-  
-  // Depth check
-  if (pedal.depthMm > constraints.maxDepthMm) {
-    reasons.push({
-      type: 'depth',
-      message: `Too deep by ${formatInches(pedal.depthMm - constraints.maxDepthMm)}"`,
-      value: pedal.depthMm,
-      limit: constraints.maxDepthMm,
-    });
-  }
-  
-  // Power check
-  if (constraints.maxCurrentMa) {
+  // Power check (skip if applyAfterPower is true)
+  if (!constraints.applyAfterPower && constraints.maxCurrentMa) {
     const currentWithPedal = currentCurrent + pedal.currentMa;
     if (currentWithPedal > constraints.maxCurrentMa) {
       reasons.push({

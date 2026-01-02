@@ -1,9 +1,41 @@
 import { useState } from 'react';
-import { Settings2, Ruler, DollarSign, Zap, ChevronRight, Check } from 'lucide-react';
+import { Settings2, Ruler, DollarSign, Zap, ChevronRight, Check, Clock, Shield } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { BOARD_TEMPLATES, getTemplateDimensionsDisplay } from '../data/boardTemplates';
 import { BoardTemplate } from '../types';
 import { formatInches, inchesToMm, formatArea } from '../utils/measurements';
+
+// Toggle component for "Apply After" feature
+function ApplyAfterToggle({ 
+  enabled, 
+  onToggle,
+  label,
+  color = 'board-accent'
+}: { 
+  enabled: boolean; 
+  onToggle: () => void;
+  label: string;
+  color?: string;
+}) {
+  return (
+    <button
+      onClick={onToggle}
+      className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+        enabled
+          ? `bg-${color}/20 text-${color} border border-${color}/50`
+          : 'bg-board-elevated text-board-muted hover:text-white border border-transparent hover:border-board-border'
+      }`}
+      style={enabled ? { 
+        backgroundColor: `var(--${color === 'board-accent' ? 'board-accent' : color === 'board-success' ? 'board-success' : 'board-warning'})20`,
+        borderColor: `var(--${color === 'board-accent' ? 'board-accent' : color === 'board-success' ? 'board-success' : 'board-warning'})50`,
+        color: `var(--${color === 'board-accent' ? 'board-accent' : color === 'board-success' ? 'board-success' : 'board-warning'})`
+      } : {}}
+    >
+      {enabled ? <Clock className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
+      {enabled ? 'Apply After' : label}
+    </button>
+  );
+}
 
 interface ConstraintsPageProps {
   onContinue: () => void;
@@ -78,6 +110,36 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
     });
   };
   
+  const toggleApplyAfterSize = () => {
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        ...board.constraints,
+        applyAfterSize: !board.constraints.applyAfterSize,
+      },
+    });
+  };
+  
+  const toggleApplyAfterBudget = () => {
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        ...board.constraints,
+        applyAfterBudget: !board.constraints.applyAfterBudget,
+      },
+    });
+  };
+  
+  const toggleApplyAfterPower = () => {
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        ...board.constraints,
+        applyAfterPower: !board.constraints.applyAfterPower,
+      },
+    });
+  };
+  
   const usableAreaMmSq = board.constraints.maxWidthMm * board.constraints.maxDepthMm * 0.85;
   
   // Group templates by brand
@@ -102,16 +164,43 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
           Choose your pedalboard size and budget. We'll show you which pedals fit 
           and gray out ones that don't.
         </p>
+        
+        {/* Apply After explanation */}
+        <div className="mt-6 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-board-elevated border border-board-border">
+          <Clock className="w-4 h-4 text-board-accent" />
+          <span className="text-sm text-zinc-400">
+            Click <span className="text-white font-medium">"Apply After"</span> to build freely, then get recommendations
+          </span>
+        </div>
       </div>
       
       <div className="max-w-5xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Board Size Selection */}
-          <div className="bg-board-surface border border-board-border rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Ruler className="w-5 h-5 text-board-accent" />
-              Board Size
-            </h2>
+          <div className={`bg-board-surface border rounded-xl p-6 transition-all ${
+            board.constraints.applyAfterSize 
+              ? 'border-board-accent/50 bg-board-accent/5' 
+              : 'border-board-border'
+          }`}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Ruler className="w-5 h-5 text-board-accent" />
+                Board Size
+              </h2>
+              <ApplyAfterToggle 
+                enabled={board.constraints.applyAfterSize || false}
+                onToggle={toggleApplyAfterSize}
+                label="Enforced"
+                color="board-accent"
+              />
+            </div>
+            
+            {board.constraints.applyAfterSize && (
+              <div className="mb-4 p-3 rounded-lg bg-board-accent/10 border border-board-accent/30 text-sm text-board-accent flex items-start gap-2">
+                <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span>Size limits won't filter pedals. Use "Recommend Setup" after building to find a board that fits.</span>
+              </div>
+            )}
             
             {/* Templates by Brand */}
             <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
@@ -187,11 +276,30 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
           {/* Budget & Power */}
           <div className="space-y-6">
             {/* Budget */}
-            <div className="bg-board-surface border border-board-border rounded-xl p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-board-success" />
-                Budget
-              </h2>
+            <div className={`bg-board-surface border rounded-xl p-6 transition-all ${
+              board.constraints.applyAfterBudget 
+                ? 'border-green-500/50 bg-green-500/5' 
+                : 'border-board-border'
+            }`}>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                  <DollarSign className="w-5 h-5 text-board-success" />
+                  Budget
+                </h2>
+                <ApplyAfterToggle 
+                  enabled={board.constraints.applyAfterBudget || false}
+                  onToggle={toggleApplyAfterBudget}
+                  label="Enforced"
+                  color="board-success"
+                />
+              </div>
+              
+              {board.constraints.applyAfterBudget && (
+                <div className="mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/30 text-sm text-green-400 flex items-start gap-2">
+                  <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                  <span>Budget won't filter pedals. Build freely, then check your total in "Recommend Setup".</span>
+                </div>
+              )}
               
               <div className="relative mb-4">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-board-muted">$</span>
@@ -237,15 +345,34 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
             </div>
             
             {/* Power Supply */}
-            <div className="bg-board-surface border border-board-border rounded-xl p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-board-warning" />
-                Power Supply (Optional)
-              </h2>
+            <div className={`bg-board-surface border rounded-xl p-6 transition-all ${
+              board.constraints.applyAfterPower 
+                ? 'border-yellow-500/50 bg-yellow-500/5' 
+                : 'border-board-border'
+            }`}>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-board-warning" />
+                  Power Supply
+                </h2>
+                <ApplyAfterToggle 
+                  enabled={board.constraints.applyAfterPower || false}
+                  onToggle={toggleApplyAfterPower}
+                  label="Enforced"
+                  color="board-warning"
+                />
+              </div>
               
-              <p className="text-sm text-zinc-400 mb-4">
-                Set the total mA your power supply can provide. We'll warn you if your pedals exceed this.
-              </p>
+              {board.constraints.applyAfterPower ? (
+                <div className="mb-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm text-yellow-400 flex items-start gap-2">
+                  <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                  <span>Power limits disabled. After building, we'll suggest the right power supply.</span>
+                </div>
+              ) : (
+                <p className="text-sm text-zinc-400 mb-4">
+                  Set the total mA your power supply can provide. We'll gray out pedals that exceed this.
+                </p>
+              )}
               
               <div className="relative">
                 <input

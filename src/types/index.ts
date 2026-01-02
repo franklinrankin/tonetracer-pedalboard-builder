@@ -72,6 +72,10 @@ export interface BoardConstraints {
   minBudget?: number;
   maxCurrentMa?: number;
   rightAngleCablesOnly?: boolean;
+  // "Apply After" flags - when true, constraint doesn't filter pedals during build
+  applyAfterSize?: boolean;
+  applyAfterBudget?: boolean;
+  applyAfterPower?: boolean;
 }
 
 export interface BoardSlot {
