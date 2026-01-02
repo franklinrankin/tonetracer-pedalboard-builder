@@ -8,6 +8,7 @@ import { PedalCatalog } from './components/PedalCatalog';
 import { EducationalTips } from './components/EducationalTips';
 import { Recommendations } from './components/Recommendations';
 import { GenreSelector } from './components/GenreSelector';
+import { GenreStarterKit } from './components/GenreStarterKit';
 
 function AppContent() {
   const { state, dispatch } = useBoard();
@@ -54,9 +55,13 @@ function AppContent() {
               <EducationalTips />
             </div>
             
-            {/* Main Content - Board Builder & Catalog */}
+            {/* Main Content - Board Builder, Starter Kit & Catalog */}
             <div className="lg:col-span-6 space-y-6 stagger-children">
               <BoardBuilder />
+              {/* Show Starter Kit prominently when genre is selected */}
+              {state.selectedGenre && (
+                <GenreStarterKit />
+              )}
               <div id="catalog">
                 <PedalCatalog />
               </div>
