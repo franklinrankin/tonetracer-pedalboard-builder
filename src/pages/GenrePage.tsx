@@ -1,6 +1,6 @@
-import { Music2, Check } from 'lucide-react';
+import { Music2, Users, ChevronRight, Check } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
-import { GENRES } from '../data/genres';
+import { GENRES, GenreProfile } from '../data/genres';
 
 interface GenrePageProps {
   onContinue: () => void;
@@ -21,91 +21,131 @@ export function GenrePage({ onContinue }: GenrePageProps) {
   const selected = selectedGenre ? GENRES.find(g => g.id === selectedGenre) : null;
   
   return (
-    <div className="h-screen flex flex-col p-6 overflow-hidden">
+    <div className="min-h-full p-8 lg:p-12">
       {/* Header */}
-      <div className="text-center mb-4 flex-shrink-0">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 mb-3">
-          <Music2 className="w-6 h-6 text-purple-400" />
+      <div className="max-w-4xl mx-auto mb-12 text-center">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 mb-6">
+          <Music2 className="w-8 h-8 text-purple-400" />
         </div>
-        <h1 className="text-2xl font-bold text-white mb-1">
+        <h1 className="text-4xl font-bold text-white mb-4">
           What style are you going for?
         </h1>
-        <p className="text-sm text-zinc-400">
-          Select a genre for tailored suggestions, or skip to browse freely
+        <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+          Select a genre and we'll suggest pedals tailored to that sound. 
+          This is optional — you can skip and browse all pedals freely.
         </p>
       </div>
       
-      {/* Genre Grid - Scrollable */}
-      <div className="flex-1 overflow-y-auto min-h-0">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
-            {GENRES.map(genre => {
-              const isSelected = selectedGenre === genre.id;
-              
-              return (
-                <button
-                  key={genre.id}
-                  onClick={() => handleSelectGenre(genre.id)}
-                  className={`relative p-3 rounded-lg border text-left transition-all hover:scale-[1.02] ${
-                    isSelected
-                      ? 'border-opacity-100'
-                      : 'border-board-border hover:border-opacity-50 bg-board-surface'
-                  }`}
-                  style={{
-                    borderColor: isSelected ? genre.color : undefined,
-                    backgroundColor: isSelected ? `${genre.color}15` : undefined,
-                  }}
-                >
-                  {isSelected && (
-                    <div 
-                      className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: genre.color }}
-                    >
-                      <Check className="w-2.5 h-2.5 text-white" />
-                    </div>
-                  )}
-                  
-                  <div className="text-2xl mb-1">{genre.icon}</div>
-                  <h3 className="font-medium text-white text-sm leading-tight">{genre.name}</h3>
-                  <p className="text-[10px] text-zinc-500 mt-0.5 capitalize">{genre.characteristics.gainLevel} gain</p>
-                </button>
-              );
-            })}
-          </div>
+      {/* Genre Grid */}
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {GENRES.map(genre => {
+            const isSelected = selectedGenre === genre.id;
+            
+            return (
+              <button
+                key={genre.id}
+                onClick={() => handleSelectGenre(genre.id)}
+                className={`relative p-6 rounded-xl border-2 text-left transition-all hover:scale-[1.02] ${
+                  isSelected
+                    ? 'border-opacity-100 bg-opacity-20'
+                    : 'border-board-border hover:border-opacity-50 bg-board-surface'
+                }`}
+                style={{
+                  borderColor: isSelected ? genre.color : undefined,
+                  backgroundColor: isSelected ? `${genre.color}15` : undefined,
+                }}
+              >
+                {isSelected && (
+                  <div 
+                    className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: genre.color }}
+                  >
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                )}
+                
+                <div className="text-4xl mb-3">{genre.icon}</div>
+                <h3 className="font-semibold text-white text-lg mb-1">{genre.name}</h3>
+                <p className="text-sm text-zinc-400 line-clamp-2">{genre.description}</p>
+                
+                {/* Characteristics */}
+                <div className="mt-4 pt-4 border-t border-board-border/50 grid grid-cols-2 gap-2">
+                  <div>
+                    <span className="text-[10px] text-board-muted uppercase">Gain</span>
+                    <div className="text-xs text-white capitalize">{genre.characteristics.gainLevel}</div>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-board-muted uppercase">Ambience</span>
+                    <div className="text-xs text-white capitalize">{genre.characteristics.ambience}</div>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
       
-      {/* Selected Genre Details - Fixed at bottom */}
+      {/* Selected Genre Details */}
       {selected && (
-        <div className="flex-shrink-0 mt-4 animate-fadeIn">
+        <div className="max-w-4xl mx-auto mt-12 animate-fadeIn">
           <div 
-            className="max-w-4xl mx-auto p-4 rounded-xl border"
+            className="p-6 rounded-xl border"
             style={{ 
               borderColor: `${selected.color}40`,
               backgroundColor: `${selected.color}10`,
             }}
           >
-            <div className="flex items-center gap-4">
-              <div className="text-4xl">{selected.icon}</div>
-              <div className="flex-1 min-w-0">
-                <h2 className="text-lg font-bold text-white">{selected.name}</h2>
-                <p className="text-xs text-zinc-400 line-clamp-1">{selected.description}</p>
-              </div>
-              <div className="flex flex-wrap gap-1 max-w-xs">
-                {selected.preferredSubtypes.slice(0, 4).map(type => (
-                  <span 
-                    key={type}
-                    className="px-2 py-0.5 text-[10px] rounded border"
-                    style={{ borderColor: selected.color, color: selected.color }}
-                  >
-                    {type}
-                  </span>
-                ))}
+            <div className="flex items-start gap-6">
+              <div className="text-6xl">{selected.icon}</div>
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-white mb-2">{selected.name}</h2>
+                <p className="text-zinc-400 mb-4">{selected.description}</p>
+                
+                <div className="flex items-center gap-2 mb-4">
+                  <Users className="w-4 h-4 text-board-muted" />
+                  <span className="text-sm text-board-muted">Artists:</span>
+                  <div className="flex flex-wrap gap-2">
+                    {selected.artists.map(artist => (
+                      <span 
+                        key={artist}
+                        className="px-2 py-0.5 text-xs rounded-full bg-board-elevated text-zinc-300"
+                      >
+                        {artist}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-sm text-board-muted">Key pedals:</span>
+                  {selected.preferredSubtypes.slice(0, 5).map(type => (
+                    <span 
+                      key={type}
+                      className="px-2 py-0.5 text-xs rounded border"
+                      style={{ borderColor: selected.color, color: selected.color }}
+                    >
+                      {type}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
+      
+      {/* Continue Button (for mobile/touch) */}
+      <div className="max-w-4xl mx-auto mt-8 lg:hidden">
+        <button
+          onClick={onContinue}
+          className="w-full py-4 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2"
+        >
+          {selectedGenre ? 'Continue' : 'Skip & Browse All'}
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
     </div>
   );
 }
+
