@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { Sliders, ChevronRight } from 'lucide-react';
+import { Sliders, ChevronRight, Sparkles } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { GenreStarterKit } from '../components/GenreStarterKit';
 import { PedalCatalog } from '../components/PedalCatalog';
 import { BoardBuilder } from '../components/BoardBuilder';
 import { SectionScores } from '../components/SectionScores';
+import { BoardRecommendations } from '../components/BoardRecommendations';
 
 interface BuildPageProps {
   onContinue: () => void;
 }
 
-type BuildTab = 'starter' | 'catalog' | 'scores';
+type BuildTab = 'starter' | 'catalog' | 'scores' | 'recommend';
 
 export function BuildPage({ onContinue }: BuildPageProps) {
   const { state } = useBoard();
@@ -21,6 +22,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
     ...(selectedGenre ? [{ id: 'starter' as BuildTab, label: 'Starter Kit' }] : []),
     { id: 'catalog' as BuildTab, label: 'All Pedals' },
     { id: 'scores' as BuildTab, label: 'Tone Tags' },
+    ...(board.slots.length > 0 ? [{ id: 'recommend' as BuildTab, label: 'Recommend Setup', icon: <Sparkles className="w-4 h-4" /> }] : []),
   ];
   
   return (
@@ -56,17 +58,20 @@ export function BuildPage({ onContinue }: BuildPageProps) {
           </div>
           
           {/* Tabs */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
                   activeTab === tab.id
                     ? 'bg-board-accent text-white'
-                    : 'text-board-muted hover:text-white hover:bg-board-elevated'
+                    : tab.id === 'recommend'
+                      ? 'text-board-accent hover:bg-board-accent/20 border border-board-accent/50'
+                      : 'text-board-muted hover:text-white hover:bg-board-elevated'
                 }`}
               >
+                {'icon' in tab && tab.icon}
                 {tab.label}
               </button>
             ))}
@@ -89,6 +94,10 @@ export function BuildPage({ onContinue }: BuildPageProps) {
             
             {activeTab === 'scores' && (
               <SectionScores />
+            )}
+            
+            {activeTab === 'recommend' && (
+              <BoardRecommendations />
             )}
           </div>
           

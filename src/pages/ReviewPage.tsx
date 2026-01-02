@@ -1,12 +1,15 @@
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2 } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches, formatArea } from '../utils/measurements';
+import { BoardRecommendations } from '../components/BoardRecommendations';
 
 export function ReviewPage() {
   const { state } = useBoard();
   const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenre } = state;
+  const [showRecommendations, setShowRecommendations] = useState(false);
   
   const genre = selectedGenre ? getGenreById(selectedGenre) : null;
   const maxArea = board.constraints.maxWidthMm * board.constraints.maxDepthMm * 0.85;
@@ -75,6 +78,28 @@ export function ReviewPage() {
       </div>
       
       <div className="max-w-5xl mx-auto">
+        {/* Adjust Setup Button */}
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => setShowRecommendations(!showRecommendations)}
+            className={`px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${
+              showRecommendations
+                ? 'bg-board-accent text-white'
+                : 'border border-board-accent text-board-accent hover:bg-board-accent/10'
+            }`}
+          >
+            <Settings2 className="w-5 h-5" />
+            {showRecommendations ? 'Hide Setup Recommendations' : 'Adjust Board, Budget & Power'}
+          </button>
+        </div>
+        
+        {/* Recommendations Panel */}
+        {showRecommendations && (
+          <div className="mb-8 animate-fadeIn">
+            <BoardRecommendations />
+          </div>
+        )}
+        
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-board-surface border border-board-border rounded-xl p-5">

@@ -10,4 +10,5 @@ export { Recommendations } from './Recommendations';
 export { GenreSelector } from './GenreSelector';
 export { GenreStarterKit } from './GenreStarterKit';
 export { WizardLayout } from './WizardLayout';
+export { BoardRecommendations } from './BoardRecommendations';
 
