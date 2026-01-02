@@ -3,6 +3,7 @@ import { Board, BoardConstraints, BoardSlot, Pedal, PedalWithStatus, Disqualific
 import { CATEGORY_INFO, getCategoryTag } from '../data/categories';
 import { PEDALS } from '../data/pedals';
 import { formatInches } from '../utils/measurements';
+import { findInsertIndex } from '../utils/signalChain';
 
 interface BoardState {
   board: Board;
@@ -225,9 +226,14 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
       if (state.board.slots.some(s => s.pedal.id === action.pedal.id)) {
         return state;
       }
+      // Find the correct position in signal chain
+      const insertIndex = findInsertIndex(state.board.slots, action.pedal);
+      const newSlots = [...state.board.slots];
+      newSlots.splice(insertIndex, 0, { pedal: action.pedal });
+      
       newBoard = {
         ...state.board,
-        slots: [...state.board.slots, { pedal: action.pedal }],
+        slots: newSlots,
         updatedAt: new Date(),
       };
       return { ...state, board: newBoard, ...calculateState(newBoard) };
