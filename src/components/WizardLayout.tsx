@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
 import { formatInches } from '../utils/measurements';
@@ -9,6 +9,7 @@ export type WizardStep = 'genre' | 'constraints' | 'build' | 'review';
 interface WizardLayoutProps {
   currentStep: WizardStep;
   onStepChange: (step: WizardStep) => void;
+  onStartOver: () => void;
   children: ReactNode;
 }
 
@@ -19,9 +20,11 @@ const STEPS: { id: WizardStep; label: string; icon: ReactNode }[] = [
   { id: 'review', label: 'Review', icon: <ListChecks className="w-5 h-5" /> },
 ];
 
-export function WizardLayout({ currentStep, onStepChange, children }: WizardLayoutProps) {
+export function WizardLayout({ currentStep, onStepChange, onStartOver, children }: WizardLayoutProps) {
   const { state } = useBoard();
   const { selectedGenre, board, totalCost, sectionScores } = state;
+  
+  const hasProgress = selectedGenre || board.slots.length > 0;
   
   const genre = selectedGenre ? getGenreById(selectedGenre) : null;
   const currentStepIndex = STEPS.findIndex(s => s.id === currentStep);
@@ -59,19 +62,35 @@ export function WizardLayout({ currentStep, onStepChange, children }: WizardLayo
     <div className="min-h-screen bg-board-dark flex">
       {/* Left Sidebar - Progress & Choices */}
       <aside className="w-80 bg-board-surface border-r border-board-border flex flex-col">
-        {/* Logo */}
-        <div className="p-6 border-b border-board-border">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-board-accent to-board-highlight flex items-center justify-center">
-              <Sliders className="w-5 h-5 text-board-dark" />
+        {/* Logo & Start Over */}
+        <div className="p-4 border-b border-board-border">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-board-accent to-board-highlight flex items-center justify-center">
+                <Sliders className="w-5 h-5 text-board-dark" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold">
+                  <span className="gradient-text">TONE</span>
+                  <span className="text-white">TRACER</span>
+                </h1>
+                <p className="text-xs text-board-muted">Pedalboard Builder</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-lg font-bold">
-                <span className="gradient-text">TONE</span>
-                <span className="text-white">TRACER</span>
-              </h1>
-              <p className="text-xs text-board-muted">Pedalboard Builder</p>
-            </div>
+            
+            {/* Start Over Button */}
+            <button
+              onClick={onStartOver}
+              className={`p-2 rounded-lg transition-all ${
+                hasProgress
+                  ? 'text-board-muted hover:text-white hover:bg-board-danger/20 hover:text-board-danger'
+                  : 'text-board-muted/30 cursor-not-allowed'
+              }`}
+              disabled={!hasProgress}
+              title="Start Over"
+            >
+              <RotateCcw className="w-5 h-5" />
+            </button>
           </div>
         </div>
         

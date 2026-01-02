@@ -1,15 +1,28 @@
 import { useState } from 'react';
-import { BoardProvider } from './context/BoardContext';
+import { BoardProvider, useBoard } from './context/BoardContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
 import { GenrePage, ConstraintsPage, BuildPage, ReviewPage } from './pages';
 
 function AppContent() {
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
+  const { dispatch } = useBoard();
   
   const handleStepChange = (step: WizardStep) => {
     setCurrentStep(step);
     // Scroll to top when changing steps
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handleStartOver = () => {
+    if (window.confirm('Start over? This will clear your board and selections.')) {
+      // Clear board
+      dispatch({ type: 'CLEAR_BOARD' });
+      // Clear genre
+      dispatch({ type: 'SET_GENRE', genreId: null });
+      // Go back to first step
+      setCurrentStep('genre');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
   
   const renderPage = () => {
@@ -28,7 +41,7 @@ function AppContent() {
   };
 
   return (
-    <WizardLayout currentStep={currentStep} onStepChange={handleStepChange}>
+    <WizardLayout currentStep={currentStep} onStepChange={handleStepChange} onStartOver={handleStartOver}>
       {/* Noise overlay for texture */}
       <div className="noise-overlay" />
       
