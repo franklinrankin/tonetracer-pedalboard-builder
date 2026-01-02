@@ -9,4 +9,5 @@ export { EducationalTips } from './EducationalTips';
 export { Recommendations } from './Recommendations';
 export { GenreSelector } from './GenreSelector';
 export { GenreStarterKit } from './GenreStarterKit';
+export { WizardLayout } from './WizardLayout';
 
