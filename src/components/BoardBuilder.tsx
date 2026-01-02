@@ -99,7 +99,7 @@ export function BoardBuilder() {
     return { width: 40, height: 56, fontSize: 5, brandSize: 4 };
   };
   
-  // Split pedals into rows of 5, right to left, bottom to top
+  // Split pedals into rows of 5, right to left, first row at bottom
   const getRows = () => {
     const pedalsPerRow = 5;
     const rows: typeof board.slots[] = [];
@@ -110,18 +110,17 @@ export function BoardBuilder() {
       rows.push([...row].reverse());
     }
     
-    // Reverse rows so first row (earliest in chain) is at bottom
-    return rows.reverse();
+    // Return rows in order - we'll use flex-col-reverse to put first row at bottom
+    return rows;
   };
   
   // Get original index from visual position
-  const getOriginalIndex = (rowIndex: number, indexInRow: number, totalRows: number, rowLength: number) => {
+  const getOriginalIndex = (rowIndex: number, indexInRow: number, _totalRows: number, rowLength: number) => {
     const pedalsPerRow = 5;
-    // Rows are reversed, so actual row from bottom
-    const actualRowFromBottom = totalRows - 1 - rowIndex;
-    // Items in row are reversed
+    // rowIndex is the actual row number (0 = first row with pedals 1-5)
+    // Items in row are reversed for right-to-left display
     const actualIndexInRow = rowLength - 1 - indexInRow;
-    return actualRowFromBottom * pedalsPerRow + actualIndexInRow;
+    return rowIndex * pedalsPerRow + actualIndexInRow;
   };
   
   if (board.slots.length === 0) {
@@ -210,10 +209,10 @@ export function BoardBuilder() {
               <div key={rowIndex} className="relative">
                 {/* Routing line for this row */}
                 <svg 
-                  className="absolute inset-0 pointer-events-none"
+                  className="absolute inset-0 pointer-events-none overflow-visible"
                   style={{ zIndex: 0 }}
                 >
-                  {/* Horizontal line */}
+                  {/* Horizontal line through pedals */}
                   <line 
                     x1="0" 
                     y1="50%" 
@@ -223,13 +222,13 @@ export function BoardBuilder() {
                     strokeWidth="3"
                   />
                   
-                  {/* Vertical connector to row below */}
-                  {rowIndex > 0 && (
+                  {/* Vertical connector to row above (drawn from this row going up) */}
+                  {rowIndex < rows.length - 1 && (
                     <line 
-                      x1={rowIndex % 2 === 1 ? "5%" : "95%"}
-                      y1="50%" 
-                      x2={rowIndex % 2 === 1 ? "5%" : "95%"}
-                      y2="150%" 
+                      x1="5%"
+                      y1="0" 
+                      x2="5%"
+                      y2="50%" 
                       stroke="#404040" 
                       strokeWidth="3"
                     />
