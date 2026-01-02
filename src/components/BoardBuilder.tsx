@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { Trash2, Share2, Download, GripVertical, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Trash2, Share2, Download, GripVertical, X, ArrowLeft } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches } from '../utils/measurements';
-import { getSignalChainSection } from '../utils/signalChain';
 
 // Pedal colors based on category
 const PEDAL_COLORS: Record<string, { bg: string; accent: string; text: string }> = {
@@ -90,6 +89,41 @@ export function BoardBuilder() {
     URL.revokeObjectURL(url);
   };
   
+  // Calculate pedal size based on count
+  const getPedalSize = () => {
+    const count = board.slots.length;
+    if (count <= 5) return { width: 72, height: 100, fontSize: 9, brandSize: 6 };
+    if (count <= 10) return { width: 64, height: 88, fontSize: 8, brandSize: 5 };
+    if (count <= 15) return { width: 56, height: 76, fontSize: 7, brandSize: 5 };
+    if (count <= 20) return { width: 48, height: 66, fontSize: 6, brandSize: 4 };
+    return { width: 40, height: 56, fontSize: 5, brandSize: 4 };
+  };
+  
+  // Split pedals into rows of 5, right to left, bottom to top
+  const getRows = () => {
+    const pedalsPerRow = 5;
+    const rows: typeof board.slots[] = [];
+    
+    for (let i = 0; i < board.slots.length; i += pedalsPerRow) {
+      // Each row goes right to left, so reverse the slice
+      const row = board.slots.slice(i, i + pedalsPerRow);
+      rows.push([...row].reverse());
+    }
+    
+    // Reverse rows so first row (earliest in chain) is at bottom
+    return rows.reverse();
+  };
+  
+  // Get original index from visual position
+  const getOriginalIndex = (rowIndex: number, indexInRow: number, totalRows: number, rowLength: number) => {
+    const pedalsPerRow = 5;
+    // Rows are reversed, so actual row from bottom
+    const actualRowFromBottom = totalRows - 1 - rowIndex;
+    // Items in row are reversed
+    const actualIndexInRow = rowLength - 1 - indexInRow;
+    return actualRowFromBottom * pedalsPerRow + actualIndexInRow;
+  };
+  
   if (board.slots.length === 0) {
     return (
       <div className="bg-board-surface border border-board-border rounded-xl p-8 text-center">
@@ -110,40 +144,43 @@ export function BoardBuilder() {
     );
   }
   
+  const rows = getRows();
+  const pedalSize = getPedalSize();
+  
   return (
     <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-board-border flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="p-3 border-b border-board-border flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <input
             type="text"
             value={board.name}
             onChange={(e) => dispatch({ type: 'SET_BOARD_NAME', name: e.target.value })}
-            className="text-lg font-semibold text-white bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-board-accent/50 rounded px-2 -ml-2"
+            className="text-base font-semibold text-white bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-board-accent/50 rounded px-1 -ml-1"
           />
-          <span className="text-sm text-board-muted">
+          <span className="text-xs text-board-muted">
             {board.slots.length} pedal{board.slots.length !== 1 ? 's' : ''}
           </span>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <button
             onClick={handleExport}
-            className="p-2 rounded-lg bg-board-elevated text-board-muted hover:text-white transition-colors"
+            className="p-1.5 rounded-lg bg-board-elevated text-board-muted hover:text-white transition-colors"
             title="Export Board"
           >
             <Download className="w-4 h-4" />
           </button>
           <button
             onClick={() => {}}
-            className="p-2 rounded-lg bg-board-elevated text-board-muted hover:text-white transition-colors"
+            className="p-1.5 rounded-lg bg-board-elevated text-board-muted hover:text-white transition-colors"
             title="Share Board"
           >
             <Share2 className="w-4 h-4" />
           </button>
           <button
             onClick={handleClearBoard}
-            className="p-2 rounded-lg bg-board-danger/20 text-board-danger hover:bg-board-danger/30 transition-colors"
+            className="p-1.5 rounded-lg bg-board-danger/20 text-board-danger hover:bg-board-danger/30 transition-colors"
             title="Clear Board"
           >
             <Trash2 className="w-4 h-4" />
@@ -151,179 +188,181 @@ export function BoardBuilder() {
         </div>
       </div>
       
-      {/* Visual Pedalboard - Horizontal Line */}
-      <div className="p-6 bg-[#c4c4c4] relative overflow-x-auto">
-        {/* Board frame */}
-        <div className="bg-[#2a2a2a] rounded-lg p-4 min-w-max">
-          {/* Signal flow indicator */}
-          <div className="flex items-center justify-between mb-3 px-2">
-            <div className="flex items-center gap-2 text-xs text-zinc-400">
-              <span className="text-lg">🎸</span>
-              <span>Guitar In</span>
-              <ChevronRight className="w-4 h-4" />
-            </div>
-            <div className="flex items-center gap-2 text-xs text-zinc-400">
-              <ChevronRight className="w-4 h-4" />
-              <span>To Amp</span>
-              <span className="text-lg">🔊</span>
-            </div>
+      {/* Visual Pedalboard */}
+      <div className="p-4 bg-[#b8b8b8] relative">
+        {/* Board surface */}
+        <div className="bg-[#1a1a1a] rounded-lg p-3 relative">
+          {/* Output arrow (left side) */}
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 flex items-center z-10">
+            <ArrowLeft className="w-5 h-5 text-zinc-400" />
+            <span className="text-[8px] text-zinc-500 ml-0.5">AMP</span>
           </div>
           
-          {/* Pedals in one horizontal line */}
-          <div className="flex items-center gap-1">
-            {/* Input cable */}
-            <div className="flex items-center">
-              <div className="w-8 h-1 bg-zinc-600 rounded-full" />
-              <div className="w-3 h-3 bg-zinc-500 rounded-full border-2 border-zinc-400" />
-            </div>
-            
-            {/* Pedals */}
-            {board.slots.map((slot, index) => {
-              const colors = PEDAL_COLORS[slot.pedal.category] || { bg: '#6b7280', accent: '#4b5563', text: '#fff' };
-              const isDragging = dragState.dragIndex === index;
-              const isDragOver = dragState.dragOverIndex === index;
-              const displayName = slot.pedal.subtype || slot.pedal.model.split(' ')[0];
-              const section = getSignalChainSection(slot.pedal);
-              
-              return (
-                <div key={slot.pedal.id} className="flex items-center">
-                  {/* Cable between pedals */}
-                  <div className="w-4 h-1 bg-zinc-600" />
+          {/* Guitar input (right side) */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 flex items-center z-10">
+            <span className="text-[8px] text-zinc-500 mr-0.5">IN</span>
+            <span className="text-base">🎸</span>
+          </div>
+          
+          {/* Rows of pedals - stacked bottom to top */}
+          <div className="flex flex-col-reverse gap-2">
+            {rows.map((row, rowIndex) => (
+              <div key={rowIndex} className="relative">
+                {/* Routing line for this row */}
+                <svg 
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ zIndex: 0 }}
+                >
+                  {/* Horizontal line */}
+                  <line 
+                    x1="0" 
+                    y1="50%" 
+                    x2="100%" 
+                    y2="50%" 
+                    stroke="#404040" 
+                    strokeWidth="3"
+                  />
                   
-                  {/* Pedal */}
-                  <div
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, index)}
-                    onDragOver={(e) => handleDragOver(e, index)}
-                    onDragEnd={handleDragEnd}
-                    className={`relative group cursor-grab active:cursor-grabbing transition-all ${
-                      isDragging ? 'opacity-50 scale-95' : ''
-                    } ${isDragOver ? 'scale-105 ring-2 ring-white' : ''}`}
-                  >
-                    {/* Pedal body */}
-                    <div 
-                      className="relative w-20 h-28 rounded-lg shadow-lg flex flex-col overflow-hidden"
-                      style={{ backgroundColor: colors.bg }}
-                    >
-                      {/* Name label */}
-                      <div 
-                        className="h-10 flex items-center justify-center px-1"
-                        style={{ 
-                          backgroundColor: slot.pedal.category === 'utility' ? '#1a1a1a' : 'white',
-                        }}
+                  {/* Vertical connector to row below */}
+                  {rowIndex > 0 && (
+                    <line 
+                      x1={rowIndex % 2 === 1 ? "5%" : "95%"}
+                      y1="50%" 
+                      x2={rowIndex % 2 === 1 ? "5%" : "95%"}
+                      y2="150%" 
+                      stroke="#404040" 
+                      strokeWidth="3"
+                    />
+                  )}
+                </svg>
+                
+                {/* Pedals - right to left */}
+                <div className="flex justify-end gap-2 relative z-10">
+                  {row.map((slot, indexInRow) => {
+                    const originalIndex = getOriginalIndex(rowIndex, indexInRow, rows.length, row.length);
+                    const colors = PEDAL_COLORS[slot.pedal.category] || { bg: '#6b7280', accent: '#4b5563', text: '#fff' };
+                    const isDragging = dragState.dragIndex === originalIndex;
+                    const isDragOver = dragState.dragOverIndex === originalIndex;
+                    const displayName = slot.pedal.subtype || slot.pedal.model.split(' ')[0];
+                    
+                    return (
+                      <div
+                        key={slot.pedal.id}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, originalIndex)}
+                        onDragOver={(e) => handleDragOver(e, originalIndex)}
+                        onDragEnd={handleDragEnd}
+                        className={`relative group cursor-grab active:cursor-grabbing transition-all flex-shrink-0 ${
+                          isDragging ? 'opacity-50 scale-95' : ''
+                        } ${isDragOver ? 'scale-110 ring-2 ring-white' : ''}`}
+                        style={{ width: pedalSize.width, height: pedalSize.height }}
                       >
-                        <span 
-                          className="text-[10px] font-bold text-center leading-tight line-clamp-2"
-                          style={{ color: slot.pedal.category === 'utility' ? 'white' : '#1a1a1a' }}
+                        {/* Pedal body */}
+                        <div 
+                          className="w-full h-full rounded shadow-lg flex flex-col overflow-hidden"
+                          style={{ backgroundColor: colors.bg }}
                         >
-                          {displayName}
-                        </span>
-                      </div>
-                      
-                      {/* Knobs area */}
-                      <div className="flex-1 flex items-center justify-center">
-                        <div className="w-12 h-6 rounded bg-black/30 flex items-center justify-center">
-                          <span className="text-[6px] text-white/50 font-mono">
-                            {slot.pedal.brand.slice(0, 5).toUpperCase()}
-                          </span>
+                          {/* Name label */}
+                          <div 
+                            className="flex-[0_0_38%] flex items-center justify-center px-0.5"
+                            style={{ 
+                              backgroundColor: slot.pedal.category === 'utility' ? '#1a1a1a' : 'white',
+                            }}
+                          >
+                            <span 
+                              className="font-bold text-center leading-tight line-clamp-2"
+                              style={{ 
+                                fontSize: pedalSize.fontSize,
+                                color: slot.pedal.category === 'utility' ? 'white' : '#1a1a1a' 
+                              }}
+                            >
+                              {displayName}
+                            </span>
+                          </div>
+                          
+                          {/* Knobs area */}
+                          <div className="flex-1 flex items-center justify-center">
+                            <div 
+                              className="rounded bg-black/30 flex items-center justify-center"
+                              style={{ 
+                                width: pedalSize.width * 0.7, 
+                                height: pedalSize.height * 0.18 
+                              }}
+                            >
+                              <span 
+                                className="text-white/50 font-mono"
+                                style={{ fontSize: pedalSize.brandSize }}
+                              >
+                                {slot.pedal.brand.slice(0, 5).toUpperCase()}
+                              </span>
+                            </div>
+                          </div>
+                          
+                          {/* Footswitch */}
+                          <div className="flex justify-center pb-1">
+                            <div 
+                              className="rounded-full bg-black/40"
+                              style={{ width: pedalSize.width * 0.35, height: pedalSize.height * 0.06 }}
+                            />
+                          </div>
+                        </div>
+                        
+                        {/* Remove button */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemovePedal(slot.pedal.id);
+                          }}
+                          className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center shadow z-20"
+                        >
+                          <X className="w-2.5 h-2.5" />
+                        </button>
+                        
+                        {/* Order number */}
+                        <div 
+                          className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-zinc-700 rounded-full flex items-center justify-center"
+                          style={{ width: 14, height: 14, fontSize: 8 }}
+                        >
+                          <span className="text-white font-bold">{originalIndex + 1}</span>
                         </div>
                       </div>
-                      
-                      {/* Footswitch */}
-                      <div className="flex justify-center pb-2">
-                        <div className="w-6 h-2 rounded-full bg-black/40" />
-                      </div>
-                      
-                      {/* Jacks */}
-                      <div className="absolute bottom-0 left-1 w-2 h-3 rounded-t" style={{ backgroundColor: colors.accent }} />
-                      <div className="absolute bottom-0 right-1 w-2 h-3 rounded-t" style={{ backgroundColor: colors.accent }} />
-                      
-                      {/* Remove button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemovePedal(slot.pedal.id);
-                        }}
-                        className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center shadow-lg z-20"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                      
-                      {/* Drag handle */}
-                      <div className="absolute top-1 left-1 opacity-0 group-hover:opacity-60 transition-opacity">
-                        <GripVertical className="w-3 h-3 text-white" />
-                      </div>
-                    </div>
-                    
-                    {/* Order number & section */}
-                    <div className="absolute -bottom-5 left-0 right-0 text-center">
-                      <span className="text-[9px] font-bold text-zinc-500">{index + 1}</span>
-                    </div>
-                  </div>
-                  
-                  {/* Cable after pedal */}
-                  <div className="w-4 h-1 bg-zinc-600" />
+                    );
+                  })}
                 </div>
-              );
-            })}
-            
-            {/* Output cable */}
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-zinc-500 rounded-full border-2 border-zinc-400" />
-              <div className="w-8 h-1 bg-zinc-600 rounded-full" />
-            </div>
+              </div>
+            ))}
           </div>
           
-          {/* Section labels below */}
-          <div className="flex items-center gap-1 mt-6 px-12">
-            {board.slots.map((slot, index) => {
-              const section = getSignalChainSection(slot.pedal);
-              const prevSection = index > 0 ? getSignalChainSection(board.slots[index - 1].pedal) : null;
-              const showLabel = section !== prevSection;
-              
-              return (
-                <div key={slot.pedal.id} className="w-20 flex-shrink-0 mx-2">
-                  {showLabel && (
-                    <div className="text-[8px] text-zinc-500 text-center truncate">
-                      {section}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+          {/* Dimensions label */}
+          <div className="absolute bottom-1 right-1 text-[8px] text-zinc-600 font-mono">
+            {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
           </div>
         </div>
         
-        {/* Dimensions */}
-        <div className="absolute top-2 right-2 text-xs text-zinc-600 font-mono bg-white/50 px-2 py-0.5 rounded">
-          {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
+        {/* Signal flow label */}
+        <div className="mt-2 text-center">
+          <span className="text-[10px] text-zinc-600 bg-zinc-300/50 px-2 py-0.5 rounded-full">
+            Signal: Guitar (right) → Pedals → Amp (left)
+          </span>
         </div>
       </div>
       
-      {/* Signal Chain List */}
-      <div className="p-4 border-t border-board-border">
-        <h3 className="text-xs font-medium text-board-muted mb-2">Signal Chain</h3>
-        <div className="flex flex-wrap gap-1">
+      {/* Compact Signal Chain List */}
+      <div className="p-3 border-t border-board-border">
+        <div className="flex flex-wrap items-center gap-1 text-[10px]">
+          <span className="text-board-muted">Chain:</span>
           {board.slots.map((slot, index) => {
-            const colors = PEDAL_COLORS[slot.pedal.category] || { bg: '#6b7280', accent: '#4b5563', text: '#fff' };
+            const colors = PEDAL_COLORS[slot.pedal.category];
             return (
-              <div 
-                key={slot.pedal.id}
-                className="flex items-center gap-1 text-xs"
-              >
+              <span key={slot.pedal.id} className="flex items-center gap-0.5">
                 <span 
-                  className="px-2 py-0.5 rounded font-medium"
-                  style={{ 
-                    backgroundColor: `${colors.bg}30`, 
-                    color: colors.bg,
-                  }}
+                  className="px-1.5 py-0.5 rounded font-medium"
+                  style={{ backgroundColor: `${colors?.bg || '#666'}30`, color: colors?.bg || '#666' }}
                 >
                   {slot.pedal.model}
                 </span>
-                {index < board.slots.length - 1 && (
-                  <ChevronRight className="w-3 h-3 text-board-muted" />
-                )}
-              </div>
+                {index < board.slots.length - 1 && <span className="text-board-muted">→</span>}
+              </span>
             );
           })}
         </div>
