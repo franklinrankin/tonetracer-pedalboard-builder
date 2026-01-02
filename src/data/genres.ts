@@ -344,14 +344,15 @@ export const GENRES: GenreProfile[] = [
     icon: '📼',
     color: '#a78bfa',
     artists: ['Mac DeMarco', 'Clairo', 'Boy Pablo', 'Men I Trust'],
-    recommendedCategories: ['modulation', 'delay', 'reverb', 'dynamics'],
+    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'dynamics'],
     sectionTargets: {
+      gain: { min: 2, ideal: 5, max: 9 },
       modulation: { min: 5, ideal: 9, max: 13 },
       delay: { min: 4, ideal: 8, max: 12 },
       reverb: { min: 4, ideal: 8, max: 12 },
       dynamics: { min: 4, ideal: 7, max: 10 },
     },
-    preferredSubtypes: ['Vibrato', 'Chorus', 'Tape', 'Analog', 'Lo-Fi', 'Compressor', 'Spring', 'Room'],
+    preferredSubtypes: ['Overdrive', 'Boost', 'Preamp', 'Vibrato', 'Chorus', 'Tape', 'Analog', 'Lo-Fi', 'Compressor', 'Spring', 'Room'],
     keywords: ['lofi', 'tape', 'warm', 'vintage', 'wobbly', 'degraded', 'cassette'],
     characteristics: {
       gainLevel: 'clean',
