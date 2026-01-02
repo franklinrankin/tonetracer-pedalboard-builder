@@ -1,33 +1,33 @@
 // Central pedal database - imports from category files
 // Priority order: gain, mod, reverb, delay, dynamics, filter, pitch, eq, synth, amp, utility, volume
 import { Pedal } from '../../types';
-import { GAIN_PEDALS } from './gain';
-import { MODULATION_PEDALS } from './modulation';
-import { REVERB_PEDALS } from './reverb';
-import { DELAY_PEDALS } from './delay';
-import { DYNAMICS_PEDALS } from './dynamics';
-import { FILTER_PEDALS } from './filter';
-import { PITCH_PEDALS } from './pitch';
-import { EQ_PEDALS } from './eq';
-import { SYNTH_PEDALS } from './synth';
-import { AMP_PEDALS } from './amp';
-import { UTILITY_PEDALS } from './utility';
-import { VOLUME_PEDALS } from './volume';
+import { ALL_PEDALS as GAIN_PEDALS } from './gain';
+import { ALL_PEDALS as MODULATION_PEDALS } from './modulation';
+import { ALL_PEDALS as REVERB_PEDALS } from './reverb';
+import { ALL_PEDALS as DELAY_PEDALS } from './delay';
+import { ALL_PEDALS as DYNAMICS_PEDALS } from './dynamics';
+import { ALL_PEDALS as FILTER_PEDALS } from './filter';
+import { ALL_PEDALS as PITCH_PEDALS } from './pitch';
+import { ALL_PEDALS as EQ_PEDALS } from './eq';
+import { ALL_PEDALS as SYNTH_PEDALS } from './synth';
+import { ALL_PEDALS as AMP_PEDALS } from './amp';
+import { ALL_PEDALS as UTILITY_PEDALS } from './utility';
+import { ALL_PEDALS as VOLUME_PEDALS } from './volume';
 
-// Combine all pedals into single array (100 total)
+// Combine all pedals into single array (~1000 total)
 export const PEDALS: Pedal[] = [
-  ...GAIN_PEDALS,        // 25 pedals - Priority 1
-  ...MODULATION_PEDALS,  // 15 pedals - Priority 2
-  ...REVERB_PEDALS,      // 12 pedals - Priority 3 (tied)
-  ...DELAY_PEDALS,       // 12 pedals - Priority 3 (tied)
-  ...DYNAMICS_PEDALS,    // 8 pedals - Priority 5
-  ...FILTER_PEDALS,      // 6 pedals - Priority 6
-  ...PITCH_PEDALS,       // 5 pedals - Priority 7
-  ...EQ_PEDALS,          // 4 pedals - Priority 8
-  ...SYNTH_PEDALS,       // 3 pedals - Priority 9
-  ...AMP_PEDALS,         // 2 pedals - Priority 10
-  ...UTILITY_PEDALS,     // 2 pedals - Priority 11
-  ...VOLUME_PEDALS,      // 2 pedals - Priority 12
+  ...GAIN_PEDALS,        // ~250 pedals - Priority 1
+  ...MODULATION_PEDALS,  // ~120 pedals - Priority 2
+  ...REVERB_PEDALS,      // ~120 pedals - Priority 3 (tied)
+  ...DELAY_PEDALS,       // ~120 pedals - Priority 3 (tied)
+  ...DYNAMICS_PEDALS,    // ~80 pedals - Priority 5
+  ...FILTER_PEDALS,      // ~60 pedals - Priority 6
+  ...PITCH_PEDALS,       // ~50 pedals - Priority 7
+  ...EQ_PEDALS,          // ~40 pedals - Priority 8
+  ...SYNTH_PEDALS,       // ~30 pedals - Priority 9
+  ...AMP_PEDALS,         // ~20 pedals - Priority 10
+  ...UTILITY_PEDALS,     // ~20 pedals - Priority 11
+  ...VOLUME_PEDALS,      // ~20 pedals - Priority 12
 ];
 
 // Export individual category arrays for filtering
