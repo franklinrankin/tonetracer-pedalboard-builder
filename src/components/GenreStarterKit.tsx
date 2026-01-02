@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, Star } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, GenreProfile } from '../data/genres';
@@ -891,6 +891,7 @@ export function GenreStarterKit() {
   const [skippedSteps, setSkippedSteps] = useState<Set<string>>(new Set());
   const [phase, setPhase] = useState<'essentials' | 'additions'>('essentials');
   const [currentAdditionIndex, setCurrentAdditionIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   const genre = selectedGenre ? getGenreById(selectedGenre) : null;
   
@@ -1039,7 +1040,7 @@ export function GenreStarterKit() {
   
   const handleAddPedal = (pedal: PedalWithStatus) => {
     dispatch({ type: 'ADD_PEDAL', pedal });
-    // Auto-advance
+    // Auto-advance and scroll to top
     setTimeout(() => {
       if (phase === 'essentials') {
         if (currentStepIndex < steps.length - 1) {
@@ -1058,6 +1059,8 @@ export function GenreStarterKit() {
           setCurrentAdditionIndex(bonusAdditions.length); // Mark complete
         }
       }
+      // Scroll to top after advancing
+      containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 300);
   };
   
@@ -1279,7 +1282,7 @@ export function GenreStarterKit() {
   const stepSatisfied = !isAdditionsPhase && currentStep ? isStepSatisfied(currentStep) : false;
   
   return (
-    <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
+    <div ref={containerRef} className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
       {/* Header with Progress */}
       <div 
         className="p-4 border-b border-board-border"
