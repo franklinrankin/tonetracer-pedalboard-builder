@@ -1,44 +1,35 @@
 import { useState } from 'react';
-import { Settings2, Ruler, DollarSign, Zap, ChevronRight, Check, Clock, Shield } from 'lucide-react';
+import { Settings2, Ruler, DollarSign, Zap, Check, Clock, Shield } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { BOARD_TEMPLATES, getTemplateDimensionsDisplay } from '../data/boardTemplates';
 import { BoardTemplate } from '../types';
 import { formatInches, inchesToMm, formatArea } from '../utils/measurements';
 
+interface ConstraintsPageProps {
+  onContinue: () => void;
+}
+
 // Toggle component for "Apply After" feature
 function ApplyAfterToggle({ 
   enabled, 
   onToggle,
-  label,
-  color = 'board-accent'
 }: { 
   enabled: boolean; 
   onToggle: () => void;
-  label: string;
-  color?: string;
 }) {
   return (
     <button
       onClick={onToggle}
-      className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+      className={`flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-medium transition-all ${
         enabled
-          ? `bg-${color}/20 text-${color} border border-${color}/50`
-          : 'bg-board-elevated text-board-muted hover:text-white border border-transparent hover:border-board-border'
+          ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+          : 'bg-board-elevated text-board-muted hover:text-white'
       }`}
-      style={enabled ? { 
-        backgroundColor: `var(--${color === 'board-accent' ? 'board-accent' : color === 'board-success' ? 'board-success' : 'board-warning'})20`,
-        borderColor: `var(--${color === 'board-accent' ? 'board-accent' : color === 'board-success' ? 'board-success' : 'board-warning'})50`,
-        color: `var(--${color === 'board-accent' ? 'board-accent' : color === 'board-success' ? 'board-success' : 'board-warning'})`
-      } : {}}
     >
       {enabled ? <Clock className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
-      {enabled ? 'Apply After' : label}
+      {enabled ? 'Apply After' : 'Enforced'}
     </button>
   );
-}
-
-interface ConstraintsPageProps {
-  onContinue: () => void;
 }
 
 export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
@@ -151,163 +142,132 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
   }, {} as Record<string, BoardTemplate[]>);
   
   return (
-    <div className="min-h-full p-8 lg:p-12">
+    <div className="h-screen flex flex-col p-6 overflow-hidden">
       {/* Header */}
-      <div className="max-w-4xl mx-auto mb-12 text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-board-accent/20 mb-6">
-          <Settings2 className="w-8 h-8 text-board-accent" />
+      <div className="text-center mb-4 flex-shrink-0">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-board-accent/20 mb-3">
+          <Settings2 className="w-6 h-6 text-board-accent" />
         </div>
-        <h1 className="text-4xl font-bold text-white mb-4">
-          Set Your Limits
-        </h1>
-        <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-          Choose your pedalboard size and budget. We'll show you which pedals fit 
-          and gray out ones that don't.
+        <h1 className="text-2xl font-bold text-white mb-1">Set Your Limits</h1>
+        <p className="text-sm text-zinc-400">
+          Choose board size and budget • Click "Apply After" to decide later
         </p>
-        
-        {/* Apply After explanation */}
-        <div className="mt-6 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-board-elevated border border-board-border">
-          <Clock className="w-4 h-4 text-board-accent" />
-          <span className="text-sm text-zinc-400">
-            Click <span className="text-white font-medium">"Apply After"</span> to build freely, then get recommendations
-          </span>
-        </div>
       </div>
       
-      <div className="max-w-5xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Board Size Selection */}
-          <div className={`bg-board-surface border rounded-xl p-6 transition-all ${
-            board.constraints.applyAfterSize 
-              ? 'border-board-accent/50 bg-board-accent/5' 
-              : 'border-board-border'
+      {/* Main Content */}
+      <div className="flex-1 overflow-hidden">
+        <div className="max-w-5xl mx-auto h-full grid lg:grid-cols-2 gap-4">
+          {/* Board Size */}
+          <div className={`bg-board-surface border rounded-xl p-4 flex flex-col overflow-hidden ${
+            board.constraints.applyAfterSize ? 'border-amber-500/30' : 'border-board-border'
           }`}>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                <Ruler className="w-5 h-5 text-board-accent" />
+            <div className="flex items-center justify-between mb-3 flex-shrink-0">
+              <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+                <Ruler className="w-4 h-4 text-board-accent" />
                 Board Size
               </h2>
               <ApplyAfterToggle 
                 enabled={board.constraints.applyAfterSize || false}
                 onToggle={toggleApplyAfterSize}
-                label="Enforced"
-                color="board-accent"
               />
             </div>
             
-            {board.constraints.applyAfterSize && (
-              <div className="mb-4 p-3 rounded-lg bg-board-accent/10 border border-board-accent/30 text-sm text-board-accent flex items-start gap-2">
-                <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>Size limits won't filter pedals. Use "Recommend Setup" after building to find a board that fits.</span>
-              </div>
-            )}
-            
-            {/* Templates by Brand */}
-            <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
-              {Object.entries(templatesByBrand).map(([brand, templates]) => (
-                <div key={brand}>
-                  <h3 className="text-xs font-medium text-board-muted uppercase tracking-wider mb-2">
-                    {brand}
-                  </h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {templates.map(template => (
-                      <button
-                        key={template.id}
-                        onClick={() => handleTemplateSelect(template)}
-                        className={`p-3 rounded-lg border text-left transition-all ${
-                          selectedTemplate === template.id
-                            ? 'border-board-accent bg-board-accent/10'
-                            : 'border-board-border hover:border-board-accent/50 bg-board-elevated/50'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-white truncate">{template.name}</span>
-                          {selectedTemplate === template.id && (
-                            <Check className="w-4 h-4 text-board-accent flex-shrink-0" />
-                          )}
-                        </div>
-                        <div className="text-xs text-board-muted mt-0.5">
-                          {getTemplateDimensionsDisplay(template)}
-                        </div>
-                      </button>
-                    ))}
+            {/* Templates - Scrollable */}
+            <div className="flex-1 overflow-y-auto min-h-0 mb-3">
+              <div className="space-y-3">
+                {Object.entries(templatesByBrand).map(([brand, templates]) => (
+                  <div key={brand}>
+                    <h3 className="text-[10px] font-medium text-board-muted uppercase tracking-wider mb-1.5">
+                      {brand}
+                    </h3>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {templates.map(template => (
+                        <button
+                          key={template.id}
+                          onClick={() => handleTemplateSelect(template)}
+                          className={`p-2 rounded-lg border text-left transition-all ${
+                            selectedTemplate === template.id
+                              ? 'border-board-accent bg-board-accent/10'
+                              : 'border-board-border hover:border-board-accent/50 bg-board-elevated/50'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-medium text-white truncate">{template.name}</span>
+                            {selectedTemplate === template.id && (
+                              <Check className="w-3 h-3 text-board-accent flex-shrink-0" />
+                            )}
+                          </div>
+                          <div className="text-[10px] text-board-muted">
+                            {getTemplateDimensionsDisplay(template)}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
             
-            {/* Manual Input */}
-            <div className="pt-4 border-t border-board-border">
-              <h3 className="text-sm font-medium text-white mb-3">Or enter custom size:</h3>
-              <div className="grid grid-cols-2 gap-4">
+            {/* Custom Size */}
+            <div className="pt-3 border-t border-board-border flex-shrink-0">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs text-board-muted block mb-1">Width</label>
+                  <label className="text-[10px] text-board-muted block mb-1">Width</label>
                   <div className="relative">
                     <input
                       type="number"
                       step="0.5"
                       value={widthInches}
                       onChange={(e) => handleWidthChange(e.target.value)}
-                      className="w-full px-3 py-2 pr-8 bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent"
+                      className="w-full px-2 py-1.5 pr-6 text-sm bg-board-dark border border-board-border rounded text-white focus:outline-none focus:border-board-accent"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-board-muted">"</span>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-board-muted">"</span>
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs text-board-muted block mb-1">Depth</label>
+                  <label className="text-[10px] text-board-muted block mb-1">Depth</label>
                   <div className="relative">
                     <input
                       type="number"
                       step="0.5"
                       value={depthInches}
                       onChange={(e) => handleDepthChange(e.target.value)}
-                      className="w-full px-3 py-2 pr-8 bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent"
+                      className="w-full px-2 py-1.5 pr-6 text-sm bg-board-dark border border-board-border rounded text-white focus:outline-none focus:border-board-accent"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-board-muted">"</span>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-board-muted">"</span>
                   </div>
                 </div>
               </div>
-              <p className="text-xs text-board-muted mt-2">
-                Usable area: ~{formatArea(usableAreaMmSq)} sq in
+              <p className="text-[10px] text-board-muted mt-1.5">
+                Usable: ~{formatArea(usableAreaMmSq)} sq in
               </p>
             </div>
           </div>
           
           {/* Budget & Power */}
-          <div className="space-y-6">
+          <div className="flex flex-col gap-4 overflow-hidden">
             {/* Budget */}
-            <div className={`bg-board-surface border rounded-xl p-6 transition-all ${
-              board.constraints.applyAfterBudget 
-                ? 'border-green-500/50 bg-green-500/5' 
-                : 'border-board-border'
+            <div className={`bg-board-surface border rounded-xl p-4 flex-1 ${
+              board.constraints.applyAfterBudget ? 'border-amber-500/30' : 'border-board-border'
             }`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                  <DollarSign className="w-5 h-5 text-board-success" />
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <DollarSign className="w-4 h-4 text-green-400" />
                   Budget
                 </h2>
                 <ApplyAfterToggle 
                   enabled={board.constraints.applyAfterBudget || false}
                   onToggle={toggleApplyAfterBudget}
-                  label="Enforced"
-                  color="board-success"
                 />
               </div>
               
-              {board.constraints.applyAfterBudget && (
-                <div className="mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/30 text-sm text-green-400 flex items-start gap-2">
-                  <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span>Budget won't filter pedals. Build freely, then check your total in "Recommend Setup".</span>
-                </div>
-              )}
-              
-              <div className="relative mb-4">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-board-muted">$</span>
+              <div className="relative mb-3">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-board-muted">$</span>
                 <input
                   type="number"
                   value={board.constraints.maxBudget}
                   onChange={(e) => handleBudgetChange(parseInt(e.target.value) || 0)}
-                  className="w-full pl-12 pr-4 py-4 text-3xl font-bold bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent text-center"
+                  className="w-full pl-8 pr-3 py-2 text-2xl font-bold bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent text-center"
                 />
               </div>
               
@@ -318,24 +278,18 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
                 step="100"
                 value={board.constraints.maxBudget}
                 onChange={(e) => handleBudgetChange(parseInt(e.target.value))}
-                className="w-full accent-board-accent"
+                className="w-full accent-green-500 mb-2"
               />
               
-              <div className="flex justify-between text-xs text-board-muted mt-2">
-                <span>$100</span>
-                <span>$5,000</span>
-              </div>
-              
-              {/* Budget presets */}
-              <div className="flex gap-2 mt-4">
+              <div className="grid grid-cols-4 gap-1.5">
                 {[300, 500, 1000, 2000].map(amount => (
                   <button
                     key={amount}
                     onClick={() => handleBudgetChange(amount)}
-                    className={`flex-1 py-2 text-sm rounded-lg border transition-colors ${
+                    className={`py-1.5 text-xs rounded border transition-colors ${
                       board.constraints.maxBudget === amount
-                        ? 'border-board-accent bg-board-accent/20 text-board-accent'
-                        : 'border-board-border text-board-muted hover:border-board-accent/50'
+                        ? 'border-green-500 bg-green-500/20 text-green-400'
+                        : 'border-board-border text-board-muted hover:border-green-500/50'
                     }`}
                   >
                     ${amount}
@@ -345,58 +299,42 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
             </div>
             
             {/* Power Supply */}
-            <div className={`bg-board-surface border rounded-xl p-6 transition-all ${
-              board.constraints.applyAfterPower 
-                ? 'border-yellow-500/50 bg-yellow-500/5' 
-                : 'border-board-border'
+            <div className={`bg-board-surface border rounded-xl p-4 flex-1 ${
+              board.constraints.applyAfterPower ? 'border-amber-500/30' : 'border-board-border'
             }`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-board-warning" />
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-yellow-400" />
                   Power Supply
                 </h2>
                 <ApplyAfterToggle 
                   enabled={board.constraints.applyAfterPower || false}
                   onToggle={toggleApplyAfterPower}
-                  label="Enforced"
-                  color="board-warning"
                 />
               </div>
               
-              {board.constraints.applyAfterPower ? (
-                <div className="mb-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm text-yellow-400 flex items-start gap-2">
-                  <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span>Power limits disabled. After building, we'll suggest the right power supply.</span>
-                </div>
-              ) : (
-                <p className="text-sm text-zinc-400 mb-4">
-                  Set the total mA your power supply can provide. We'll gray out pedals that exceed this.
-                </p>
-              )}
-              
-              <div className="relative">
+              <div className="relative mb-3">
                 <input
                   type="number"
                   value={board.constraints.maxCurrentMa || 2000}
                   onChange={(e) => handlePowerChange(parseInt(e.target.value) || 0)}
-                  className="w-full px-4 py-3 pr-16 bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent"
+                  className="w-full px-3 py-2 pr-12 text-lg bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-board-muted">mA</span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-board-muted">mA</span>
               </div>
               
-              {/* Power presets */}
-              <div className="flex gap-2 mt-4">
+              <div className="grid grid-cols-4 gap-1.5">
                 {[500, 1000, 2000, 3000].map(amount => (
                   <button
                     key={amount}
                     onClick={() => handlePowerChange(amount)}
-                    className={`flex-1 py-2 text-sm rounded-lg border transition-colors ${
+                    className={`py-1.5 text-xs rounded border transition-colors ${
                       board.constraints.maxCurrentMa === amount
-                        ? 'border-board-warning bg-board-warning/20 text-board-warning'
-                        : 'border-board-border text-board-muted hover:border-board-warning/50'
+                        ? 'border-yellow-500 bg-yellow-500/20 text-yellow-400'
+                        : 'border-board-border text-board-muted hover:border-yellow-500/50'
                     }`}
                   >
-                    {amount}mA
+                    {amount}
                   </button>
                 ))}
               </div>
@@ -404,18 +342,6 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
           </div>
         </div>
       </div>
-      
-      {/* Continue Button (mobile) */}
-      <div className="max-w-5xl mx-auto mt-8 lg:hidden">
-        <button
-          onClick={onContinue}
-          className="w-full py-4 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2"
-        >
-          Continue to Building
-          <ChevronRight className="w-5 h-5" />
-        </button>
-      </div>
     </div>
   );
 }
-
