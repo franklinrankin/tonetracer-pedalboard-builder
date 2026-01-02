@@ -50,312 +50,275 @@ function getGenreBonusAdditions(
       .sort((a, b) => Math.abs(a.reverbPrice - 120) - Math.abs(b.reverbPrice - 120))
       .slice(0, 3);
   };
+  
+  const findBySubtype = (subtypes: string[]) => {
+    return allPedals
+      .filter(p => 
+        p.fits && 
+        !onBoardIds.has(p.id) &&
+        subtypes.includes(p.subtype || '')
+      )
+      .sort((a, b) => Math.abs(a.reverbPrice - 120) - Math.abs(b.reverbPrice - 120))
+      .slice(0, 3);
+  };
 
-  // Genre-specific additions
+  // Genre-specific bonus additions
   switch (genre.id) {
-    case 'rock':
-    case 'metal':
-      // Second drive for stacking
-      if (onBoardSubtypes.has('Overdrive') || onBoardSubtypes.has('Distortion')) {
-        const drives = findPedals('gain', ['Overdrive', 'Distortion']);
-        if (drives.length > 0) {
-          additions.push({
-            id: 'second-drive',
-            name: 'Second Drive',
-            reason: 'Stack drives for more gain options and tonal variety',
-            category: 'gain',
-            pedals: drives,
-          });
-        }
-      }
-      // Boost for leads
-      if (!onBoardSubtypes.has('Boost')) {
-        const boosts = findPedals('gain', ['Boost']);
-        if (boosts.length > 0) {
-          additions.push({
-            id: 'boost',
-            name: 'Boost Pedal',
-            reason: 'Push your amp or stack with drives for solos',
-            category: 'gain',
-            subtype: 'Boost',
-            pedals: boosts,
-          });
-        }
-      }
-      // Wah for rock
-      if (!onBoardSubtypes.has('Wah')) {
-        const wahs = findPedals('filter', ['Wah']);
-        if (wahs.length > 0) {
-          additions.push({
-            id: 'wah',
-            name: 'Wah Pedal',
-            reason: 'Essential for expressive leads and funk rhythms',
-            category: 'filter',
-            subtype: 'Wah',
-            pedals: wahs,
-          });
-        }
-      }
-      break;
-      
     case 'blues':
-      // Boost for dynamics
+      // Tremolo
+      if (!onBoardSubtypes.has('Tremolo')) {
+        const trems = findPedals('modulation', ['Tremolo']);
+        if (trems.length > 0) {
+          additions.push({
+            id: 'tremolo',
+            name: 'Tremolo',
+            reason: 'Classic vintage wobble - think B.B. King ballads',
+            category: 'modulation',
+            subtype: 'Tremolo',
+            pedals: trems,
+          });
+        }
+      }
+      // Slapback Delay
+      const slapbackBlues = findPedals('delay', ['Analog', 'Tape']);
+      if (slapbackBlues.length > 0) {
+        additions.push({
+          id: 'slapback',
+          name: 'Slapback Delay',
+          reason: 'Short, rhythmic repeats for that vintage blues sound',
+          category: 'delay',
+          pedals: slapbackBlues,
+        });
+      }
+      // Spring Reverb
+      const springBlues = findPedals('reverb', ['Spring']);
+      if (springBlues.length > 0) {
+        additions.push({
+          id: 'spring-reverb',
+          name: 'Spring Reverb',
+          reason: 'Classic amp-style reverb for authentic blues tone',
+          category: 'reverb',
+          subtype: 'Spring',
+          pedals: springBlues,
+        });
+      }
+      // Boost (post-drive)
       if (!onBoardSubtypes.has('Boost')) {
         const boosts = findPedals('gain', ['Boost']);
         if (boosts.length > 0) {
           additions.push({
             id: 'boost',
             name: 'Clean Boost',
-            reason: 'Add volume for solos without changing your tone',
+            reason: 'Push your amp or add volume for solos',
             category: 'gain',
             subtype: 'Boost',
             pedals: boosts,
           });
         }
       }
-      // Wah for expression
+      break;
+      
+    case 'rock':
+      // Phaser
+      if (!onBoardSubtypes.has('Phaser')) {
+        const phasers = findPedals('modulation', ['Phaser']);
+        if (phasers.length > 0) {
+          additions.push({
+            id: 'phaser',
+            name: 'Phaser',
+            reason: 'Classic swooshy effect - Van Halen, Pink Floyd vibes',
+            category: 'modulation',
+            subtype: 'Phaser',
+            pedals: phasers,
+          });
+        }
+      }
+      // Flanger
+      if (!onBoardSubtypes.has('Flanger')) {
+        const flangers = findPedals('modulation', ['Flanger']);
+        if (flangers.length > 0) {
+          additions.push({
+            id: 'flanger',
+            name: 'Flanger',
+            reason: 'Jet-like swoosh for dramatic moments',
+            category: 'modulation',
+            subtype: 'Flanger',
+            pedals: flangers,
+          });
+        }
+      }
+      // Tape-style Delay
+      const tapeDelays = findPedals('delay', ['Tape']);
+      if (tapeDelays.length > 0) {
+        additions.push({
+          id: 'tape-delay',
+          name: 'Tape Delay',
+          reason: 'Warm, analog-style repeats with character',
+          category: 'delay',
+          subtype: 'Tape',
+          pedals: tapeDelays,
+        });
+      }
+      // Wah
       if (!onBoardSubtypes.has('Wah')) {
         const wahs = findPedals('filter', ['Wah']);
         if (wahs.length > 0) {
           additions.push({
             id: 'wah',
             name: 'Wah Pedal',
-            reason: 'The voice of blues - Hendrix, SRV, Clapton all used one',
+            reason: 'Essential for expressive leads - Hendrix, Clapton style',
             category: 'filter',
             subtype: 'Wah',
             pedals: wahs,
           });
         }
       }
-      // Tremolo for vintage vibes
-      if (!onBoardSubtypes.has('Tremolo')) {
-        const trems = findPedals('modulation', ['Tremolo']);
-        if (trems.length > 0) {
-          additions.push({
-            id: 'tremolo',
-            name: 'Tremolo',
-            reason: 'Classic vintage effect - think B.B. King ballads',
-            category: 'modulation',
-            subtype: 'Tremolo',
-            pedals: trems,
-          });
-        }
-      }
       break;
       
-    case 'ambient':
-    case 'shoegaze':
-    case 'worship':
-      // Volume pedal for swells
-      if (!onBoardSubtypes.has('Volume')) {
-        const volumes = findPedals('volume', ['Volume']);
-        if (volumes.length > 0) {
+    case 'metal':
+      // Noise Gate
+      if (!onBoardSubtypes.has('Gate')) {
+        const gates = findBySubtype(['Gate', 'Noise Gate']);
+        if (gates.length > 0) {
           additions.push({
-            id: 'volume',
-            name: 'Volume Pedal',
-            reason: 'Essential for swells and ambient pad sounds',
-            category: 'volume',
-            subtype: 'Volume',
-            pedals: volumes,
+            id: 'noise-gate',
+            name: 'Noise Gate',
+            reason: 'Eliminate hum and tighten high-gain tones',
+            subtype: 'Gate',
+            pedals: gates,
           });
         }
       }
-      // Second delay
-      const delaySubtypes = ['Tape', 'Analog', 'Digital', 'Multi'];
-      const existingDelayType = Array.from(onBoardSubtypes).find(s => delaySubtypes.includes(s || ''));
-      if (existingDelayType) {
-        const otherDelays = findPedals('delay', delaySubtypes.filter(t => t !== existingDelayType));
-        if (otherDelays.length > 0) {
+      // Graphic EQ (post-gain)
+      if (!onBoardSubtypes.has('Graphic')) {
+        const eqs = findPedals('eq', ['Graphic']);
+        if (eqs.length > 0) {
           additions.push({
-            id: 'second-delay',
-            name: 'Second Delay',
-            reason: 'Stack delays for complex rhythms and ambient textures',
-            category: 'delay',
-            pedals: otherDelays,
+            id: 'graphic-eq',
+            name: 'Graphic EQ',
+            reason: 'Sculpt your tone - boost mids, tighten lows',
+            category: 'eq',
+            subtype: 'Graphic',
+            pedals: eqs,
           });
         }
       }
-      // Second reverb
-      if (onBoardSubtypes.has('Ambient') || onBoardSubtypes.has('Multi')) {
-        const reverbs = findPedals('reverb', undefined, ['Ambient']);
-        if (reverbs.length > 0) {
-          additions.push({
-            id: 'second-reverb',
-            name: 'Second Reverb',
-            reason: 'Layer reverbs for massive ambient soundscapes',
-            category: 'reverb',
-            pedals: reverbs,
-          });
-        }
+      // Pitch (octave down / harmonizer)
+      const metalPitch = findPedals('pitch', ['Octave', 'Harmonizer', 'Shifter']);
+      if (metalPitch.length > 0) {
+        additions.push({
+          id: 'pitch',
+          name: 'Pitch Shifter',
+          reason: 'Drop-tune on the fly or add harmonies',
+          category: 'pitch',
+          pedals: metalPitch,
+        });
       }
-      // Looper
-      if (!onBoardSubtypes.has('Looper')) {
-        const loopers = allPedals.filter(p => p.subtype === 'Looper' && p.fits && !onBoardIds.has(p.id)).slice(0, 3);
-        if (loopers.length > 0) {
+      // Boost (tightening, not gain)
+      if (!onBoardSubtypes.has('Boost')) {
+        const boosts = findPedals('gain', ['Boost']);
+        if (boosts.length > 0) {
           additions.push({
-            id: 'looper',
-            name: 'Looper',
-            reason: 'Build layers and create ambient soundscapes live',
-            subtype: 'Looper',
-            pedals: loopers,
+            id: 'boost',
+            name: 'Tight Boost',
+            reason: 'Tighten your amp\'s response without adding gain',
+            category: 'gain',
+            subtype: 'Boost',
+            pedals: boosts,
           });
         }
       }
       break;
       
     case 'indie':
-      // Tremolo for texture
-      if (!onBoardSubtypes.has('Tremolo')) {
-        const trems = findPedals('modulation', ['Tremolo']);
-        if (trems.length > 0) {
-          additions.push({
-            id: 'tremolo',
-            name: 'Tremolo',
-            reason: 'Classic indie texture - think Radiohead, Tame Impala',
-            category: 'modulation',
-            subtype: 'Tremolo',
-            pedals: trems,
-          });
-        }
-      }
-      // Fuzz for contrast
-      if (!onBoardSubtypes.has('Fuzz')) {
-        const fuzzes = findPedals('gain', ['Fuzz']);
-        if (fuzzes.length > 0) {
-          additions.push({
-            id: 'fuzz',
-            name: 'Fuzz',
-            reason: 'Add gritty contrast to your clean tones',
-            category: 'gain',
-            subtype: 'Fuzz',
-            pedals: fuzzes,
-          });
-        }
-      }
-      break;
-      
-    case 'funk':
-      // Auto-wah / Envelope filter
-      if (!onBoardSubtypes.has('Envelope') && !onBoardSubtypes.has('Auto-Wah')) {
-        const envelopes = findPedals('filter', ['Envelope', 'Auto-Wah']);
-        if (envelopes.length > 0) {
-          additions.push({
-            id: 'envelope',
-            name: 'Envelope Filter',
-            reason: 'Get that funky quack without a wah pedal',
-            category: 'filter',
-            pedals: envelopes,
-          });
-        }
-      }
-      // Octave for bass lines
-      const octaves = allPedals.filter(p => p.subtype === 'Octave' && p.fits && !onBoardIds.has(p.id)).slice(0, 3);
-      if (octaves.length > 0 && !onBoardSubtypes.has('Octave')) {
-        additions.push({
-          id: 'octave',
-          name: 'Octave Pedal',
-          reason: 'Fatten your sound or play bass lines on guitar',
-          subtype: 'Octave',
-          pedals: octaves,
-        });
-      }
-      break;
-      
-    case 'prog':
-      // Pitch shifter
-      if (!onBoardSubtypes.has('Shifter') && !onBoardSubtypes.has('Harmonizer')) {
-        const pitches = findPedals('pitch', ['Shifter', 'Harmonizer', 'Whammy']);
-        if (pitches.length > 0) {
-          additions.push({
-            id: 'pitch',
-            name: 'Pitch Shifter',
-            reason: 'Create harmonies and wild pitch effects',
-            category: 'pitch',
-            pedals: pitches,
-          });
-        }
-      }
-      // Looper for practice and composition
-      if (!onBoardSubtypes.has('Looper')) {
-        const loopers = allPedals.filter(p => p.subtype === 'Looper' && p.fits && !onBoardIds.has(p.id)).slice(0, 3);
-        if (loopers.length > 0) {
-          additions.push({
-            id: 'looper',
-            name: 'Looper',
-            reason: 'Essential for practicing and composing complex parts',
-            subtype: 'Looper',
-            pedals: loopers,
-          });
-        }
-      }
-      // Second drive
-      if (onBoardSubtypes.has('Overdrive') || onBoardSubtypes.has('Distortion')) {
-        const drives = findPedals('gain', ['Overdrive', 'Distortion']);
-        if (drives.length > 0) {
-          additions.push({
-            id: 'second-drive',
-            name: 'Second Drive',
-            reason: 'More gain options for dynamic prog arrangements',
-            category: 'gain',
-            pedals: drives,
-          });
-        }
-      }
-      break;
-      
-    case 'jazz':
-      // Chorus for warmth
+      // Chorus
       if (!onBoardSubtypes.has('Chorus')) {
         const choruses = findPedals('modulation', ['Chorus']);
         if (choruses.length > 0) {
           additions.push({
             id: 'chorus',
             name: 'Chorus',
-            reason: 'Add warmth and dimension to clean tones',
+            reason: 'Lush, shimmering texture for clean and dirty tones',
             category: 'modulation',
             subtype: 'Chorus',
             pedals: choruses,
           });
         }
       }
-      // EQ for tone shaping
-      if (!onBoardSubtypes.has('Parametric') && !onBoardSubtypes.has('Graphic')) {
-        const eqs = findPedals('eq', ['Parametric', 'Graphic']);
-        if (eqs.length > 0) {
-          additions.push({
-            id: 'eq',
-            name: 'EQ Pedal',
-            reason: 'Fine-tune your tone for different rooms and guitars',
-            category: 'eq',
-            pedals: eqs,
-          });
-        }
+      // Lo-fi / Degradation
+      const lofi = findBySubtype(['Lo-Fi', 'Bitcrusher', 'Degrader']);
+      if (lofi.length > 0) {
+        additions.push({
+          id: 'lofi',
+          name: 'Lo-Fi Effects',
+          reason: 'Add character with tape wobble or bit reduction',
+          pedals: lofi,
+        });
+      }
+      // Multi-Delay
+      const multiDelay = findPedals('delay', ['Multi', 'Digital']);
+      if (multiDelay.length > 0) {
+        additions.push({
+          id: 'multi-delay',
+          name: 'Multi-Mode Delay',
+          reason: 'Versatile delay with multiple algorithms',
+          category: 'delay',
+          pedals: multiDelay,
+        });
+      }
+      // Weird Modulation (ring mod, etc.)
+      const weirdMod = findBySubtype(['Ring Mod', 'Vibrato', 'Rotary']);
+      if (weirdMod.length > 0) {
+        additions.push({
+          id: 'weird-mod',
+          name: 'Weird Modulation',
+          reason: 'Ring mod, vibrato, or rotary for unique textures',
+          pedals: weirdMod,
+        });
       }
       break;
       
-    case 'country':
-      // Compressor if not already
-      if (!onBoardSubtypes.has('Compressor')) {
-        const comps = findPedals('dynamics', ['Compressor']);
-        if (comps.length > 0) {
-          additions.push({
-            id: 'compressor',
-            name: 'Compressor',
-            reason: 'Essential for chicken pickin\' and clean country tones',
-            category: 'dynamics',
-            subtype: 'Compressor',
-            pedals: comps,
-          });
-        }
+    case 'shoegaze':
+      // Big Reverb
+      const bigReverb = findPedals('reverb', ['Ambient', 'Shimmer', 'Multi']);
+      if (bigReverb.length > 0) {
+        additions.push({
+          id: 'big-reverb',
+          name: 'Big Reverb',
+          reason: 'Massive, washy reverb for walls of sound',
+          category: 'reverb',
+          pedals: bigReverb,
+        });
       }
-      // Volume pedal for swells
+      // Modulated Delay
+      const modDelay = findPedals('delay', ['Tape', 'Multi', 'Analog']);
+      if (modDelay.length > 0) {
+        additions.push({
+          id: 'mod-delay',
+          name: 'Modulated Delay',
+          reason: 'Delays with built-in modulation for dreamy textures',
+          category: 'delay',
+          pedals: modDelay,
+        });
+      }
+      // Reverse / Swell effects
+      const reverseEffects = findBySubtype(['Reverse', 'Shimmer', 'Ambient']);
+      if (reverseEffects.length > 0) {
+        additions.push({
+          id: 'reverse',
+          name: 'Reverse / Swell',
+          reason: 'Create backwards sounds and ethereal swells',
+          pedals: reverseEffects,
+        });
+      }
+      // Volume Pedal
       if (!onBoardSubtypes.has('Volume')) {
         const volumes = findPedals('volume', ['Volume']);
         if (volumes.length > 0) {
           additions.push({
             id: 'volume',
             name: 'Volume Pedal',
-            reason: 'Pedal steel-style swells are a country staple',
+            reason: 'Essential for swells and dynamic control',
             category: 'volume',
             subtype: 'Volume',
             pedals: volumes,
@@ -364,51 +327,353 @@ function getGenreBonusAdditions(
       }
       break;
       
-    case 'experimental':
-      // Synth/Fuzz-synth
-      const synths = allPedals.filter(p => (p.category === 'synth' || p.subtype === 'Fuzz/Synth') && p.fits && !onBoardIds.has(p.id)).slice(0, 3);
-      if (synths.length > 0) {
+    case 'ambient':
+      // Ambient Reverb
+      const ambientReverb = findPedals('reverb', ['Ambient', 'Shimmer', 'Multi']);
+      if (ambientReverb.length > 0) {
         additions.push({
-          id: 'synth',
-          name: 'Synth Pedal',
-          reason: 'Transform your guitar into a synthesizer',
-          category: 'synth',
-          pedals: synths,
+          id: 'ambient-reverb',
+          name: 'Ambient Reverb',
+          reason: 'Lush, infinite reverb for soundscapes',
+          category: 'reverb',
+          pedals: ambientReverb,
         });
       }
-      // Ring mod or bitcrusher
-      const weird = allPedals.filter(p => 
-        (p.subtype === 'Ring Mod' || p.subtype === 'Bitcrusher' || p.subtype === 'Glitch') && 
-        p.fits && !onBoardIds.has(p.id)
-      ).slice(0, 3);
-      if (weird.length > 0) {
+      // Multi / Preset Delay
+      const presetDelay = findPedals('delay', ['Multi', 'Digital']);
+      if (presetDelay.length > 0) {
         additions.push({
-          id: 'weird',
-          name: 'Weird Effects',
-          reason: 'Go beyond traditional sounds with glitch and destruction',
-          pedals: weird,
+          id: 'preset-delay',
+          name: 'Preset Delay',
+          reason: 'Save your favorite delay settings for instant recall',
+          category: 'delay',
+          pedals: presetDelay,
+        });
+      }
+      // Freeze / Sustain
+      const freezePedals = findBySubtype(['Freeze', 'Sustain', 'Infinite']);
+      if (freezePedals.length > 0) {
+        additions.push({
+          id: 'freeze',
+          name: 'Freeze / Sustain',
+          reason: 'Create infinite drones and pads from any note',
+          pedals: freezePedals,
+        });
+      }
+      // Expression Control
+      const expression = findPedals('volume', ['Expression', 'Volume']);
+      if (expression.length > 0) {
+        additions.push({
+          id: 'expression',
+          name: 'Expression Pedal',
+          reason: 'Control parameters in real-time with your foot',
+          category: 'volume',
+          pedals: expression,
         });
       }
       break;
-  }
-  
-  // Universal additions (for all genres if not already suggested)
-  
-  // Buffer/Signal enhancer for long cable runs
-  if (additions.length < 3) {
-    const buffers = allPedals.filter(p => 
-      (p.subtype === 'Buffer' || p.subtype === 'Signal Enhancer') && 
-      p.fits && !onBoardIds.has(p.id)
-    ).slice(0, 3);
-    if (buffers.length > 0 && !onBoardSubtypes.has('Buffer')) {
-      additions.push({
-        id: 'buffer',
-        name: 'Buffer',
-        reason: 'Preserve your tone with long cable runs or many pedals',
-        subtype: 'Buffer',
-        pedals: buffers,
-      });
-    }
+      
+    case 'country':
+      // Compressor (characterful)
+      if (!onBoardSubtypes.has('Compressor')) {
+        const comps = findPedals('dynamics', ['Compressor']);
+        if (comps.length > 0) {
+          additions.push({
+            id: 'compressor',
+            name: 'Compressor',
+            reason: 'Essential for chicken pickin\' and sustain',
+            category: 'dynamics',
+            subtype: 'Compressor',
+            pedals: comps,
+          });
+        }
+      }
+      // Slapback Delay
+      const slapbackCountry = findPedals('delay', ['Analog', 'Tape']);
+      if (slapbackCountry.length > 0) {
+        additions.push({
+          id: 'slapback',
+          name: 'Slapback Delay',
+          reason: 'Classic country/rockabilly short delay',
+          category: 'delay',
+          pedals: slapbackCountry,
+        });
+      }
+      // Tremolo
+      if (!onBoardSubtypes.has('Tremolo')) {
+        const trems = findPedals('modulation', ['Tremolo']);
+        if (trems.length > 0) {
+          additions.push({
+            id: 'tremolo',
+            name: 'Tremolo',
+            reason: 'Vintage amp-style wobble for ballads',
+            category: 'modulation',
+            subtype: 'Tremolo',
+            pedals: trems,
+          });
+        }
+      }
+      // Clean Boost
+      if (!onBoardSubtypes.has('Boost')) {
+        const boosts = findPedals('gain', ['Boost']);
+        if (boosts.length > 0) {
+          additions.push({
+            id: 'boost',
+            name: 'Clean Boost',
+            reason: 'Add sparkle and volume for solos',
+            category: 'gain',
+            subtype: 'Boost',
+            pedals: boosts,
+          });
+        }
+      }
+      break;
+      
+    case 'jazz':
+      // EQ / Tone Shaping
+      if (!onBoardSubtypes.has('Parametric') && !onBoardSubtypes.has('Graphic')) {
+        const eqs = findPedals('eq', ['Parametric', 'Graphic']);
+        if (eqs.length > 0) {
+          additions.push({
+            id: 'eq',
+            name: 'EQ Pedal',
+            reason: 'Fine-tune your tone for different rooms',
+            category: 'eq',
+            pedals: eqs,
+          });
+        }
+      }
+      // Subtle Reverb
+      const subtleReverb = findPedals('reverb', ['Spring', 'Room', 'Plate']);
+      if (subtleReverb.length > 0) {
+        additions.push({
+          id: 'subtle-reverb',
+          name: 'Subtle Reverb',
+          reason: 'Just enough space without washing out your tone',
+          category: 'reverb',
+          pedals: subtleReverb,
+        });
+      }
+      // Clean Boost
+      if (!onBoardSubtypes.has('Boost')) {
+        const boosts = findPedals('gain', ['Boost']);
+        if (boosts.length > 0) {
+          additions.push({
+            id: 'boost',
+            name: 'Clean Boost',
+            reason: 'Add presence without changing your tone',
+            category: 'gain',
+            subtype: 'Boost',
+            pedals: boosts,
+          });
+        }
+      }
+      // Compressor (very light)
+      if (!onBoardSubtypes.has('Compressor')) {
+        const comps = findPedals('dynamics', ['Compressor']);
+        if (comps.length > 0) {
+          additions.push({
+            id: 'compressor',
+            name: 'Light Compressor',
+            reason: 'Subtle compression for even dynamics',
+            category: 'dynamics',
+            subtype: 'Compressor',
+            pedals: comps,
+          });
+        }
+      }
+      break;
+      
+    case 'funk':
+      // Envelope Filter
+      if (!onBoardSubtypes.has('Envelope') && !onBoardSubtypes.has('Auto-Wah')) {
+        const envelopes = findPedals('filter', ['Envelope', 'Auto-Wah']);
+        if (envelopes.length > 0) {
+          additions.push({
+            id: 'envelope',
+            name: 'Envelope Filter',
+            reason: 'Auto-wah quack that responds to your playing',
+            category: 'filter',
+            pedals: envelopes,
+          });
+        }
+      }
+      // Phaser
+      if (!onBoardSubtypes.has('Phaser')) {
+        const phasers = findPedals('modulation', ['Phaser']);
+        if (phasers.length > 0) {
+          additions.push({
+            id: 'phaser',
+            name: 'Phaser',
+            reason: 'Classic funk swirl - think Isaac Hayes',
+            category: 'modulation',
+            subtype: 'Phaser',
+            pedals: phasers,
+          });
+        }
+      }
+      // Compressor (snappy)
+      if (!onBoardSubtypes.has('Compressor')) {
+        const comps = findPedals('dynamics', ['Compressor']);
+        if (comps.length > 0) {
+          additions.push({
+            id: 'compressor',
+            name: 'Snappy Compressor',
+            reason: 'Keep your funk tight and punchy',
+            category: 'dynamics',
+            subtype: 'Compressor',
+            pedals: comps,
+          });
+        }
+      }
+      // Auto-Wah
+      const autoWahs = findBySubtype(['Auto-Wah', 'Envelope']);
+      if (autoWahs.length > 0 && !onBoardSubtypes.has('Auto-Wah')) {
+        additions.push({
+          id: 'autowah',
+          name: 'Auto-Wah',
+          reason: 'Hands-free funky filter sweeps',
+          pedals: autoWahs,
+        });
+      }
+      break;
+      
+    case 'prog':
+      // Multi-Modulation
+      const multiMod = findPedals('modulation', ['Multi', 'Chorus', 'Phaser', 'Flanger']);
+      if (multiMod.length > 0) {
+        additions.push({
+          id: 'multi-mod',
+          name: 'Multi-Modulation',
+          reason: 'Multiple mod effects in one pedal for versatility',
+          category: 'modulation',
+          pedals: multiMod,
+        });
+      }
+      // Advanced Delay
+      const advancedDelay = findPedals('delay', ['Multi', 'Digital']);
+      if (advancedDelay.length > 0) {
+        additions.push({
+          id: 'advanced-delay',
+          name: 'Advanced Delay',
+          reason: 'Complex delay patterns and tap tempo',
+          category: 'delay',
+          pedals: advancedDelay,
+        });
+      }
+      // Pitch / Harmonizer
+      const progPitch = findPedals('pitch', ['Harmonizer', 'Shifter', 'Whammy']);
+      if (progPitch.length > 0) {
+        additions.push({
+          id: 'harmonizer',
+          name: 'Pitch / Harmonizer',
+          reason: 'Create harmonies and pitch effects on the fly',
+          category: 'pitch',
+          pedals: progPitch,
+        });
+      }
+      // MIDI / Loop Switching
+      const midiPedals = findBySubtype(['Loop Switcher', 'MIDI Controller', 'Switcher']);
+      if (midiPedals.length > 0) {
+        additions.push({
+          id: 'midi',
+          name: 'MIDI / Loop Switcher',
+          reason: 'Control your rig with presets and MIDI',
+          pedals: midiPedals,
+        });
+      }
+      break;
+      
+    case 'worship':
+      // Ambient Reverb
+      const worshipReverb = findPedals('reverb', ['Ambient', 'Shimmer', 'Multi']);
+      if (worshipReverb.length > 0) {
+        additions.push({
+          id: 'ambient-reverb',
+          name: 'Ambient Reverb',
+          reason: 'Lush, pad-like reverb for atmospheric playing',
+          category: 'reverb',
+          pedals: worshipReverb,
+        });
+      }
+      // Stereo Delay
+      const stereoDelay = findPedals('delay', ['Multi', 'Digital', 'Tape']);
+      if (stereoDelay.length > 0) {
+        additions.push({
+          id: 'stereo-delay',
+          name: 'Stereo Delay',
+          reason: 'Wide, spacious delays for huge soundscapes',
+          category: 'delay',
+          pedals: stereoDelay,
+        });
+      }
+      // Volume / Swell Control
+      if (!onBoardSubtypes.has('Volume')) {
+        const volumes = findPedals('volume', ['Volume', 'Expression']);
+        if (volumes.length > 0) {
+          additions.push({
+            id: 'volume',
+            name: 'Volume Pedal',
+            reason: 'Essential for swells and pad-like playing',
+            category: 'volume',
+            pedals: volumes,
+          });
+        }
+      }
+      // MIDI / Preset Control
+      const worshipMidi = findBySubtype(['Loop Switcher', 'MIDI Controller', 'Switcher']);
+      if (worshipMidi.length > 0) {
+        additions.push({
+          id: 'midi',
+          name: 'Preset Controller',
+          reason: 'Switch between songs instantly with presets',
+          pedals: worshipMidi,
+        });
+      }
+      break;
+      
+    case 'experimental':
+      // Feedback / Oscillation
+      const feedback = findBySubtype(['Feedback', 'Oscillator', 'Noise', 'Drone']);
+      if (feedback.length > 0) {
+        additions.push({
+          id: 'feedback',
+          name: 'Feedback / Oscillation',
+          reason: 'Create controlled chaos and self-oscillation',
+          pedals: feedback,
+        });
+      }
+      // Bitcrusher / Lo-fi
+      const bitcrush = findBySubtype(['Bitcrusher', 'Lo-Fi', 'Degrader']);
+      if (bitcrush.length > 0) {
+        additions.push({
+          id: 'bitcrusher',
+          name: 'Bitcrusher / Lo-Fi',
+          reason: 'Destroy your signal in creative ways',
+          pedals: bitcrush,
+        });
+      }
+      // Pitch / Glitch
+      const glitchPitch = findBySubtype(['Glitch', 'Shifter', 'Whammy', 'Harmonizer']);
+      if (glitchPitch.length > 0) {
+        additions.push({
+          id: 'glitch',
+          name: 'Pitch / Glitch',
+          reason: 'Random pitch jumps and digital artifacts',
+          pedals: glitchPitch,
+        });
+      }
+      // Routing / Loopers
+      const routing = findBySubtype(['Looper', 'ABY', 'Loop Switcher', 'Mixer']);
+      if (routing.length > 0) {
+        additions.push({
+          id: 'routing',
+          name: 'Routing / Looper',
+          reason: 'Create complex signal paths and layer sounds',
+          pedals: routing,
+        });
+      }
+      break;
   }
   
   return additions.slice(0, 4); // Max 4 bonus additions
