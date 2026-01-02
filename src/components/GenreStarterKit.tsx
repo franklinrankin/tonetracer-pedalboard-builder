@@ -674,6 +674,210 @@ function getGenreBonusAdditions(
         });
       }
       break;
+      
+    case 'pop':
+      // Pitch (micro-shift / doubler)
+      const popPitch = findPedals('pitch', ['Doubler', 'Detune', 'Shifter', 'Micro']);
+      if (popPitch.length > 0) {
+        additions.push({
+          id: 'pitch-doubler',
+          name: 'Pitch Doubler',
+          reason: 'Subtle thickening and width for polished tones',
+          category: 'pitch',
+          pedals: popPitch,
+        });
+      }
+      // Tremolo
+      if (!onBoardSubtypes.has('Tremolo')) {
+        const popTrem = findPedals('modulation', ['Tremolo']);
+        if (popTrem.length > 0) {
+          additions.push({
+            id: 'tremolo',
+            name: 'Tremolo',
+            reason: 'Add rhythmic pulse and movement',
+            category: 'modulation',
+            subtype: 'Tremolo',
+            pedals: popTrem,
+          });
+        }
+      }
+      // EQ (tone shaping)
+      if (!onBoardSubtypes.has('Parametric') && !onBoardSubtypes.has('Graphic')) {
+        const popEq = findPedals('eq', ['Parametric', 'Graphic']);
+        if (popEq.length > 0) {
+          additions.push({
+            id: 'eq',
+            name: 'EQ Pedal',
+            reason: 'Shape your tone to sit perfectly in the mix',
+            category: 'eq',
+            pedals: popEq,
+          });
+        }
+      }
+      // Auto-filter (very subtle)
+      const popFilter = findPedals('filter', ['Envelope', 'Auto-Wah']);
+      if (popFilter.length > 0) {
+        additions.push({
+          id: 'auto-filter',
+          name: 'Auto Filter',
+          reason: 'Subtle filter sweeps for texture',
+          category: 'filter',
+          pedals: popFilter,
+        });
+      }
+      break;
+      
+    case 'lofi':
+      // Bitcrusher / Sample Rate Reducer
+      const lofiBitcrush = findBySubtype(['Bitcrusher', 'Lo-Fi', 'Degrader', 'Sample Rate']);
+      if (lofiBitcrush.length > 0) {
+        additions.push({
+          id: 'bitcrusher',
+          name: 'Bitcrusher',
+          reason: 'Digital degradation for that crunchy lo-fi sound',
+          pedals: lofiBitcrush,
+        });
+      }
+      // Warble / Cassette Mod
+      const lofiWarble = findBySubtype(['Vibrato', 'Chorus', 'Warble', 'Cassette']);
+      if (lofiWarble.length > 0) {
+        additions.push({
+          id: 'warble',
+          name: 'Warble / Cassette',
+          reason: 'Tape-style pitch wobble and wow/flutter',
+          pedals: lofiWarble,
+        });
+      }
+      // Low-pass Filter
+      const lofiFilter = findPedals('filter', ['Low-Pass', 'Filter', 'Tone']);
+      if (lofiFilter.length > 0) {
+        additions.push({
+          id: 'lowpass',
+          name: 'Low-Pass Filter',
+          reason: 'Roll off highs for that muffled vintage sound',
+          category: 'filter',
+          pedals: lofiFilter,
+        });
+      }
+      // Saturation / Preamp
+      const lofiSat = findPedals('gain', ['Preamp', 'Boost', 'Overdrive']);
+      if (lofiSat.length > 0) {
+        additions.push({
+          id: 'saturation',
+          name: 'Saturation / Preamp',
+          reason: 'Add warmth and harmonic richness',
+          category: 'gain',
+          pedals: lofiSat,
+        });
+      }
+      break;
+      
+    case 'singer-songwriter':
+      // Volume Pedal
+      if (!onBoardSubtypes.has('Volume')) {
+        const sswVolume = findPedals('volume', ['Volume', 'Expression']);
+        if (sswVolume.length > 0) {
+          additions.push({
+            id: 'volume',
+            name: 'Volume Pedal',
+            reason: 'Smooth dynamics without touching your guitar',
+            category: 'volume',
+            subtype: 'Volume',
+            pedals: sswVolume,
+          });
+        }
+      }
+      // EQ (tone sweetening)
+      if (!onBoardSubtypes.has('Parametric') && !onBoardSubtypes.has('Graphic')) {
+        const sswEq = findPedals('eq', ['Parametric', 'Graphic']);
+        if (sswEq.length > 0) {
+          additions.push({
+            id: 'eq',
+            name: 'EQ Pedal',
+            reason: 'Sweeten your acoustic tone for any room',
+            category: 'eq',
+            pedals: sswEq,
+          });
+        }
+      }
+      // Subtle Modulation
+      const sswMod = findPedals('modulation', ['Chorus', 'Tremolo', 'Vibrato']);
+      if (sswMod.length > 0) {
+        additions.push({
+          id: 'subtle-mod',
+          name: 'Subtle Modulation',
+          reason: 'Light movement without overwhelming your tone',
+          category: 'modulation',
+          pedals: sswMod,
+        });
+      }
+      // Boost (clean)
+      if (!onBoardSubtypes.has('Boost')) {
+        const sswBoost = findPedals('gain', ['Boost']);
+        if (sswBoost.length > 0) {
+          additions.push({
+            id: 'boost',
+            name: 'Clean Boost',
+            reason: 'Lift your signal for solos or emphasis',
+            category: 'gain',
+            subtype: 'Boost',
+            pedals: sswBoost,
+          });
+        }
+      }
+      break;
+      
+    case 'indie-rock':
+      // Fuzz
+      if (!onBoardSubtypes.has('Fuzz')) {
+        const irFuzz = findPedals('gain', ['Fuzz']);
+        if (irFuzz.length > 0) {
+          additions.push({
+            id: 'fuzz',
+            name: 'Fuzz',
+            reason: 'Thick, woolly saturation for big moments',
+            category: 'gain',
+            subtype: 'Fuzz',
+            pedals: irFuzz,
+          });
+        }
+      }
+      // Pitch (octave / detune)
+      const irPitch = findPedals('pitch', ['Octave', 'Detune', 'Shifter']);
+      if (irPitch.length > 0) {
+        additions.push({
+          id: 'pitch',
+          name: 'Pitch / Octave',
+          reason: 'Add depth with octaves or detuned doubling',
+          category: 'pitch',
+          pedals: irPitch,
+        });
+      }
+      // Tremolo
+      if (!onBoardSubtypes.has('Tremolo')) {
+        const irTrem = findPedals('modulation', ['Tremolo']);
+        if (irTrem.length > 0) {
+          additions.push({
+            id: 'tremolo',
+            name: 'Tremolo',
+            reason: 'Classic indie texture and rhythmic pulse',
+            category: 'modulation',
+            subtype: 'Tremolo',
+            pedals: irTrem,
+          });
+        }
+      }
+      // Experimental Modulation
+      const irWeirdMod = findBySubtype(['Ring Mod', 'Rotary', 'Vibrato', 'Flanger']);
+      if (irWeirdMod.length > 0) {
+        additions.push({
+          id: 'weird-mod',
+          name: 'Experimental Mod',
+          reason: 'Ring mod, vibrato, or flanger for unique textures',
+          pedals: irWeirdMod,
+        });
+      }
+      break;
   }
   
   return additions.slice(0, 4); // Max 4 bonus additions
