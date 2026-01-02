@@ -2,6 +2,7 @@ import { Plus, Minus, AlertCircle, Zap, ArrowUpDown, DollarSign } from 'lucide-r
 import { PedalWithStatus, Pedal } from '../types';
 import { CATEGORY_INFO, getRatingLabel } from '../data/categories';
 import { useBoard } from '../context/BoardContext';
+import { formatInches } from '../utils/measurements';
 
 interface PedalCardProps {
   pedal: PedalWithStatus;
@@ -125,7 +126,7 @@ export function PedalCard({ pedal, isOnBoard = false, compact = false }: PedalCa
           </div>
           <div className="flex items-center gap-1 text-board-muted">
             <ArrowUpDown className="w-3 h-3" />
-            <span>{pedal.widthMm}×{pedal.depthMm}</span>
+            <span>{formatInches(pedal.widthMm)}"×{formatInches(pedal.depthMm)}"</span>
           </div>
           <div className="flex items-center gap-1 text-board-muted">
             <Zap className="w-3 h-3" />

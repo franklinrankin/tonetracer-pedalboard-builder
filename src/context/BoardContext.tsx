@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { Board, BoardConstraints, BoardSlot, Pedal, PedalWithStatus, DisqualificationReason, Category, SectionScore } from '../types';
 import { CATEGORY_INFO, getCategoryTag } from '../data/categories';
 import { PEDALS } from '../data/pedals';
+import { formatInches } from '../utils/measurements';
 
 interface BoardState {
   board: Board;
@@ -82,7 +83,7 @@ function calculatePedalStatus(
   if (pedal.widthMm > constraints.maxWidthMm) {
     reasons.push({
       type: 'width',
-      message: `Too wide by ${pedal.widthMm - constraints.maxWidthMm}mm`,
+      message: `Too wide by ${formatInches(pedal.widthMm - constraints.maxWidthMm)}"`,
       value: pedal.widthMm,
       limit: constraints.maxWidthMm,
     });
@@ -92,7 +93,7 @@ function calculatePedalStatus(
   if (pedal.depthMm > constraints.maxDepthMm) {
     reasons.push({
       type: 'depth',
-      message: `Too deep by ${pedal.depthMm - constraints.maxDepthMm}mm`,
+      message: `Too deep by ${formatInches(pedal.depthMm - constraints.maxDepthMm)}"`,
       value: pedal.depthMm,
       limit: constraints.maxDepthMm,
     });

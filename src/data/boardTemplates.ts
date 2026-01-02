@@ -1,4 +1,5 @@
 import { BoardTemplate } from '../types';
+import { formatInches } from '../utils/measurements';
 
 export const BOARD_TEMPLATES: BoardTemplate[] = [
   {
@@ -144,3 +145,7 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
   },
 ];
 
+// Helper to get display dimensions in inches
+export function getTemplateDimensionsDisplay(template: BoardTemplate): string {
+  return `${formatInches(template.widthMm)}" × ${formatInches(template.depthMm)}"`;
+}

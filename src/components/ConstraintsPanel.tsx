@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Settings2, DollarSign, Ruler, Zap, ChevronDown } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
-import { BOARD_TEMPLATES } from '../data/boardTemplates';
+import { BOARD_TEMPLATES, getTemplateDimensionsDisplay } from '../data/boardTemplates';
 import { BoardTemplate } from '../types';
+import { mmToInches, inchesToMm, formatInches, formatArea } from '../utils/measurements';
 
 export function ConstraintsPanel() {
   const { state, dispatch } = useBoard();
@@ -10,8 +11,14 @@ export function ConstraintsPanel() {
   const [isExpanded, setIsExpanded] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   
+  // Local state for inch inputs (to avoid conversion rounding issues while typing)
+  const [widthInches, setWidthInches] = useState(formatInches(board.constraints.maxWidthMm));
+  const [depthInches, setDepthInches] = useState(formatInches(board.constraints.maxDepthMm));
+  
   const handleTemplateSelect = (template: BoardTemplate) => {
     setSelectedTemplate(template.id);
+    setWidthInches(formatInches(template.widthMm));
+    setDepthInches(formatInches(template.depthMm));
     dispatch({
       type: 'SET_CONSTRAINTS',
       constraints: {
@@ -21,6 +28,32 @@ export function ConstraintsPanel() {
         maxBudget: template.suggestedBudget || board.constraints.maxBudget,
       },
     });
+  };
+  
+  const handleWidthChange = (value: string) => {
+    setWidthInches(value);
+    const inches = parseFloat(value) || 0;
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        ...board.constraints,
+        maxWidthMm: Math.round(inchesToMm(inches)),
+      },
+    });
+    setSelectedTemplate(null);
+  };
+  
+  const handleDepthChange = (value: string) => {
+    setDepthInches(value);
+    const inches = parseFloat(value) || 0;
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        ...board.constraints,
+        maxDepthMm: Math.round(inchesToMm(inches)),
+      },
+    });
+    setSelectedTemplate(null);
   };
   
   const handleConstraintChange = (key: string, value: number) => {
@@ -34,7 +67,9 @@ export function ConstraintsPanel() {
     setSelectedTemplate(null);
   };
   
-  const usableArea = (board.constraints.maxWidthMm * board.constraints.maxDepthMm * 0.85) / 100; // cm²
+  // Calculate usable area in square inches
+  const usableAreaMmSq = board.constraints.maxWidthMm * board.constraints.maxDepthMm * 0.85;
+  const usableAreaInSq = formatArea(usableAreaMmSq);
   
   return (
     <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
@@ -72,7 +107,7 @@ export function ConstraintsPanel() {
                 >
                   <div className="text-sm font-medium text-white truncate">{template.name}</div>
                   <div className="text-xs text-board-muted mt-0.5">
-                    {template.widthMm}×{template.depthMm}mm
+                    {getTemplateDimensionsDisplay(template)}
                   </div>
                 </button>
               ))}
@@ -86,31 +121,39 @@ export function ConstraintsPanel() {
               <div>
                 <label className="flex items-center gap-2 text-sm text-zinc-400 mb-2">
                   <Ruler className="w-4 h-4" />
-                  Width (mm)
+                  Width (in)
                 </label>
-                <input
-                  type="number"
-                  value={board.constraints.maxWidthMm}
-                  onChange={(e) => handleConstraintChange('maxWidthMm', parseInt(e.target.value) || 0)}
-                  className="w-full px-3 py-2 bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent transition-colors"
-                />
+                <div className="relative">
+                  <input
+                    type="number"
+                    step="0.5"
+                    value={widthInches}
+                    onChange={(e) => handleWidthChange(e.target.value)}
+                    className="w-full px-3 py-2 pr-8 bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent transition-colors"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-board-muted text-sm">"</span>
+                </div>
               </div>
               <div>
                 <label className="flex items-center gap-2 text-sm text-zinc-400 mb-2">
                   <Ruler className="w-4 h-4" />
-                  Depth (mm)
+                  Depth (in)
                 </label>
-                <input
-                  type="number"
-                  value={board.constraints.maxDepthMm}
-                  onChange={(e) => handleConstraintChange('maxDepthMm', parseInt(e.target.value) || 0)}
-                  className="w-full px-3 py-2 bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent transition-colors"
-                />
+                <div className="relative">
+                  <input
+                    type="number"
+                    step="0.5"
+                    value={depthInches}
+                    onChange={(e) => handleDepthChange(e.target.value)}
+                    className="w-full px-3 py-2 pr-8 bg-board-dark border border-board-border rounded-lg text-white focus:outline-none focus:border-board-accent transition-colors"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-board-muted text-sm">"</span>
+                </div>
               </div>
             </div>
             
             <div className="text-xs text-board-muted">
-              Usable area: ~{usableArea.toFixed(0)} cm² ({(usableArea / 10000 * 155).toFixed(1)} sq in)
+              Usable area: ~{usableAreaInSq} sq in
             </div>
             
             {/* Budget */}
@@ -161,4 +204,3 @@ export function ConstraintsPanel() {
     </div>
   );
 }
-

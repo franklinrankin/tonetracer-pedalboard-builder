@@ -3,6 +3,7 @@ import { useBoard } from '../context/BoardContext';
 import { PedalCard } from './PedalCard';
 import { CATEGORY_INFO, CATEGORY_ORDER } from '../data/categories';
 import { Category, PedalWithStatus } from '../types';
+import { formatInches } from '../utils/measurements';
 
 export function BoardBuilder() {
   const { state, dispatch } = useBoard();
@@ -155,7 +156,7 @@ export function BoardBuilder() {
           </div>
           
           <div className="absolute bottom-2 right-2 text-[10px] text-board-muted font-mono">
-            {board.constraints.maxWidthMm}×{board.constraints.maxDepthMm}mm
+            {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
           </div>
         </div>
       </div>

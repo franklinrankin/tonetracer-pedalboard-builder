@@ -1,5 +1,6 @@
 import { DollarSign, Square, Zap, Cable, Music } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
+import { formatArea } from '../utils/measurements';
 
 export function BoardStats() {
   const { state } = useBoard();
@@ -62,9 +63,9 @@ export function BoardStats() {
             </div>
             <div className="text-sm font-mono">
               <span className={areaPercent > 100 ? 'text-board-danger' : 'text-white'}>
-                {(totalArea / 100).toFixed(0)}
+                {formatArea(totalArea)}
               </span>
-              <span className="text-board-muted"> / {(maxArea / 100).toFixed(0)} cm²</span>
+              <span className="text-board-muted"> / {formatArea(maxArea)} in²</span>
             </div>
           </div>
           <div className="h-2 bg-board-dark rounded-full overflow-hidden">
@@ -122,4 +123,3 @@ export function BoardStats() {
     </div>
   );
 }
-
