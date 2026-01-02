@@ -7,4 +7,5 @@ export { PedalCard } from './PedalCard';
 export { PedalCatalog } from './PedalCatalog';
 export { EducationalTips } from './EducationalTips';
 export { Recommendations } from './Recommendations';
+export { GenreSelector } from './GenreSelector';
 

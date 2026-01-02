@@ -11,6 +11,7 @@ interface BoardState {
   totalArea: number;
   totalCurrent: number;
   genres: string[];
+  selectedGenre: string | null;
 }
 
 type BoardAction =
@@ -19,7 +20,8 @@ type BoardAction =
   | { type: 'REMOVE_PEDAL'; pedalId: string }
   | { type: 'CLEAR_BOARD' }
   | { type: 'SET_BOARD_NAME'; name: string }
-  | { type: 'LOAD_BOARD'; board: Board };
+  | { type: 'LOAD_BOARD'; board: Board }
+  | { type: 'SET_GENRE'; genreId: string | null };
 
 const defaultConstraints: BoardConstraints = {
   maxWidthMm: 610,
@@ -251,6 +253,9 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
     case 'LOAD_BOARD':
       return { ...state, board: action.board, ...calculateState(action.board) };
       
+    case 'SET_GENRE':
+      return { ...state, selectedGenre: action.genreId };
+      
     default:
       return state;
   }
@@ -266,6 +271,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
   const initialState: BoardState = {
     board: defaultBoard,
     ...calculateState(defaultBoard),
+    selectedGenre: null,
   };
   
   const [state, dispatch] = useReducer(boardReducer, initialState);
