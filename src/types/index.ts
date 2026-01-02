@@ -16,19 +16,33 @@ export type Category =
 
 export type BypassType = 'true' | 'buffered' | 'selectable';
 
-export type SignalType = 'mono' | 'stereo';
+export type SignalType = 'mono' | 'stereo' | 'mono-in-stereo-out';
+
+export type CircuitType = 'analog' | 'digital' | 'hybrid';
+
+export type PowerType = 
+  | '9V DC'
+  | '12V DC'
+  | '18V DC'
+  | '9-18V DC'
+  | '9V AC'
+  | '12V AC'
+  | 'Battery Only'
+  | 'USB';
 
 export type EnclosureType = 
-  | 'mini'
-  | '1590A'
-  | '1590B'
-  | '125B'
-  | '1590BB'
-  | 'boss-compact'
-  | 'boss-twin'
-  | 'medium'
-  | 'large'
-  | 'xl';
+  | 'nano'        // ~1.5" x 1.5"
+  | 'mini'        // ~1.75" x 3.5"
+  | '1590A'       // ~2.4" x 3.9"
+  | '1590B'       // ~2.4" x 4.4"
+  | '125B'        // ~3" x 4.75"
+  | '1590BB'      // ~4.7" x 3.7"
+  | 'boss-compact'// ~2.9" x 5.1"
+  | 'boss-twin'   // ~4.9" x 5.1"
+  | 'medium'      // ~4" x 5"
+  | 'large'       // ~5" x 6"
+  | 'xl'          // ~7"+ 
+  | 'custom';
 
 export interface Pedal {
   id: string;
@@ -36,21 +50,26 @@ export interface Pedal {
   model: string;
   category: Category;
   subtype?: string;
-  categoryRating: number; // 1-10
   
-  // Physical
+  // Category-specific rating (scale depends on category)
+  // Gain: 1-10, Modulation/Delay/Reverb/Dynamics/Utility: 1-15, Filter/Pitch/EQ/Volume/Amp: 1-10
+  categoryRating: number;
+  
+  // Physical dimensions (stored in mm internally, displayed in inches)
   widthMm: number;
   depthMm: number;
   heightMm: number;
   enclosure: EnclosureType;
   topJacks: boolean;
   
-  // Signal
+  // Signal & Electronics
   signal: SignalType;
   buffered: boolean;
   bypassType: BypassType;
+  circuitType?: CircuitType; // analog, digital, or hybrid
   
   // Power
+  powerType?: PowerType; // e.g., '9V DC', '18V DC', etc.
   voltage: number; // e.g., 9, 12, 18
   currentMa: number;
   centerNegative: boolean;
@@ -58,11 +77,15 @@ export interface Pedal {
   // Commerce
   msrp: number;
   reverbPrice: number;
-  reverbRating: number; // 1-5 stars
+  reverbPriceRange?: { min: number; max: number }; // Price range for used
+  reverbRating?: number; // 1-5 stars
   
-  // Optional
+  // Optional metadata
   imageUrl?: string;
   description?: string;
+  releaseYear?: number;
+  discontinued?: boolean;
+  madeIn?: string;
 }
 
 export interface BoardConstraints {
