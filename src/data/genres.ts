@@ -320,14 +320,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🎤',
     color: '#f472b6',
     artists: ['John Mayer', 'Ed Sheeran', 'Taylor Swift', 'Harry Styles'],
-    recommendedCategories: ['modulation', 'dynamics', 'delay', 'reverb'],
+    recommendedCategories: ['gain', 'modulation', 'dynamics', 'delay', 'reverb'],
     sectionTargets: {
+      gain: { min: 2, ideal: 5, max: 8 },
       modulation: { min: 3, ideal: 6, max: 10 },
       dynamics: { min: 5, ideal: 8, max: 12 },
       delay: { min: 3, ideal: 6, max: 9 },
       reverb: { min: 4, ideal: 7, max: 10 },
     },
-    preferredSubtypes: ['Chorus', 'Compressor', 'Digital', 'Plate', 'Hall', 'Room'],
+    preferredSubtypes: ['Overdrive', 'Boost', 'Chorus', 'Compressor', 'Digital', 'Plate', 'Hall', 'Room'],
     keywords: ['polished', 'clean', 'radio', 'pop', 'bright', 'clear'],
     characteristics: {
       gainLevel: 'clean',
