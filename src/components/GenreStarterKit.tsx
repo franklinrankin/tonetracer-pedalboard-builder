@@ -48,7 +48,7 @@ function getGenreBonusAdditions(
         (!excludeSubtypes || !excludeSubtypes.includes(p.subtype || ''))
       )
       .sort((a, b) => Math.abs(a.reverbPrice - 120) - Math.abs(b.reverbPrice - 120))
-      .slice(0, 3);
+      .slice(0, 11); // 1 top pick + 5 highly recommended + 5 could be cool
   };
   
   const findBySubtype = (subtypes: string[]) => {
@@ -59,7 +59,7 @@ function getGenreBonusAdditions(
         subtypes.includes(p.subtype || '')
       )
       .sort((a, b) => Math.abs(a.reverbPrice - 120) - Math.abs(b.reverbPrice - 120))
-      .slice(0, 3);
+      .slice(0, 11); // 1 top pick + 5 highly recommended + 5 could be cool
   };
 
   // Genre-specific bonus additions
@@ -920,12 +920,18 @@ export function GenreStarterKit() {
     const tunerPedals = allPedals.filter(p => p.subtype === 'Tuner' && p.fits);
     if (tunerPedals.length > 0) {
       const education = getPedalEducation('Tuner');
+      // Sort tuners by price (mid-range first)
+      const sortedTuners = [...tunerPedals].sort((a, b) => {
+        const aMidRange = Math.abs(a.reverbPrice - 80);
+        const bMidRange = Math.abs(b.reverbPrice - 80);
+        return aMidRange - bMidRange;
+      });
       steps.push({
         id: 'tuner',
         name: 'Tuner',
         description: 'Every guitarist needs a tuner! It keeps you in tune and can mute your signal.',
         subtype: 'Tuner',
-        pedals: tunerPedals.slice(0, 3),
+        pedals: sortedTuners.slice(0, 11), // 1 top pick + 5 highly recommended + 5 could be cool
         education: education ? {
           whatItDoes: education.whatItDoes,
           beginnerTip: education.beginnerTip,
@@ -961,6 +967,24 @@ export function GenreStarterKit() {
         const primarySubtype = sortedPedals[0].subtype || categoryInfo.displayName;
         const education = getPedalEducation(primarySubtype);
         
+        // Format display name - combine subtype with category for clarity
+        const getDisplayName = (subtype: string, cat: Category): string => {
+          // Subtypes that need category suffix for clarity
+          const needsCategorySuffix: Record<string, string[]> = {
+            delay: ['Analog', 'Digital', 'Tape', 'Multi'],
+            reverb: ['Spring', 'Hall', 'Plate', 'Room', 'Shimmer', 'Ambient'],
+            modulation: ['Multi'],
+            gain: ['Multi'],
+          };
+          
+          if (needsCategorySuffix[cat]?.includes(subtype)) {
+            return `${subtype} ${categoryInfo.displayName}`;
+          }
+          return subtype;
+        };
+        
+        const displayName = getDisplayName(primarySubtype, category);
+        
         // Get description based on category
         const getCategoryDescription = (cat: Category): string => {
           const descriptions: Record<Category, string> = {
@@ -982,11 +1006,11 @@ export function GenreStarterKit() {
         
         steps.push({
           id: `${category}-${primarySubtype}`,
-          name: primarySubtype,
+          name: displayName,
           description: getCategoryDescription(category),
           category: category,
           subtype: primarySubtype,
-          pedals: sortedPedals.slice(0, 3),
+          pedals: sortedPedals.slice(0, 11), // 1 top pick + 5 highly recommended + 5 could be cool
           education: education ? {
             whatItDoes: education.whatItDoes,
             beginnerTip: education.beginnerTip,
@@ -1430,99 +1454,121 @@ export function GenreStarterKit() {
         )}
         
         {/* Pedal Options */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           {(isAdditionsPhase ? currentAddition.pedals : currentStep.pedals).map((pedal, index) => {
             const isOnBoard = onBoardIds.has(pedal.id);
             const isExpanded = expandedPedal === pedal.id;
             
+            // Determine tier: 0 = Top Pick, 1-5 = Highly Recommended, 6+ = Could Be Cool
+            const tier = index === 0 ? 'top' : index <= 5 ? 'recommended' : 'cool';
+            const tierLabel = tier === 'top' ? 'TOP PICK' : tier === 'recommended' ? 'HIGHLY RECOMMENDED' : 'COULD BE COOL';
+            const tierColors = {
+              top: { border: isAdditionsPhase ? 'border-amber-500/50' : 'border-board-accent/50', bg: isAdditionsPhase ? 'bg-amber-500/5' : 'bg-board-accent/5', badge: isAdditionsPhase ? 'bg-amber-500/20 text-amber-400' : 'bg-board-accent/20 text-board-accent' },
+              recommended: { border: 'border-blue-500/30', bg: 'bg-blue-500/5', badge: 'bg-blue-500/20 text-blue-400' },
+              cool: { border: 'border-board-border', bg: 'bg-board-elevated/30', badge: 'bg-zinc-500/20 text-zinc-400' },
+            };
+            
+            // Show tier headers
+            const showTierHeader = index === 0 || index === 1 || index === 6;
+            const tierHeaderText = index === 0 ? '⭐ Top Pick' : index === 1 ? '👍 Highly Recommended' : index === 6 ? '✨ Could Be Cool' : null;
+            
             return (
-              <div 
-                key={pedal.id}
-                className={`p-4 rounded-xl border transition-all ${
-                  isOnBoard
-                    ? 'border-green-500/50 bg-green-500/10'
-                    : index === 0
-                      ? isAdditionsPhase 
-                        ? 'border-amber-500/50 bg-amber-500/5'
-                        : 'border-board-accent/50 bg-board-accent/5'
-                      : 'border-board-border bg-board-elevated/50'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  {/* Rank */}
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    isOnBoard
-                      ? 'bg-green-500/20 text-green-400'
-                      : index === 0
-                        ? isAdditionsPhase 
-                          ? 'bg-amber-500/20 text-amber-400'
-                          : 'bg-board-accent/20 text-board-accent'
-                        : 'bg-board-elevated text-board-muted'
+              <div key={pedal.id}>
+                {/* Tier Header */}
+                {showTierHeader && tierHeaderText && (
+                  <div className={`text-xs font-medium mb-2 mt-4 first:mt-0 ${
+                    index === 0 ? (isAdditionsPhase ? 'text-amber-400' : 'text-board-accent') :
+                    index === 1 ? 'text-blue-400' : 'text-zinc-500'
                   }`}>
-                    {isOnBoard ? <Check className="w-4 h-4" /> : <span className="text-sm font-bold">{index + 1}</span>}
+                    {tierHeaderText}
                   </div>
-                  
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <h4 className="font-medium text-white">{pedal.model}</h4>
-                      {index === 0 && !isOnBoard && (
-                        <span className={`px-1.5 py-0.5 text-[10px] font-medium rounded ${
-                          isAdditionsPhase 
-                            ? 'bg-amber-500/20 text-amber-400'
-                            : 'bg-board-accent/20 text-board-accent'
-                        }`}>
-                          TOP PICK
-                        </span>
-                      )}
+                )}
+                
+                <div 
+                  className={`p-3 rounded-xl border transition-all ${
+                    isOnBoard
+                      ? 'border-green-500/50 bg-green-500/10'
+                      : `${tierColors[tier].border} ${tierColors[tier].bg}`
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    {/* Rank */}
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                      isOnBoard
+                        ? 'bg-green-500/20 text-green-400'
+                        : tier === 'top'
+                          ? (isAdditionsPhase ? 'bg-amber-500/20 text-amber-400' : 'bg-board-accent/20 text-board-accent')
+                          : tier === 'recommended'
+                            ? 'bg-blue-500/20 text-blue-400'
+                            : 'bg-board-elevated text-board-muted'
+                    }`}>
+                      {isOnBoard ? <Check className="w-4 h-4" /> : 
+                       tier === 'top' ? <Star className="w-4 h-4" /> : 
+                       <span className="text-xs font-bold">{index}</span>}
                     </div>
-                    <p className="text-xs text-board-muted mb-2">{pedal.brand}</p>
                     
-                    <div className="flex items-center gap-4 text-xs">
-                      <span className="text-white font-medium">${pedal.reverbPrice}</span>
-                      <span className="text-board-muted">{formatInches(pedal.widthMm)}" × {formatInches(pedal.depthMm)}"</span>
-                      <span className="text-board-muted">{pedal.currentMa}mA</span>
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <h4 className="font-medium text-white text-sm">{pedal.model}</h4>
+                        {tier === 'top' && !isOnBoard && (
+                          <span className={`px-1.5 py-0.5 text-[10px] font-medium rounded ${tierColors[tier].badge}`}>
+                            {tierLabel}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-board-muted mb-1">{pedal.brand}</p>
+                      
+                      <div className="flex items-center gap-3 text-xs">
+                        <span className="text-white font-medium">${pedal.reverbPrice}</span>
+                        <span className="text-board-muted">{formatInches(pedal.widthMm)}" × {formatInches(pedal.depthMm)}"</span>
+                        <span className="text-board-muted">{pedal.currentMa}mA</span>
+                      </div>
                     </div>
+                    
+                    {/* Action */}
+                    {isOnBoard ? (
+                      <span className="px-2 py-1 text-xs font-medium text-green-400 bg-green-500/20 rounded-lg">
+                        Added
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => handleAddPedal(pedal)}
+                        className="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center gap-1"
+                        style={{ 
+                          backgroundColor: tier === 'top' 
+                            ? (isAdditionsPhase ? '#f59e0b' : genre.color)
+                            : tier === 'recommended'
+                              ? '#3b82f620'
+                              : '#52525b20',
+                          color: tier === 'top' ? 'white' : tier === 'recommended' ? '#3b82f6' : '#a1a1aa',
+                        }}
+                      >
+                        <Plus className="w-3 h-3" />
+                        Add
+                      </button>
+                    )}
                   </div>
                   
-                  {/* Action */}
-                  {isOnBoard ? (
-                    <span className="px-3 py-1.5 text-xs font-medium text-green-400 bg-green-500/20 rounded-lg">
-                      Added
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() => handleAddPedal(pedal)}
-                      className="px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1"
-                      style={{ 
-                        backgroundColor: index === 0 
-                          ? (isAdditionsPhase ? '#f59e0b' : genre.color)
-                          : (isAdditionsPhase ? '#f59e0b20' : `${genre.color}20`),
-                        color: index === 0 ? 'white' : (isAdditionsPhase ? '#f59e0b' : genre.color),
-                      }}
-                    >
-                      <Plus className="w-4 h-4" />
-                      Add
-                    </button>
+                  {/* Expandable Details */}
+                  {pedal.description && (
+                    <>
+                      <button
+                        onClick={() => setExpandedPedal(isExpanded ? null : pedal.id)}
+                        className="mt-2 text-xs text-board-muted hover:text-white transition-colors flex items-center gap-1"
+                      >
+                        <Info className="w-3 h-3" />
+                        {isExpanded ? 'Less info' : 'More info'}
+                      </button>
+                      
+                      {isExpanded && (
+                        <p className="mt-2 text-xs text-zinc-400 animate-fadeIn">
+                          {pedal.description}
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
-                
-                {/* Expandable Details */}
-                {pedal.description && (
-                  <button
-                    onClick={() => setExpandedPedal(isExpanded ? null : pedal.id)}
-                    className="mt-2 text-xs text-board-muted hover:text-white transition-colors flex items-center gap-1"
-                  >
-                    <Info className="w-3 h-3" />
-                    {isExpanded ? 'Less info' : 'More info'}
-                  </button>
-                )}
-                
-                {isExpanded && pedal.description && (
-                  <p className="mt-2 text-xs text-zinc-400 animate-fadeIn">
-                    {pedal.description}
-                  </p>
-                )}
               </div>
             );
           })}

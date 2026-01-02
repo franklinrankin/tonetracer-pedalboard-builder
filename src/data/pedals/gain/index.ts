@@ -6,12 +6,15 @@ import { FUZZ_PEDALS } from './fuzz';
 import { BOOST_PEDALS } from './boosts';
 
 // Combine all gain pedals (~250 total)
-export const GAIN_PEDALS: Pedal[] = [
+export const ALL_PEDALS: Pedal[] = [
   ...OVERDRIVE_PEDALS,   // ~70 pedals
   ...DISTORTION_PEDALS,  // ~45 pedals
   ...FUZZ_PEDALS,        // ~50 pedals
   ...BOOST_PEDALS,       // ~30 pedals
 ];
+
+// Alias for backwards compatibility
+export const GAIN_PEDALS = ALL_PEDALS;
 
 // Export subcategories
 export {
@@ -21,5 +24,5 @@ export {
   BOOST_PEDALS,
 };
 
-export default GAIN_PEDALS;
+export default ALL_PEDALS;
 

@@ -5,11 +5,14 @@ import { PHASER_PEDALS } from './phaser';
 import { OTHER_MODULATION_PEDALS } from './other';
 
 // Combine all modulation pedals (~120 total)
-export const MODULATION_PEDALS: Pedal[] = [
+export const ALL_PEDALS: Pedal[] = [
   ...CHORUS_PEDALS,           // ~35 pedals
   ...PHASER_PEDALS,           // ~25 pedals
   ...OTHER_MODULATION_PEDALS, // ~60 pedals (flanger, tremolo, vibrato, rotary)
 ];
+
+// Alias for backwards compatibility
+export const MODULATION_PEDALS = ALL_PEDALS;
 
 // Export subcategories
 export {
@@ -18,5 +21,5 @@ export {
   OTHER_MODULATION_PEDALS,
 };
 
-export default MODULATION_PEDALS;
+export default ALL_PEDALS;
 

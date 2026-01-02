@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Trash2, Share2, Download, GripVertical, X, ArrowLeft } from 'lucide-react';
+import { Trash2, Share2, Download, GripVertical, X, ArrowLeft, Info, DollarSign, Zap, Box } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches } from '../utils/measurements';
+import { Pedal } from '../types';
 
 // Pedal colors based on category
 const PEDAL_COLORS: Record<string, { bg: string; accent: string; text: string }> = {
@@ -34,6 +35,7 @@ export function BoardBuilder() {
     dragIndex: null,
     dragOverIndex: null,
   });
+  const [selectedPedal, setSelectedPedal] = useState<Pedal | null>(null);
   
   const handleDragStart = (e: React.DragEvent, index: number) => {
     e.dataTransfer.effectAllowed = 'move';
@@ -244,6 +246,8 @@ export function BoardBuilder() {
                     const isDragOver = dragState.dragOverIndex === originalIndex;
                     const displayName = slot.pedal.subtype || slot.pedal.model.split(' ')[0];
                     
+                    const isSelected = selectedPedal?.id === slot.pedal.id;
+                    
                     return (
                       <div
                         key={slot.pedal.id}
@@ -251,9 +255,12 @@ export function BoardBuilder() {
                         onDragStart={(e) => handleDragStart(e, originalIndex)}
                         onDragOver={(e) => handleDragOver(e, originalIndex)}
                         onDragEnd={handleDragEnd}
+                        onClick={() => setSelectedPedal(isSelected ? null : slot.pedal)}
                         className={`relative group cursor-grab active:cursor-grabbing transition-all flex-shrink-0 ${
                           isDragging ? 'opacity-50 scale-95' : ''
-                        } ${isDragOver ? 'scale-110 ring-2 ring-white' : ''}`}
+                        } ${isDragOver ? 'scale-110 ring-2 ring-white' : ''} ${
+                          isSelected ? 'ring-2 ring-board-accent ring-offset-1 ring-offset-black' : ''
+                        }`}
                         style={{ width: pedalSize.width, height: pedalSize.height }}
                       >
                         {/* Pedal body */}
@@ -345,6 +352,99 @@ export function BoardBuilder() {
           </span>
         </div>
       </div>
+      
+      {/* Selected Pedal Info Panel */}
+      {selectedPedal && (
+        <div className="p-4 border-t border-board-border bg-board-elevated">
+          <div className="flex items-start justify-between mb-3">
+            <div>
+              <div className="text-xs text-board-muted">{selectedPedal.brand}</div>
+              <h3 className="text-lg font-semibold text-white">{selectedPedal.model}</h3>
+            </div>
+            <button 
+              onClick={() => setSelectedPedal(null)}
+              className="p-1 rounded hover:bg-board-surface transition-colors"
+            >
+              <X className="w-4 h-4 text-board-muted" />
+            </button>
+          </div>
+          
+          {/* Quick Stats */}
+          <div className="grid grid-cols-4 gap-3 mb-3">
+            <div className="p-2 rounded-lg bg-board-surface">
+              <div className="flex items-center gap-1 text-board-muted text-xs mb-1">
+                <DollarSign className="w-3 h-3" />
+                <span>Price</span>
+              </div>
+              <div className="text-white font-medium">${selectedPedal.reverbPrice}</div>
+            </div>
+            <div className="p-2 rounded-lg bg-board-surface">
+              <div className="flex items-center gap-1 text-board-muted text-xs mb-1">
+                <Zap className="w-3 h-3" />
+                <span>Power</span>
+              </div>
+              <div className="text-white font-medium">{selectedPedal.currentMa}mA</div>
+            </div>
+            <div className="p-2 rounded-lg bg-board-surface">
+              <div className="flex items-center gap-1 text-board-muted text-xs mb-1">
+                <Box className="w-3 h-3" />
+                <span>Size</span>
+              </div>
+              <div className="text-white font-medium text-xs">
+                {formatInches(selectedPedal.widthMm)}" × {formatInches(selectedPedal.depthMm)}"
+              </div>
+            </div>
+            <div className="p-2 rounded-lg bg-board-surface">
+              <div className="flex items-center gap-1 text-board-muted text-xs mb-1">
+                <Info className="w-3 h-3" />
+                <span>Rating</span>
+              </div>
+              <div className="text-white font-medium">{selectedPedal.categoryRating}/10</div>
+            </div>
+          </div>
+          
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2">
+            <span 
+              className="px-2 py-1 text-xs rounded-full"
+              style={{ 
+                backgroundColor: `${CATEGORY_INFO[selectedPedal.category]?.color || '#666'}20`,
+                color: CATEGORY_INFO[selectedPedal.category]?.color || '#666'
+              }}
+            >
+              {CATEGORY_INFO[selectedPedal.category]?.displayName || selectedPedal.category}
+            </span>
+            {selectedPedal.subtype && (
+              <span className="px-2 py-1 text-xs rounded-full bg-board-surface text-board-muted">
+                {selectedPedal.subtype}
+              </span>
+            )}
+            <span className="px-2 py-1 text-xs rounded-full bg-board-surface text-board-muted">
+              {selectedPedal.bypassType === 'true' ? 'True Bypass' : selectedPedal.bypassType === 'buffered' ? 'Buffered' : 'Selectable Bypass'}
+            </span>
+            <span className="px-2 py-1 text-xs rounded-full bg-board-surface text-board-muted">
+              {selectedPedal.signal === 'mono' ? 'Mono' : 'Stereo'}
+            </span>
+            {selectedPedal.circuitType && (
+              <span className="px-2 py-1 text-xs rounded-full bg-board-surface text-board-muted capitalize">
+                {selectedPedal.circuitType}
+              </span>
+            )}
+            {selectedPedal.topJacks && (
+              <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
+                Top Jacks
+              </span>
+            )}
+          </div>
+          
+          {/* Description if available */}
+          {selectedPedal.description && (
+            <p className="mt-3 text-sm text-board-muted">
+              {selectedPedal.description}
+            </p>
+          )}
+        </div>
+      )}
       
       {/* Compact Signal Chain List */}
       <div className="p-3 border-t border-board-border">

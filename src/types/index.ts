@@ -24,11 +24,15 @@ export type PowerType =
   | '9V DC'
   | '12V DC'
   | '18V DC'
+  | '24V DC'
   | '9-18V DC'
   | '9V AC'
   | '12V AC'
+  | 'AC'
+  | '48V Phantom'
   | 'Battery Only'
-  | 'USB';
+  | 'USB'
+  | 'Passive';
 
 export type EnclosureType = 
   | 'nano'        // ~1.5" x 1.5"
