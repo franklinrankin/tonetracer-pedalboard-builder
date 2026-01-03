@@ -11,6 +11,7 @@ function AppContent() {
   // Capture visualizer screenshot with high quality for clear text
   const captureVisualizerScreenshot = useCallback(async () => {
     const element = document.getElementById('board-visualizer-capture');
+    console.log('Capturing screenshot, element found:', !!element);
     if (element) {
       try {
         const canvas = await html2canvas(element, {
@@ -21,10 +22,13 @@ function AppContent() {
           allowTaint: true,
         });
         const dataUrl = canvas.toDataURL('image/png', 1.0);
+        console.log('Screenshot captured, length:', dataUrl.length);
         dispatch({ type: 'SET_VISUALIZER_SCREENSHOT', screenshot: dataUrl });
       } catch (error) {
         console.error('Failed to capture visualizer:', error);
       }
+    } else {
+      console.warn('board-visualizer-capture element not found');
     }
   }, [dispatch]);
   

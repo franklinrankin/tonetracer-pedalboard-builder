@@ -420,6 +420,7 @@ export function BoardVisualizer() {
 
       {/* Board Visualization */}
       <div 
+        id="board-visualizer-capture"
         ref={containerRef}
         className="relative bg-board-elevated rounded-xl p-6 border border-board-border overflow-visible"
         style={{ minHeight: '500px', paddingTop: '80px', paddingBottom: '80px' }}
