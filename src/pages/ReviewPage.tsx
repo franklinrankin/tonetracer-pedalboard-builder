@@ -6,7 +6,6 @@ import { CATEGORY_INFO } from '../data/categories';
 import { formatInches, formatArea } from '../utils/measurements';
 import { BoardRecommendations } from '../components/BoardRecommendations';
 import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
-import { BoardVisualizer } from '../components/BoardVisualizer';
 
 // Genre Matches Component - shown when user didn't pre-select genres
 function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
@@ -283,7 +282,7 @@ function PowerSupplyRecommendations({
 
 export function ReviewPage() {
   const { state } = useBoard();
-  const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres } = state;
+  const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres, visualizerScreenshot } = state;
   const [showRecommendations, setShowRecommendations] = useState(false);
   
   const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
@@ -524,20 +523,25 @@ export function ReviewPage() {
           </div>
         </div>
         
-        {/* Board Layout Preview */}
-        {board.slots.length > 0 && (
+        {/* Board Layout Screenshot */}
+        {visualizerScreenshot && (
           <div className="mb-8 bg-board-surface border border-board-border rounded-xl overflow-hidden">
             <div className="p-3 border-b border-board-border flex items-center gap-2">
-              <LayoutGrid className="w-4 h-4 text-board-accent" />
-              <h3 className="text-sm font-semibold text-white">Board Layout Preview</h3>
+              <LayoutGrid className="w-4 h-4 text-purple-400" />
+              <h3 className="text-sm font-semibold text-white">Board Layout</h3>
               <span className="text-xs text-board-muted ml-auto">
                 {board.constraints.maxWidthMm && board.constraints.maxDepthMm
                   ? `${(board.constraints.maxWidthMm / 25.4).toFixed(1)}" × ${(board.constraints.maxDepthMm / 25.4).toFixed(1)}"`
                   : 'Custom size'}
               </span>
             </div>
-            <div className="p-4">
-              <BoardVisualizer previewMode />
+            <div className="p-4 flex justify-center">
+              <img 
+                src={visualizerScreenshot} 
+                alt="Board Layout Preview" 
+                className="max-w-full h-auto rounded-lg shadow-lg"
+                style={{ maxHeight: '400px' }}
+              />
             </div>
           </div>
         )}

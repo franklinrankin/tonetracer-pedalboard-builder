@@ -25,15 +25,11 @@ const SIGNAL_COLORS = [
   '#14b8a6', // teal
 ];
 
-interface BoardVisualizerProps {
-  previewMode?: boolean;
-}
-
-export function BoardVisualizer({ previewMode = false }: BoardVisualizerProps) {
+export function BoardVisualizer() {
   const { state } = useBoard();
   const { board } = state;
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(previewMode ? 0.7 : 1);
+  const [scale, setScale] = useState(1);
   const [positions, setPositions] = useState<Map<string, PedalPosition>>(new Map());
   const [selectedPedal, setSelectedPedal] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -338,99 +334,96 @@ export function BoardVisualizer({ previewMode = false }: BoardVisualizerProps) {
 
   if (board.slots.length === 0) {
     return (
-      <div className={`flex items-center justify-center ${previewMode ? 'h-48' : 'h-96'} bg-board-elevated rounded-xl border border-board-border`}>
+      <div className="flex items-center justify-center h-96 bg-board-elevated rounded-xl border border-board-border">
         <p className="text-board-muted">Add pedals to your board to visualize the signal flow</p>
       </div>
     );
   }
 
   return (
-    <div className={previewMode ? "space-y-2" : "space-y-4"}>
-      {/* Controls - hidden in preview mode */}
-      {!previewMode && (
-        <div className="flex items-center justify-between bg-board-surface rounded-xl p-4 border border-board-border">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Move className="w-4 h-4 text-board-muted" />
-              <span className="text-sm text-board-muted">Drag pedals to move</span>
-            </div>
-            {selectedPedal && (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => rotatePedal('ccw')}
-                  className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
-                  title="Rotate counter-clockwise"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => rotatePedal('cw')}
-                  className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
-                  title="Rotate clockwise"
-                >
-                  <RotateCw className="w-4 h-4" />
-                </button>
-                <span className="text-sm text-board-accent ml-2">
-                  {board.slots.find(s => s.pedal.id === selectedPedal)?.pedal.model} selected
-                </span>
-              </div>
-            )}
-          </div>
-          
+    <div className="space-y-4">
+      {/* Controls */}
+      <div className="flex items-center justify-between bg-board-surface rounded-xl p-4 border border-board-border">
+        <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setScale(s => Math.max(0.5, s - 0.1))}
-              className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
-            >
-              <ZoomOut className="w-4 h-4" />
-            </button>
-            <span className="text-sm text-white w-16 text-center">{Math.round(scale * 100)}%</span>
-            <button
-              onClick={() => setScale(s => Math.min(2, s + 0.1))}
-              className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
-            >
-              <ZoomIn className="w-4 h-4" />
-            </button>
+            <Move className="w-4 h-4 text-board-muted" />
+            <span className="text-sm text-board-muted">Drag pedals to move</span>
           </div>
+          {selectedPedal && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => rotatePedal('ccw')}
+                className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
+                title="Rotate counter-clockwise"
+              >
+                <RotateCcw className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => rotatePedal('cw')}
+                className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
+                title="Rotate clockwise"
+              >
+                <RotateCw className="w-4 h-4" />
+              </button>
+              <span className="text-sm text-board-accent ml-2">
+                {board.slots.find(s => s.pedal.id === selectedPedal)?.pedal.model} selected
+              </span>
+            </div>
+          )}
         </div>
-      )}
+        
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setScale(s => Math.max(0.5, s - 0.1))}
+            className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
+          >
+            <ZoomOut className="w-4 h-4" />
+          </button>
+          <span className="text-sm text-white w-16 text-center">{Math.round(scale * 100)}%</span>
+          <button
+            onClick={() => setScale(s => Math.min(2, s + 0.1))}
+            className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
+          >
+            <ZoomIn className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
 
-      {/* Signal Flow Legend (Right to Left) - hidden in preview mode */}
-      {!previewMode && (
-        <div className="bg-board-surface rounded-xl p-4 border border-board-border">
-          <h3 className="text-sm font-medium text-white mb-3">Signal Flow (Right → Left)</h3>
-          <div className="flex flex-wrap gap-3">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-green-500 border-2 border-green-300" />
-              <span className="text-xs text-board-muted">Input (Guitar)</span>
+      {/* Signal Flow Legend (Right to Left) */}
+      <div className="bg-board-surface rounded-xl p-4 border border-board-border">
+        <h3 className="text-sm font-medium text-white mb-3">Signal Flow (Right → Left)</h3>
+        <div className="flex flex-wrap gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-full bg-green-500 border-2 border-green-300" />
+            <span className="text-xs text-board-muted">Input (Guitar)</span>
+          </div>
+          <span className="text-xs text-board-muted">→</span>
+          {board.slots.map((slot, index) => (
+            <div key={slot.pedal.id} className="flex items-center gap-2">
+              <div 
+                className="w-3 h-1 rounded-full"
+                style={{ backgroundColor: SIGNAL_COLORS[index % SIGNAL_COLORS.length] }}
+              />
+              <span className="text-xs text-board-muted">
+                {index + 1}. {slot.pedal.model}
+              </span>
+              {index < board.slots.length - 1 && <span className="text-xs text-board-muted">→</span>}
             </div>
-            <span className="text-xs text-board-muted">→</span>
-            {board.slots.map((slot, index) => (
-              <div key={slot.pedal.id} className="flex items-center gap-2">
-                <div 
-                  className="w-3 h-1 rounded-full"
-                  style={{ backgroundColor: SIGNAL_COLORS[index % SIGNAL_COLORS.length] }}
-                />
-                <span className="text-xs text-board-muted">
-                  {index + 1}. {slot.pedal.model}
-                </span>
-                {index < board.slots.length - 1 && <span className="text-xs text-board-muted">→</span>}
-              </div>
-            ))}
-            <span className="text-xs text-board-muted">→</span>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-red-500 border-2 border-red-300" />
-              <span className="text-xs text-board-muted">Output (Amp)</span>
-            </div>
+          ))}
+          <span className="text-xs text-board-muted">→</span>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-full bg-red-500 border-2 border-red-300" />
+            <span className="text-xs text-board-muted">Output (Amp)</span>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Board Visualization */}
       <div 
+        id="board-visualizer-capture"
         ref={containerRef}
-        className={`relative bg-board-elevated rounded-xl border border-board-border overflow-visible ${previewMode ? 'p-3' : 'p-6'}`}
-        style={{ minHeight: previewMode ? '200px' : '500px', paddingTop: previewMode ? '20px' : '80px', paddingBottom: previewMode ? '20px' : '80px' }}
+        className="relative bg-board-elevated rounded-xl p-6 border border-board-border overflow-visible"
+        style={{ minHeight: '500px', paddingTop: '80px', paddingBottom: '80px' }}
       >
         {/* Board Surface */}
         <div
@@ -682,12 +675,8 @@ export function BoardVisualizer({ previewMode = false }: BoardVisualizerProps) {
             return (
               <div
                 key={slot.pedal.id}
-                className={`absolute select-none transition-shadow ${
-                  previewMode 
-                    ? 'cursor-default z-10' 
-                    : isSelected 
-                      ? 'cursor-move ring-2 ring-board-accent ring-offset-2 ring-offset-board-dark z-20' 
-                      : 'cursor-move z-10 hover:z-20'
+                className={`absolute cursor-move select-none transition-shadow ${
+                  isSelected ? 'ring-2 ring-board-accent ring-offset-2 ring-offset-board-dark z-20' : 'z-10 hover:z-20'
                 }`}
                 style={{
                   left,
@@ -697,31 +686,29 @@ export function BoardVisualizer({ previewMode = false }: BoardVisualizerProps) {
                   transform: `rotate(${pos.rotation}deg)`,
                   transformOrigin: 'center center',
                 }}
-                onMouseDown={previewMode ? undefined : (e) => handleMouseDown(e, slot.pedal.id)}
-                onClick={previewMode ? undefined : () => setSelectedPedal(slot.pedal.id)}
+                onMouseDown={(e) => handleMouseDown(e, slot.pedal.id)}
+                onClick={() => setSelectedPedal(slot.pedal.id)}
               >
-                {/* Function label above pedal - hidden in preview mode */}
-                {!previewMode && (
-                  <div 
-                    className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none"
-                    style={{ 
-                      top: -18,
-                      transform: `translateX(-50%) rotate(-${pos.rotation}deg)`,
+                {/* Function label above pedal */}
+                <div 
+                  className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none"
+                  style={{ 
+                    top: -18,
+                    transform: `translateX(-50%) rotate(-${pos.rotation}deg)`,
+                  }}
+                >
+                  <span 
+                    className="px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wide"
+                    style={{
+                      backgroundColor: `${categoryColor}cc`,
+                      color: 'white',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                      boxShadow: `0 2px 4px rgba(0,0,0,0.3)`,
                     }}
                   >
-                    <span 
-                      className="px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wide"
-                      style={{
-                        backgroundColor: `${categoryColor}cc`,
-                        color: 'white',
-                        textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-                        boxShadow: `0 2px 4px rgba(0,0,0,0.3)`,
-                      }}
-                    >
-                      {pedalFunction}
-                    </span>
-                  </div>
-                )}
+                    {pedalFunction}
+                  </span>
+                </div>
                 
                 {/* Pedal body */}
                 <div
@@ -820,8 +807,8 @@ export function BoardVisualizer({ previewMode = false }: BoardVisualizerProps) {
                   </>
                 )}
                 
-                {/* Pedal Info Card Popup - hidden in preview mode */}
-                {!previewMode && showPedalCard === slot.pedal.id && (() => {
+                {/* Pedal Info Card Popup */}
+                {showPedalCard === slot.pedal.id && (() => {
                   // Check if there's enough space above (if pedal is in top 35% of board, show below)
                   const showBelow = pos.y < 35;
                   
