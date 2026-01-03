@@ -970,5 +970,4 @@ export const BoardVisualizer = forwardRef<BoardVisualizerRef>(function BoardVisu
       </div>
     </div>
   );
-}
-
+});
