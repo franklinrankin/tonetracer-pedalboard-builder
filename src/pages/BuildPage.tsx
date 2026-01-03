@@ -38,7 +38,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <div className="bg-board-surface border-b border-board-border sticky top-0 z-10">
+      <div className="bg-board-surface border-b border-board-border">
         <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -104,7 +104,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
       <div className="max-w-7xl mx-auto p-6">
         {/* Board Preview - Full Width at Top */}
         <div className="mb-6">
-          <div className="sticky top-36 z-5">
+          <div className="sticky top-20 z-5">
             <BoardBuilder />
           </div>
         </div>
