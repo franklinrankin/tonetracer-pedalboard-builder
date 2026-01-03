@@ -6,8 +6,8 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'pt-nano',
     name: 'Pedaltrain Nano',
     description: 'Ultra-compact, 3-4 mini pedals',
-    widthMm: 356,
-    depthMm: 127,
+    widthMm: 356,  // 14"
+    depthMm: 146,  // 5.75" (actual Pedaltrain spec)
     brand: 'Pedaltrain',
     suggestedBudget: 300,
   },
@@ -15,8 +15,8 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'pt-nano-plus',
     name: 'Pedaltrain Nano+',
     description: 'Compact with room for power supply underneath',
-    widthMm: 457,
-    depthMm: 127,
+    widthMm: 457,  // 18"
+    depthMm: 146,  // 5.75" (actual Pedaltrain spec)
     brand: 'Pedaltrain',
     suggestedBudget: 400,
   },
@@ -24,8 +24,8 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'pt-metro-16',
     name: 'Pedaltrain Metro 16',
     description: 'Small board, 4-5 standard pedals',
-    widthMm: 406,
-    depthMm: 152,
+    widthMm: 406,  // 16"
+    depthMm: 203,  // 8" (actual Pedaltrain spec)
     brand: 'Pedaltrain',
     suggestedBudget: 500,
   },
@@ -33,8 +33,8 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'pt-metro-20',
     name: 'Pedaltrain Metro 20',
     description: 'Slightly larger small board',
-    widthMm: 508,
-    depthMm: 152,
+    widthMm: 508,  // 20"
+    depthMm: 203,  // 8" (actual Pedaltrain spec)
     brand: 'Pedaltrain',
     suggestedBudget: 600,
   },
@@ -42,8 +42,8 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'pt-metro-24',
     name: 'Pedaltrain Metro 24',
     description: 'Popular gigging size',
-    widthMm: 610,
-    depthMm: 203,
+    widthMm: 610,  // 24"
+    depthMm: 203,  // 8" (actual Pedaltrain spec)
     brand: 'Pedaltrain',
     suggestedBudget: 800,
   },
@@ -51,8 +51,8 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'pt-classic-jr',
     name: 'Pedaltrain Classic Jr',
     description: 'Versatile medium board',
-    widthMm: 457,
-    depthMm: 318,
+    widthMm: 457,  // 18"
+    depthMm: 318,  // 12.5" (actual Pedaltrain spec)
     brand: 'Pedaltrain',
     suggestedBudget: 700,
   },
@@ -60,8 +60,8 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'pt-classic-1',
     name: 'Pedaltrain Classic 1',
     description: 'Standard medium-large board',
-    widthMm: 559,
-    depthMm: 318,
+    widthMm: 559,  // 22"
+    depthMm: 318,  // 12.5" (actual Pedaltrain spec)
     brand: 'Pedaltrain',
     suggestedBudget: 1000,
   },
@@ -69,8 +69,8 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'pt-classic-2',
     name: 'Pedaltrain Classic 2',
     description: 'Large professional board',
-    widthMm: 610,
-    depthMm: 318,
+    widthMm: 610,  // 24"
+    depthMm: 318,  // 12.5" (actual Pedaltrain spec)
     brand: 'Pedaltrain',
     suggestedBudget: 1500,
   },
@@ -78,8 +78,8 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'pt-classic-pro',
     name: 'Pedaltrain Classic Pro',
     description: 'Extra-large touring board',
-    widthMm: 813,
-    depthMm: 419,
+    widthMm: 813,  // 32"
+    depthMm: 406,  // 16" (actual Pedaltrain spec)
     brand: 'Pedaltrain',
     suggestedBudget: 2500,
   },
@@ -160,31 +160,37 @@ export function getBoardTemplateByDimensions(widthMm: number, depthMm: number): 
 }
 
 // Estimate how many pedals can fit on a board
-// Based on average pedal size of ~75mm wide x 125mm deep with 10mm spacing
+// Based on average pedal size - most pedals range from 60-90mm wide, 100-130mm deep
+// Use smaller averages since many pedals are compact, and tight spacing is common
 export function estimatePedalCapacity(widthMm: number, depthMm: number): number {
-  const AVG_PEDAL_WIDTH = 75; // mm (~3")
-  const AVG_PEDAL_DEPTH = 125; // mm (~5")
-  const SPACING = 10; // mm between pedals
+  const AVG_PEDAL_WIDTH = 65; // mm (~2.5") - accounts for mini/compact pedals
+  const AVG_PEDAL_DEPTH = 110; // mm (~4.3") - accounts for varied depths
+  const SPACING = 8; // mm between pedals - experienced players pack tight
 
   const pedalsPerRow = Math.floor(widthMm / (AVG_PEDAL_WIDTH + SPACING));
   const numRows = Math.floor(depthMm / (AVG_PEDAL_DEPTH + SPACING));
   
-  return Math.max(pedalsPerRow * numRows, 3); // Minimum 3 pedals
+  // Account for staggered placement - can often fit 10-15% more
+  const baseCapacity = pedalsPerRow * numRows;
+  const staggerBonus = Math.floor(baseCapacity * 0.1);
+  
+  return Math.max(baseCapacity + staggerBonus, 3); // Minimum 3 pedals
 }
 
 // Get recommended number of essential pedal categories based on board size
 export function getRecommendedEssentialCount(widthMm: number, depthMm: number): number {
   const capacity = estimatePedalCapacity(widthMm, depthMm);
   
+  // Aim to fill most of the board with essentials
   // Small boards (3-5 capacity): 3-4 essentials
-  // Medium boards (6-10 capacity): 5-6 essentials
-  // Large boards (11-15 capacity): 7-8 essentials
-  // XL boards (16+ capacity): 8-10 essentials
+  // Medium boards (6-10 capacity): 5-7 essentials  
+  // Large boards (11-15 capacity): 8-10 essentials
+  // XL boards (16+ capacity): 10-12 essentials
   
   if (capacity <= 5) return Math.min(capacity, 4);
-  if (capacity <= 10) return Math.min(capacity - 1, 6);
-  if (capacity <= 15) return Math.min(capacity - 2, 8);
-  return Math.min(capacity - 3, 10);
+  if (capacity <= 10) return Math.min(capacity - 1, 7);
+  if (capacity <= 15) return Math.min(capacity - 2, 10);
+  return Math.min(capacity - 3, 12);
 }
 
 // Get recommended number of bonus pedals based on board size
@@ -192,11 +198,11 @@ export function getRecommendedBonusCount(widthMm: number, depthMm: number): numb
   const capacity = estimatePedalCapacity(widthMm, depthMm);
   const essentials = getRecommendedEssentialCount(widthMm, depthMm);
   
-  // Leave some room - bonus pedals fill remaining capacity minus a buffer
+  // Fill remaining capacity with bonus pedals
   const remaining = capacity - essentials;
   
-  if (remaining <= 1) return 0;
-  if (remaining <= 3) return 2;
-  if (remaining <= 5) return 3;
-  return Math.min(remaining - 1, 5);
+  if (remaining <= 1) return Math.max(remaining, 0);
+  if (remaining <= 3) return remaining;
+  if (remaining <= 6) return Math.min(remaining, 5);
+  return Math.min(remaining, 6);
 }
