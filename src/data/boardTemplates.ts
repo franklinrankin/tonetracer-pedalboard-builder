@@ -149,3 +149,54 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
 export function getTemplateDimensionsDisplay(template: BoardTemplate): string {
   return `${formatInches(template.widthMm)}" × ${formatInches(template.depthMm)}"`;
 }
+
+// Get board template by dimensions
+export function getBoardTemplateByDimensions(widthMm: number, depthMm: number): BoardTemplate | undefined {
+  const tolerance = 0.1;
+  return BOARD_TEMPLATES.find(template =>
+    Math.abs(template.widthMm - widthMm) < tolerance &&
+    Math.abs(template.depthMm - depthMm) < tolerance
+  );
+}
+
+// Estimate how many pedals can fit on a board
+// Based on average pedal size of ~75mm wide x 125mm deep with 10mm spacing
+export function estimatePedalCapacity(widthMm: number, depthMm: number): number {
+  const AVG_PEDAL_WIDTH = 75; // mm (~3")
+  const AVG_PEDAL_DEPTH = 125; // mm (~5")
+  const SPACING = 10; // mm between pedals
+
+  const pedalsPerRow = Math.floor(widthMm / (AVG_PEDAL_WIDTH + SPACING));
+  const numRows = Math.floor(depthMm / (AVG_PEDAL_DEPTH + SPACING));
+  
+  return Math.max(pedalsPerRow * numRows, 3); // Minimum 3 pedals
+}
+
+// Get recommended number of essential pedal categories based on board size
+export function getRecommendedEssentialCount(widthMm: number, depthMm: number): number {
+  const capacity = estimatePedalCapacity(widthMm, depthMm);
+  
+  // Small boards (3-5 capacity): 3-4 essentials
+  // Medium boards (6-10 capacity): 5-6 essentials
+  // Large boards (11-15 capacity): 7-8 essentials
+  // XL boards (16+ capacity): 8-10 essentials
+  
+  if (capacity <= 5) return Math.min(capacity, 4);
+  if (capacity <= 10) return Math.min(capacity - 1, 6);
+  if (capacity <= 15) return Math.min(capacity - 2, 8);
+  return Math.min(capacity - 3, 10);
+}
+
+// Get recommended number of bonus pedals based on board size
+export function getRecommendedBonusCount(widthMm: number, depthMm: number): number {
+  const capacity = estimatePedalCapacity(widthMm, depthMm);
+  const essentials = getRecommendedEssentialCount(widthMm, depthMm);
+  
+  // Leave some room - bonus pedals fill remaining capacity minus a buffer
+  const remaining = capacity - essentials;
+  
+  if (remaining <= 1) return 0;
+  if (remaining <= 3) return 2;
+  if (remaining <= 5) return 3;
+  return Math.min(remaining - 1, 5);
+}

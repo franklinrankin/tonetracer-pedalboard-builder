@@ -98,6 +98,7 @@ export interface BoardConstraints {
   maxBudget: number;
   minBudget?: number;
   maxCurrentMa?: number;
+  maxPedalCount?: number; // If set, use this instead of board size
   rightAngleCablesOnly?: boolean;
   // "Apply After" flags - when true, constraint doesn't filter pedals during build
   applyAfterSize?: boolean;

@@ -3,6 +3,7 @@ import { PedalWithStatus, Pedal } from '../types';
 import { CATEGORY_INFO, getRatingLabel } from '../data/categories';
 import { useBoard } from '../context/BoardContext';
 import { formatInches } from '../utils/measurements';
+import { PedalImage } from './PedalImage';
 
 interface PedalCardProps {
   pedal: PedalWithStatus;
@@ -32,14 +33,7 @@ export function PedalCard({ pedal, isOnBoard = false, compact = false }: PedalCa
             : 'bg-board-surface border-board-border hover:border-board-accent/30'
         }`}
       >
-        <div 
-          className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: `${categoryInfo.color}20` }}
-        >
-          <span className="text-sm font-bold" style={{ color: categoryInfo.color }}>
-            {pedal.categoryRating}
-          </span>
-        </div>
+        <PedalImage category={pedal.category} size="sm" />
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
@@ -82,25 +76,30 @@ export function PedalCard({ pedal, isOnBoard = false, compact = false }: PedalCa
       
       <div className="p-4">
         {/* Header */}
-        <div className="flex items-start justify-between mb-3">
-          <div>
+        <div className="flex items-start gap-3 mb-3">
+          <PedalImage 
+            category={pedal.category} 
+            size="lg" 
+            className={isDisabled ? 'opacity-50' : ''}
+          />
+          
+          <div className="flex-1 min-w-0">
             <div className="text-xs text-board-muted mb-0.5">{pedal.brand}</div>
             <h3 className={`font-semibold ${isDisabled ? 'text-zinc-500' : 'text-white'}`}>
               {pedal.model}
             </h3>
-          </div>
-          
-          {/* Rating badge */}
-          <div 
-            className="flex items-center justify-center w-10 h-10 rounded-lg"
-            style={{ backgroundColor: `${categoryInfo.color}20` }}
-          >
-            <span 
-              className="text-lg font-bold"
-              style={{ color: isDisabled ? '#6b7280' : categoryInfo.color }}
+            {/* Rating badge */}
+            <div 
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded mt-1"
+              style={{ backgroundColor: `${categoryInfo.color}20` }}
             >
-              {pedal.categoryRating}
-            </span>
+              <span 
+                className="text-sm font-bold"
+                style={{ color: isDisabled ? '#6b7280' : categoryInfo.color }}
+              >
+                {pedal.categoryRating}/10
+              </span>
+            </div>
           </div>
         </div>
         

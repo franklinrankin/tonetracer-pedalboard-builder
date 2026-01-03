@@ -1,12 +1,13 @@
-import { Music2, Users, ChevronRight, Check, X } from 'lucide-react';
+import { Music2, Users, ChevronRight, Check, X, Wand2 } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { GENRES, GenreProfile, getGenreById } from '../data/genres';
 
 interface GenrePageProps {
   onContinue: () => void;
+  onCreateOwn?: () => void; // Skip to build page directly
 }
 
-export function GenrePage({ onContinue }: GenrePageProps) {
+export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
   const { state, dispatch } = useBoard();
   const { selectedGenres } = state;
   
@@ -72,6 +73,32 @@ export function GenrePage({ onContinue }: GenrePageProps) {
       {/* Genre Grid */}
       <div className="max-w-5xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {/* Create Your Own Card */}
+          <button
+            onClick={onCreateOwn}
+            className="relative p-6 rounded-xl border-2 border-dashed border-board-accent/50 text-left transition-all hover:scale-[1.02] hover:border-board-accent bg-gradient-to-br from-board-accent/10 to-board-highlight/10 group"
+          >
+            <div className="w-12 h-12 mb-3 rounded-xl bg-board-accent/20 flex items-center justify-center group-hover:bg-board-accent/30 transition-colors">
+              <Wand2 className="w-6 h-6 text-board-accent" />
+            </div>
+            <h3 className="font-semibold text-white text-lg mb-1">Create Your Own</h3>
+            <p className="text-sm text-zinc-400 line-clamp-2">
+              No limits — build freely and we'll show you what genres it fits
+            </p>
+            
+            {/* Features */}
+            <div className="mt-4 pt-4 border-t border-board-border/50 space-y-1">
+              <div className="flex items-center gap-2 text-xs text-board-muted">
+                <Check className="w-3 h-3 text-board-accent" />
+                <span>Skip to building</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-board-muted">
+                <Check className="w-3 h-3 text-board-accent" />
+                <span>Top 3 genre matches</span>
+              </div>
+            </div>
+          </button>
+          
           {GENRES.map(genre => {
             const isSelected = selectedGenres.includes(genre.id);
             const selectionIndex = selectedGenres.indexOf(genre.id);
@@ -191,11 +218,11 @@ export function GenrePage({ onContinue }: GenrePageProps) {
         </div>
       )}
       
-      {/* Continue Button (for mobile/touch) */}
-      <div className="max-w-4xl mx-auto mt-8 lg:hidden">
+      {/* Floating Continue Button - Bottom Left */}
+      <div className="fixed bottom-6 left-6 z-50">
         <button
           onClick={onContinue}
-          className="w-full py-4 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2"
+          className="px-6 py-3 bg-board-accent text-white font-medium rounded-xl flex items-center gap-2 shadow-lg shadow-board-accent/30 hover:bg-board-accent-dim transition-colors"
         >
           {selectedGenres.length > 0 ? 'Continue' : 'Skip & Browse All'}
           <ChevronRight className="w-5 h-5" />

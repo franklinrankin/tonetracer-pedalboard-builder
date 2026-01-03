@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sliders, ChevronRight, Sparkles } from 'lucide-react';
+import { Sliders, ChevronRight, Sparkles, RotateCcw } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { GenreStarterKit } from '../components/GenreStarterKit';
 import { PedalCatalog } from '../components/PedalCatalog';
@@ -14,10 +14,19 @@ interface BuildPageProps {
 type BuildTab = 'starter' | 'catalog' | 'scores' | 'recommend';
 
 export function BuildPage({ onContinue }: BuildPageProps) {
-  const { state } = useBoard();
+  const { state, dispatch } = useBoard();
   const { selectedGenres, board } = state;
   const hasGenres = selectedGenres.length > 0;
   const [activeTab, setActiveTab] = useState<BuildTab>(hasGenres ? 'starter' : 'catalog');
+  const [starterKitKey, setStarterKitKey] = useState(0);
+  
+  const handleStartOverBoard = () => {
+    if (board.slots.length === 0 || window.confirm('Clear your board and restart the recommendations?')) {
+      dispatch({ type: 'CLEAR_BOARD' });
+      setStarterKitKey(prev => prev + 1); // Reset GenreStarterKit state
+      setActiveTab(hasGenres ? 'starter' : 'catalog');
+    }
+  };
   
   const tabs = [
     ...(hasGenres ? [{ id: 'starter' as BuildTab, label: selectedGenres.length > 1 ? 'Multi-Genre Kit' : 'Starter Kit' }] : []),
@@ -47,15 +56,26 @@ export function BuildPage({ onContinue }: BuildPageProps) {
               </div>
             </div>
             
-            {board.slots.length > 0 && (
-              <button
-                onClick={onContinue}
-                className="hidden lg:flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors"
-              >
-                Review Board
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            )}
+            <div className="hidden lg:flex items-center gap-3">
+              {board.slots.length > 0 && (
+                <button
+                  onClick={handleStartOverBoard}
+                  className="flex items-center gap-2 px-4 py-3 text-board-muted hover:text-white border border-board-border rounded-xl hover:bg-board-elevated transition-colors"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Start Over
+                </button>
+              )}
+              {board.slots.length > 0 && (
+                <button
+                  onClick={onContinue}
+                  className="flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors"
+                >
+                  Review Board
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              )}
+            </div>
           </div>
           
           {/* Tabs */}
@@ -81,33 +101,31 @@ export function BuildPage({ onContinue }: BuildPageProps) {
       </div>
       
       {/* Content */}
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="grid lg:grid-cols-5 gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-3 space-y-6">
-            {activeTab === 'starter' && hasGenres && (
-              <GenreStarterKit />
-            )}
-            
-            {activeTab === 'catalog' && (
-              <PedalCatalog />
-            )}
-            
-            {activeTab === 'scores' && (
-              <SectionScores />
-            )}
-            
-            {activeTab === 'recommend' && (
-              <BoardRecommendations />
-            )}
+      <div className="max-w-7xl mx-auto p-6">
+        {/* Board Preview - Full Width at Top */}
+        <div className="mb-6">
+          <div className="sticky top-36 z-5">
+            <BoardBuilder />
           </div>
+        </div>
+        
+        {/* Pedal Selection - Below Board */}
+        <div className="space-y-6">
+          {activeTab === 'starter' && hasGenres && (
+            <GenreStarterKit key={starterKitKey} />
+          )}
           
-          {/* Board Preview (sticky) */}
-          <div className="lg:col-span-2">
-            <div className="sticky top-36">
-              <BoardBuilder />
-            </div>
-          </div>
+          {activeTab === 'catalog' && (
+            <PedalCatalog />
+          )}
+          
+          {activeTab === 'scores' && (
+            <SectionScores />
+          )}
+          
+          {activeTab === 'recommend' && (
+            <BoardRecommendations />
+          )}
         </div>
       </div>
       

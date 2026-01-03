@@ -1,11 +1,15 @@
-import { useState, useRef } from 'react';
-import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, Star } from 'lucide-react';
+import { useState, useRef, useMemo } from 'react';
+import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, Star, ArrowUpDown } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, GenreProfile } from '../data/genres';
 import { getPedalEducation } from '../data/pedalEducation';
 import { CATEGORY_INFO } from '../data/categories';
 import { PedalWithStatus, Category } from '../types';
 import { formatInches } from '../utils/measurements';
+import { PedalImage } from './PedalImage';
+import { estimatePedalCapacity, getRecommendedEssentialCount, getRecommendedBonusCount } from '../data/boardTemplates';
+
+type SortOption = 'default' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'rating-asc' | 'rating-desc' | 'size-asc' | 'size-desc';
 
 interface StarterKitStep {
   id: string;
@@ -34,32 +38,68 @@ function getGenreBonusAdditions(
   genre: GenreProfile,
   allPedals: PedalWithStatus[],
   onBoardIds: Set<string>,
-  onBoardSubtypes: Set<string | undefined>
+  onBoardSubtypes: Set<string | undefined>,
+  budget: number = 500
 ): BonusAddition[] {
   const additions: BonusAddition[] = [];
   
+  // Genre-aware sorting helper with category-based budget allocation
+  const sortByGenreFit = (pedals: PedalWithStatus[], category?: Category) => {
+    const categoryTarget = category ? genre.sectionTargets[category] : null;
+    const idealRating = categoryTarget ? Math.min(categoryTarget.ideal, 10) : 5;
+    
+    // Calculate ideal price based on category importance for this genre
+    // Higher sectionTargets.ideal = more important to the genre
+    const targetIdeal = categoryTarget?.ideal || 5;
+    const importanceScore = targetIdeal / 10;
+    
+    const categoryIndex = category ? genre.recommendedCategories.indexOf(category) : -1;
+    const positionBonus = categoryIndex >= 0 && categoryIndex <= 1 ? 0.3 : 
+                          categoryIndex >= 0 && categoryIndex <= 3 ? 0.15 : 0;
+    
+    const budgetMultiplier = Math.min(importanceScore + positionBonus + 0.5, 2.5);
+    const avgBudgetPerPedal = budget / 8;
+    const categoryBudget = avgBudgetPerPedal * budgetMultiplier;
+    const idealPrice = Math.min(Math.max(categoryBudget, 80), 450);
+    
+    return [...pedals].sort((a, b) => {
+      // Score based on how close the pedal's rating is to genre's ideal
+      const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
+      const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
+      
+      // Bonus for preferred subtypes
+      const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 3 : 0;
+      const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 3 : 0;
+      
+      const aScore = aRatingScore + aSubtypeBonus;
+      const bScore = bRatingScore + bSubtypeBonus;
+      
+      if (bScore !== aScore) return bScore - aScore;
+      
+      // For bonus additions, prefer more affordable options (icing, not the cake)
+      // These are extras after the essentials, so favor value picks
+      return a.reverbPrice - b.reverbPrice; // Cheaper wins for bonus picks
+    });
+  };
+  
   const findPedals = (category: Category, subtypes?: string[], excludeSubtypes?: string[]) => {
-    return allPedals
-      .filter(p => 
-        p.category === category && 
-        p.fits && 
-        !onBoardIds.has(p.id) &&
-        (!subtypes || subtypes.includes(p.subtype || '')) &&
-        (!excludeSubtypes || !excludeSubtypes.includes(p.subtype || ''))
-      )
-      .sort((a, b) => Math.abs(a.reverbPrice - 120) - Math.abs(b.reverbPrice - 120))
-      .slice(0, 11); // 1 top pick + 5 highly recommended + 5 could be cool
+    const filtered = allPedals.filter(p => 
+      p.category === category && 
+      p.fits && 
+      !onBoardIds.has(p.id) &&
+      (!subtypes || subtypes.includes(p.subtype || '')) &&
+      (!excludeSubtypes || !excludeSubtypes.includes(p.subtype || ''))
+    );
+    return sortByGenreFit(filtered, category).slice(0, 11);
   };
   
   const findBySubtype = (subtypes: string[]) => {
-    return allPedals
-      .filter(p => 
-        p.fits && 
-        !onBoardIds.has(p.id) &&
-        subtypes.includes(p.subtype || '')
-      )
-      .sort((a, b) => Math.abs(a.reverbPrice - 120) - Math.abs(b.reverbPrice - 120))
-      .slice(0, 11); // 1 top pick + 5 highly recommended + 5 could be cool
+    const filtered = allPedals.filter(p => 
+      p.fits && 
+      !onBoardIds.has(p.id) &&
+      subtypes.includes(p.subtype || '')
+    );
+    return sortByGenreFit(filtered, filtered[0]?.category).slice(0, 11);
   };
 
   // Genre-specific bonus additions
@@ -891,7 +931,44 @@ export function GenreStarterKit() {
   const [skippedSteps, setSkippedSteps] = useState<Set<string>>(new Set());
   const [phase, setPhase] = useState<'essentials' | 'additions'>('essentials');
   const [currentAdditionIndex, setCurrentAdditionIndex] = useState(0);
+  const [sortBy, setSortBy] = useState<SortOption>('default');
+  const [skipTuner, setSkipTuner] = useState(false); // Option to skip tuner pedal
+  const [skipSecondGain, setSkipSecondGain] = useState(false); // Option to skip second gain pedal
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Sort pedals helper function
+  const sortPedals = (pedals: PedalWithStatus[]): PedalWithStatus[] => {
+    if (sortBy === 'default') return pedals;
+    
+    const sorted = [...pedals];
+    switch (sortBy) {
+      case 'name-asc':
+        sorted.sort((a, b) => a.model.localeCompare(b.model));
+        break;
+      case 'name-desc':
+        sorted.sort((a, b) => b.model.localeCompare(a.model));
+        break;
+      case 'price-asc':
+        sorted.sort((a, b) => a.reverbPrice - b.reverbPrice);
+        break;
+      case 'price-desc':
+        sorted.sort((a, b) => b.reverbPrice - a.reverbPrice);
+        break;
+      case 'rating-asc':
+        sorted.sort((a, b) => a.categoryRating - b.categoryRating);
+        break;
+      case 'rating-desc':
+        sorted.sort((a, b) => b.categoryRating - a.categoryRating);
+        break;
+      case 'size-asc':
+        sorted.sort((a, b) => (a.widthMm * a.depthMm) - (b.widthMm * b.depthMm));
+        break;
+      case 'size-desc':
+        sorted.sort((a, b) => (b.widthMm * b.depthMm) - (a.widthMm * a.depthMm));
+        break;
+    }
+    return sorted;
+  };
   
   // Get all selected genres
   const genres = selectedGenres.map(id => getGenreById(id)).filter(Boolean) as GenreProfile[];
@@ -911,8 +988,13 @@ export function GenreStarterKit() {
     );
   }
   
-  // Merge recommended categories from all genres (prioritize by frequency)
+  // Merge recommended categories from all genres (preserve duplicates for stacked pedals)
   const mergedCategories = (() => {
+    if (genres.length === 1) {
+      // Single genre - use its categories directly (preserves duplicates like 'gain', 'gain')
+      return genres[0].recommendedCategories;
+    }
+    // Multiple genres - merge with frequency sorting but preserve duplicates
     const categoryCount = new Map<Category, number>();
     genres.forEach(g => {
       g.recommendedCategories.forEach(cat => {
@@ -940,110 +1022,274 @@ export function GenreStarterKit() {
   const onBoardCategories = new Set(board.slots.map(s => s.pedal.category));
   const onBoardSubtypes = new Set(board.slots.map(s => s.pedal.subtype));
   
-  // Generate essential steps based on genre's recommended categories
+  // Calculate how many pedals the board can fit
+  // Use maxPedalCount if set, otherwise estimate from board size
+  const boardCapacity = board.constraints.maxPedalCount || 
+    estimatePedalCapacity(board.constraints.maxWidthMm, board.constraints.maxDepthMm);
+  
+  // Calculate recommended essentials and bonus based on capacity
+  const recommendedEssentials = board.constraints.maxPedalCount
+    ? Math.min(board.constraints.maxPedalCount - 1, 10) // Leave room for 1 bonus if possible
+    : getRecommendedEssentialCount(board.constraints.maxWidthMm, board.constraints.maxDepthMm);
+  
+  const recommendedBonus = board.constraints.maxPedalCount
+    ? Math.max(0, Math.min(board.constraints.maxPedalCount - recommendedEssentials, 5))
+    : getRecommendedBonusCount(board.constraints.maxWidthMm, board.constraints.maxDepthMm);
+
+  // Helper functions for step generation
+  const getDisplayName = (subtype: string, category: Category): string => {
+    const categoryInfo = CATEGORY_INFO[category];
+    const needsCategorySuffix: Record<string, string[]> = {
+      delay: ['Analog', 'Digital', 'Tape', 'Multi'],
+      reverb: ['Spring', 'Hall', 'Plate', 'Room', 'Shimmer', 'Ambient'],
+      modulation: ['Multi'],
+      gain: ['Multi'],
+    };
+    if (needsCategorySuffix[category]?.includes(subtype)) {
+      return `${subtype} ${categoryInfo.displayName}`;
+    }
+    return subtype;
+  };
+
+  const getCategoryDescription = (cat: Category, isSecond?: boolean): string => {
+    const descriptions: Record<Category, string> = {
+      gain: isSecond ? 'Stack another drive for more tonal options' : 'Drive and distortion for your tone',
+      dynamics: isSecond ? 'Add another dynamics tool' : 'Control your dynamics and sustain',
+      filter: isSecond ? 'More filtering options' : 'Shape your tone with filtering effects',
+      eq: isSecond ? 'Additional tone shaping' : 'Fine-tune your frequencies',
+      modulation: isSecond ? 'Layer more movement and texture' : 'Add movement and texture to your sound',
+      delay: isSecond ? 'A second delay for layered echoes' : 'Create echoes and rhythmic repeats',
+      reverb: isSecond ? 'Stack reverbs for lush ambience' : 'Add space and ambience',
+      pitch: isSecond ? 'More pitch options' : 'Shift and harmonize your pitch',
+      volume: isSecond ? 'Additional volume control' : 'Control your volume and expression',
+      utility: 'Essential tools for your signal chain',
+      amp: isSecond ? 'More amp options' : 'Amp and cab simulation',
+      synth: isSecond ? 'More synth textures' : 'Synth and special effects',
+    };
+    return descriptions[cat] || `${CATEGORY_INFO[cat].displayName} pedal`;
+  };
+
+  // Generate essential steps based on genre's recommended categories AND board capacity
   const generateSteps = (): StarterKitStep[] => {
     const steps: StarterKitStep[] = [];
+    const offeredSubtypes = new Set<string>(['Tuner']);
     
-    // Step 1: Tuner (always first)
-    const tunerPedals = allPedals.filter(p => p.subtype === 'Tuner' && p.fits);
-    if (tunerPedals.length > 0) {
-      const education = getPedalEducation('Tuner');
-      // Sort tuners by price (mid-range first)
-      const sortedTuners = [...tunerPedals].sort((a, b) => {
-        const aMidRange = Math.abs(a.reverbPrice - 80);
-        const bMidRange = Math.abs(b.reverbPrice - 80);
-        return aMidRange - bMidRange;
-      });
-      steps.push({
-        id: 'tuner',
-        name: 'Tuner',
-        description: 'Every guitarist needs a tuner! It keeps you in tune and can mute your signal.',
-        subtype: 'Tuner',
-        pedals: sortedTuners.slice(0, 11), // 1 top pick + 5 highly recommended + 5 could be cool
-        education: education ? {
-          whatItDoes: education.whatItDoes,
-          beginnerTip: education.beginnerTip,
-        } : undefined,
-      });
+    // Step 1: Tuner (first, unless user opted out)
+    if (!skipTuner) {
+      const tunerPedals = allPedals.filter(p => p.subtype === 'Tuner' && p.fits);
+      if (tunerPedals.length > 0) {
+        const education = getPedalEducation('Tuner');
+        const sortedTuners = [...tunerPedals].sort((a, b) => {
+          const aMidRange = Math.abs(a.reverbPrice - 80);
+          const bMidRange = Math.abs(b.reverbPrice - 80);
+          return aMidRange - bMidRange;
+        });
+        steps.push({
+          id: 'tuner',
+          name: 'Tuner',
+          description: 'Every guitarist needs a tuner! It keeps you in tune and can mute your signal.',
+          subtype: 'Tuner',
+          pedals: sortedTuners.slice(0, 11),
+          education: education ? { whatItDoes: education.whatItDoes, beginnerTip: education.beginnerTip } : undefined,
+        });
+      }
     }
     
-    // Add steps based on genre's recommended categories (in order)
-    for (const category of genre.recommendedCategories) {
-      const categoryInfo = CATEGORY_INFO[category];
-      
-      // Get pedals for this category, prioritizing preferred subtypes
-      const categoryPedals = allPedals.filter(p => 
-        p.category === category && p.fits
-      );
-      
-      // First try preferred subtypes for this genre
-      const preferredPedals = categoryPedals.filter(p => 
-        genre.preferredSubtypes.includes(p.subtype || '')
-      );
-      
-      // Fall back to all category pedals if no preferred matches
-      const pedalsToUse = preferredPedals.length > 0 ? preferredPedals : categoryPedals;
-      
-      // Sort by price (mid-range first for beginners)
-      const sortedPedals = [...pedalsToUse].sort((a, b) => {
-        const aMidRange = Math.abs(a.reverbPrice - 100);
-        const bMidRange = Math.abs(b.reverbPrice - 100);
-        return aMidRange - bMidRange;
-      });
-      
-      if (sortedPedals.length > 0) {
-        const primarySubtype = sortedPedals[0].subtype || categoryInfo.displayName;
-        const education = getPedalEducation(primarySubtype);
+    // For larger boards, we'll loop through categories multiple times
+    // to offer different subtypes (e.g., Overdrive first pass, then Fuzz second pass)
+    const maxPasses = Math.ceil(recommendedEssentials / genre.recommendedCategories.length);
+    
+    // Track how many of each category we've added for skip logic
+    const categoryStepCount = new Map<Category, number>();
+    
+    // Count how many times each category appears in recommendedCategories (this is the max we should add)
+    const categoryMaxCount = new Map<Category, number>();
+    genre.recommendedCategories.forEach(cat => {
+      categoryMaxCount.set(cat, (categoryMaxCount.get(cat) || 0) + 1);
+    });
+    
+    for (let pass = 0; pass < maxPasses && steps.length < recommendedEssentials; pass++) {
+      for (const category of genre.recommendedCategories) {
+        if (steps.length >= recommendedEssentials) break;
         
-        // Format display name - combine subtype with category for clarity
-        const getDisplayName = (subtype: string, cat: Category): string => {
-          // Subtypes that need category suffix for clarity
-          const needsCategorySuffix: Record<string, string[]> = {
-            delay: ['Analog', 'Digital', 'Tape', 'Multi'],
-            reverb: ['Spring', 'Hall', 'Plate', 'Room', 'Shimmer', 'Ambient'],
-            modulation: ['Multi'],
-            gain: ['Multi'],
-          };
-          
-          if (needsCategorySuffix[cat]?.includes(subtype)) {
-            return `${subtype} ${categoryInfo.displayName}`;
+        // Check how many of this category we've already added vs how many are in recommendedCategories
+        const currentCategoryCount = categoryStepCount.get(category) || 0;
+        const maxCountForCategory = categoryMaxCount.get(category) || 1;
+        
+        // Don't add more of this category than specified in recommendedCategories
+        if (currentCategoryCount >= maxCountForCategory) {
+          continue;
+        }
+        
+        // Skip second gain if user opted out
+        if (category === 'gain' && currentCategoryCount >= 1 && skipSecondGain) {
+          continue;
+        }
+        
+        const categoryInfo = CATEGORY_INFO[category];
+        
+        // Get pedals not yet offered
+        const categoryPedals = allPedals.filter(p => 
+          p.category === category && 
+          p.fits &&
+          !offeredSubtypes.has(p.subtype || '')
+        );
+        
+        if (categoryPedals.length === 0) continue;
+        
+        // Group by subtype
+        const subtypeGroups = new Map<string, typeof categoryPedals>();
+        categoryPedals.forEach(p => {
+          const subtype = p.subtype || categoryInfo.displayName;
+          if (!subtypeGroups.has(subtype)) {
+            subtypeGroups.set(subtype, []);
           }
-          return subtype;
-        };
+          subtypeGroups.get(subtype)!.push(p);
+        });
         
-        const displayName = getDisplayName(primarySubtype, category);
+        // Find best subtype to offer (prefer genre's preferred subtypes)
+        let bestSubtype: string | null = null;
+        let bestPedals: typeof categoryPedals = [];
         
-        // Get description based on category
-        const getCategoryDescription = (cat: Category): string => {
-          const descriptions: Record<Category, string> = {
-            gain: 'Drive and distortion for your tone',
-            dynamics: 'Control your dynamics and sustain',
-            filter: 'Shape your tone with filtering effects',
-            eq: 'Fine-tune your frequencies',
-            modulation: 'Add movement and texture to your sound',
-            delay: 'Create echoes and rhythmic repeats',
-            reverb: 'Add space and ambience',
-            pitch: 'Shift and harmonize your pitch',
-            volume: 'Control your volume and expression',
-            utility: 'Essential tools for your signal chain',
-            amp: 'Amp and cab simulation',
-            synth: 'Synth and special effects',
-          };
-          return descriptions[cat] || `${categoryInfo.displayName} pedal`;
-        };
+        // First try preferred subtypes
+        for (const subtype of genre.preferredSubtypes) {
+          if (subtypeGroups.has(subtype) && !offeredSubtypes.has(subtype)) {
+            bestSubtype = subtype;
+            bestPedals = subtypeGroups.get(subtype)!;
+            break;
+          }
+        }
+        
+        // Fall back to any available subtype
+        if (!bestSubtype) {
+          for (const [subtype, pedals] of subtypeGroups) {
+            if (!offeredSubtypes.has(subtype)) {
+              bestSubtype = subtype;
+              bestPedals = pedals;
+              break;
+            }
+          }
+        }
+        
+        if (!bestSubtype || bestPedals.length === 0) continue;
+        
+        // Genre-aware sorting: prioritize pedals that match the genre's target rating
+        const categoryTarget = genre.sectionTargets[category];
+        const idealRating = categoryTarget ? Math.min(categoryTarget.ideal, 10) : 5; // Cap at 10, default to 5
+        
+        // Calculate ideal price based on budget AND category importance for this genre
+        // Use sectionTargets.ideal to determine importance - higher ideal = more important to genre
+        // e.g., Ambient has reverb ideal of 15 (max), so reverb is THE key pedal
+        const targetIdeal = categoryTarget?.ideal || 5;
+        const importanceScore = targetIdeal / 10; // 0.5 to 1.5 based on ideal value
+        
+        // Also consider position in recommendedCategories (earlier = more important)
+        const categoryIndex = genre.recommendedCategories.indexOf(category);
+        const positionBonus = categoryIndex >= 0 && categoryIndex <= 1 ? 0.3 : 
+                              categoryIndex >= 0 && categoryIndex <= 3 ? 0.15 : 0;
+        
+        // Final budget multiplier: combines target importance + position importance
+        const budgetMultiplier = Math.min(importanceScore + positionBonus + 0.5, 2.5); // Cap at 2.5x
+        const avgBudgetPerPedal = board.constraints.maxBudget / 8;
+        const categoryBudget = avgBudgetPerPedal * budgetMultiplier;
+        
+        // Max price for this category based on its importance (more important = higher budget)
+        const maxForCategory = board.constraints.maxBudget * (0.15 + budgetMultiplier * 0.1); // 15-40% of budget
+        
+        // For the FIRST pedal in each category, consider ALL subtypes to find the best
+        // We want the BEST pedal for the genre, not just the first matching subtype
+        // Check if we've already added a step for this category
+        const isFirstOfCategory = !steps.some(s => s.category === category);
+        let pedalsToSort = bestPedals;
+        if (isFirstOfCategory) { // Only for the first pedal in this category
+          // Get ALL pedals in this category that fit, regardless of subtype
+          const allCategoryPedals = allPedals.filter(p => 
+            p.category === category && 
+            p.fits &&
+            !onBoardIds.has(p.id)
+          );
+          if (allCategoryPedals.length > 0) {
+            pedalsToSort = allCategoryPedals;
+          }
+        }
+        
+        const sortedPedals = [...pedalsToSort].sort((a, b) => {
+          // PRICE is primary factor - higher budget = better pedals
+          // Filter to pedals within this category's budget allocation
+          const aAffordable = a.reverbPrice <= maxForCategory;
+          const bAffordable = b.reverbPrice <= maxForCategory;
+          
+          // If one is affordable and one isn't, prefer affordable
+          if (aAffordable && !bAffordable) return -1;
+          if (!aAffordable && bAffordable) return 1;
+          
+          // Both affordable - prefer higher price (usually better quality)
+          if (a.reverbPrice !== b.reverbPrice) {
+            return b.reverbPrice - a.reverbPrice;
+          }
+          
+          // Secondary: rating match to genre's ideal
+          const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
+          const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
+          
+          // Bonus for preferred subtypes
+          const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 2 : 0;
+          const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 2 : 0;
+          
+          const aScore = aRatingScore + aSubtypeBonus;
+          const bScore = bRatingScore + bSubtypeBonus;
+          
+          return bScore - aScore;
+        });
+        
+        // Use the top pedal's actual subtype since we may have pulled from all category pedals
+        const topPedal = sortedPedals[0];
+        const actualSubtype = isFirstOfCategory && topPedal 
+          ? (topPedal.subtype || bestSubtype) 
+          : bestSubtype;
+        
+        const education = getPedalEducation(actualSubtype);
+        const isSecondOfCategory = !isFirstOfCategory;
+        
+        // Special naming for gain category to be clearer about stacking
+        let stepName: string;
+        let stepDescription: string;
+        if (category === 'gain') {
+          if (isFirstOfCategory) {
+            stepName = 'Gain 1 (Main Drive)';
+            stepDescription = 'Your primary drive sound - overdrive or distortion for your main tone.';
+          } else {
+            const subtypeDisplay = getDisplayName(actualSubtype, category);
+            stepName = `Gain 2 (${subtypeDisplay})`;
+            stepDescription = 'Stack with your main drive for more options and tonal variety.';
+          }
+        } else {
+          // For other categories, use standard naming
+          const displayName = isFirstOfCategory 
+            ? categoryInfo.displayName 
+            : getDisplayName(actualSubtype, category);
+          stepName = isSecondOfCategory ? `Second ${displayName}` : displayName;
+          stepDescription = getCategoryDescription(category, isSecondOfCategory);
+        }
         
         steps.push({
-          id: `${category}-${primarySubtype}`,
-          name: displayName,
-          description: getCategoryDescription(category),
+          id: `${category}-${actualSubtype}-${currentCategoryCount}`,
+          name: stepName,
+          description: stepDescription,
           category: category,
-          subtype: primarySubtype,
-          pedals: sortedPedals.slice(0, 11), // 1 top pick + 5 highly recommended + 5 could be cool
-          education: education ? {
-            whatItDoes: education.whatItDoes,
-            beginnerTip: education.beginnerTip,
-          } : undefined,
+          subtype: actualSubtype,
+          pedals: sortedPedals.slice(0, 11),
+          education: education ? { whatItDoes: education.whatItDoes, beginnerTip: education.beginnerTip } : undefined,
         });
+        
+        // Track category count for skip logic and naming
+        categoryStepCount.set(category, currentCategoryCount + 1);
+        
+        // Only track the SELECTED subtype as offered - not all subtypes from displayed pedals
+        // This allows subsequent passes to offer different subtypes from the same category
+        if (actualSubtype) {
+          offeredSubtypes.add(actualSubtype);
+        }
       }
     }
     
@@ -1051,17 +1297,21 @@ export function GenreStarterKit() {
   };
   
   const steps = generateSteps();
-  const bonusAdditions = getGenreBonusAdditions(genre, allPedals, onBoardIds, onBoardSubtypes);
+  
+  // Get bonus additions and limit based on board size
+  const allBonusAdditions = getGenreBonusAdditions(genre, allPedals, onBoardIds, onBoardSubtypes, board.constraints.maxBudget);
+  const bonusAdditions = allBonusAdditions.slice(0, recommendedBonus);
   
   const currentStep = steps[currentStepIndex];
   const currentAddition = bonusAdditions[currentAdditionIndex];
   const essentialsComplete = currentStepIndex >= steps.length;
   const additionsComplete = currentAdditionIndex >= bonusAdditions.length;
   
-  // Check if current step is already satisfied
+  // Check if current step is already satisfied (only by exact subtype match)
   const isStepSatisfied = (step: StarterKitStep) => {
+    // Only check subtype, not category - this prevents all gain steps 
+    // from lighting up when one gain pedal is added
     if (step.subtype && onBoardSubtypes.has(step.subtype)) return true;
-    if (step.category && onBoardCategories.has(step.category)) return true;
     return false;
   };
   
@@ -1243,7 +1493,7 @@ export function GenreStarterKit() {
           
           <div className="flex gap-3 justify-center">
             <button
-              onClick={() => setCurrentAdditionIndex(bonusAdditions.length)}
+              onClick={() => { setPhase('additions'); setCurrentAdditionIndex(bonusAdditions.length); }}
               className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
             >
               I'm Done
@@ -1336,6 +1586,8 @@ export function GenreStarterKit() {
                   ? `Addition ${currentAdditionIndex + 1} of ${bonusAdditions.length}`
                   : `Step ${currentStepIndex + 1} of ${steps.length}`
                 }
+                {' · '}
+                <span className="text-board-accent">~{boardCapacity} pedals fit your board</span>
               </p>
             </div>
           </div>
@@ -1358,7 +1610,6 @@ export function GenreStarterKit() {
             const isCurrent = !isAdditionsPhase && index === currentStepIndex;
             const isPast = index < currentStepIndex || isAdditionsPhase;
             const isSkipped = skippedSteps.has(step.id);
-            const isSatisfied = isStepSatisfied(step);
             
             return (
               <button
@@ -1368,7 +1619,9 @@ export function GenreStarterKit() {
                   isCurrent ? 'ring-2 ring-offset-1 ring-offset-board-surface' : ''
                 }`}
                 style={{
-                  backgroundColor: isPast || isSatisfied
+                  // Only show as complete if actually past - not based on satisfaction
+                  // This prevents future steps from lighting up out of order
+                  backgroundColor: isPast
                     ? genre.color
                     : isSkipped
                       ? '#52525b'
@@ -1457,9 +1710,38 @@ export function GenreStarterKit() {
             )}
           </div>
           
-          <h3 className="text-xl font-bold text-white mb-1">
-            {isAdditionsPhase ? `Add a ${currentAddition.name}?` : `Choose a ${currentStep.name}`}
-          </h3>
+          <div className="flex items-center gap-3 mb-1">
+            <h3 className="text-xl font-bold text-white">
+              {isAdditionsPhase ? `Add a ${currentAddition.name}?` : `Choose a ${currentStep.name}`}
+            </h3>
+            {/* Skip Tuner option - only show on tuner step */}
+            {!isAdditionsPhase && currentStep?.subtype === 'Tuner' && (
+              <button
+                onClick={() => {
+                  setSkipTuner(true);
+                  // Stay at index 0 - the steps will regenerate without tuner,
+                  // so index 0 will now be the first genre pedal
+                  setCurrentStepIndex(0);
+                }}
+                className="px-2.5 py-1 text-xs rounded-lg bg-board-elevated text-board-muted hover:text-white hover:bg-board-accent/20 transition-all border border-board-border hover:border-board-accent/30"
+              >
+                Skip tuner
+              </button>
+            )}
+            {/* Skip Second Drive option - only show on Gain 2 step */}
+            {!isAdditionsPhase && currentStep?.category === 'gain' && currentStep?.id?.includes('gain-') && !currentStep?.id?.includes('-0') && (
+              <button
+                onClick={() => {
+                  setSkipSecondGain(true);
+                  // Move to next step - the steps will regenerate without second gain
+                  setCurrentStepIndex(currentStepIndex);
+                }}
+                className="px-2.5 py-1 text-xs rounded-lg bg-board-elevated text-board-muted hover:text-white hover:bg-board-accent/20 transition-all border border-board-border hover:border-board-accent/30"
+              >
+                Skip second drive
+              </button>
+            )}
+          </div>
           <p className="text-sm text-zinc-400">
             {isAdditionsPhase ? currentAddition.reason : currentStep.description}
           </p>
@@ -1483,14 +1765,50 @@ export function GenreStarterKit() {
           </div>
         )}
         
+        {/* Sort Options */}
+        <div className="mb-4 flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1 text-xs text-board-muted">
+            <ArrowUpDown className="w-3 h-3" />
+            <span>Sort:</span>
+          </div>
+          <div className="flex items-center gap-1 flex-wrap">
+            {[
+              { value: 'default', label: 'Recommended' },
+              { value: 'price-asc', label: 'Price ↑' },
+              { value: 'price-desc', label: 'Price ↓' },
+              { value: 'rating-asc', label: 'Rating ↑' },
+              { value: 'rating-desc', label: 'Rating ↓' },
+              { value: 'name-asc', label: 'Name ↑' },
+              { value: 'name-desc', label: 'Name ↓' },
+              { value: 'size-asc', label: 'Size ↑' },
+              { value: 'size-desc', label: 'Size ↓' },
+            ].map(option => (
+              <button
+                key={option.value}
+                onClick={() => setSortBy(option.value as SortOption)}
+                className={`px-2 py-1 text-xs rounded transition-colors ${
+                  sortBy === option.value
+                    ? 'bg-board-accent text-white'
+                    : 'bg-board-elevated text-board-muted hover:text-white hover:bg-board-surface border border-board-border'
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        
         {/* Pedal Options */}
         <div className="space-y-2">
-          {(isAdditionsPhase ? currentAddition.pedals : currentStep.pedals).map((pedal, index) => {
+          {sortPedals(isAdditionsPhase ? currentAddition.pedals : currentStep.pedals).map((pedal, index) => {
             const isOnBoard = onBoardIds.has(pedal.id);
             const isExpanded = expandedPedal === pedal.id;
             
+            // Only show tiers when using default (recommended) sort
+            const usesTiers = sortBy === 'default';
+            
             // Determine tier: 0 = Top Pick, 1-5 = Highly Recommended, 6+ = Could Be Cool
-            const tier = index === 0 ? 'top' : index <= 5 ? 'recommended' : 'cool';
+            const tier = usesTiers ? (index === 0 ? 'top' : index <= 5 ? 'recommended' : 'cool') : 'cool';
             const tierLabel = tier === 'top' ? 'TOP PICK' : tier === 'recommended' ? 'HIGHLY RECOMMENDED' : 'COULD BE COOL';
             const tierColors = {
               top: { border: isAdditionsPhase ? 'border-amber-500/50' : 'border-board-accent/50', bg: isAdditionsPhase ? 'bg-amber-500/5' : 'bg-board-accent/5', badge: isAdditionsPhase ? 'bg-amber-500/20 text-amber-400' : 'bg-board-accent/20 text-board-accent' },
@@ -1498,8 +1816,8 @@ export function GenreStarterKit() {
               cool: { border: 'border-board-border', bg: 'bg-board-elevated/30', badge: 'bg-zinc-500/20 text-zinc-400' },
             };
             
-            // Show tier headers
-            const showTierHeader = index === 0 || index === 1 || index === 6;
+            // Show tier headers only when using default sort
+            const showTierHeader = usesTiers && (index === 0 || index === 1 || index === 6);
             const tierHeaderText = index === 0 ? '⭐ Top Pick' : index === 1 ? '👍 Highly Recommended' : index === 6 ? '✨ Could Be Cool' : null;
             
             return (
@@ -1522,19 +1840,22 @@ export function GenreStarterKit() {
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    {/* Rank */}
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      isOnBoard
-                        ? 'bg-green-500/20 text-green-400'
-                        : tier === 'top'
-                          ? (isAdditionsPhase ? 'bg-amber-500/20 text-amber-400' : 'bg-board-accent/20 text-board-accent')
-                          : tier === 'recommended'
-                            ? 'bg-blue-500/20 text-blue-400'
-                            : 'bg-board-elevated text-board-muted'
-                    }`}>
-                      {isOnBoard ? <Check className="w-4 h-4" /> : 
-                       tier === 'top' ? <Star className="w-4 h-4" /> : 
-                       <span className="text-xs font-bold">{index}</span>}
+                    {/* Pedal Image */}
+                    <div className="relative">
+                      <PedalImage category={pedal.category} size="md" />
+                      {/* Status badge overlay */}
+                      {isOnBoard && (
+                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                      )}
+                      {tier === 'top' && !isOnBoard && (
+                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
+                          style={{ backgroundColor: isAdditionsPhase ? '#f59e0b' : genre.color }}
+                        >
+                          <Star className="w-3 h-3 text-white" />
+                        </div>
+                      )}
                     </div>
                     
                     {/* Info */}
@@ -1551,6 +1872,7 @@ export function GenreStarterKit() {
                       
                       <div className="flex items-center gap-3 text-xs">
                         <span className="text-white font-medium">${pedal.reverbPrice}</span>
+                        <span className="text-board-muted">{pedal.categoryRating}/10</span>
                         <span className="text-board-muted">{formatInches(pedal.widthMm)}" × {formatInches(pedal.depthMm)}"</span>
                         <span className="text-board-muted">{pedal.currentMa}mA</span>
                       </div>

@@ -25,10 +25,28 @@ function AppContent() {
     }
   };
   
+  const handleCreateOwn = () => {
+    // Clear any selected genres and set no limits, then go straight to build
+    dispatch({ type: 'CLEAR_GENRES' });
+    dispatch({ 
+      type: 'SET_CONSTRAINTS', 
+      constraints: {
+        maxWidthMm: 100000, // Effectively no limit
+        maxDepthMm: 100000,
+        maxBudget: 100000,
+        maxCurrentMa: undefined,
+        applyAfterSize: true,
+        applyAfterBudget: true,
+        applyAfterPower: true,
+      }
+    });
+    handleStepChange('build'); // Skip constraints, go straight to build
+  };
+  
   const renderPage = () => {
     switch (currentStep) {
       case 'genre':
-        return <GenrePage onContinue={() => handleStepChange('constraints')} />;
+        return <GenrePage onContinue={() => handleStepChange('constraints')} onCreateOwn={handleCreateOwn} />;
       case 'constraints':
         return <ConstraintsPage onContinue={() => handleStepChange('build')} />;
       case 'build':
@@ -36,7 +54,7 @@ function AppContent() {
       case 'review':
         return <ReviewPage />;
       default:
-        return <GenrePage onContinue={() => handleStepChange('constraints')} />;
+        return <GenrePage onContinue={() => handleStepChange('constraints')} onCreateOwn={handleCreateOwn} />;
     }
   };
 

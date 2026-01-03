@@ -13,8 +13,10 @@ import { ALL_PEDALS as SYNTH_PEDALS } from './synth';
 import { ALL_PEDALS as AMP_PEDALS } from './amp';
 import { ALL_PEDALS as UTILITY_PEDALS } from './utility';
 import { ALL_PEDALS as VOLUME_PEDALS } from './volume';
+import VINTAGE_PEDALS from './vintage';
+import ADDITIONAL_PEDALS from './additional';
 
-// Combine all pedals into single array (~1000 total)
+// Combine all pedals into single array (~1100+ total)
 export const PEDALS: Pedal[] = [
   ...GAIN_PEDALS,        // ~250 pedals - Priority 1
   ...MODULATION_PEDALS,  // ~120 pedals - Priority 2
@@ -28,6 +30,8 @@ export const PEDALS: Pedal[] = [
   ...AMP_PEDALS,         // ~20 pedals - Priority 10
   ...UTILITY_PEDALS,     // ~20 pedals - Priority 11
   ...VOLUME_PEDALS,      // ~20 pedals - Priority 12
+  ...VINTAGE_PEDALS,     // ~50+ vintage & discontinued classics
+  ...ADDITIONAL_PEDALS,  // ~70+ additional current pedals
 ];
 
 // Export individual category arrays for filtering

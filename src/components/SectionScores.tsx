@@ -50,7 +50,7 @@ export function SectionScores() {
           
           if (!score) return null;
           
-          const percentage = (score.totalScore / info.maxScore) * 100;
+          const percentage = (score.totalScore / score.maxScore) * 100;
           
           return (
             <div key={category} className="p-4 hover:bg-board-elevated/30 transition-colors">
@@ -66,7 +66,7 @@ export function SectionScores() {
                 </div>
                 <div className="text-right">
                   <div className="font-mono text-lg text-white">
-                    {score.totalScore}<span className="text-board-muted text-sm">/{info.maxScore}</span>
+                    {score.totalScore}<span className="text-board-muted text-sm">/{score.maxScore}</span>
                   </div>
                 </div>
               </div>

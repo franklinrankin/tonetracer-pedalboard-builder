@@ -147,6 +147,9 @@ export function PedalCatalog() {
                   All Categories
                 </button>
                 <div className="h-px bg-board-border my-1" />
+                <div className="px-3 py-1 text-[10px] text-board-muted italic">
+                  in signal chain order
+                </div>
                 {CATEGORY_ORDER.map(cat => (
                   <button
                     key={cat}

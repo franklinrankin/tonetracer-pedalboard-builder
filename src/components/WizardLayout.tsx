@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react';
 import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw, HelpCircle, Database } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
+import { BOARD_TEMPLATES } from '../data/boardTemplates';
 import { formatInches } from '../utils/measurements';
 import { AboutModal } from './AboutModal';
 import { PedalCatalog } from './PedalCatalog';
@@ -210,7 +211,9 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
             {currentStepIndex > 1 && (
               <div className="p-3 rounded-lg border border-board-border bg-board-elevated">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-board-muted">Board Size</span>
+                  <span className="text-xs text-board-muted">
+                    {board.constraints.maxPedalCount ? 'Pedal Count' : 'Board Size'}
+                  </span>
                   <button
                     onClick={() => onStepChange('constraints')}
                     className="text-xs text-board-accent hover:underline"
@@ -218,9 +221,29 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
                     Edit
                   </button>
                 </div>
-                <div className="text-sm text-white font-medium">
-                  {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
-                </div>
+                {board.constraints.maxPedalCount ? (
+                  <div className="text-sm text-white font-medium">
+                    {board.constraints.maxPedalCount} pedals max
+                  </div>
+                ) : (
+                  (() => {
+                    const matchingTemplate = BOARD_TEMPLATES.find(
+                      t => t.widthMm === board.constraints.maxWidthMm && t.depthMm === board.constraints.maxDepthMm
+                    );
+                    return (
+                      <>
+                        {matchingTemplate && (
+                          <div className="text-xs text-white font-medium leading-tight mb-1">
+                            {matchingTemplate.name}
+                          </div>
+                        )}
+                        <div className={`text-white font-medium ${matchingTemplate ? 'text-xs text-zinc-400' : 'text-sm'}`}>
+                          {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
+                        </div>
+                      </>
+                    );
+                  })()
+                )}
                 <div className="text-xs text-board-muted mt-1">
                   Budget: ${board.constraints.maxBudget}
                 </div>

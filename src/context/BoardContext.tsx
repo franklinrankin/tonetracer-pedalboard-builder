@@ -134,11 +134,20 @@ function calculateSectionScores(slots: BoardSlot[]): SectionScore[] {
     const totalScore = categoryPedals.reduce((sum, p) => sum + p.categoryRating, 0);
     const info = CATEGORY_INFO[category];
     
+    // Dynamic max score: base max (10) * number of pedals in category
+    const dynamicMaxScore = info.maxScore * categoryPedals.length;
+    
+    // For tag calculation, normalize score to a 1-10 scale based on percentage
+    // This way tags are consistent regardless of how many pedals
+    const normalizedScore = categoryPedals.length > 0 
+      ? Math.round((totalScore / dynamicMaxScore) * info.maxScore)
+      : 0;
+    
     return {
       category,
       totalScore,
-      maxScore: info.maxScore,
-      tag: getCategoryTag(category, totalScore),
+      maxScore: dynamicMaxScore,
+      tag: getCategoryTag(category, normalizedScore),
       pedals: categoryPedals,
     };
   }).filter(s => s.pedals.length > 0);
@@ -227,6 +236,14 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
       if (state.board.slots.some(s => s.pedal.id === action.pedal.id)) {
         return state;
       }
+      
+      // Check pedal count limit if set
+      if (state.board.constraints.maxPedalCount && 
+          state.board.slots.length >= state.board.constraints.maxPedalCount) {
+        console.warn(`Board is full (${state.board.constraints.maxPedalCount} pedals max)`);
+        return state;
+      }
+      
       // Find the correct position in signal chain
       const insertIndex = findInsertIndex(state.board.slots, action.pedal);
       const newSlots = [...state.board.slots];

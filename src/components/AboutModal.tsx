@@ -156,12 +156,192 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
               <Zap className="w-5 h-5 text-amber-400" />
               <h3 className="text-lg font-semibold text-white">Tone Tags</h3>
             </div>
-            <p className="text-sm text-zinc-400 leading-relaxed">
+            <p className="text-sm text-zinc-400 leading-relaxed mb-3">
               As you add pedals, ToneTracer calculates your board's overall character and 
               gives you <span className="text-board-accent font-medium">Tone Tags</span> — 
-              descriptive labels like "dirty bird" for high-gain boards or "pristine" for 
-              clean setups. These help you understand what your board will sound like at a glance.
+              fun labels that describe your sound in each category.
             </p>
+            <p className="text-sm text-zinc-400 leading-relaxed mb-4">
+              Tags are based on your <span className="text-zinc-300">average intensity</span> across 
+              pedals in that category. Each pedal is rated 1-10, and your tag is determined by 
+              where your average falls. The ranges below show what average you need to hit each tag. 
+              <span className="text-zinc-300"> The total score scales with how many pedals you have</span> (1 pedal = out of 10, 
+              2 pedals = out of 20, etc.) but your tag stays consistent based on your average.
+            </p>
+            
+            <div className="space-y-3 text-xs">
+              {/* Gain Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <span className="font-medium text-white">Gain / Dirt</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-2:</span> mr. clean</span>
+                  <span><span className="text-zinc-300">3-4:</span> dirty bird</span>
+                  <span><span className="text-zinc-300">5-6:</span> burner</span>
+                  <span><span className="text-zinc-300">7-8:</span> screamer</span>
+                  <span className="col-span-2"><span className="text-zinc-300">9-10:</span> melt my face why don't you</span>
+                </div>
+              </div>
+              
+              {/* Modulation Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-purple-500" />
+                  <span className="font-medium text-white">Modulation</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-2:</span> still water</span>
+                  <span><span className="text-zinc-300">3-4:</span> a little motion</span>
+                  <span><span className="text-zinc-300">5-6:</span> swirly</span>
+                  <span><span className="text-zinc-300">7-8:</span> spin cycle</span>
+                  <span><span className="text-zinc-300">9-10:</span> it's a twister</span>
+                </div>
+              </div>
+              
+              {/* Delay Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  <span className="font-medium text-white">Delay</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-2:</span> come again?</span>
+                  <span><span className="text-zinc-300">3-4:</span> repeater</span>
+                  <span><span className="text-zinc-300">5-6:</span> spelunker</span>
+                  <span><span className="text-zinc-300">7-8:</span> long term memory</span>
+                  <span><span className="text-zinc-300">9-10:</span> time traveler</span>
+                </div>
+              </div>
+              
+              {/* Reverb Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-teal-500" />
+                  <span className="font-medium text-white">Reverb</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-2:</span> bone dry</span>
+                  <span><span className="text-zinc-300">3-4:</span> moist</span>
+                  <span><span className="text-zinc-300">5-6:</span> drippy</span>
+                  <span><span className="text-zinc-300">7-8:</span> dreamy</span>
+                  <span><span className="text-zinc-300">9-10:</span> floating</span>
+                </div>
+              </div>
+              
+              {/* Dynamics Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-orange-500" />
+                  <span className="font-medium text-white">Dynamics</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-2:</span> wide open</span>
+                  <span><span className="text-zinc-300">3-4:</span> gluey</span>
+                  <span><span className="text-zinc-300">5-6:</span> smooth operator</span>
+                  <span><span className="text-zinc-300">7-8:</span> squashed</span>
+                  <span><span className="text-zinc-300">9-10:</span> clamped down</span>
+                </div>
+              </div>
+              
+              {/* Filter Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <span className="font-medium text-white">Filter</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-2:</span> town crier</span>
+                  <span><span className="text-zinc-300">3-4:</span> quack doctor</span>
+                  <span><span className="text-zinc-300">5-6:</span> funky chicken</span>
+                  <span><span className="text-zinc-300">7-8:</span> street sweeper</span>
+                  <span className="col-span-2"><span className="text-zinc-300">9-10:</span> what are you talking about</span>
+                </div>
+              </div>
+              
+              {/* Pitch Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-pink-500" />
+                  <span className="font-medium text-white">Pitch</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-2:</span> pitchy</span>
+                  <span><span className="text-zinc-300">3-4:</span> pitchier</span>
+                  <span><span className="text-zinc-300">5-6:</span> harmonious</span>
+                  <span><span className="text-zinc-300">7-8:</span> warped</span>
+                  <span><span className="text-zinc-300">9-10:</span> unrecognizable</span>
+                </div>
+              </div>
+              
+              {/* EQ Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-cyan-500" />
+                  <span className="font-medium text-white">EQ / Tone Shaping</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-3:</span> shaper</span>
+                  <span><span className="text-zinc-300">4-7:</span> sculptor</span>
+                  <span><span className="text-zinc-300">8-10:</span> surgical</span>
+                </div>
+              </div>
+              
+              {/* Volume Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-slate-500" />
+                  <span className="font-medium text-white">Volume & Control</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-3:</span> in control</span>
+                  <span><span className="text-zinc-300">4-7:</span> manager</span>
+                  <span><span className="text-zinc-300">8-10:</span> board administrator</span>
+                </div>
+              </div>
+              
+              {/* Amp Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-amber-700" />
+                  <span className="font-medium text-white">Amp & Cab</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-3:</span> direct</span>
+                  <span><span className="text-zinc-300">4-7:</span> amplifier</span>
+                  <span><span className="text-zinc-300">8-10:</span> simulator</span>
+                </div>
+              </div>
+              
+              {/* Utility Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-gray-500" />
+                  <span className="font-medium text-white">Utility / Routing</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-2:</span> work smarter</span>
+                  <span><span className="text-zinc-300">3-4:</span> router</span>
+                  <span><span className="text-zinc-300">5-6:</span> pedal nerd</span>
+                  <span><span className="text-zinc-300">7-8:</span> geeked out</span>
+                  <span><span className="text-zinc-300">9-10:</span> board scholar</span>
+                </div>
+              </div>
+              
+              {/* Synth Tags */}
+              <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-violet-500" />
+                  <span className="font-medium text-white">Synth / Special Effects</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1 text-zinc-400">
+                  <span><span className="text-zinc-300">0-3:</span> effect flavor</span>
+                  <span><span className="text-zinc-300">4-7:</span> texture / synth-like</span>
+                  <span><span className="text-zinc-300">8-10:</span> sound design tool</span>
+                </div>
+              </div>
+            </div>
           </section>
         </div>
         

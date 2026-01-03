@@ -1,11 +1,144 @@
-import { useState } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
-import { getGenreById } from '../data/genres';
+import { getGenreById, getTopGenreMatches, GenreMatch } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches, formatArea } from '../utils/measurements';
 import { BoardRecommendations } from '../components/BoardRecommendations';
 import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
+
+// Genre Matches Component - shown when user didn't pre-select genres
+function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
+  const [expanded, setExpanded] = useState(false);
+  
+  if (matches.length === 0) {
+    return (
+      <div className="bg-board-surface border border-board-border rounded-xl p-5">
+        <h2 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+          <Target className="w-5 h-5 text-purple-400" />
+          Genre Match
+        </h2>
+        <p className="text-sm text-board-muted">
+          Add more pedals to see genre matches!
+        </p>
+      </div>
+    );
+  }
+  
+  const topMatch = matches[0];
+  
+  return (
+    <div className="bg-board-surface border border-board-border rounded-xl p-5">
+      <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+        <Target className="w-5 h-5 text-purple-400" />
+        Your Board's Genre DNA
+      </h2>
+      
+      <p className="text-sm text-zinc-400 mb-4">
+        Based on your pedal choices, here's what genres your board fits best:
+      </p>
+      
+      {/* Top Match */}
+      <div 
+        className="p-4 rounded-lg border mb-3"
+        style={{ 
+          backgroundColor: `${topMatch.genre.color}10`,
+          borderColor: `${topMatch.genre.color}40`,
+        }}
+      >
+        <div className="flex items-start justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">{topMatch.genre.icon}</span>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span 
+                  className="text-xs font-medium px-2 py-0.5 rounded"
+                  style={{ backgroundColor: `${topMatch.genre.color}30`, color: topMatch.genre.color }}
+                >
+                  #1 MATCH
+                </span>
+              </div>
+              <h3 className="font-semibold text-white text-lg">{topMatch.genre.name}</h3>
+            </div>
+          </div>
+          <div className="text-right">
+            <div 
+              className="text-2xl font-bold"
+              style={{ color: topMatch.genre.color }}
+            >
+              {Math.round(topMatch.fitPercent)}%
+            </div>
+            <div className="text-xs text-board-muted">fit</div>
+          </div>
+        </div>
+        
+        <p className="text-sm text-zinc-300 mb-3">{topMatch.summary}</p>
+        
+        {/* Match reasons */}
+        <div className="space-y-1">
+          {topMatch.reasons.slice(0, 3).map((reason, i) => (
+            <div key={i} className="flex items-center gap-2 text-xs">
+              <div 
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ 
+                  backgroundColor: reason.strength === 'strong' 
+                    ? topMatch.genre.color 
+                    : reason.strength === 'moderate' 
+                      ? `${topMatch.genre.color}80` 
+                      : `${topMatch.genre.color}50` 
+                }}
+              />
+              <span className="text-zinc-400">{reason.reason}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Other Matches */}
+      {matches.length > 1 && (
+        <>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="w-full flex items-center justify-center gap-2 py-2 text-sm text-board-muted hover:text-white transition-colors"
+          >
+            {expanded ? 'Hide other matches' : `Show ${matches.length - 1} more genre ${matches.length - 1 === 1 ? 'match' : 'matches'}`}
+            {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+          
+          {expanded && (
+            <div className="space-y-2 mt-2">
+              {matches.slice(1).map((match, index) => (
+                <div 
+                  key={match.genre.id}
+                  className="p-3 rounded-lg border"
+                  style={{ 
+                    backgroundColor: `${match.genre.color}08`,
+                    borderColor: `${match.genre.color}30`,
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">{match.genre.icon}</span>
+                      <span className="font-medium text-white">{match.genre.name}</span>
+                      <span className="text-xs text-board-muted">#{index + 2}</span>
+                    </div>
+                    <span 
+                      className="text-sm font-medium"
+                      style={{ color: match.genre.color }}
+                    >
+                      {Math.round(match.fitPercent)}%
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-400">{match.summary}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
 
 // Power Supply Recommendations Component
 function PowerSupplyRecommendations({ 
@@ -159,6 +292,13 @@ export function ReviewPage() {
   const powerPercent = board.constraints.maxCurrentMa 
     ? (totalCurrent / board.constraints.maxCurrentMa) * 100 
     : 0;
+    
+  // Calculate genre matches when user didn't pre-select genres ("Create Your Own" mode)
+  const isCreateYourOwnMode = selectedGenres.length === 0;
+  const genreMatches = useMemo(() => {
+    if (!isCreateYourOwnMode || board.slots.length === 0) return [];
+    return getTopGenreMatches(sectionScores, 3);
+  }, [isCreateYourOwnMode, sectionScores, board.slots.length]);
   
   const handleExport = () => {
     const boardData = {
@@ -203,6 +343,9 @@ export function ReviewPage() {
     }
   };
   
+  // For "Create Your Own" mode, show top genre match in header
+  const topGenreMatch = genreMatches.length > 0 ? genreMatches[0] : null;
+  
   return (
     <div className="min-h-full p-8 lg:p-12">
       {/* Header */}
@@ -214,8 +357,49 @@ export function ReviewPage() {
           Your Pedalboard is Ready!
         </h1>
         <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-          Here's a summary of your build. Export it, share it, or go back to make changes.
+          {isCreateYourOwnMode && topGenreMatch ? (
+            <>
+              Based on your choices, your board is <span className="font-semibold" style={{ color: topGenreMatch.genre.color }}>{Math.round(topGenreMatch.fitPercent)}% {topGenreMatch.genre.name}</span>! See the breakdown below.
+            </>
+          ) : (
+            <>Here's a summary of your build. Export it, share it, or go back to make changes.</>
+          )}
         </p>
+        
+        {/* Genre Matches Banner - shown in "Create Your Own" mode */}
+        {isCreateYourOwnMode && genreMatches.length > 0 && (
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            {genreMatches.map((match, index) => (
+              <div 
+                key={match.genre.id}
+                className="flex items-center gap-3 px-5 py-3 rounded-xl border"
+                style={{ 
+                  backgroundColor: `${match.genre.color}15`,
+                  borderColor: `${match.genre.color}40`,
+                }}
+              >
+                <span className="text-2xl">{match.genre.icon}</span>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span 
+                      className="text-xs font-bold px-1.5 py-0.5 rounded"
+                      style={{ backgroundColor: `${match.genre.color}30`, color: match.genre.color }}
+                    >
+                      #{index + 1}
+                    </span>
+                    <span className="font-semibold text-white">{match.genre.name}</span>
+                  </div>
+                  <div 
+                    className="text-lg font-bold"
+                    style={{ color: match.genre.color }}
+                  >
+                    {Math.round(match.fitPercent)}% match
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       
       <div className="max-w-5xl mx-auto">
@@ -307,10 +491,61 @@ export function ReviewPage() {
             <div className="text-xs text-board-muted mt-3">
               {selectedGenreObjects.length > 0 
                 ? selectedGenreObjects.map(g => `${g.icon} ${g.name}`).join(' + ')
-                : genres.length > 0 ? genres.join(', ') : 'Mixed style'}
+                : genreMatches.length > 0 
+                  ? genreMatches.slice(0, 2).map(m => `${m.genre.icon} ${m.genre.name}`).join(' + ')
+                  : genres.length > 0 ? genres.join(', ') : 'Mixed style'}
             </div>
           </div>
         </div>
+        
+        {/* Section Scores & Tags - Full width section */}
+        {sectionScores.length > 0 && (
+          <div className="mb-8 bg-board-surface border border-board-border rounded-xl overflow-hidden">
+            <div className="p-3 border-b border-board-border flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-board-accent" />
+              <h3 className="text-sm font-semibold text-white">Section Scores & Tags</h3>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 divide-x divide-y divide-board-border">
+              {sectionScores.map(score => {
+                const catInfo = CATEGORY_INFO[score.category];
+                const percentage = (score.totalScore / score.maxScore) * 100;
+                return (
+                  <div key={score.category} className="p-3">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-medium text-white">{catInfo.displayName}</span>
+                      <span className="font-mono text-sm text-white">
+                        {score.totalScore}<span className="text-board-muted text-xs">/{score.maxScore}</span>
+                      </span>
+                    </div>
+                    
+                    {/* Progress bar */}
+                    <div className="h-1.5 bg-board-dark rounded-full overflow-hidden mb-2">
+                      <div 
+                        className="h-full rounded-full transition-all"
+                        style={{ 
+                          width: `${Math.min(percentage, 100)}%`,
+                          backgroundColor: catInfo.color,
+                        }}
+                      />
+                    </div>
+                    
+                    {/* Tag */}
+                    <div 
+                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium"
+                      style={{ 
+                        backgroundColor: `${catInfo.color}20`,
+                        color: catInfo.color,
+                      }}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: catInfo.color }} />
+                      {score.tag}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
         
         {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-6">
@@ -349,37 +584,12 @@ export function ReviewPage() {
             </div>
           </div>
           
-          {/* Tone Tags & Actions */}
+          {/* Sidebar */}
           <div className="space-y-6">
-            {/* Tone Tags */}
-            <div className="bg-board-surface border border-board-border rounded-xl p-5">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-board-accent" />
-                Your Tone Tags
-              </h2>
-              <div className="space-y-3">
-                {sectionScores.map(score => {
-                  const catInfo = CATEGORY_INFO[score.category];
-                  return (
-                    <div key={score.category} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div 
-                          className="w-2 h-2 rounded-full"
-                          style={{ backgroundColor: catInfo.color }}
-                        />
-                        <span className="text-sm text-board-muted">{catInfo.displayName}</span>
-                      </div>
-                      <span 
-                        className="text-sm font-medium px-2 py-0.5 rounded-full"
-                        style={{ backgroundColor: `${catInfo.color}20`, color: catInfo.color }}
-                      >
-                        {score.tag}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            {/* Genre Matches - shown in "Create Your Own" mode */}
+            {isCreateYourOwnMode && board.slots.length > 0 && (
+              <GenreMatchesSection matches={genreMatches} />
+            )}
             
             {/* Signal Chain */}
             <div className="bg-board-surface border border-board-border rounded-xl p-5">

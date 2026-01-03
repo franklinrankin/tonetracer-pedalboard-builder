@@ -91,19 +91,37 @@ export function BoardBuilder() {
     URL.revokeObjectURL(url);
   };
   
-  // Calculate pedal size based on count
-  const getPedalSize = () => {
+  const isSizeEnforced = !board.constraints.applyAfterSize;
+  
+  // Board dimensions in pixels - use a larger scale for full-width display
+  const MAX_DISPLAY_WIDTH = 800;
+  const SCALE_FACTOR = Math.min(MAX_DISPLAY_WIDTH / board.constraints.maxWidthMm, 2.0);
+  const boardWidthPx = board.constraints.maxWidthMm * SCALE_FACTOR;
+  const boardDepthPx = board.constraints.maxDepthMm * SCALE_FACTOR;
+  
+  // Calculate pedal size - if size enforced, scale pedals proportionally to board
+  const getPedalSize = (pedal?: Pedal) => {
+    if (isSizeEnforced && pedal) {
+      // Scale actual pedal size to match board scale
+      const width = Math.max(pedal.widthMm * SCALE_FACTOR, 40);
+      const height = Math.max(pedal.depthMm * SCALE_FACTOR, 55);
+      const fontSize = Math.max(7, Math.min(11, width / 6));
+      const brandSize = Math.max(5, fontSize - 2);
+      return { width, height, fontSize, brandSize };
+    }
+    
+    // Fallback: size based on count (larger for horizontal layout)
     const count = board.slots.length;
-    if (count <= 5) return { width: 72, height: 100, fontSize: 9, brandSize: 6 };
-    if (count <= 10) return { width: 64, height: 88, fontSize: 8, brandSize: 5 };
-    if (count <= 15) return { width: 56, height: 76, fontSize: 7, brandSize: 5 };
-    if (count <= 20) return { width: 48, height: 66, fontSize: 6, brandSize: 4 };
-    return { width: 40, height: 56, fontSize: 5, brandSize: 4 };
+    if (count <= 8) return { width: 80, height: 110, fontSize: 10, brandSize: 7 };
+    if (count <= 12) return { width: 70, height: 96, fontSize: 9, brandSize: 6 };
+    if (count <= 16) return { width: 60, height: 82, fontSize: 8, brandSize: 5 };
+    if (count <= 24) return { width: 52, height: 72, fontSize: 7, brandSize: 5 };
+    return { width: 44, height: 60, fontSize: 6, brandSize: 4 };
   };
   
-  // Split pedals into rows of 5, right to left, first row at bottom
+  // Split pedals into rows of 8 (more for wider layout), right to left, first row at bottom
   const getRows = () => {
-    const pedalsPerRow = 5;
+    const pedalsPerRow = 8;
     const rows: typeof board.slots[] = [];
     
     for (let i = 0; i < board.slots.length; i += pedalsPerRow) {
@@ -118,7 +136,7 @@ export function BoardBuilder() {
   
   // Get original index from visual position
   const getOriginalIndex = (rowIndex: number, indexInRow: number, _totalRows: number, rowLength: number) => {
-    const pedalsPerRow = 5;
+    const pedalsPerRow = 8;
     // rowIndex is the actual row number (0 = first row with pedals 1-5)
     // Items in row are reversed for right-to-left display
     const actualIndexInRow = rowLength - 1 - indexInRow;
@@ -146,7 +164,103 @@ export function BoardBuilder() {
   }
   
   const rows = getRows();
-  const pedalSize = getPedalSize();
+  const defaultPedalSize = getPedalSize();
+  
+  // Render a single pedal
+  const renderPedal = (slot: typeof board.slots[0], originalIndex: number) => {
+    const pedalSize = isSizeEnforced ? getPedalSize(slot.pedal) : defaultPedalSize;
+    const colors = PEDAL_COLORS[slot.pedal.category] || { bg: '#6b7280', accent: '#4b5563', text: '#fff' };
+    const isDragging = dragState.dragIndex === originalIndex;
+    const isDragOver = dragState.dragOverIndex === originalIndex;
+    const displayName = slot.pedal.subtype || slot.pedal.model.split(' ')[0];
+    const isSelected = selectedPedal?.id === slot.pedal.id;
+    
+    return (
+      <div
+        key={slot.pedal.id}
+        draggable
+        onDragStart={(e) => handleDragStart(e, originalIndex)}
+        onDragOver={(e) => handleDragOver(e, originalIndex)}
+        onDragEnd={handleDragEnd}
+        onClick={() => setSelectedPedal(isSelected ? null : slot.pedal)}
+        className={`relative group cursor-grab active:cursor-grabbing transition-all flex-shrink-0 ${
+          isDragging ? 'opacity-50 scale-95' : ''
+        } ${isDragOver ? 'scale-110 ring-2 ring-white' : ''} ${
+          isSelected ? 'ring-2 ring-board-accent ring-offset-1 ring-offset-black' : ''
+        }`}
+        style={{ width: pedalSize.width, height: pedalSize.height }}
+      >
+        {/* Pedal body */}
+        <div 
+          className="w-full h-full rounded shadow-lg flex flex-col overflow-hidden"
+          style={{ backgroundColor: colors.bg }}
+        >
+          {/* Name label */}
+          <div 
+            className="flex-[0_0_38%] flex items-center justify-center px-0.5"
+            style={{ 
+              backgroundColor: slot.pedal.category === 'utility' ? '#1a1a1a' : 'white',
+            }}
+          >
+            <span 
+              className="font-bold text-center leading-tight line-clamp-2"
+              style={{ 
+                fontSize: pedalSize.fontSize,
+                color: slot.pedal.category === 'utility' ? 'white' : '#1a1a1a' 
+              }}
+            >
+              {displayName}
+            </span>
+          </div>
+          
+          {/* Knobs area */}
+          <div className="flex-1 flex items-center justify-center">
+            <div 
+              className="rounded bg-black/30 flex items-center justify-center"
+              style={{ 
+                width: pedalSize.width * 0.7, 
+                height: pedalSize.height * 0.18 
+              }}
+            >
+              <span 
+                className="text-white/50 font-mono"
+                style={{ fontSize: pedalSize.brandSize }}
+              >
+                {slot.pedal.brand.slice(0, 5).toUpperCase()}
+              </span>
+            </div>
+          </div>
+          
+          {/* Footswitch */}
+          <div className="flex justify-center pb-1">
+            <div 
+              className="rounded-full bg-black/40"
+              style={{ width: pedalSize.width * 0.35, height: pedalSize.height * 0.06 }}
+            />
+          </div>
+        </div>
+        
+        {/* Remove button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemovePedal(slot.pedal.id);
+          }}
+          className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center shadow z-20"
+        >
+          <X className="w-2.5 h-2.5" />
+        </button>
+        
+        {/* Order number */}
+        <div 
+          className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-zinc-700 rounded-full flex items-center justify-center"
+          style={{ width: 14, height: 14, fontSize: 8 }}
+        >
+          <span className="text-white font-bold">{originalIndex + 1}</span>
+        </div>
+      </div>
+    );
+  };
   
   return (
     <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
@@ -190,168 +304,72 @@ export function BoardBuilder() {
       </div>
       
       {/* Visual Pedalboard */}
-      <div className="p-4 bg-[#b8b8b8] relative">
-        {/* Board surface */}
-        <div className="bg-[#1a1a1a] rounded-lg p-3 relative">
-          {/* Output arrow (left side) */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 flex items-center z-10">
-            <ArrowLeft className="w-5 h-5 text-zinc-400" />
-            <span className="text-[8px] text-zinc-500 ml-0.5">AMP</span>
+      {isSizeEnforced ? (
+        /* ENFORCED SIZE: Show board at exact scaled dimensions */
+        <div className="p-4 bg-[#b8b8b8] relative overflow-x-auto">
+          {/* Board surface - FIXED dimensions matching constraint ratio */}
+          <div 
+            className="bg-[#1a1a1a] rounded-lg p-2 relative mx-auto overflow-hidden"
+            style={{ 
+              width: boardWidthPx, 
+              height: boardDepthPx 
+            }}
+          >
+            {/* Output arrow (left side) */}
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 flex items-center z-10">
+              <ArrowLeft className="w-4 h-4 text-zinc-400" />
+              <span className="text-[7px] text-zinc-500 ml-0.5">AMP</span>
+            </div>
+            
+            {/* Guitar input (right side) */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 flex items-center z-10">
+              <span className="text-[7px] text-zinc-500 mr-0.5">IN</span>
+              <span className="text-sm">🎸</span>
+            </div>
+            
+            {/* Pedals arranged to fit - right to left (guitar to amp) */}
+            <div 
+              className="absolute bottom-2 left-2 right-2 flex flex-row-reverse flex-wrap-reverse content-end gap-1 items-end"
+              style={{ top: 2 }}
+            >
+              {board.slots.map((slot, index) => renderPedal(slot, index))}
+            </div>
+            
+            {/* Dimensions label */}
+            <div className="absolute bottom-0.5 right-1 text-[7px] text-zinc-500 font-mono">
+              {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
+            </div>
           </div>
           
-          {/* Guitar input (right side) */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 flex items-center z-10">
-            <span className="text-[8px] text-zinc-500 mr-0.5">IN</span>
-            <span className="text-base">🎸</span>
-          </div>
-          
-          {/* Rows of pedals - stacked bottom to top */}
-          <div className="flex flex-col-reverse gap-2">
-            {rows.map((row, rowIndex) => (
-              <div key={rowIndex} className="relative">
-                {/* Routing line for this row */}
-                <svg 
-                  className="absolute inset-0 pointer-events-none overflow-visible"
-                  style={{ zIndex: 0 }}
-                >
-                  {/* Horizontal line through pedals */}
-                  <line 
-                    x1="0" 
-                    y1="50%" 
-                    x2="100%" 
-                    y2="50%" 
-                    stroke="#404040" 
-                    strokeWidth="3"
-                  />
-                  
-                  {/* Vertical connector to row above (drawn from this row going up) */}
-                  {rowIndex < rows.length - 1 && (
-                    <line 
-                      x1="5%"
-                      y1="0" 
-                      x2="5%"
-                      y2="50%" 
-                      stroke="#404040" 
-                      strokeWidth="3"
-                    />
-                  )}
-                </svg>
-                
-                {/* Pedals - right to left */}
-                <div className="flex justify-end gap-2 relative z-10">
-                  {row.map((slot, indexInRow) => {
-                    const originalIndex = getOriginalIndex(rowIndex, indexInRow, rows.length, row.length);
-                    const colors = PEDAL_COLORS[slot.pedal.category] || { bg: '#6b7280', accent: '#4b5563', text: '#fff' };
-                    const isDragging = dragState.dragIndex === originalIndex;
-                    const isDragOver = dragState.dragOverIndex === originalIndex;
-                    const displayName = slot.pedal.subtype || slot.pedal.model.split(' ')[0];
-                    
-                    const isSelected = selectedPedal?.id === slot.pedal.id;
-                    
-                    return (
-                      <div
-                        key={slot.pedal.id}
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, originalIndex)}
-                        onDragOver={(e) => handleDragOver(e, originalIndex)}
-                        onDragEnd={handleDragEnd}
-                        onClick={() => setSelectedPedal(isSelected ? null : slot.pedal)}
-                        className={`relative group cursor-grab active:cursor-grabbing transition-all flex-shrink-0 ${
-                          isDragging ? 'opacity-50 scale-95' : ''
-                        } ${isDragOver ? 'scale-110 ring-2 ring-white' : ''} ${
-                          isSelected ? 'ring-2 ring-board-accent ring-offset-1 ring-offset-black' : ''
-                        }`}
-                        style={{ width: pedalSize.width, height: pedalSize.height }}
-                      >
-                        {/* Pedal body */}
-                        <div 
-                          className="w-full h-full rounded shadow-lg flex flex-col overflow-hidden"
-                          style={{ backgroundColor: colors.bg }}
-                        >
-                          {/* Name label */}
-                          <div 
-                            className="flex-[0_0_38%] flex items-center justify-center px-0.5"
-                            style={{ 
-                              backgroundColor: slot.pedal.category === 'utility' ? '#1a1a1a' : 'white',
-                            }}
-                          >
-                            <span 
-                              className="font-bold text-center leading-tight line-clamp-2"
-                              style={{ 
-                                fontSize: pedalSize.fontSize,
-                                color: slot.pedal.category === 'utility' ? 'white' : '#1a1a1a' 
-                              }}
-                            >
-                              {displayName}
-                            </span>
-                          </div>
-                          
-                          {/* Knobs area */}
-                          <div className="flex-1 flex items-center justify-center">
-                            <div 
-                              className="rounded bg-black/30 flex items-center justify-center"
-                              style={{ 
-                                width: pedalSize.width * 0.7, 
-                                height: pedalSize.height * 0.18 
-                              }}
-                            >
-                              <span 
-                                className="text-white/50 font-mono"
-                                style={{ fontSize: pedalSize.brandSize }}
-                              >
-                                {slot.pedal.brand.slice(0, 5).toUpperCase()}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          {/* Footswitch */}
-                          <div className="flex justify-center pb-1">
-                            <div 
-                              className="rounded-full bg-black/40"
-                              style={{ width: pedalSize.width * 0.35, height: pedalSize.height * 0.06 }}
-                            />
-                          </div>
-                        </div>
-                        
-                        {/* Remove button */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemovePedal(slot.pedal.id);
-                          }}
-                          className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center shadow z-20"
-                        >
-                          <X className="w-2.5 h-2.5" />
-                        </button>
-                        
-                        {/* Order number */}
-                        <div 
-                          className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-zinc-700 rounded-full flex items-center justify-center"
-                          style={{ width: 14, height: 14, fontSize: 8 }}
-                        >
-                          <span className="text-white font-bold">{originalIndex + 1}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Dimensions label */}
-          <div className="absolute bottom-1 right-1 text-[8px] text-zinc-600 font-mono">
-            {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
+          {/* Signal flow label */}
+          <div className="mt-2 text-center">
+            <span className="text-[10px] text-zinc-600 bg-zinc-300/50 px-2 py-0.5 rounded-full">
+              Signal: Guitar (right) → Pedals → Amp (left)
+            </span>
           </div>
         </div>
-        
-        {/* Signal flow label */}
-        <div className="mt-2 text-center">
-          <span className="text-[10px] text-zinc-600 bg-zinc-300/50 px-2 py-0.5 rounded-full">
-            Signal: Guitar (right) → Pedals → Amp (left)
-          </span>
+      ) : (
+        /* NOT ENFORCED: Simple pedal list without board outline */
+        <div className="p-4 bg-board-elevated relative">
+          <div className="text-center mb-3">
+            <span className="text-xs text-board-muted bg-board-surface px-3 py-1 rounded-full">
+              Board size not set — pedals only
+            </span>
+          </div>
+          
+          {/* Pedals in a simple flow - right to left (guitar to amp) */}
+          <div className="flex flex-row-reverse flex-wrap-reverse gap-3 justify-center items-end pb-4">
+            {board.slots.map((slot, index) => renderPedal(slot, index))}
+          </div>
+          
+          {/* Signal flow */}
+          <div className="text-center">
+            <span className="text-[10px] text-board-muted">
+              Signal: Guitar → {board.slots.map(s => s.pedal.model.split(' ')[0]).join(' → ')} → Amp
+            </span>
+          </div>
         </div>
-      </div>
+      )}
       
       {/* Selected Pedal Info Panel */}
       {selectedPedal && (

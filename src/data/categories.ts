@@ -172,19 +172,20 @@ export const CATEGORY_INFO: Record<Category, CategoryInfo> = {
   },
 };
 
+// Categories ordered by signal chain position (guitar → amp)
 export const CATEGORY_ORDER: Category[] = [
-  'gain',
-  'modulation',
-  'delay',
-  'reverb',
-  'dynamics',
-  'filter',
-  'pitch',
-  'eq',
-  'volume',
-  'amp',
-  'utility',
-  'synth',
+  'utility',    // Tuner first (special case - tuners go at front)
+  'filter',     // Wah, Envelope filters - early for expressiveness
+  'dynamics',   // Compressor before dirt
+  'pitch',      // Octave, pitch shifters - before or after dirt
+  'gain',       // Boost, Overdrive, Distortion, Fuzz
+  'eq',         // Shape tone after dirt
+  'synth',      // Synth effects
+  'modulation', // Phaser, Chorus, Tremolo - after dirt
+  'volume',     // Volume pedals
+  'amp',        // Amp/Cab simulation
+  'delay',      // Time-based effects
+  'reverb',     // Usually last before output
 ];
 
 export function getCategoryTag(category: Category, score: number): string {

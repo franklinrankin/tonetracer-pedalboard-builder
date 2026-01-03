@@ -32,7 +32,7 @@ export const GENRES: GenreProfile[] = [
     icon: '🎸',
     color: '#3b82f6',
     artists: ['Stevie Ray Vaughan', 'B.B. King', 'John Mayer', 'Gary Clark Jr.'],
-    recommendedCategories: ['gain', 'dynamics', 'delay', 'reverb', 'eq'],
+    recommendedCategories: ['gain', 'gain', 'dynamics', 'delay', 'reverb', 'eq'],
     sectionTargets: {
       gain: { min: 3, ideal: 8, max: 12 },
       dynamics: { min: 4, ideal: 7, max: 10 },
@@ -56,15 +56,14 @@ export const GENRES: GenreProfile[] = [
     icon: '🤘',
     color: '#ef4444',
     artists: ['Led Zeppelin', 'AC/DC', 'The Rolling Stones', 'Foo Fighters'],
-    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'utility'],
+    recommendedCategories: ['gain', 'gain', 'modulation', 'delay', 'reverb'],
     sectionTargets: {
       gain: { min: 8, ideal: 15, max: 20 },
       modulation: { min: 2, ideal: 5, max: 8 },
       delay: { min: 2, ideal: 5, max: 8 },
       reverb: { min: 2, ideal: 5, max: 8 },
-      utility: { min: 2, ideal: 5, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Distortion', 'Phaser', 'Chorus', 'Wah', 'Analog', 'Tape', 'Tuner', 'ABY'],
+    preferredSubtypes: ['Overdrive', 'Distortion', 'Phaser', 'Chorus', 'Wah', 'Analog', 'Tape'],
     keywords: ['classic', 'crunchy', 'punchy', 'rock', 'powerful'],
     characteristics: {
       gainLevel: 'medium',
@@ -80,12 +79,11 @@ export const GENRES: GenreProfile[] = [
     icon: '🔥',
     color: '#1f2937',
     artists: ['Metallica', 'Slipknot', 'Gojira', 'Meshuggah'],
-    recommendedCategories: ['gain', 'dynamics', 'eq', 'utility', 'amp'],
+    recommendedCategories: ['gain', 'gain', 'dynamics', 'eq', 'amp'],
     sectionTargets: {
       gain: { min: 18, ideal: 25, max: 30 },
       dynamics: { min: 5, ideal: 8, max: 12 },
       eq: { min: 4, ideal: 7, max: 10 },
-      utility: { min: 4, ideal: 8, max: 12 },
       amp: { min: 3, ideal: 6, max: 10 },
     },
     preferredSubtypes: ['Distortion', 'Boost', 'Gate', 'Compressor', 'Graphic', 'Parametric', 'Cab Sim', 'Amp Sim'],
@@ -104,15 +102,14 @@ export const GENRES: GenreProfile[] = [
     icon: '🌙',
     color: '#8b5cf6',
     artists: ['Radiohead', 'Arctic Monkeys', 'Tame Impala', 'The Strokes'],
-    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'utility'],
+    recommendedCategories: ['gain', 'gain', 'modulation', 'delay', 'reverb'],
     sectionTargets: {
       gain: { min: 4, ideal: 10, max: 15 },
       modulation: { min: 5, ideal: 10, max: 15 },
       delay: { min: 5, ideal: 9, max: 13 },
       reverb: { min: 5, ideal: 9, max: 13 },
-      utility: { min: 2, ideal: 5, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Fuzz', 'Chorus', 'Tremolo', 'Phaser', 'Tape', 'Digital', 'Looper', 'ABY'],
+    preferredSubtypes: ['Overdrive', 'Fuzz', 'Chorus', 'Tremolo', 'Phaser', 'Tape', 'Digital', 'Looper'],
     keywords: ['textured', 'creative', 'indie', 'alternative', 'dreamy'],
     characteristics: {
       gainLevel: 'low',
@@ -152,15 +149,16 @@ export const GENRES: GenreProfile[] = [
     icon: '✨',
     color: '#06b6d4',
     artists: ['Explosions in the Sky', 'Sigur Rós', 'Mogwai', 'Hammock'],
-    recommendedCategories: ['modulation', 'delay', 'reverb', 'pitch', 'utility'],
+    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'pitch', 'volume'],
     sectionTargets: {
+      gain: { min: 2, ideal: 4, max: 8 },
       modulation: { min: 6, ideal: 10, max: 15 },
       delay: { min: 10, ideal: 14, max: 15 },
       reverb: { min: 12, ideal: 15, max: 15 },
       pitch: { min: 3, ideal: 6, max: 10 },
-      utility: { min: 5, ideal: 10, max: 15 },
+      volume: { min: 5, ideal: 10, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Tremolo', 'Chorus', 'Tape', 'Multi', 'Ambient', 'Shimmer', 'Octave', 'Volume', 'Looper', 'ABY'],
+    preferredSubtypes: ['Boost', 'Overdrive', 'Tremolo', 'Chorus', 'Tape', 'Multi', 'Ambient', 'Shimmer', 'Octave', 'Volume', 'Looper'],
     keywords: ['ambient', 'atmospheric', 'ethereal', 'expansive', 'cinematic'],
     characteristics: {
       gainLevel: 'low',
@@ -200,15 +198,16 @@ export const GENRES: GenreProfile[] = [
     icon: '🎷',
     color: '#6366f1',
     artists: ['Pat Metheny', 'John Scofield', 'Julian Lage', 'Kurt Rosenwinkel'],
-    recommendedCategories: ['gain', 'dynamics', 'reverb', 'eq', 'volume'],
+    recommendedCategories: ['gain', 'dynamics', 'modulation', 'reverb', 'eq', 'volume'],
     sectionTargets: {
       gain: { min: 0, ideal: 3, max: 6 },
       dynamics: { min: 3, ideal: 6, max: 10 },
+      modulation: { min: 2, ideal: 4, max: 7 },
       reverb: { min: 2, ideal: 5, max: 8 },
       eq: { min: 3, ideal: 6, max: 10 },
       volume: { min: 3, ideal: 6, max: 10 },
     },
-    preferredSubtypes: ['Boost', 'Compressor', 'Chorus', 'Parametric', 'Spring', 'Volume', 'Expression'],
+    preferredSubtypes: ['Boost', 'Compressor', 'Chorus', 'Vibrato', 'Parametric', 'Spring', 'Volume', 'Expression'],
     keywords: ['warm', 'clean', 'jazz', 'smooth', 'articulate'],
     characteristics: {
       gainLevel: 'clean',
@@ -224,15 +223,14 @@ export const GENRES: GenreProfile[] = [
     icon: '🕺',
     color: '#10b981',
     artists: ['Nile Rodgers', 'Prince', 'Cory Wong', 'John Mayer'],
-    recommendedCategories: ['dynamics', 'filter', 'modulation', 'gain', 'utility'],
+    recommendedCategories: ['dynamics', 'filter', 'modulation', 'gain'],
     sectionTargets: {
       dynamics: { min: 5, ideal: 9, max: 15 },
       filter: { min: 5, ideal: 8, max: 10 },
       modulation: { min: 3, ideal: 6, max: 10 },
       gain: { min: 2, ideal: 6, max: 10 },
-      utility: { min: 2, ideal: 5, max: 10 },
     },
-    preferredSubtypes: ['Compressor', 'Wah', 'Envelope', 'Auto-Wah', 'Phaser', 'Chorus', 'Overdrive', 'Boost', 'Tuner', 'ABY'],
+    preferredSubtypes: ['Compressor', 'Wah', 'Envelope', 'Auto-Wah', 'Phaser', 'Chorus', 'Overdrive', 'Boost'],
     keywords: ['funky', 'quack', 'dynamic', 'groove', 'envelope'],
     characteristics: {
       gainLevel: 'clean',
@@ -248,15 +246,14 @@ export const GENRES: GenreProfile[] = [
     icon: '🎹',
     color: '#7c3aed',
     artists: ['Dream Theater', 'Tool', 'Porcupine Tree', 'Animals as Leaders'],
-    recommendedCategories: ['gain', 'modulation', 'delay', 'pitch', 'utility'],
+    recommendedCategories: ['gain', 'modulation', 'delay', 'pitch'],
     sectionTargets: {
       gain: { min: 10, ideal: 18, max: 25 },
       modulation: { min: 6, ideal: 12, max: 15 },
       delay: { min: 8, ideal: 12, max: 15 },
       pitch: { min: 5, ideal: 8, max: 10 },
-      utility: { min: 6, ideal: 12, max: 15 },
     },
-    preferredSubtypes: ['Overdrive', 'Distortion', 'Boost', 'Multi', 'Chorus', 'Phaser', 'Harmonizer', 'Shifter', 'Whammy', 'Loop Switcher', 'Looper'],
+    preferredSubtypes: ['Overdrive', 'Distortion', 'Boost', 'Multi', 'Chorus', 'Phaser', 'Harmonizer', 'Shifter', 'Whammy', 'Looper'],
     keywords: ['versatile', 'complex', 'progressive', 'technical', 'dynamic'],
     characteristics: {
       gainLevel: 'high',
@@ -296,15 +293,15 @@ export const GENRES: GenreProfile[] = [
     icon: '🔮',
     color: '#f43f5e',
     artists: ['Sonic Youth', 'Nine Inch Nails', 'St. Vincent', 'Battles'],
-    recommendedCategories: ['gain', 'pitch', 'filter', 'modulation', 'utility'],
+    recommendedCategories: ['gain', 'pitch', 'filter', 'modulation', 'synth'],
     sectionTargets: {
       gain: { min: 8, ideal: 18, max: 28 },
       pitch: { min: 5, ideal: 9, max: 10 },
       filter: { min: 4, ideal: 7, max: 10 },
       modulation: { min: 8, ideal: 13, max: 15 },
-      utility: { min: 6, ideal: 10, max: 15 },
+      synth: { min: 4, ideal: 8, max: 10 },
     },
-    preferredSubtypes: ['Fuzz', 'Distortion', 'Synth', 'Fuzz/Synth', 'Shifter', 'Whammy', 'Harmonizer', 'Wah', 'Envelope', 'Special', 'Glitch', 'Looper', 'ABY'],
+    preferredSubtypes: ['Fuzz', 'Distortion', 'Synth', 'Fuzz/Synth', 'Shifter', 'Whammy', 'Harmonizer', 'Wah', 'Envelope', 'Special', 'Glitch', 'Looper'],
     keywords: ['experimental', 'noise', 'synth', 'glitch', 'weird', 'unconventional'],
     characteristics: {
       gainLevel: 'high',
@@ -391,7 +388,7 @@ export const GENRES: GenreProfile[] = [
     icon: '🎸',
     color: '#fb923c',
     artists: ['The National', 'Interpol', 'Spoon', 'Vampire Weekend'],
-    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb'],
+    recommendedCategories: ['gain', 'gain', 'modulation', 'delay', 'reverb'],
     sectionTargets: {
       gain: { min: 6, ideal: 12, max: 18 },
       modulation: { min: 4, ideal: 8, max: 12 },
@@ -411,6 +408,19 @@ export const GENRES: GenreProfile[] = [
 
 export function getGenreById(id: string): GenreProfile | undefined {
   return GENRES.find(g => g.id === id);
+}
+
+export interface GenreMatchReason {
+  category: Category;
+  reason: string;
+  strength: 'strong' | 'moderate' | 'weak';
+}
+
+export interface GenreMatch {
+  genre: GenreProfile;
+  fitPercent: number;
+  reasons: GenreMatchReason[];
+  summary: string;
 }
 
 export function calculateGenreFit(
@@ -444,4 +454,100 @@ export function calculateGenreFit(
   }
 
   return targetCount > 0 ? (totalFit / targetCount) * 100 : 0;
+}
+
+// Get detailed genre matches with explanations
+export function getTopGenreMatches(
+  sectionScores: { category: Category; totalScore: number }[],
+  topN: number = 3
+): GenreMatch[] {
+  const matches: GenreMatch[] = [];
+
+  for (const genre of GENRES) {
+    const reasons: GenreMatchReason[] = [];
+    let totalFit = 0;
+    let targetCount = 0;
+
+    for (const [category, target] of Object.entries(genre.sectionTargets)) {
+      const score = sectionScores.find(s => s.category === category as Category);
+      const currentScore = score?.totalScore || 0;
+
+      if (target) {
+        targetCount++;
+        
+        // Calculate fit and generate reason
+        if (currentScore >= target.min && currentScore <= target.max) {
+          const distanceFromIdeal = Math.abs(currentScore - target.ideal);
+          const maxDistance = Math.max(target.ideal - target.min, target.max - target.ideal);
+          const fitPercent = 1 - (distanceFromIdeal / maxDistance) * 0.5;
+          totalFit += fitPercent;
+
+          // Generate reason based on how close to ideal
+          if (distanceFromIdeal <= maxDistance * 0.3) {
+            reasons.push({
+              category: category as Category,
+              reason: `Your ${category} level (${currentScore}) is spot-on for ${genre.name}`,
+              strength: 'strong',
+            });
+          } else {
+            reasons.push({
+              category: category as Category,
+              reason: `Your ${category} level works well for ${genre.name}`,
+              strength: 'moderate',
+            });
+          }
+        } else if (currentScore < target.min && currentScore > 0) {
+          totalFit += Math.max(0, currentScore / target.min) * 0.5;
+          reasons.push({
+            category: category as Category,
+            reason: `A bit more ${category} would be typical for ${genre.name}`,
+            strength: 'weak',
+          });
+        } else if (currentScore > target.max) {
+          totalFit += 0.3;
+          reasons.push({
+            category: category as Category,
+            reason: `More ${category} than typical ${genre.name}, but can still work`,
+            strength: 'weak',
+          });
+        }
+      }
+    }
+
+    const fitPercent = targetCount > 0 ? (totalFit / targetCount) * 100 : 0;
+    
+    // Only include if there's a reasonable fit
+    if (fitPercent > 30) {
+      // Generate summary
+      const strongReasons = reasons.filter(r => r.strength === 'strong');
+      let summary = '';
+      
+      if (fitPercent >= 80) {
+        summary = `Perfect match! Your board has classic ${genre.name} DNA.`;
+      } else if (fitPercent >= 60) {
+        summary = `Strong fit. Your tones lean ${genre.name} with room for exploration.`;
+      } else if (fitPercent >= 45) {
+        summary = `Decent match. You share some ${genre.name} sensibilities.`;
+      } else {
+        summary = `Some overlap with ${genre.name} tones.`;
+      }
+
+      if (strongReasons.length > 0) {
+        const cats = strongReasons.slice(0, 2).map(r => r.category).join(' and ');
+        summary += ` Your ${cats} choices nail it.`;
+      }
+
+      matches.push({
+        genre,
+        fitPercent,
+        reasons: reasons.filter(r => r.strength !== 'weak' || reasons.length <= 3).slice(0, 4),
+        summary,
+      });
+    }
+  }
+
+  // Sort by fit and return top N
+  return matches
+    .sort((a, b) => b.fitPercent - a.fitPercent)
+    .slice(0, topN);
 }

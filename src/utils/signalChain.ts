@@ -6,16 +6,20 @@ const SIGNAL_CHAIN_ORDER: Record<string, number> = {
   // Tuner - always first (can mute signal)
   'Tuner': 1,
   
+  // Buffers - early in chain
+  'Buffer': 5,
+  
   // Filters - early in chain for expressiveness
   'Wah': 10,
   'Envelope': 11,
   'Auto-Wah': 12,
-  'filter': 15, // Default for filter category
+  'filter': 15,
   
   // Dynamics - compress before dirt
   'Compressor': 20,
   'Limiter': 21,
   'Noise Gate': 22,
+  'Gate': 23, // Noise gate
   'dynamics': 25,
   
   // Pitch effects - before or after dirt depending on taste
@@ -36,6 +40,7 @@ const SIGNAL_CHAIN_ORDER: Record<string, number> = {
   // EQ - shape your tone after dirt
   'Graphic': 60,
   'Parametric': 61,
+  'EQ': 62,
   'eq': 62,
   
   // Synth effects
@@ -50,25 +55,34 @@ const SIGNAL_CHAIN_ORDER: Record<string, number> = {
   'Vibrato': 73,
   'Tremolo': 74,
   'Rotary': 75,
+  'Ring Mod': 76,
+  'Uni-Vibe': 77,
   'modulation': 72,
   
   // Volume - control dynamics after effects
   'Volume': 80,
+  'Expression': 81,
   'volume': 81,
   
   // Amp/Cab simulation
   'Preamp': 85,
   'Cab Sim': 86,
+  'IR Loader': 87,
   'amp': 87,
   
-  // Time-based effects - end of chain
-  'Analog': 90, // Analog delay
+  // Time-based effects - Delay
+  'Analog Delay': 90,
+  'Analog': 90, // For "Analog" subtype
   'Tape': 91,
+  'Tape Delay': 91,
   'Digital': 92,
+  'Digital Delay': 92,
   'Multi': 93,
+  'Multi Delay': 93,
+  'Slapback': 89,
   'delay': 92,
   
-  // Reverb - usually last
+  // Reverb - usually last before utility
   'Spring': 95,
   'Hall': 96,
   'Plate': 97,
@@ -77,10 +91,14 @@ const SIGNAL_CHAIN_ORDER: Record<string, number> = {
   'Shimmer': 100,
   'reverb': 98,
   
-  // Utility - depends on type
-  'Buffer': 5, // Buffers often go early
+  // Utility - usually at the end
+  'DI': 102,
+  'A/B Box': 103,
+  'Mixer': 104,
+  'Switcher': 105,
   'Loop Switcher': 105,
-  'Looper': 110, // Loopers usually last
+  'Loop': 108,
+  'Looper': 110,
   'utility': 105,
 };
 
@@ -128,8 +146,9 @@ export function findInsertIndex(slots: BoardSlot[], newPedal: Pedal): number {
 export function getSignalChainSection(pedal: Pedal): string {
   const position = getSignalChainPosition(pedal);
   
+  if (position <= 1) return 'Tuner';
   if (position <= 5) return 'Buffer';
-  if (position <= 15) return 'Tuner & Filters';
+  if (position <= 15) return 'Filters';
   if (position <= 25) return 'Dynamics';
   if (position <= 35) return 'Pitch';
   if (position <= 55) return 'Gain';
@@ -137,7 +156,7 @@ export function getSignalChainSection(pedal: Pedal): string {
   if (position <= 80) return 'Modulation';
   if (position <= 87) return 'Volume & Amp';
   if (position <= 93) return 'Delay';
-  if (position <= 105) return 'Reverb';
+  if (position <= 101) return 'Reverb';
   return 'Utility';
 }
 
