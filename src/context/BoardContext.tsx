@@ -14,7 +14,7 @@ interface BoardState {
   totalCurrent: number;
   genres: string[];
   selectedGenres: string[]; // Up to 3 genres
-  boardSnapshot: string | null; // Base64 image of the visualizer
+  boardSnapshot: string | null; // Base64 image of visualizer
 }
 
 type BoardAction =

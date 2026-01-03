@@ -10,25 +10,21 @@ interface VisualizePageProps {
 
 export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
   const { state, dispatch } = useBoard();
-  const { board, totalCost, boardSnapshot } = state;
+  const { board, totalCost } = state;
   const visualizerRef = useRef<BoardVisualizerRef>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [justSaved, setJustSaved] = useState(false);
 
-  const handleSaveSnapshot = async () => {
-    if (!visualizerRef.current) return;
-    
-    setIsSaving(true);
-    try {
+  // Save snapshot and continue to review
+  const handleContinue = async () => {
+    if (visualizerRef.current) {
+      setIsSaving(true);
       const snapshot = await visualizerRef.current.captureSnapshot();
       if (snapshot) {
         dispatch({ type: 'SAVE_SNAPSHOT', snapshot });
-        setJustSaved(true);
-        setTimeout(() => setJustSaved(false), 2000);
       }
-    } finally {
       setIsSaving(false);
     }
+    onContinue();
   };
 
   return (
@@ -58,35 +54,23 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
                 Back to Build
               </button>
               {board.slots.length > 0 && (
-                <>
-                  <button
-                    onClick={handleSaveSnapshot}
-                    disabled={isSaving}
-                    className={`flex items-center gap-2 px-4 py-3 font-medium rounded-xl transition-colors ${
-                      justSaved
-                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                        : boardSnapshot
-                          ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30 hover:bg-purple-500/30'
-                          : 'bg-board-elevated text-white border border-board-border hover:bg-board-border'
-                    }`}
-                  >
-                    {isSaving ? (
+                <button
+                  onClick={handleContinue}
+                  disabled={isSaving}
+                  className="flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors disabled:opacity-50"
+                >
+                  {isSaving ? (
+                    <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : justSaved ? (
-                      <Check className="w-4 h-4" />
-                    ) : (
-                      <Camera className="w-4 h-4" />
-                    )}
-                    {justSaved ? 'Saved!' : boardSnapshot ? 'Update Snapshot' : 'Save Snapshot'}
-                  </button>
-                  <button
-                    onClick={onContinue}
-                    className="flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors"
-                  >
-                    Review Board
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      Review Board
+                      <ChevronRight className="w-5 h-5" />
+                    </>
+                  )}
+                </button>
               )}
             </div>
           </div>
@@ -127,11 +111,18 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
             Build
           </button>
           <button
-            onClick={onContinue}
-            className="flex-1 py-3 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2"
+            onClick={handleContinue}
+            disabled={isSaving}
+            className="flex-1 py-3 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
           >
-            Review
-            <ChevronRight className="w-5 h-5" />
+            {isSaving ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <>
+                Review
+                <ChevronRight className="w-5 h-5" />
+              </>
+            )}
           </button>
         </div>
       </div>

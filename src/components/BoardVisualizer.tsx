@@ -67,7 +67,7 @@ export const BoardVisualizer = forwardRef<BoardVisualizerRef>(function BoardVisu
         const html2canvas = (await import('html2canvas')).default;
         const canvas = await html2canvas(boardRef.current, {
           backgroundColor: '#1a1a1a',
-          scale: 2, // Higher quality
+          scale: 2,
           logging: false,
         });
         return canvas.toDataURL('image/png');

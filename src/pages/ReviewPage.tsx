@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, Image } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, Eye } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, getTopGenreMatches, GenreMatch } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
@@ -20,7 +20,7 @@ function BoardSnapshotSection({ snapshot }: { snapshot: string }) {
     <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
       <div className="p-4 border-b border-board-border flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Image className="w-5 h-5 text-purple-400" />
+          <Eye className="w-5 h-5 text-purple-400" />
           <h2 className="text-lg font-semibold text-white">Board Layout</h2>
         </div>
         <button
@@ -28,10 +28,10 @@ function BoardSnapshotSection({ snapshot }: { snapshot: string }) {
           className="flex items-center gap-2 px-3 py-1.5 text-sm bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors"
         >
           <Download className="w-4 h-4" />
-          Download
+          Download Image
         </button>
       </div>
-      <div className="p-4">
+      <div className="p-4 bg-board-dark/50">
         <img 
           src={snapshot} 
           alt="Pedalboard layout" 
