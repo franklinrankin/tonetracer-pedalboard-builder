@@ -1,11 +1,46 @@
 import { useState, useMemo } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, Image } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, getTopGenreMatches, GenreMatch } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches, formatArea } from '../utils/measurements';
 import { BoardRecommendations } from '../components/BoardRecommendations';
 import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
+
+// Board Snapshot Component
+function BoardSnapshotSection({ snapshot }: { snapshot: string }) {
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = snapshot;
+    link.download = 'pedalboard-layout.png';
+    link.click();
+  };
+  
+  return (
+    <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
+      <div className="p-4 border-b border-board-border flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Image className="w-5 h-5 text-purple-400" />
+          <h2 className="text-lg font-semibold text-white">Board Layout</h2>
+        </div>
+        <button
+          onClick={handleDownload}
+          className="flex items-center gap-2 px-3 py-1.5 text-sm bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors"
+        >
+          <Download className="w-4 h-4" />
+          Download
+        </button>
+      </div>
+      <div className="p-4">
+        <img 
+          src={snapshot} 
+          alt="Pedalboard layout" 
+          className="w-full rounded-lg border border-board-border"
+        />
+      </div>
+    </div>
+  );
+}
 
 // Genre Matches Component - shown when user didn't pre-select genres
 function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
@@ -282,7 +317,7 @@ function PowerSupplyRecommendations({
 
 export function ReviewPage() {
   const { state } = useBoard();
-  const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres } = state;
+  const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres, boardSnapshot } = state;
   const [showRecommendations, setShowRecommendations] = useState(false);
   
   const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
@@ -497,6 +532,13 @@ export function ReviewPage() {
             </div>
           </div>
         </div>
+        
+        {/* Board Snapshot */}
+        {boardSnapshot && (
+          <div className="mb-8">
+            <BoardSnapshotSection snapshot={boardSnapshot} />
+          </div>
+        )}
         
         {/* Section Scores & Tags - Full width section */}
         {sectionScores.length > 0 && (

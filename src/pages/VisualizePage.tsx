@@ -1,6 +1,7 @@
-import { Eye, ChevronRight, ChevronLeft } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { Eye, ChevronRight, ChevronLeft, Camera, Check, Loader2 } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
-import { BoardVisualizer } from '../components/BoardVisualizer';
+import { BoardVisualizer, BoardVisualizerRef } from '../components/BoardVisualizer';
 
 interface VisualizePageProps {
   onContinue: () => void;
@@ -8,8 +9,27 @@ interface VisualizePageProps {
 }
 
 export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
-  const { state } = useBoard();
-  const { board, totalCost } = state;
+  const { state, dispatch } = useBoard();
+  const { board, totalCost, boardSnapshot } = state;
+  const visualizerRef = useRef<BoardVisualizerRef>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
+
+  const handleSaveSnapshot = async () => {
+    if (!visualizerRef.current) return;
+    
+    setIsSaving(true);
+    try {
+      const snapshot = await visualizerRef.current.captureSnapshot();
+      if (snapshot) {
+        dispatch({ type: 'SAVE_SNAPSHOT', snapshot });
+        setJustSaved(true);
+        setTimeout(() => setJustSaved(false), 2000);
+      }
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="min-h-full">
@@ -38,13 +58,35 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
                 Back to Build
               </button>
               {board.slots.length > 0 && (
-                <button
-                  onClick={onContinue}
-                  className="flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors"
-                >
-                  Review Board
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+                <>
+                  <button
+                    onClick={handleSaveSnapshot}
+                    disabled={isSaving}
+                    className={`flex items-center gap-2 px-4 py-3 font-medium rounded-xl transition-colors ${
+                      justSaved
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                        : boardSnapshot
+                          ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30 hover:bg-purple-500/30'
+                          : 'bg-board-elevated text-white border border-board-border hover:bg-board-border'
+                    }`}
+                  >
+                    {isSaving ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : justSaved ? (
+                      <Check className="w-4 h-4" />
+                    ) : (
+                      <Camera className="w-4 h-4" />
+                    )}
+                    {justSaved ? 'Saved!' : boardSnapshot ? 'Update Snapshot' : 'Save Snapshot'}
+                  </button>
+                  <button
+                    onClick={onContinue}
+                    className="flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors"
+                  >
+                    Review Board
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -71,7 +113,7 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
       
       {/* Content */}
       <div className="max-w-6xl mx-auto p-6">
-        <BoardVisualizer />
+        <BoardVisualizer ref={visualizerRef} />
       </div>
       
       {/* Mobile Navigation */}
