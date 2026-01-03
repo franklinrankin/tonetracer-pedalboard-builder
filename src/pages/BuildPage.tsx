@@ -112,7 +112,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
         {/* Pedal Selection - Below Board */}
         <div className="space-y-6">
           {activeTab === 'starter' && hasGenres && (
-            <GenreStarterKit key={starterKitKey} />
+            <GenreStarterKit key={starterKitKey} onFinishUp={onContinue} />
           )}
           
           {activeTab === 'catalog' && (

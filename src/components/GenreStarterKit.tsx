@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from 'react';
-import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, Star, ArrowUpDown } from 'lucide-react';
+import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, ArrowUpDown } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, GenreProfile } from '../data/genres';
 import { getPedalEducation } from '../data/pedalEducation';
@@ -10,6 +10,16 @@ import { PedalImage } from './PedalImage';
 import { estimatePedalCapacity, getRecommendedEssentialCount, getRecommendedBonusCount } from '../data/boardTemplates';
 
 type SortOption = 'default' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'rating-asc' | 'rating-desc' | 'size-asc' | 'size-desc';
+
+type PriceRange = 'all' | 'budget' | 'mid' | 'premium' | 'luxury';
+
+const PRICE_RANGES: Record<PriceRange, { label: string; min: number; max: number }> = {
+  all: { label: 'All Prices', min: 0, max: Infinity },
+  budget: { label: 'Budget ($0-75)', min: 0, max: 75 },
+  mid: { label: 'Mid ($75-150)', min: 75, max: 150 },
+  premium: { label: 'Premium ($150-300)', min: 150, max: 300 },
+  luxury: { label: 'Luxury ($300+)', min: 300, max: Infinity },
+};
 
 interface StarterKitStep {
   id: string;
@@ -33,15 +43,23 @@ interface BonusAddition {
   pedals: PedalWithStatus[];
 }
 
+interface GenreStarterKitProps {
+  onFinishUp?: () => void;
+}
+
 // Genre-specific bonus additions logic
 function getGenreBonusAdditions(
   genre: GenreProfile,
   allPedals: PedalWithStatus[],
   onBoardIds: Set<string>,
   onBoardSubtypes: Set<string | undefined>,
-  budget: number = 500
+  budget: number = 500,
+  priceRangeFilter: PriceRange = 'all'
 ): BonusAddition[] {
   const additions: BonusAddition[] = [];
+  
+  // Get price range config
+  const priceRangeConfig = PRICE_RANGES[priceRangeFilter];
   
   // Genre-aware sorting helper with category-based budget allocation
   const sortByGenreFit = (pedals: PedalWithStatus[], category?: Category) => {
@@ -83,22 +101,40 @@ function getGenreBonusAdditions(
   };
   
   const findPedals = (category: Category, subtypes?: string[], excludeSubtypes?: string[]) => {
-    const filtered = allPedals.filter(p => 
+    let filtered = allPedals.filter(p => 
       p.category === category && 
       p.fits && 
       !onBoardIds.has(p.id) &&
       (!subtypes || subtypes.includes(p.subtype || '')) &&
       (!excludeSubtypes || !excludeSubtypes.includes(p.subtype || ''))
     );
+    
+    // Apply price range filter
+    if (priceRangeFilter !== 'all') {
+      const inRange = filtered.filter(p => p.reverbPrice >= priceRangeConfig.min && p.reverbPrice < priceRangeConfig.max);
+      if (inRange.length > 0) {
+        filtered = inRange;
+      }
+    }
+    
     return sortByGenreFit(filtered, category).slice(0, 11);
   };
   
   const findBySubtype = (subtypes: string[]) => {
-    const filtered = allPedals.filter(p => 
+    let filtered = allPedals.filter(p => 
       p.fits && 
       !onBoardIds.has(p.id) &&
       subtypes.includes(p.subtype || '')
     );
+    
+    // Apply price range filter
+    if (priceRangeFilter !== 'all') {
+      const inRange = filtered.filter(p => p.reverbPrice >= priceRangeConfig.min && p.reverbPrice < priceRangeConfig.max);
+      if (inRange.length > 0) {
+        filtered = inRange;
+      }
+    }
+    
     return sortByGenreFit(filtered, filtered[0]?.category).slice(0, 11);
   };
 
@@ -923,7 +959,7 @@ function getGenreBonusAdditions(
   return additions.slice(0, 4); // Max 4 bonus additions
 }
 
-export function GenreStarterKit() {
+export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
   const { state, dispatch } = useBoard();
   const { selectedGenres, allPedals, board } = state;
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -932,15 +968,27 @@ export function GenreStarterKit() {
   const [phase, setPhase] = useState<'essentials' | 'additions'>('essentials');
   const [currentAdditionIndex, setCurrentAdditionIndex] = useState(0);
   const [sortBy, setSortBy] = useState<SortOption>('default');
+  const [priceRange, setPriceRange] = useState<PriceRange>('all');
   const [skipTuner, setSkipTuner] = useState(false); // Option to skip tuner pedal
   const [skipSecondGain, setSkipSecondGain] = useState(false); // Option to skip second gain pedal
   const containerRef = useRef<HTMLDivElement>(null);
   
+  // Filter pedals by price range
+  const filterByPriceRange = (pedals: PedalWithStatus[]): PedalWithStatus[] => {
+    if (priceRange === 'all') return pedals;
+    
+    const range = PRICE_RANGES[priceRange];
+    return pedals.filter(p => p.reverbPrice >= range.min && p.reverbPrice < range.max);
+  };
+  
   // Sort pedals helper function
   const sortPedals = (pedals: PedalWithStatus[]): PedalWithStatus[] => {
-    if (sortBy === 'default') return pedals;
+    // First filter by price range
+    let result = filterByPriceRange(pedals);
     
-    const sorted = [...pedals];
+    if (sortBy === 'default') return result;
+    
+    const sorted = [...result];
     switch (sortBy) {
       case 'name-asc':
         sorted.sort((a, b) => a.model.localeCompare(b.model));
@@ -1029,7 +1077,7 @@ export function GenreStarterKit() {
   
   // Calculate recommended essentials and bonus based on capacity
   const recommendedEssentials = board.constraints.maxPedalCount
-    ? Math.min(board.constraints.maxPedalCount - 1, 10) // Leave room for 1 bonus if possible
+    ? Math.max(1, Math.min(board.constraints.maxPedalCount - 1, 10)) // At least 1 essential, leave room for bonus if possible
     : getRecommendedEssentialCount(board.constraints.maxWidthMm, board.constraints.maxDepthMm);
   
   const recommendedBonus = board.constraints.maxPedalCount
@@ -1076,10 +1124,28 @@ export function GenreStarterKit() {
     
     // Step 1: Tuner (first, unless user opted out)
     if (!skipTuner) {
-      const tunerPedals = allPedals.filter(p => p.subtype === 'Tuner' && p.fits);
+      let tunerPedals = allPedals.filter(p => p.subtype === 'Tuner' && p.fits);
+      
+      // Apply price range filter to tuners
+      if (priceRange !== 'all') {
+        const range = PRICE_RANGES[priceRange];
+        const tunersInRange = tunerPedals.filter(p => p.reverbPrice >= range.min && p.reverbPrice < range.max);
+        if (tunersInRange.length > 0) {
+          tunerPedals = tunersInRange;
+        }
+      }
+      
       if (tunerPedals.length > 0) {
         const education = getPedalEducation('Tuner');
         const sortedTuners = [...tunerPedals].sort((a, b) => {
+          // When price range selected, sort by rating (best tuner in range)
+          if (priceRange !== 'all') {
+            if (b.categoryRating !== a.categoryRating) {
+              return b.categoryRating - a.categoryRating;
+            }
+            return a.reverbPrice - b.reverbPrice; // Prefer cheaper for same rating
+          }
+          // Default: prefer mid-range priced tuners
           const aMidRange = Math.abs(a.reverbPrice - 80);
           const bMidRange = Math.abs(b.reverbPrice - 80);
           return aMidRange - bMidRange;
@@ -1213,9 +1279,40 @@ export function GenreStarterKit() {
           }
         }
         
-        const sortedPedals = [...pedalsToSort].sort((a, b) => {
-          // PRICE is primary factor - higher budget = better pedals
-          // Filter to pedals within this category's budget allocation
+        // Apply price range filter FIRST if user selected one
+        const priceRangeConfig = PRICE_RANGES[priceRange];
+        let pedalsInRange = pedalsToSort;
+        if (priceRange !== 'all') {
+          pedalsInRange = pedalsToSort.filter(p => 
+            p.reverbPrice >= priceRangeConfig.min && p.reverbPrice < priceRangeConfig.max
+          );
+          // If no pedals in range, fall back to all pedals (will show "no pedals in range" message)
+          if (pedalsInRange.length === 0) {
+            pedalsInRange = pedalsToSort;
+          }
+        }
+        
+        const sortedPedals = [...pedalsInRange].sort((a, b) => {
+          // When price range is selected, prioritize by RATING first (best in range)
+          if (priceRange !== 'all') {
+            // Primary: rating match to genre's ideal
+            const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
+            const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
+            
+            // Bonus for preferred subtypes
+            const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 2 : 0;
+            const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 2 : 0;
+            
+            const aScore = aRatingScore + aSubtypeBonus;
+            const bScore = bRatingScore + bSubtypeBonus;
+            
+            if (bScore !== aScore) return bScore - aScore;
+            
+            // Secondary: prefer lower price within range (better value)
+            return a.reverbPrice - b.reverbPrice;
+          }
+          
+          // Default sorting (no price range): prefer higher priced pedals within budget
           const aAffordable = a.reverbPrice <= maxForCategory;
           const bAffordable = b.reverbPrice <= maxForCategory;
           
@@ -1299,10 +1396,13 @@ export function GenreStarterKit() {
   const steps = generateSteps();
   
   // Get bonus additions and limit based on board size
-  const allBonusAdditions = getGenreBonusAdditions(genre, allPedals, onBoardIds, onBoardSubtypes, board.constraints.maxBudget);
+  const allBonusAdditions = getGenreBonusAdditions(genre, allPedals, onBoardIds, onBoardSubtypes, board.constraints.maxBudget, priceRange);
   const bonusAdditions = allBonusAdditions.slice(0, recommendedBonus);
   
-  const currentStep = steps[currentStepIndex];
+  // Clamp currentStepIndex to valid range (steps can shrink as pedals are added)
+  // Use steps.length - 1 as max to avoid out-of-bounds access, but allow steps.length for essentialsComplete check
+  const safeStepIndex = Math.min(currentStepIndex, Math.max(0, steps.length - 1));
+  const currentStep = steps.length > 0 ? steps[safeStepIndex] : undefined;
   const currentAddition = bonusAdditions[currentAdditionIndex];
   const essentialsComplete = currentStepIndex >= steps.length;
   const additionsComplete = currentAdditionIndex >= bonusAdditions.length;
@@ -1320,15 +1420,8 @@ export function GenreStarterKit() {
     // Auto-advance and scroll to top
     setTimeout(() => {
       if (phase === 'essentials') {
-        if (currentStepIndex < steps.length - 1) {
-          setCurrentStepIndex(currentStepIndex + 1);
-        } else {
-          // Move to additions phase
-          if (bonusAdditions.length > 0) {
-            setPhase('additions');
-            setCurrentAdditionIndex(0);
-          }
-        }
+        // Always advance to next step - transition screen shows when essentialsComplete
+        setCurrentStepIndex(currentStepIndex + 1);
       } else {
         if (currentAdditionIndex < bonusAdditions.length - 1) {
           setCurrentAdditionIndex(currentAdditionIndex + 1);
@@ -1343,15 +1436,11 @@ export function GenreStarterKit() {
   
   const handleSkip = () => {
     if (phase === 'essentials') {
-      setSkippedSteps(prev => new Set(prev).add(currentStep.id));
-      if (currentStepIndex < steps.length - 1) {
-        setCurrentStepIndex(currentStepIndex + 1);
-      } else {
-        if (bonusAdditions.length > 0) {
-          setPhase('additions');
-          setCurrentAdditionIndex(0);
-        }
+      if (currentStep) {
+        setSkippedSteps(prev => new Set(prev).add(currentStep.id));
       }
+      // Always advance to next step - transition screen shows when essentialsComplete
+      setCurrentStepIndex(currentStepIndex + 1);
     } else {
       if (currentAdditionIndex < bonusAdditions.length - 1) {
         setCurrentAdditionIndex(currentAdditionIndex + 1);
@@ -1426,13 +1515,22 @@ export function GenreStarterKit() {
             ))}
           </div>
           
-          <div className="flex gap-3 justify-center">
+          <div className="flex gap-3 justify-center flex-wrap">
             <button
               onClick={handleRestart}
-              className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-white hover:bg-board-elevated transition-colors"
+              className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
             >
               Start Over
             </button>
+            {onFinishUp && (
+              <button
+                onClick={onFinishUp}
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-board-accent text-white hover:bg-board-accent-dim transition-colors flex items-center gap-2"
+              >
+                Finish Up
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
             <button
               onClick={() => { setPhase('essentials'); setCurrentStepIndex(0); }}
               className="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
@@ -1450,6 +1548,11 @@ export function GenreStarterKit() {
   if (phase === 'essentials' && essentialsComplete && bonusAdditions.length > 0) {
     const addedCount = board.slots.length;
     const totalCost = board.slots.reduce((sum, s) => sum + s.pedal.reverbPrice, 0);
+    const remainingBudget = board.constraints.maxBudget ? board.constraints.maxBudget - totalCost : 0;
+    const usedArea = board.slots.reduce((sum, s) => sum + (s.pedal.widthMm * s.pedal.depthMm), 0);
+    const totalArea = (board.constraints.maxWidthMm || 1) * (board.constraints.maxDepthMm || 1);
+    const remainingArea = totalArea - usedArea;
+    const remainingPercent = totalArea > 0 ? Math.round((remainingArea / totalArea) * 100) : 0;
     
     return (
       <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
@@ -1465,25 +1568,68 @@ export function GenreStarterKit() {
           </div>
           
           <h2 className="text-xl font-bold text-white mb-2">
-            Essentials Complete!
+            Essentials Complete! 🎸
           </h2>
           <p className="text-sm text-zinc-400 mb-4">
-            {addedCount} pedals • ${totalCost} total
+            Your {genre.name} board has all the core pedals
           </p>
           
-          <div className="p-4 rounded-xl border border-board-accent/30 bg-board-accent/5 mb-6">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Sparkles className="w-5 h-5 text-board-accent" />
-              <h3 className="font-semibold text-white">Recommended Additions</h3>
+          {/* Stats */}
+          <div className="grid grid-cols-2 gap-3 mb-6 max-w-xs mx-auto">
+            <div className="p-3 rounded-lg bg-board-elevated/50">
+              <div className="text-lg font-bold text-white">{addedCount}</div>
+              <div className="text-xs text-zinc-500">Pedals Added</div>
             </div>
-            <p className="text-sm text-zinc-400 mb-3">
-              We have {bonusAdditions.length} extra pedals to suggest for your {genre.name} sound
-            </p>
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="p-3 rounded-lg bg-board-elevated/50">
+              <div className="text-lg font-bold text-white">${totalCost}</div>
+              <div className="text-xs text-zinc-500">Total Cost</div>
+            </div>
+            {board.constraints.maxBudget && remainingBudget > 0 && (
+              <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/30">
+                <div className="text-lg font-bold text-green-400">${remainingBudget}</div>
+                <div className="text-xs text-green-400/70">Budget Left</div>
+              </div>
+            )}
+            {remainingPercent > 10 && (
+              <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/30">
+                <div className="text-lg font-bold text-blue-400">{remainingPercent}%</div>
+                <div className="text-xs text-blue-400/70">Space Left</div>
+              </div>
+            )}
+          </div>
+          
+          {/* Options */}
+          <div className="space-y-3">
+            {/* Finish Board Option */}
+            <button
+              onClick={() => { setPhase('additions'); setCurrentAdditionIndex(bonusAdditions.length); }}
+              className="w-full px-4 py-3 text-sm font-medium rounded-lg border border-green-500/30 bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors flex items-center justify-center gap-2"
+            >
+              <Check className="w-4 h-4" />
+              Finish Board
+              <span className="text-green-400/60 text-xs ml-1">— I'm happy with my essentials</span>
+            </button>
+            
+            {/* Add More Option */}
+            <button
+              onClick={() => { setPhase('additions'); setCurrentAdditionIndex(0); }}
+              className="w-full px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              style={{ backgroundColor: genre.color, color: 'white' }}
+            >
+              <Plus className="w-4 h-4" />
+              Add More Pedals
+              <span className="text-white/70 text-xs ml-1">— {bonusAdditions.length} suggestions within budget & space</span>
+            </button>
+          </div>
+          
+          {/* Preview of additions */}
+          <div className="mt-4 pt-4 border-t border-board-border">
+            <p className="text-xs text-zinc-500 mb-2">Available additions:</p>
+            <div className="flex flex-wrap justify-center gap-1">
               {bonusAdditions.map(addition => (
                 <span 
                   key={addition.id}
-                  className="px-2 py-1 text-xs rounded-full border border-board-accent/30 text-board-accent"
+                  className="px-2 py-0.5 text-xs rounded-full bg-board-elevated text-zinc-400"
                 >
                   {addition.name}
                 </span>
@@ -1491,21 +1637,23 @@ export function GenreStarterKit() {
             </div>
           </div>
           
-          <div className="flex gap-3 justify-center">
+          {/* Secondary actions */}
+          <div className="mt-4 pt-4 border-t border-board-border flex justify-center gap-3">
             <button
-              onClick={() => { setPhase('additions'); setCurrentAdditionIndex(bonusAdditions.length); }}
+              onClick={handleRestart}
               className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
             >
-              I'm Done
+              Start Over
             </button>
-            <button
-              onClick={() => { setPhase('additions'); setCurrentAdditionIndex(0); }}
-              className="px-6 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
-              style={{ backgroundColor: genre.color, color: 'white' }}
-            >
-              Show Me More
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            {onFinishUp && (
+              <button
+                onClick={onFinishUp}
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-board-accent text-white hover:bg-board-accent-dim transition-colors flex items-center gap-2"
+              >
+                Finish Up
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -1537,12 +1685,23 @@ export function GenreStarterKit() {
             {addedCount} pedals • ${totalCost} total
           </p>
           
-          <button
-            onClick={handleRestart}
-            className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-white hover:bg-board-elevated transition-colors"
-          >
-            Start Over
-          </button>
+          <div className="flex justify-center gap-3">
+            <button
+              onClick={handleRestart}
+              className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+            >
+              Start Over
+            </button>
+            {onFinishUp && (
+              <button
+                onClick={onFinishUp}
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-board-accent text-white hover:bg-board-accent-dim transition-colors flex items-center gap-2"
+              >
+                Finish Up
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -1554,9 +1713,100 @@ export function GenreStarterKit() {
   const totalSteps = steps.length + (bonusAdditions.length > 0 ? 1 : 0); // +1 for additions section
   const currentProgress = isAdditionsPhase 
     ? steps.length + currentAdditionIndex + 1 
-    : currentStepIndex + 1;
+    : safeStepIndex + 1;
   
   const stepSatisfied = !isAdditionsPhase && currentStep ? isStepSatisfied(currentStep) : false;
+  
+  // Safety check: if no steps and no additions, show a fallback
+  if (steps.length === 0 && bonusAdditions.length === 0) {
+    return (
+      <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
+        <div className="p-6 text-center">
+          <div 
+            className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center"
+            style={{ backgroundColor: `${genre.color}20` }}
+          >
+            <GraduationCap className="w-8 h-8" style={{ color: genre.color }} />
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">
+            Build Your {genre.name} Board
+          </h2>
+          <p className="text-sm text-zinc-400 mb-4">
+            Use the "All Pedals" tab to browse and add pedals to your board.
+          </p>
+          {onFinishUp && board.slots.length > 0 && (
+            <button
+              onClick={onFinishUp}
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-board-accent text-white hover:bg-board-accent-dim transition-colors flex items-center gap-2 mx-auto"
+            >
+              Finish Up
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+  
+  // Safety check: if in essentials phase but no current step, show transition to additions
+  if (!isAdditionsPhase && !currentStep) {
+    // No more steps available - treat as essentials complete
+    if (bonusAdditions.length > 0) {
+      const addedCount = board.slots.length;
+      const totalCost = board.slots.reduce((sum, s) => sum + s.pedal.reverbPrice, 0);
+      return (
+        <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
+          <div className="p-6 text-center" style={{ backgroundColor: `${genre.color}10` }}>
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ backgroundColor: `${genre.color}20` }}>
+              <Check className="w-8 h-8" style={{ color: genre.color }} />
+            </div>
+            <h2 className="text-xl font-bold text-white mb-2">Essentials Complete! 🎸</h2>
+            <p className="text-sm text-zinc-400 mb-4">{addedCount} pedals • ${totalCost} total</p>
+            <div className="space-y-3">
+              <button
+                onClick={() => { setPhase('additions'); setCurrentAdditionIndex(bonusAdditions.length); }}
+                className="w-full px-4 py-3 text-sm font-medium rounded-lg border border-green-500/30 bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors flex items-center justify-center gap-2"
+              >
+                <Check className="w-4 h-4" />
+                Finish Board
+              </button>
+              <button
+                onClick={() => { setPhase('additions'); setCurrentAdditionIndex(0); }}
+                className="w-full px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                style={{ backgroundColor: genre.color, color: 'white' }}
+              >
+                <Plus className="w-4 h-4" />
+                Add More Pedals ({bonusAdditions.length} available)
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    // No bonus additions either - show complete
+    return (
+      <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
+        <div className="p-6 text-center" style={{ backgroundColor: `${genre.color}10` }}>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ backgroundColor: `${genre.color}20` }}>
+            <PartyPopper className="w-8 h-8" style={{ color: genre.color }} />
+          </div>
+          <h2 className="text-xl font-bold text-white mb-2">Your {genre.name} Board is Ready!</h2>
+          <p className="text-sm text-zinc-400 mb-4">{board.slots.length} pedals added</p>
+          <div className="flex justify-center gap-3">
+            <button onClick={handleRestart} className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors">
+              Start Over
+            </button>
+            {onFinishUp && (
+              <button onClick={onFinishUp} className="px-4 py-2 text-sm font-medium rounded-lg bg-board-accent text-white hover:bg-board-accent-dim transition-colors flex items-center gap-2">
+                Finish Up
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div ref={containerRef} className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
@@ -1572,7 +1822,7 @@ export function GenreStarterKit() {
               style={{ backgroundColor: `${genre.color}20` }}
             >
               {isAdditionsPhase ? (
-                <Star className="w-5 h-5" style={{ color: genre.color }} />
+                <Sparkles className="w-5 h-5" style={{ color: genre.color }} />
               ) : (
                 <GraduationCap className="w-5 h-5" style={{ color: genre.color }} />
               )}
@@ -1584,7 +1834,7 @@ export function GenreStarterKit() {
               <p className="text-xs text-board-muted">
                 {isAdditionsPhase 
                   ? `Addition ${currentAdditionIndex + 1} of ${bonusAdditions.length}`
-                  : `Step ${currentStepIndex + 1} of ${steps.length}`
+                  : `Step ${safeStepIndex + 1} of ${steps.length}`
                 }
                 {' · '}
                 <span className="text-board-accent">~{boardCapacity} pedals fit your board</span>
@@ -1607,8 +1857,8 @@ export function GenreStarterKit() {
         <div className="flex gap-1">
           {/* Essential steps */}
           {steps.map((step, index) => {
-            const isCurrent = !isAdditionsPhase && index === currentStepIndex;
-            const isPast = index < currentStepIndex || isAdditionsPhase;
+            const isCurrent = !isAdditionsPhase && index === safeStepIndex;
+            const isPast = index < safeStepIndex || isAdditionsPhase;
             const isSkipped = skippedSteps.has(step.id);
             
             return (
@@ -1712,7 +1962,7 @@ export function GenreStarterKit() {
           
           <div className="flex items-center gap-3 mb-1">
             <h3 className="text-xl font-bold text-white">
-              {isAdditionsPhase ? `Add a ${currentAddition.name}?` : `Choose a ${currentStep.name}`}
+              {isAdditionsPhase ? `Add a ${currentAddition?.name}?` : `Choose a ${currentStep?.name || 'Pedal'}`}
             </h3>
             {/* Skip Tuner option - only show on tuner step */}
             {!isAdditionsPhase && currentStep?.subtype === 'Tuner' && (
@@ -1743,7 +1993,7 @@ export function GenreStarterKit() {
             )}
           </div>
           <p className="text-sm text-zinc-400">
-            {isAdditionsPhase ? currentAddition.reason : currentStep.description}
+            {isAdditionsPhase ? currentAddition?.reason : currentStep?.description}
           </p>
         </div>
         
@@ -1765,68 +2015,122 @@ export function GenreStarterKit() {
           </div>
         )}
         
-        {/* Sort Options */}
-        <div className="mb-4 flex items-center gap-2 flex-wrap">
-          <div className="flex items-center gap-1 text-xs text-board-muted">
-            <ArrowUpDown className="w-3 h-3" />
-            <span>Sort:</span>
+        {/* Sort & Filter Options */}
+        <div className="mb-4 space-y-2">
+          {/* Sort Options */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1 text-xs text-board-muted">
+              <ArrowUpDown className="w-3 h-3" />
+              <span>Sort:</span>
+            </div>
+            <div className="flex items-center gap-1 flex-wrap">
+              {[
+                { value: 'default', label: 'Recommended' },
+                { value: 'price-asc', label: 'Price ↑' },
+                { value: 'price-desc', label: 'Price ↓' },
+                { value: 'rating-asc', label: 'Rating ↑' },
+                { value: 'rating-desc', label: 'Rating ↓' },
+                { value: 'name-asc', label: 'Name ↑' },
+                { value: 'name-desc', label: 'Name ↓' },
+                { value: 'size-asc', label: 'Size ↑' },
+                { value: 'size-desc', label: 'Size ↓' },
+              ].map(option => (
+                <button
+                  key={option.value}
+                  onClick={() => setSortBy(option.value as SortOption)}
+                  className={`px-2 py-1 text-xs rounded transition-colors ${
+                    sortBy === option.value
+                      ? 'bg-board-accent text-white'
+                      : 'bg-board-elevated text-board-muted hover:text-white hover:bg-board-surface border border-board-border'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="flex items-center gap-1 flex-wrap">
-            {[
-              { value: 'default', label: 'Recommended' },
-              { value: 'price-asc', label: 'Price ↑' },
-              { value: 'price-desc', label: 'Price ↓' },
-              { value: 'rating-asc', label: 'Rating ↑' },
-              { value: 'rating-desc', label: 'Rating ↓' },
-              { value: 'name-asc', label: 'Name ↑' },
-              { value: 'name-desc', label: 'Name ↓' },
-              { value: 'size-asc', label: 'Size ↑' },
-              { value: 'size-desc', label: 'Size ↓' },
-            ].map(option => (
-              <button
-                key={option.value}
-                onClick={() => setSortBy(option.value as SortOption)}
-                className={`px-2 py-1 text-xs rounded transition-colors ${
-                  sortBy === option.value
-                    ? 'bg-board-accent text-white'
-                    : 'bg-board-elevated text-board-muted hover:text-white hover:bg-board-surface border border-board-border'
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
+          
+          {/* Price Range Filter */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1 text-xs text-board-muted">
+              <span className="text-green-400">$</span>
+              <span>Price Range:</span>
+            </div>
+            <div className="flex items-center gap-1 flex-wrap">
+              {(Object.entries(PRICE_RANGES) as [PriceRange, { label: string; min: number; max: number }][]).map(([key, range]) => (
+                <button
+                  key={key}
+                  onClick={() => setPriceRange(key)}
+                  className={`px-2 py-1 text-xs rounded transition-colors ${
+                    priceRange === key
+                      ? 'bg-green-600 text-white'
+                      : 'bg-board-elevated text-board-muted hover:text-white hover:bg-board-surface border border-board-border'
+                  }`}
+                >
+                  {range.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
         
         {/* Pedal Options */}
-        <div className="space-y-2">
-          {sortPedals(isAdditionsPhase ? currentAddition.pedals : currentStep.pedals).map((pedal, index) => {
+        <div className="space-y-2" key={`pedals-${currentStep?.id || 'none'}-${sortBy}-${priceRange}`}>
+          {(() => {
+            const pedalsToShow = isAdditionsPhase ? currentAddition?.pedals : currentStep?.pedals;
+            if (!pedalsToShow || pedalsToShow.length === 0) {
+              return (
+                <div className="p-4 rounded-lg bg-board-elevated border border-board-border text-center">
+                  <p className="text-board-muted text-sm">No pedals available for this step.</p>
+                </div>
+              );
+            }
+            const filteredPedals = sortPedals(pedalsToShow);
+            
+            // Show message if no pedals match price range
+            if (filteredPedals.length === 0 && priceRange !== 'all') {
+              return (
+                <div className="p-4 rounded-lg bg-board-elevated border border-board-border text-center">
+                  <p className="text-board-muted text-sm">
+                    No pedals found in the <span className="text-green-400 font-medium">{PRICE_RANGES[priceRange].label}</span> range for this category.
+                  </p>
+                  <button
+                    onClick={() => setPriceRange('all')}
+                    className="mt-2 px-3 py-1 text-xs rounded bg-green-600 text-white hover:bg-green-500 transition-colors"
+                  >
+                    Show All Prices
+                  </button>
+                </div>
+              );
+            }
+            
+            return filteredPedals.map((pedal, index) => {
             const isOnBoard = onBoardIds.has(pedal.id);
             const isExpanded = expandedPedal === pedal.id;
             
-            // Only show tiers when using default (recommended) sort
-            const usesTiers = sortBy === 'default';
+            // Only show tiers when using default (recommended) sort and showing all prices
+            const usesTiers = sortBy === 'default' && priceRange === 'all';
             
-            // Determine tier: 0 = Top Pick, 1-5 = Highly Recommended, 6+ = Could Be Cool
-            const tier = usesTiers ? (index === 0 ? 'top' : index <= 5 ? 'recommended' : 'cool') : 'cool';
-            const tierLabel = tier === 'top' ? 'TOP PICK' : tier === 'recommended' ? 'HIGHLY RECOMMENDED' : 'COULD BE COOL';
+            // Determine tier: 0-5 = Highly Recommended, 6+ = Could Be Cool
+            const tier = usesTiers ? (index <= 5 ? 'recommended' : 'cool') : 'cool';
             const tierColors = {
-              top: { border: isAdditionsPhase ? 'border-amber-500/50' : 'border-board-accent/50', bg: isAdditionsPhase ? 'bg-amber-500/5' : 'bg-board-accent/5', badge: isAdditionsPhase ? 'bg-amber-500/20 text-amber-400' : 'bg-board-accent/20 text-board-accent' },
-              recommended: { border: 'border-blue-500/30', bg: 'bg-blue-500/5', badge: 'bg-blue-500/20 text-blue-400' },
+              recommended: { border: isAdditionsPhase ? 'border-amber-500/30' : 'border-blue-500/30', bg: isAdditionsPhase ? 'bg-amber-500/5' : 'bg-blue-500/5', badge: isAdditionsPhase ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400' },
               cool: { border: 'border-board-border', bg: 'bg-board-elevated/30', badge: 'bg-zinc-500/20 text-zinc-400' },
             };
             
-            // Show tier headers only when using default sort
-            const showTierHeader = usesTiers && (index === 0 || index === 1 || index === 6);
-            const tierHeaderText = index === 0 ? '⭐ Top Pick' : index === 1 ? '👍 Highly Recommended' : index === 6 ? '✨ Could Be Cool' : null;
+            // Show tier headers only when using default sort and showing all prices
+            const showTierHeader = usesTiers && (index === 0 || index === 6);
+            const tierHeaderText = index === 0 ? '👍 Highly Recommended' : index === 6 ? '✨ Could Be Cool' : null;
+            
+            // When filtering by price range, show "Best in Range" for top pick
+            const showPriceRangeBadge = priceRange !== 'all' && index === 0;
             
             return (
-              <div key={pedal.id}>
+              <div key={`${pedal.id}-${index}-${sortBy}`}>
                 {/* Tier Header */}
                 {showTierHeader && tierHeaderText && (
                   <div className={`text-xs font-medium mb-2 mt-4 first:mt-0 ${
-                    index === 0 ? (isAdditionsPhase ? 'text-amber-400' : 'text-board-accent') :
-                    index === 1 ? 'text-blue-400' : 'text-zinc-500'
+                    index === 0 ? (isAdditionsPhase ? 'text-amber-400' : 'text-blue-400') : 'text-zinc-500'
                   }`}>
                     {tierHeaderText}
                   </div>
@@ -1849,22 +2153,15 @@ export function GenreStarterKit() {
                           <Check className="w-3 h-3 text-white" />
                         </div>
                       )}
-                      {tier === 'top' && !isOnBoard && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
-                          style={{ backgroundColor: isAdditionsPhase ? '#f59e0b' : genre.color }}
-                        >
-                          <Star className="w-3 h-3 text-white" />
-                        </div>
-                      )}
                     </div>
                     
                     {/* Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
                         <h4 className="font-medium text-white text-sm">{pedal.model}</h4>
-                        {tier === 'top' && !isOnBoard && (
-                          <span className={`px-1.5 py-0.5 text-[10px] font-medium rounded ${tierColors[tier].badge}`}>
-                            {tierLabel}
+                        {showPriceRangeBadge && !isOnBoard && (
+                          <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-green-500/20 text-green-400">
+                            BEST IN RANGE
                           </span>
                         )}
                       </div>
@@ -1923,7 +2220,8 @@ export function GenreStarterKit() {
                 </div>
               </div>
             );
-          })}
+          });
+          })()}
         </div>
       </div>
       

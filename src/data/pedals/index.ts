@@ -17,7 +17,8 @@ import VINTAGE_PEDALS from './vintage';
 import ADDITIONAL_PEDALS from './additional';
 
 // Combine all pedals into single array (~1100+ total)
-export const PEDALS: Pedal[] = [
+// Deduplicate by ID (later entries override earlier ones, but we prefer originals)
+const allPedalsRaw: Pedal[] = [
   ...GAIN_PEDALS,        // ~250 pedals - Priority 1
   ...MODULATION_PEDALS,  // ~120 pedals - Priority 2
   ...REVERB_PEDALS,      // ~120 pedals - Priority 3 (tied)
@@ -33,6 +34,16 @@ export const PEDALS: Pedal[] = [
   ...VINTAGE_PEDALS,     // ~50+ vintage & discontinued classics
   ...ADDITIONAL_PEDALS,  // ~70+ additional current pedals
 ];
+
+// Deduplicate by ID - keep first occurrence (original data takes priority)
+const seenIds = new Set<string>();
+export const PEDALS: Pedal[] = allPedalsRaw.filter(pedal => {
+  if (seenIds.has(pedal.id)) {
+    return false; // Skip duplicates
+  }
+  seenIds.add(pedal.id);
+  return true;
+});
 
 // Export individual category arrays for filtering
 export {
