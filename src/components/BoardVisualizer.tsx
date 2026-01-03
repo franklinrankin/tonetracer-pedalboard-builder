@@ -52,26 +52,46 @@ export function BoardVisualizer() {
     }
   }, [boardWidthMm]);
 
-  // Initialize pedal positions in signal chain order (right to left)
+  // Initialize pedal positions in signal chain order (right to left, packed toward bottom)
+  // Mimics the "My Pedalboard" layout from BoardBuilder
   useEffect(() => {
     const newPositions = new Map<string, PedalPosition>();
     const pedalCount = board.slots.length;
     
+    if (pedalCount === 0) {
+      setPositions(newPositions);
+      return;
+    }
+    
+    // Calculate how many pedals fit per row based on average pedal width
+    const avgPedalWidthPercent = 12; // ~12% of board width per pedal
+    const pedalsPerRow = Math.max(Math.floor(85 / avgPedalWidthPercent), 4); // Leave margins
+    const numRows = Math.ceil(pedalCount / pedalsPerRow);
+    
+    // Row height as percentage (pedals are taller than wide typically)
+    const rowHeightPercent = Math.min(40, 80 / numRows); // Max 40% per row
+    
     board.slots.forEach((slot, index) => {
       if (!positions.has(slot.pedal.id)) {
-        // Arrange pedals in a grid pattern initially (right to left)
-        const cols = Math.ceil(Math.sqrt(pedalCount));
-        const row = Math.floor(index / cols);
-        const col = index % cols;
+        const row = Math.floor(index / pedalsPerRow);
+        const col = index % pedalsPerRow;
+        const pedalsInThisRow = Math.min(pedalsPerRow, pedalCount - row * pedalsPerRow);
         
-        // Space them out across the board (reverse X for right-to-left)
-        const xSpacing = 100 / (cols + 1);
-        const ySpacing = 100 / (Math.ceil(pedalCount / cols) + 1);
+        // Calculate X position (right to left within row)
+        // Pedals start from right side, evenly spaced
+        const rowWidth = pedalsInThisRow * avgPedalWidthPercent;
+        const rowStartX = 95 - (100 - rowWidth) / 2; // Center the row, start from right
+        const x = rowStartX - col * avgPedalWidthPercent;
+        
+        // Calculate Y position (bottom rows first)
+        // First row at bottom (~75% down), additional rows above
+        const baseY = 75 - (numRows - 1) * rowHeightPercent; // Adjust base for multiple rows
+        const y = baseY + row * rowHeightPercent;
         
         newPositions.set(slot.pedal.id, {
           id: slot.pedal.id,
-          x: 100 - xSpacing * (col + 1), // Reverse X position
-          y: ySpacing * (row + 1),
+          x: Math.max(8, Math.min(92, x)), // Keep within bounds
+          y: Math.max(15, Math.min(85, y)),
           rotation: 0,
         });
       } else {
