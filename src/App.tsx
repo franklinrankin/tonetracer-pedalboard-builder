@@ -8,20 +8,18 @@ function AppContent() {
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
   const { dispatch } = useBoard();
   
-  // Capture visualizer screenshot
+  // Capture visualizer screenshot with high quality for clear text
   const captureVisualizerScreenshot = useCallback(async () => {
     const element = document.getElementById('board-visualizer-capture');
     if (element) {
       try {
         const canvas = await html2canvas(element, {
           backgroundColor: '#1a1a1a',
-          scale: 3, // Higher scale for sharper text
+          scale: 3, // 3x resolution for sharp, clear text
           logging: false,
           useCORS: true,
           allowTaint: true,
-          imageTimeout: 0,
         });
-        // Use higher quality PNG
         const dataUrl = canvas.toDataURL('image/png', 1.0);
         dispatch({ type: 'SET_VISUALIZER_SCREENSHOT', screenshot: dataUrl });
       } catch (error) {
@@ -31,7 +29,7 @@ function AppContent() {
   }, [dispatch]);
   
   const handleStepChange = async (step: WizardStep) => {
-    // If navigating away from visualize to review, capture screenshot first
+    // Capture screenshot when going from visualize to review
     if (currentStep === 'visualize' && step === 'review') {
       await captureVisualizerScreenshot();
     }
