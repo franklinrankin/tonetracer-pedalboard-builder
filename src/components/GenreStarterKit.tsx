@@ -1284,28 +1284,30 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
       }
       
       const sortedPedals = [...pedalsInRange].sort((a, b) => {
-        if (priceRange !== 'all') {
-          const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
-          const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
-          const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 2 : 0;
-          const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 2 : 0;
-          const aScore = aRatingScore + aSubtypeBonus;
-          const bScore = bRatingScore + bSubtypeBonus;
-          if (bScore !== aScore) return bScore - aScore;
-          return a.reverbPrice - b.reverbPrice;
-        }
-        
-        const aAffordable = a.reverbPrice <= maxForCategory;
-        const bAffordable = b.reverbPrice <= maxForCategory;
-        if (aAffordable && !bAffordable) return -1;
-        if (!aAffordable && bAffordable) return 1;
-        if (a.reverbPrice !== b.reverbPrice) return b.reverbPrice - a.reverbPrice;
-        
+        // PRIMARY: Genre fit score (rating match + preferred subtype bonus)
+        // This ensures the BEST pedal for the genre is recommended, regardless of price
         const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
         const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
         const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 2 : 0;
         const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 2 : 0;
-        return (bRatingScore + bSubtypeBonus) - (aRatingScore + aSubtypeBonus);
+        const aScore = aRatingScore + aSubtypeBonus;
+        const bScore = bRatingScore + bSubtypeBonus;
+        
+        // If genre fit scores differ significantly, prioritize better fit
+        if (Math.abs(bScore - aScore) >= 1) return bScore - aScore;
+        
+        // SECONDARY: For similar genre fit, prefer affordable options within budget
+        const aAffordable = a.reverbPrice <= maxForCategory;
+        const bAffordable = b.reverbPrice <= maxForCategory;
+        if (aAffordable && !bAffordable) return -1;
+        if (!aAffordable && bAffordable) return 1;
+        
+        // TERTIARY: Among similar pedals, prefer mid-range value (not cheapest, not most expensive)
+        // This balances quality with value
+        const targetPrice = maxForCategory * 0.6; // Sweet spot around 60% of budget
+        const aPriceDiff = Math.abs(a.reverbPrice - targetPrice);
+        const bPriceDiff = Math.abs(b.reverbPrice - targetPrice);
+        return aPriceDiff - bPriceDiff;
       });
       
       // Use the top pedal's actual subtype
@@ -1427,26 +1429,28 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
       }
       
       const sortedPedals = [...pedalsInRange].sort((a, b) => {
-        if (priceRange !== 'all') {
-          const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
-          const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
-          const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 2 : 0;
-          const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 2 : 0;
-          const aScore = aRatingScore + aSubtypeBonus;
-          const bScore = bRatingScore + bSubtypeBonus;
-          if (bScore !== aScore) return bScore - aScore;
-          return a.reverbPrice - b.reverbPrice;
-        }
+        // PRIMARY: Genre fit score (rating match + preferred subtype bonus)
+        const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
+        const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
+        const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 2 : 0;
+        const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 2 : 0;
+        const aScore = aRatingScore + aSubtypeBonus;
+        const bScore = bRatingScore + bSubtypeBonus;
         
+        // If genre fit scores differ, prioritize better fit
+        if (Math.abs(bScore - aScore) >= 1) return bScore - aScore;
+        
+        // SECONDARY: For similar genre fit, prefer affordable options
         const aAffordable = a.reverbPrice <= maxForCategory;
         const bAffordable = b.reverbPrice <= maxForCategory;
         if (aAffordable && !bAffordable) return -1;
         if (!aAffordable && bAffordable) return 1;
-        if (a.reverbPrice !== b.reverbPrice) return b.reverbPrice - a.reverbPrice;
         
-        const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
-        const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
-        return bRatingScore - aRatingScore;
+        // TERTIARY: Prefer mid-range value for extras
+        const targetPrice = maxForCategory * 0.5; // Lower target for extras
+        const aPriceDiff = Math.abs(a.reverbPrice - targetPrice);
+        const bPriceDiff = Math.abs(b.reverbPrice - targetPrice);
+        return aPriceDiff - bPriceDiff;
       });
       
       const topPedal = sortedPedals[0];
