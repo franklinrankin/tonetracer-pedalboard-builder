@@ -7,8 +7,12 @@ export interface GenreProfile {
   icon: string;
   color: string;
   artists: string[];
-  // Recommended pedal categories for this genre (in order of importance)
-  recommendedCategories: Category[];
+  // Essential categories - ONE of each should be filled first, in priority order
+  // These define the "core sound" of the genre
+  essentialCategories: Category[];
+  // Extra categories - added after essentials are filled (for larger boards)
+  // Can include duplicates like a second gain pedal
+  extraCategories: Category[];
   // Target section scores (what this genre typically needs)
   sectionTargets: Partial<Record<Category, { min: number; ideal: number; max: number }>>;
   // Preferred pedal subtypes
@@ -32,7 +36,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🎸',
     color: '#3b82f6',
     artists: ['Stevie Ray Vaughan', 'B.B. King', 'John Mayer', 'Gary Clark Jr.'],
-    recommendedCategories: ['gain', 'gain', 'dynamics', 'delay', 'reverb', 'eq'],
+    // Core blues: drive for tone, dynamics for feel, delay/reverb for space
+    essentialCategories: ['gain', 'dynamics', 'delay', 'reverb'],
+    // Extras: second gain (boost), EQ for tone shaping
+    extraCategories: ['gain', 'eq'],
     sectionTargets: {
       gain: { min: 3, ideal: 8, max: 12 },
       dynamics: { min: 4, ideal: 7, max: 10 },
@@ -56,7 +63,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🤘',
     color: '#ef4444',
     artists: ['Led Zeppelin', 'AC/DC', 'The Rolling Stones', 'Foo Fighters'],
-    recommendedCategories: ['gain', 'gain', 'modulation', 'delay', 'reverb'],
+    // Core rock: drive is king, modulation for color, delay/reverb for depth
+    essentialCategories: ['gain', 'modulation', 'delay', 'reverb'],
+    // Extras: second gain for stacking/boost
+    extraCategories: ['gain'],
     sectionTargets: {
       gain: { min: 8, ideal: 15, max: 20 },
       modulation: { min: 2, ideal: 5, max: 8 },
@@ -79,7 +89,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🔥',
     color: '#1f2937',
     artists: ['Metallica', 'Slipknot', 'Gojira', 'Meshuggah'],
-    recommendedCategories: ['gain', 'gain', 'dynamics', 'eq', 'amp'],
+    // Core metal: high gain distortion, noise gate, EQ for tight sound
+    essentialCategories: ['gain', 'dynamics', 'eq', 'amp'],
+    // Extras: boost for leads
+    extraCategories: ['gain'],
     sectionTargets: {
       gain: { min: 18, ideal: 25, max: 30 },
       dynamics: { min: 5, ideal: 8, max: 12 },
@@ -102,7 +115,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🌙',
     color: '#8b5cf6',
     artists: ['Radiohead', 'Arctic Monkeys', 'Tame Impala', 'The Strokes'],
-    recommendedCategories: ['gain', 'gain', 'modulation', 'delay', 'reverb'],
+    // Core alt: drive for grit, mod for texture, delay/reverb for atmosphere
+    essentialCategories: ['gain', 'modulation', 'delay', 'reverb'],
+    // Extras: fuzz or second drive
+    extraCategories: ['gain'],
     sectionTargets: {
       gain: { min: 4, ideal: 10, max: 15 },
       modulation: { min: 5, ideal: 10, max: 15 },
@@ -125,7 +141,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🌊',
     color: '#ec4899',
     artists: ['My Bloody Valentine', 'Slowdive', 'Ride', 'Nothing'],
-    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'pitch'],
+    // Core shoegaze: fuzz, heavy mod, massive reverb, delay for wash
+    essentialCategories: ['gain', 'modulation', 'reverb', 'delay'],
+    // Extras: pitch for shimmer/octave, more modulation
+    extraCategories: ['pitch', 'modulation'],
     sectionTargets: {
       gain: { min: 8, ideal: 16, max: 22 },
       modulation: { min: 10, ideal: 14, max: 15 },
@@ -149,7 +168,10 @@ export const GENRES: GenreProfile[] = [
     icon: '✨',
     color: '#06b6d4',
     artists: ['Explosions in the Sky', 'Sigur Rós', 'Mogwai', 'Hammock'],
-    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'pitch', 'volume'],
+    // Core ambient: reverb is KING, delay for texture, mod for movement, light gain
+    essentialCategories: ['reverb', 'delay', 'modulation', 'gain'],
+    // Extras: volume for swells, pitch for shimmer
+    extraCategories: ['volume', 'pitch'],
     sectionTargets: {
       gain: { min: 2, ideal: 4, max: 8 },
       modulation: { min: 6, ideal: 10, max: 15 },
@@ -174,7 +196,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🤠',
     color: '#f59e0b',
     artists: ['Brad Paisley', 'Keith Urban', 'Brent Mason', 'Vince Gill'],
-    recommendedCategories: ['gain', 'dynamics', 'delay', 'reverb', 'volume'],
+    // Core country: compressor is essential, light drive, delay for slapback, reverb
+    essentialCategories: ['dynamics', 'gain', 'delay', 'reverb'],
+    // Extras: volume pedal for swells
+    extraCategories: ['volume'],
     sectionTargets: {
       gain: { min: 2, ideal: 5, max: 8 },
       dynamics: { min: 6, ideal: 10, max: 15 },
@@ -198,7 +223,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🎷',
     color: '#6366f1',
     artists: ['Pat Metheny', 'John Scofield', 'Julian Lage', 'Kurt Rosenwinkel'],
-    recommendedCategories: ['gain', 'dynamics', 'modulation', 'reverb', 'eq', 'volume'],
+    // Core jazz: dynamics for touch, reverb for room, EQ for tone, subtle mod
+    essentialCategories: ['dynamics', 'reverb', 'eq', 'modulation'],
+    // Extras: light boost, volume pedal
+    extraCategories: ['gain', 'volume'],
     sectionTargets: {
       gain: { min: 0, ideal: 3, max: 6 },
       dynamics: { min: 3, ideal: 6, max: 10 },
@@ -223,7 +251,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🕺',
     color: '#10b981',
     artists: ['Nile Rodgers', 'Prince', 'Cory Wong', 'John Mayer'],
-    recommendedCategories: ['dynamics', 'filter', 'modulation', 'gain'],
+    // Core funk: compressor for snap, wah/envelope for quack, phaser, light drive
+    essentialCategories: ['dynamics', 'filter', 'modulation', 'gain'],
+    // Extras: none typically needed
+    extraCategories: [],
     sectionTargets: {
       dynamics: { min: 5, ideal: 9, max: 15 },
       filter: { min: 5, ideal: 8, max: 10 },
@@ -246,7 +277,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🎹',
     color: '#7c3aed',
     artists: ['Dream Theater', 'Tool', 'Porcupine Tree', 'Animals as Leaders'],
-    recommendedCategories: ['gain', 'modulation', 'delay', 'pitch'],
+    // Core prog: versatile gain, modulation, delay, pitch effects
+    essentialCategories: ['gain', 'modulation', 'delay', 'pitch'],
+    // Extras: additional gain, more modulation
+    extraCategories: ['gain', 'modulation'],
     sectionTargets: {
       gain: { min: 10, ideal: 18, max: 25 },
       modulation: { min: 6, ideal: 12, max: 15 },
@@ -269,7 +303,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🙏',
     color: '#0ea5e9',
     artists: ['Lincoln Brewster', 'The War on Drugs', 'Hillsong', 'Bethel'],
-    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'volume'],
+    // Core worship: reverb for wash, delay for texture, mod for shimmer, drive
+    essentialCategories: ['reverb', 'delay', 'modulation', 'gain'],
+    // Extras: volume for swells
+    extraCategories: ['volume'],
     sectionTargets: {
       gain: { min: 4, ideal: 10, max: 15 },
       modulation: { min: 5, ideal: 9, max: 13 },
@@ -293,7 +330,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🔮',
     color: '#f43f5e',
     artists: ['Sonic Youth', 'Nine Inch Nails', 'St. Vincent', 'Battles'],
-    recommendedCategories: ['gain', 'pitch', 'filter', 'modulation', 'synth'],
+    // Core experimental: fuzz, pitch shifter, filter, wild modulation
+    essentialCategories: ['gain', 'pitch', 'filter', 'modulation'],
+    // Extras: synth pedals, more chaos
+    extraCategories: ['synth', 'gain'],
     sectionTargets: {
       gain: { min: 8, ideal: 18, max: 28 },
       pitch: { min: 5, ideal: 9, max: 10 },
@@ -317,7 +357,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🎤',
     color: '#f472b6',
     artists: ['John Mayer', 'Ed Sheeran', 'Taylor Swift', 'Harry Styles'],
-    recommendedCategories: ['gain', 'modulation', 'dynamics', 'delay', 'reverb'],
+    // Core pop: compressor for polish, light drive, subtle mod, reverb for space
+    essentialCategories: ['dynamics', 'gain', 'modulation', 'reverb'],
+    // Extras: delay for depth
+    extraCategories: ['delay'],
     sectionTargets: {
       gain: { min: 2, ideal: 5, max: 8 },
       modulation: { min: 3, ideal: 6, max: 10 },
@@ -341,7 +384,10 @@ export const GENRES: GenreProfile[] = [
     icon: '📼',
     color: '#a78bfa',
     artists: ['Mac DeMarco', 'Clairo', 'Boy Pablo', 'Men I Trust'],
-    recommendedCategories: ['gain', 'modulation', 'delay', 'reverb', 'dynamics'],
+    // Core lo-fi: vibrato/chorus for wobble, tape delay, warm reverb, light drive
+    essentialCategories: ['modulation', 'delay', 'reverb', 'gain'],
+    // Extras: compression
+    extraCategories: ['dynamics'],
     sectionTargets: {
       gain: { min: 2, ideal: 5, max: 9 },
       modulation: { min: 5, ideal: 9, max: 13 },
@@ -365,7 +411,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🎵',
     color: '#fbbf24',
     artists: ['James Taylor', 'Joni Mitchell', 'Iron & Wine', 'Phoebe Bridgers'],
-    recommendedCategories: ['dynamics', 'reverb', 'delay', 'modulation'],
+    // Core singer-songwriter: compression, reverb, subtle delay, light modulation
+    essentialCategories: ['dynamics', 'reverb', 'delay', 'modulation'],
+    // Extras: none typically needed
+    extraCategories: [],
     sectionTargets: {
       dynamics: { min: 4, ideal: 7, max: 10 },
       reverb: { min: 3, ideal: 6, max: 9 },
@@ -388,7 +437,10 @@ export const GENRES: GenreProfile[] = [
     icon: '🎸',
     color: '#fb923c',
     artists: ['The National', 'Interpol', 'Spoon', 'Vampire Weekend'],
-    recommendedCategories: ['gain', 'gain', 'modulation', 'delay', 'reverb'],
+    // Core indie rock: drive for grit, modulation for character, delay/reverb for space
+    essentialCategories: ['gain', 'modulation', 'delay', 'reverb'],
+    // Extras: second gain for stacking
+    extraCategories: ['gain'],
     sectionTargets: {
       gain: { min: 6, ideal: 12, max: 18 },
       modulation: { min: 4, ideal: 8, max: 12 },
