@@ -535,12 +535,15 @@ export function ReviewPage() {
                   : 'Custom size'}
               </span>
             </div>
-            <div className="p-4 flex justify-center">
+            <div className="p-4 flex justify-center bg-board-dark/50">
               <img 
                 src={visualizerScreenshot} 
                 alt="Board Layout Preview" 
                 className="max-w-full h-auto rounded-lg shadow-lg"
-                style={{ maxHeight: '400px' }}
+                style={{ 
+                  maxHeight: '500px',
+                  imageRendering: 'crisp-edges',
+                }}
               />
             </div>
           </div>

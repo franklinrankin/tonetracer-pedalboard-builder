@@ -15,11 +15,14 @@ function AppContent() {
       try {
         const canvas = await html2canvas(element, {
           backgroundColor: '#1a1a1a',
-          scale: 1.5,
+          scale: 3, // Higher scale for sharper text
           logging: false,
           useCORS: true,
+          allowTaint: true,
+          imageTimeout: 0,
         });
-        const dataUrl = canvas.toDataURL('image/png');
+        // Use higher quality PNG
+        const dataUrl = canvas.toDataURL('image/png', 1.0);
         dispatch({ type: 'SET_VISUALIZER_SCREENSHOT', screenshot: dataUrl });
       } catch (error) {
         console.error('Failed to capture visualizer:', error);

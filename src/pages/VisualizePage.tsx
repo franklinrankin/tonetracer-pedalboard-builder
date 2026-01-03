@@ -79,25 +79,17 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
         <div className="flex gap-3">
           <button
             onClick={onBack}
-            disabled={isCapturing}
-            className="flex-1 py-3 border border-board-border text-white font-medium rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
+            className="flex-1 py-3 border border-board-border text-white font-medium rounded-xl flex items-center justify-center gap-2"
           >
             <ChevronLeft className="w-4 h-4" />
             Build
           </button>
           <button
-            onClick={handleContinue}
-            disabled={isCapturing}
-            className="flex-1 py-3 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
+            onClick={onContinue}
+            className="flex-1 py-3 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2"
           >
-            {isCapturing ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <>
-                Review
-                <ChevronRight className="w-5 h-5" />
-              </>
-            )}
+            Review
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       </div>
