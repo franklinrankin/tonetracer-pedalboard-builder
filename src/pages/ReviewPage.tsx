@@ -1,27 +1,12 @@
 import { useState, useMemo } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, Eye } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, getTopGenreMatches, GenreMatch } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches, formatArea } from '../utils/measurements';
 import { BoardRecommendations } from '../components/BoardRecommendations';
 import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
-
-// Pedal colors for board preview
-const PEDAL_COLORS: Record<string, { bg: string; accent: string; text: string }> = {
-  gain: { bg: '#f97316', accent: '#ea580c', text: '#000' },
-  dynamics: { bg: '#3b82f6', accent: '#2563eb', text: '#fff' },
-  filter: { bg: '#a1a1aa', accent: '#71717a', text: '#000' },
-  eq: { bg: '#86efac', accent: '#4ade80', text: '#000' },
-  modulation: { bg: '#a855f7', accent: '#9333ea', text: '#fff' },
-  delay: { bg: '#06b6d4', accent: '#0891b2', text: '#fff' },
-  reverb: { bg: '#92400e', accent: '#78350f', text: '#fff' },
-  pitch: { bg: '#ec4899', accent: '#db2777', text: '#fff' },
-  volume: { bg: '#6b7280', accent: '#4b5563', text: '#fff' },
-  utility: { bg: '#f5f5f4', accent: '#e7e5e4', text: '#000' },
-  amp: { bg: '#fbbf24', accent: '#f59e0b', text: '#000' },
-  synth: { bg: '#8b5cf6', accent: '#7c3aed', text: '#fff' },
-};
+import { BoardVisualizer } from '../components/BoardVisualizer';
 
 // Genre Matches Component - shown when user didn't pre-select genres
 function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
@@ -382,6 +367,31 @@ export function ReviewPage() {
           )}
         </p>
         
+        {/* Show Initially Selected Genre(s) */}
+        {!isCreateYourOwnMode && selectedGenreObjects.length > 0 && (
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <span className="text-sm text-zinc-500 self-center">Built for:</span>
+            {selectedGenreObjects.map((genre) => (
+              <div 
+                key={genre!.id}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border"
+                style={{ 
+                  backgroundColor: `${genre!.color}15`,
+                  borderColor: `${genre!.color}50`,
+                }}
+              >
+                <span className="text-xl">{genre!.icon}</span>
+                <span 
+                  className="font-semibold text-lg"
+                  style={{ color: genre!.color }}
+                >
+                  {genre!.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+        
         {/* Genre Matches Banner - shown in "Create Your Own" mode */}
         {isCreateYourOwnMode && genreMatches.length > 0 && (
           <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -514,101 +524,20 @@ export function ReviewPage() {
           </div>
         </div>
         
-        {/* Board Preview */}
+        {/* Board Layout Preview */}
         {board.slots.length > 0 && (
           <div className="mb-8 bg-board-surface border border-board-border rounded-xl overflow-hidden">
-            <div className="p-3 border-b border-board-border flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-board-accent" />
-                <h3 className="text-sm font-semibold text-white">Board Layout</h3>
-              </div>
-              <span className="text-xs text-board-muted">
-                {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
+            <div className="p-3 border-b border-board-border flex items-center gap-2">
+              <LayoutGrid className="w-4 h-4 text-board-accent" />
+              <h3 className="text-sm font-semibold text-white">Board Layout Preview</h3>
+              <span className="text-xs text-board-muted ml-auto">
+                {board.constraints.maxWidthMm && board.constraints.maxDepthMm
+                  ? `${(board.constraints.maxWidthMm / 25.4).toFixed(1)}" × ${(board.constraints.maxDepthMm / 25.4).toFixed(1)}"`
+                  : 'Custom size'}
               </span>
             </div>
-            <div className="p-4 bg-[#b8b8b8]">
-              {/* Board surface */}
-              <div 
-                className="bg-[#1a1a1a] rounded-lg p-3 relative mx-auto"
-                style={{ 
-                  maxWidth: '100%',
-                  aspectRatio: `${board.constraints.maxWidthMm} / ${board.constraints.maxDepthMm}`,
-                }}
-              >
-                {/* Signal flow arrows */}
-                <div className="absolute left-1 top-1/2 -translate-y-1/2 text-[8px] text-zinc-500">← AMP</div>
-                <div className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px] text-zinc-500">IN →</div>
-                
-                {/* Pedals - arranged right to left */}
-                <div className="flex flex-row-reverse flex-wrap-reverse content-end gap-1 h-full items-end justify-end p-2">
-                  {board.slots.map((slot) => {
-                    const colors = PEDAL_COLORS[slot.pedal.category] || { bg: '#6b7280', text: '#fff' };
-                    const displayName = slot.pedal.subtype || slot.pedal.model.split(' ')[0];
-                    return (
-                      <div
-                        key={slot.pedal.id}
-                        className="rounded shadow-md flex flex-col overflow-hidden"
-                        style={{ 
-                          backgroundColor: colors.bg,
-                          width: 'clamp(40px, 8%, 70px)',
-                          height: 'clamp(55px, 12%, 95px)',
-                        }}
-                      >
-                        {/* Name */}
-                        <div 
-                          className="flex-[0_0_38%] flex items-center justify-center px-0.5"
-                          style={{ backgroundColor: slot.pedal.category === 'utility' ? '#1a1a1a' : 'white' }}
-                        >
-                          <span 
-                            className="font-bold text-center leading-tight text-[6px] line-clamp-2"
-                            style={{ color: slot.pedal.category === 'utility' ? 'white' : '#1a1a1a' }}
-                          >
-                            {displayName}
-                          </span>
-                        </div>
-                        {/* Knobs */}
-                        <div className="flex-1 flex items-center justify-center">
-                          <div className="rounded bg-black/30 px-1 py-0.5">
-                            <span className="text-white/50 font-mono text-[5px]">
-                              {slot.pedal.brand.slice(0, 4).toUpperCase()}
-                            </span>
-                          </div>
-                        </div>
-                        {/* Footswitch */}
-                        <div className="flex justify-center pb-0.5">
-                          <div className="w-3 h-1 rounded-full bg-black/40" />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-            {/* Signal chain */}
-            <div className="p-3 border-t border-board-border bg-board-elevated">
-              <div className="flex items-center gap-1.5 text-xs overflow-x-auto">
-                <span className="text-board-muted whitespace-nowrap">Signal:</span>
-                <span className="text-zinc-500">🎸</span>
-                <ArrowRight className="w-3 h-3 text-zinc-600 flex-shrink-0" />
-                {board.slots.map((slot, i) => (
-                  <span key={slot.pedal.id} className="flex items-center gap-1.5">
-                    <span 
-                      className="px-1.5 py-0.5 rounded text-[10px] font-medium whitespace-nowrap"
-                      style={{ 
-                        backgroundColor: `${CATEGORY_INFO[slot.pedal.category]?.color || '#666'}20`,
-                        color: CATEGORY_INFO[slot.pedal.category]?.color || '#666',
-                      }}
-                    >
-                      {slot.pedal.model.split(' ')[0]}
-                    </span>
-                    {i < board.slots.length - 1 && (
-                      <ArrowRight className="w-3 h-3 text-zinc-600 flex-shrink-0" />
-                    )}
-                  </span>
-                ))}
-                <ArrowRight className="w-3 h-3 text-zinc-600 flex-shrink-0" />
-                <span className="text-zinc-500 whitespace-nowrap">🔊 Amp</span>
-              </div>
+            <div className="p-4">
+              <BoardVisualizer previewMode />
             </div>
           </div>
         )}
