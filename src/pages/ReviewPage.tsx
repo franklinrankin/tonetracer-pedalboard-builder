@@ -524,7 +524,7 @@ export function ReviewPage() {
         </div>
         
         {/* Board Layout Screenshot */}
-        {visualizerScreenshot && (
+        {visualizerScreenshot ? (
           <div className="mb-8 bg-board-surface border border-board-border rounded-xl overflow-hidden">
             <div className="p-3 border-b border-board-border flex items-center gap-2">
               <LayoutGrid className="w-4 h-4 text-purple-400" />
@@ -543,6 +543,10 @@ export function ReviewPage() {
                 style={{ maxHeight: '500px' }}
               />
             </div>
+          </div>
+        ) : (
+          <div className="mb-8 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-400 text-sm">
+            Debug: No screenshot captured. Go to Visualize page and click "Review Board" button.
           </div>
         )}
         

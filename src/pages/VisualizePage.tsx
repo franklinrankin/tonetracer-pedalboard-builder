@@ -16,22 +16,28 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
 
   const handleReview = async () => {
     const element = document.getElementById('board-visualizer-capture');
+    console.log('Element found:', element);
     if (element) {
       setIsCapturing(true);
       try {
         const canvas = await html2canvas(element, {
           backgroundColor: '#1a1a1a',
-          scale: 3,
-          logging: false,
+          scale: 2,
+          logging: true,
           useCORS: true,
           allowTaint: true,
         });
         const dataUrl = canvas.toDataURL('image/png', 1.0);
+        console.log('Screenshot captured, size:', dataUrl.length);
         dispatch({ type: 'SET_VISUALIZER_SCREENSHOT', screenshot: dataUrl });
+        alert('Screenshot captured! Size: ' + Math.round(dataUrl.length/1024) + 'KB');
       } catch (error) {
         console.error('Screenshot failed:', error);
+        alert('Screenshot failed: ' + error);
       }
       setIsCapturing(false);
+    } else {
+      alert('Element not found!');
     }
     onContinue();
   };
