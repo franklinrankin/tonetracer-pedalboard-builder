@@ -53,7 +53,7 @@ export function BoardVisualizer() {
   }, [boardWidthMm]);
 
   // Initialize pedal positions in signal chain order (right to left, packed toward bottom)
-  // Mimics the "My Pedalboard" layout from BoardBuilder
+  // Uses actual pedal dimensions to prevent overlaps
   useEffect(() => {
     const newPositions = new Map<string, PedalPosition>();
     const pedalCount = board.slots.length;
@@ -63,44 +63,86 @@ export function BoardVisualizer() {
       return;
     }
     
-    // Calculate how many pedals fit per row based on average pedal width
-    const avgPedalWidthPercent = 12; // ~12% of board width per pedal
-    const pedalsPerRow = Math.max(Math.floor(85 / avgPedalWidthPercent), 4); // Leave margins
-    const numRows = Math.ceil(pedalCount / pedalsPerRow);
+    // Calculate pedal sizes as percentage of board
+    const getPedalSizePercent = (slot: BoardSlot) => ({
+      width: (slot.pedal.widthMm / boardWidthMm) * 100,
+      height: (slot.pedal.depthMm / boardDepthMm) * 100,
+    });
     
-    // Row height as percentage (pedals are taller than wide typically)
-    const rowHeightPercent = Math.min(40, 80 / numRows); // Max 40% per row
+    // Gap between pedals (as percentage)
+    const gapX = 2; // 2% horizontal gap
+    const gapY = 3; // 3% vertical gap
+    const marginX = 5; // 5% margin from edges
+    const marginY = 8; // 8% margin from top/bottom
     
+    // Calculate how many pedals fit per row
+    const availableWidth = 100 - (2 * marginX);
+    let currentRowPedals: { slot: BoardSlot; index: number; width: number; height: number }[] = [];
+    const rows: typeof currentRowPedals[] = [];
+    let currentRowWidth = 0;
+    
+    // Group pedals into rows based on actual widths
     board.slots.forEach((slot, index) => {
-      if (!positions.has(slot.pedal.id)) {
-        const row = Math.floor(index / pedalsPerRow);
-        const col = index % pedalsPerRow;
-        const pedalsInThisRow = Math.min(pedalsPerRow, pedalCount - row * pedalsPerRow);
-        
-        // Calculate X position (right to left within row)
-        // Pedals start from right side, evenly spaced
-        const rowWidth = pedalsInThisRow * avgPedalWidthPercent;
-        const rowStartX = 95 - (100 - rowWidth) / 2; // Center the row, start from right
-        const x = rowStartX - col * avgPedalWidthPercent;
-        
-        // Calculate Y position (bottom rows first)
-        // First row at bottom (~75% down), additional rows above
-        const baseY = 75 - (numRows - 1) * rowHeightPercent; // Adjust base for multiple rows
-        const y = baseY + row * rowHeightPercent;
-        
-        newPositions.set(slot.pedal.id, {
-          id: slot.pedal.id,
-          x: Math.max(8, Math.min(92, x)), // Keep within bounds
-          y: Math.max(15, Math.min(85, y)),
-          rotation: 0,
-        });
-      } else {
-        newPositions.set(slot.pedal.id, positions.get(slot.pedal.id)!);
+      const size = getPedalSizePercent(slot);
+      const pedalWithGap = size.width + gapX;
+      
+      if (currentRowWidth + size.width > availableWidth && currentRowPedals.length > 0) {
+        // Start new row
+        rows.push([...currentRowPedals]);
+        currentRowPedals = [];
+        currentRowWidth = 0;
       }
+      
+      currentRowPedals.push({ slot, index, width: size.width, height: size.height });
+      currentRowWidth += pedalWithGap;
+    });
+    
+    // Don't forget the last row
+    if (currentRowPedals.length > 0) {
+      rows.push(currentRowPedals);
+    }
+    
+    // Calculate max row height for each row
+    const rowHeights = rows.map(row => 
+      Math.max(...row.map(p => p.height)) + gapY
+    );
+    const totalHeight = rowHeights.reduce((sum, h) => sum + h, 0);
+    
+    // Position pedals row by row (first row at bottom)
+    let currentY = 100 - marginY; // Start from bottom
+    
+    rows.forEach((row, rowIndex) => {
+      const rowHeight = rowHeights[rowIndex];
+      const rowWidth = row.reduce((sum, p) => sum + p.width + gapX, -gapX); // Total width minus last gap
+      
+      // Center row position, pedals go right to left
+      let currentX = 100 - marginX - (availableWidth - rowWidth) / 2;
+      
+      // Position Y at bottom of row (pedal centers)
+      const y = currentY - rowHeight / 2;
+      
+      row.forEach((pedal) => {
+        const x = currentX - pedal.width / 2;
+        
+        if (!positions.has(pedal.slot.pedal.id)) {
+          newPositions.set(pedal.slot.pedal.id, {
+            id: pedal.slot.pedal.id,
+            x: Math.max(marginX, Math.min(100 - marginX, x)),
+            y: Math.max(marginY, Math.min(100 - marginY, y)),
+            rotation: 0,
+          });
+        } else {
+          newPositions.set(pedal.slot.pedal.id, positions.get(pedal.slot.pedal.id)!);
+        }
+        
+        currentX -= pedal.width + gapX;
+      });
+      
+      currentY -= rowHeight;
     });
     
     setPositions(newPositions);
-  }, [board.slots.length]);
+  }, [board.slots.length, boardWidthMm, boardDepthMm]);
 
   // Get jack positions based on rotation (right-to-left flow: input on right, output on left)
   const getJackPositions = (
