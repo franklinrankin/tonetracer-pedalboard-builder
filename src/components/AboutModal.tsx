@@ -63,8 +63,9 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
               <h3 className="text-lg font-semibold text-white">The Rating System</h3>
             </div>
             <p className="text-sm text-zinc-400 leading-relaxed mb-4">
-              Each pedal has a <span className="text-board-accent font-medium">Category Rating</span> that 
-              tells you how intense or complex it is within its category. This helps you balance your board.
+              Each pedal has a <span className="text-board-accent font-medium">Category Rating from 1-10</span> that 
+              tells you how intense or complex it is within its category. All categories use the same 1-10 scale, 
+              making it easy to compare and balance your board.
             </p>
             
             <div className="space-y-3">
@@ -87,12 +88,12 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
               <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-3 h-3 rounded-full bg-purple-500" />
-                  <span className="font-medium text-white text-sm">Modulation (1-15)</span>
+                  <span className="font-medium text-white text-sm">Modulation (1-10)</span>
                 </div>
                 <div className="text-xs text-zinc-400 space-y-1">
-                  <p><span className="text-zinc-300">1-5:</span> Subtle movement, light chorus/vibrato</p>
-                  <p><span className="text-zinc-300">6-10:</span> Noticeable effect, classic sounds</p>
-                  <p><span className="text-zinc-300">11-15:</span> Deep, complex, multi-mode</p>
+                  <p><span className="text-zinc-300">1-3:</span> Subtle movement, light chorus/vibrato</p>
+                  <p><span className="text-zinc-300">4-6:</span> Noticeable effect, classic sounds</p>
+                  <p><span className="text-zinc-300">7-10:</span> Deep, complex, multi-mode</p>
                 </div>
               </div>
               
@@ -100,12 +101,12 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
               <div className="p-3 rounded-lg bg-board-elevated border border-board-border">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-3 h-3 rounded-full bg-cyan-500" />
-                  <span className="font-medium text-white text-sm">Delay & Reverb (1-15)</span>
+                  <span className="font-medium text-white text-sm">Delay & Reverb (1-10)</span>
                 </div>
                 <div className="text-xs text-zinc-400 space-y-1">
-                  <p><span className="text-zinc-300">1-5:</span> Subtle ambience, slapback, room</p>
-                  <p><span className="text-zinc-300">6-10:</span> Moderate depth, tape/analog character</p>
-                  <p><span className="text-zinc-300">11-15:</span> Lush, ambient, infinite possibilities</p>
+                  <p><span className="text-zinc-300">1-3:</span> Subtle ambience, slapback, room</p>
+                  <p><span className="text-zinc-300">4-6:</span> Moderate depth, tape/analog character</p>
+                  <p><span className="text-zinc-300">7-10:</span> Lush, ambient, infinite possibilities</p>
                 </div>
               </div>
             </div>
