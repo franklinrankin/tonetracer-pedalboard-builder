@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Eye, ChevronRight, ChevronLeft, Camera, Check, Loader2 } from 'lucide-react';
+import { Eye, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { BoardVisualizer, BoardVisualizerRef } from '../components/BoardVisualizer';
 
@@ -18,9 +18,13 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
   const handleContinue = async () => {
     if (visualizerRef.current) {
       setIsSaving(true);
-      const snapshot = await visualizerRef.current.captureSnapshot();
-      if (snapshot) {
-        dispatch({ type: 'SAVE_SNAPSHOT', snapshot });
+      try {
+        const snapshot = await visualizerRef.current.captureSnapshot();
+        if (snapshot) {
+          dispatch({ type: 'SAVE_SNAPSHOT', snapshot });
+        }
+      } catch (error) {
+        console.error('Failed to capture snapshot:', error);
       }
       setIsSaving(false);
     }
