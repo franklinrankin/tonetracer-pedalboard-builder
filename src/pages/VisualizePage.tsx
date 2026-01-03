@@ -1,7 +1,6 @@
-import { useRef, useState } from 'react';
-import { Eye, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
+import { Eye, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
-import { BoardVisualizer, BoardVisualizerRef } from '../components/BoardVisualizer';
+import { BoardVisualizer } from '../components/BoardVisualizer';
 
 interface VisualizePageProps {
   onContinue: () => void;
@@ -9,27 +8,8 @@ interface VisualizePageProps {
 }
 
 export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
-  const { state, dispatch } = useBoard();
+  const { state } = useBoard();
   const { board, totalCost } = state;
-  const visualizerRef = useRef<BoardVisualizerRef>(null);
-  const [isSaving, setIsSaving] = useState(false);
-
-  // Save snapshot and continue to review
-  const handleContinue = async () => {
-    if (visualizerRef.current) {
-      setIsSaving(true);
-      try {
-        const snapshot = await visualizerRef.current.captureSnapshot();
-        if (snapshot) {
-          dispatch({ type: 'SAVE_SNAPSHOT', snapshot });
-        }
-      } catch (error) {
-        console.error('Failed to capture snapshot:', error);
-      }
-      setIsSaving(false);
-    }
-    onContinue();
-  };
 
   return (
     <div className="min-h-full">
@@ -59,21 +39,11 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
               </button>
               {board.slots.length > 0 && (
                 <button
-                  onClick={handleContinue}
-                  disabled={isSaving}
-                  className="flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors disabled:opacity-50"
+                  onClick={onContinue}
+                  className="flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors"
                 >
-                  {isSaving ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    <>
-                      Review Board
-                      <ChevronRight className="w-5 h-5" />
-                    </>
-                  )}
+                  Review Board
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               )}
             </div>
@@ -101,7 +71,7 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
       
       {/* Content */}
       <div className="max-w-6xl mx-auto p-6">
-        <BoardVisualizer ref={visualizerRef} />
+        <BoardVisualizer />
       </div>
       
       {/* Mobile Navigation */}
@@ -115,18 +85,11 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
             Build
           </button>
           <button
-            onClick={handleContinue}
-            disabled={isSaving}
-            className="flex-1 py-3 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
+            onClick={onContinue}
+            className="flex-1 py-3 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2"
           >
-            {isSaving ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <>
-                Review
-                <ChevronRight className="w-5 h-5" />
-              </>
-            )}
+            Review
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       </div>

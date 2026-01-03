@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { RotateCw, Move, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { BoardSlot } from '../types';
@@ -25,15 +25,10 @@ const SIGNAL_COLORS = [
   '#14b8a6', // teal
 ];
 
-export interface BoardVisualizerRef {
-  captureSnapshot: () => Promise<string | null>;
-}
-
-export const BoardVisualizer = forwardRef<BoardVisualizerRef>(function BoardVisualizer(_, ref) {
+export function BoardVisualizer() {
   const { state } = useBoard();
   const { board } = state;
   const containerRef = useRef<HTMLDivElement>(null);
-  const boardRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [positions, setPositions] = useState<Map<string, PedalPosition>>(new Map());
   const [selectedPedal, setSelectedPedal] = useState<string | null>(null);
@@ -56,27 +51,6 @@ export const BoardVisualizer = forwardRef<BoardVisualizerRef>(function BoardVisu
       setDisplayScale(maxDisplayWidth / boardWidthMm);
     }
   }, [boardWidthMm]);
-
-  // Expose capture function to parent
-  useImperativeHandle(ref, () => ({
-    captureSnapshot: async () => {
-      if (!boardRef.current) return null;
-      
-      try {
-        // Dynamically import html2canvas
-        const html2canvas = (await import('html2canvas')).default;
-        const canvas = await html2canvas(boardRef.current, {
-          backgroundColor: '#1a1a1a',
-          scale: 2,
-          logging: false,
-        });
-        return canvas.toDataURL('image/png');
-      } catch (error) {
-        console.error('Failed to capture snapshot:', error);
-        return null;
-      }
-    },
-  }));
 
   // Initialize pedal positions in signal chain order (right to left, packed toward bottom)
   // Uses actual pedal dimensions to prevent overlaps
@@ -452,7 +426,6 @@ export const BoardVisualizer = forwardRef<BoardVisualizerRef>(function BoardVisu
       >
         {/* Board Surface */}
         <div
-          ref={boardRef}
           className="relative mx-auto rounded-lg shadow-2xl overflow-visible"
           style={{
             width: boardDisplayW,
@@ -970,4 +943,5 @@ export const BoardVisualizer = forwardRef<BoardVisualizerRef>(function BoardVisu
       </div>
     </div>
   );
-});
+}
+

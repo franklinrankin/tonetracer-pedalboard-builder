@@ -14,7 +14,6 @@ interface BoardState {
   totalCurrent: number;
   genres: string[];
   selectedGenres: string[]; // Up to 3 genres
-  boardSnapshot: string | null; // Base64 image of visualizer
 }
 
 type BoardAction =
@@ -25,8 +24,7 @@ type BoardAction =
   | { type: 'SET_BOARD_NAME'; name: string }
   | { type: 'LOAD_BOARD'; board: Board }
   | { type: 'TOGGLE_GENRE'; genreId: string }
-  | { type: 'CLEAR_GENRES' }
-  | { type: 'SAVE_SNAPSHOT'; snapshot: string };
+  | { type: 'CLEAR_GENRES' };
 
 const defaultConstraints: BoardConstraints = {
   maxWidthMm: 610,
@@ -307,9 +305,6 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
       
     case 'CLEAR_GENRES':
       return { ...state, selectedGenres: [] };
-    
-    case 'SAVE_SNAPSHOT':
-      return { ...state, boardSnapshot: action.snapshot };
       
     default:
       return state;
@@ -327,7 +322,6 @@ export function BoardProvider({ children }: { children: ReactNode }) {
     board: defaultBoard,
     ...calculateState(defaultBoard),
     selectedGenres: [],
-    boardSnapshot: null,
   };
   
   const [state, dispatch] = useReducer(boardReducer, initialState);
