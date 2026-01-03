@@ -1,17 +1,158 @@
 import { useState } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2 } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches, formatArea } from '../utils/measurements';
 import { BoardRecommendations } from '../components/BoardRecommendations';
+import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
+
+// Power Supply Recommendations Component
+function PowerSupplyRecommendations({ 
+  pedalCount, 
+  totalCurrentMa 
+}: { 
+  pedalCount: number; 
+  totalCurrentMa: number;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const recommendations = recommendPowerSupply(pedalCount, totalCurrentMa);
+  
+  if (recommendations.length === 0) {
+    return (
+      <div className="bg-board-surface border border-board-border rounded-xl p-5">
+        <h2 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+          <Battery className="w-5 h-5 text-board-warning" />
+          Power Supply
+        </h2>
+        <p className="text-sm text-board-muted">
+          No matching power supplies found. You may need a high-capacity or multi-unit setup.
+        </p>
+      </div>
+    );
+  }
+  
+  const topPick = recommendations[0];
+  const headroomMa = Math.ceil(totalCurrentMa * 1.2);
+  
+  return (
+    <div className="bg-board-surface border border-board-border rounded-xl p-5">
+      <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+        <Battery className="w-5 h-5 text-board-warning" />
+        Recommended Power Supply
+      </h2>
+      
+      {/* Requirements */}
+      <div className="flex gap-4 mb-4 text-xs text-board-muted">
+        <div>
+          <span className="text-white font-medium">{pedalCount}</span> pedals
+        </div>
+        <div>
+          <span className="text-white font-medium">{totalCurrentMa}mA</span> draw
+        </div>
+        <div>
+          <span className="text-board-warning font-medium">{headroomMa}mA</span> w/ headroom
+        </div>
+      </div>
+      
+      {/* Top Pick */}
+      <div className="p-4 rounded-lg bg-board-warning/10 border border-board-warning/30 mb-3">
+        <div className="flex items-start justify-between mb-2">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-medium px-2 py-0.5 rounded bg-board-warning/20 text-board-warning">
+                TOP PICK
+              </span>
+              {topPick.isolated && (
+                <span className="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400">
+                  Isolated
+                </span>
+              )}
+            </div>
+            <h3 className="font-semibold text-white">{topPick.brand} {topPick.model}</h3>
+          </div>
+          <div className="text-right">
+            <div className="text-lg font-bold text-white">${topPick.reverbPrice}</div>
+            <div className="text-xs text-board-muted">used avg</div>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-3 gap-3 text-sm">
+          <div>
+            <div className="text-board-muted text-xs">Outputs</div>
+            <div className="text-white font-medium">{topPick.totalOutputs}</div>
+          </div>
+          <div>
+            <div className="text-board-muted text-xs">Total Power</div>
+            <div className="text-white font-medium">{topPick.totalMa}mA</div>
+          </div>
+          <div>
+            <div className="text-board-muted text-xs">Size</div>
+            <div className="text-white font-medium">{topPick.widthIn}" × {topPick.depthIn}"</div>
+          </div>
+        </div>
+        
+        {topPick.features.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1">
+            {topPick.features.slice(0, 3).map(feature => (
+              <span key={feature} className="text-xs px-2 py-0.5 rounded bg-board-elevated text-board-muted">
+                {feature}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      {/* Show More */}
+      {recommendations.length > 1 && (
+        <>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="w-full flex items-center justify-center gap-2 py-2 text-sm text-board-muted hover:text-white transition-colors"
+          >
+            {expanded ? 'Hide alternatives' : `Show ${recommendations.length - 1} more options`}
+            {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+          
+          {expanded && (
+            <div className="space-y-2 mt-2">
+              {recommendations.slice(1).map((ps, index) => (
+                <div key={ps.id} className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-xs text-board-muted mr-2">#{index + 2}</span>
+                      <span className="font-medium text-white">{ps.brand} {ps.model}</span>
+                      {ps.isolated && (
+                        <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-green-500/20 text-green-400">
+                          Isolated
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <span className="font-medium text-white">${ps.reverbPrice}</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 mt-1 text-xs text-board-muted">
+                    <span>{ps.totalOutputs} outputs</span>
+                    <span>{ps.totalMa}mA</span>
+                    <span>{ps.widthIn}" × {ps.depthIn}"</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
 
 export function ReviewPage() {
   const { state } = useBoard();
-  const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenre } = state;
+  const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres } = state;
   const [showRecommendations, setShowRecommendations] = useState(false);
   
-  const genre = selectedGenre ? getGenreById(selectedGenre) : null;
+  const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
   const maxArea = board.constraints.maxWidthMm * board.constraints.maxDepthMm * 0.85;
   const budgetPercent = (totalCost / board.constraints.maxBudget) * 100;
   const areaPercent = (totalArea / maxArea) * 100;
@@ -164,7 +305,9 @@ export function ReviewPage() {
             </div>
             <div className="text-3xl font-bold text-white">{board.slots.length}</div>
             <div className="text-xs text-board-muted mt-3">
-              {genre ? `${genre.icon} ${genre.name}` : genres.length > 0 ? genres.join(', ') : 'Mixed style'}
+              {selectedGenreObjects.length > 0 
+                ? selectedGenreObjects.map(g => `${g.icon} ${g.name}`).join(' + ')
+                : genres.length > 0 ? genres.join(', ') : 'Mixed style'}
             </div>
           </div>
         </div>
@@ -256,6 +399,14 @@ export function ReviewPage() {
                 This is a suggested order. Feel free to experiment!
               </p>
             </div>
+            
+            {/* Power Supply Recommendations */}
+            {board.slots.length > 0 && (
+              <PowerSupplyRecommendations 
+                pedalCount={board.slots.length}
+                totalCurrentMa={totalCurrent}
+              />
+            )}
             
             {/* Actions */}
             <div className="space-y-3">

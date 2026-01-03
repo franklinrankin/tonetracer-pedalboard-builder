@@ -1,6 +1,6 @@
-import { Music2, Users, ChevronRight, Check } from 'lucide-react';
+import { Music2, Users, ChevronRight, Check, X } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
-import { GENRES, GenreProfile } from '../data/genres';
+import { GENRES, GenreProfile, getGenreById } from '../data/genres';
 
 interface GenrePageProps {
   onContinue: () => void;
@@ -8,22 +8,23 @@ interface GenrePageProps {
 
 export function GenrePage({ onContinue }: GenrePageProps) {
   const { state, dispatch } = useBoard();
-  const { selectedGenre } = state;
+  const { selectedGenres } = state;
   
-  const handleSelectGenre = (genreId: string) => {
-    if (selectedGenre === genreId) {
-      dispatch({ type: 'SET_GENRE', genreId: null });
-    } else {
-      dispatch({ type: 'SET_GENRE', genreId });
-    }
+  const handleToggleGenre = (genreId: string) => {
+    dispatch({ type: 'TOGGLE_GENRE', genreId });
   };
   
-  const selected = selectedGenre ? GENRES.find(g => g.id === selectedGenre) : null;
+  const handleClearGenres = () => {
+    dispatch({ type: 'CLEAR_GENRES' });
+  };
+  
+  const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean) as GenreProfile[];
+  const isAtMax = selectedGenres.length >= 3;
   
   return (
     <div className="min-h-full p-8 lg:p-12">
       {/* Header */}
-      <div className="max-w-4xl mx-auto mb-12 text-center">
+      <div className="max-w-4xl mx-auto mb-8 text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 mb-6">
           <Music2 className="w-8 h-8 text-purple-400" />
         </div>
@@ -31,22 +32,61 @@ export function GenrePage({ onContinue }: GenrePageProps) {
           What style are you going for?
         </h1>
         <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-          Select a genre and we'll suggest pedals tailored to that sound. 
+          Select up to <span className="text-board-accent font-semibold">3 genres</span> and we'll suggest versatile pedals that work across your styles.
           This is optional — you can skip and browse all pedals freely.
         </p>
       </div>
+      
+      {/* Selected Genres Display */}
+      {selectedGenres.length > 0 && (
+        <div className="max-w-4xl mx-auto mb-8">
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <span className="text-sm text-board-muted">Selected:</span>
+            {selectedGenreObjects.map(genre => (
+              <button
+                key={genre.id}
+                onClick={() => handleToggleGenre(genre.id)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all hover:opacity-80"
+                style={{ backgroundColor: `${genre.color}30`, color: genre.color }}
+              >
+                <span>{genre.icon}</span>
+                <span>{genre.name}</span>
+                <X className="w-3.5 h-3.5" />
+              </button>
+            ))}
+            {selectedGenres.length > 1 && (
+              <button
+                onClick={handleClearGenres}
+                className="px-3 py-1.5 rounded-full text-xs text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+              >
+                Clear all
+              </button>
+            )}
+          </div>
+          <p className="text-center text-xs text-board-muted mt-2">
+            {3 - selectedGenres.length} more {3 - selectedGenres.length === 1 ? 'slot' : 'slots'} available
+          </p>
+        </div>
+      )}
       
       {/* Genre Grid */}
       <div className="max-w-5xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {GENRES.map(genre => {
-            const isSelected = selectedGenre === genre.id;
+            const isSelected = selectedGenres.includes(genre.id);
+            const selectionIndex = selectedGenres.indexOf(genre.id);
+            const isDisabled = !isSelected && isAtMax;
             
             return (
               <button
                 key={genre.id}
-                onClick={() => handleSelectGenre(genre.id)}
-                className={`relative p-6 rounded-xl border-2 text-left transition-all hover:scale-[1.02] ${
+                onClick={() => !isDisabled && handleToggleGenre(genre.id)}
+                disabled={isDisabled}
+                className={`relative p-6 rounded-xl border-2 text-left transition-all ${
+                  isDisabled 
+                    ? 'opacity-40 cursor-not-allowed'
+                    : 'hover:scale-[1.02]'
+                } ${
                   isSelected
                     ? 'border-opacity-100 bg-opacity-20'
                     : 'border-board-border hover:border-opacity-50 bg-board-surface'
@@ -58,10 +98,10 @@ export function GenrePage({ onContinue }: GenrePageProps) {
               >
                 {isSelected && (
                   <div 
-                    className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center"
+                    className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
                     style={{ backgroundColor: genre.color }}
                   >
-                    <Check className="w-4 h-4 text-white" />
+                    {selectionIndex + 1}
                   </div>
                 )}
                 
@@ -86,51 +126,67 @@ export function GenrePage({ onContinue }: GenrePageProps) {
         </div>
       </div>
       
-      {/* Selected Genre Details */}
-      {selected && (
-        <div className="max-w-4xl mx-auto mt-12 animate-fadeIn">
-          <div 
-            className="p-6 rounded-xl border"
-            style={{ 
-              borderColor: `${selected.color}40`,
-              backgroundColor: `${selected.color}10`,
-            }}
-          >
-            <div className="flex items-start gap-6">
-              <div className="text-6xl">{selected.icon}</div>
-              <div className="flex-1">
-                <h2 className="text-2xl font-bold text-white mb-2">{selected.name}</h2>
-                <p className="text-zinc-400 mb-4">{selected.description}</p>
+      {/* Selected Genres Details */}
+      {selectedGenreObjects.length > 0 && (
+        <div className="max-w-4xl mx-auto mt-8 space-y-4 animate-fadeIn">
+          <h3 className="text-center text-sm text-board-muted mb-4">
+            {selectedGenreObjects.length === 1 
+              ? 'Your selected style' 
+              : `Your ${selectedGenreObjects.length} styles — we'll suggest versatile pedals`}
+          </h3>
+          
+          <div className={`grid gap-4 ${selectedGenreObjects.length === 1 ? 'grid-cols-1' : selectedGenreObjects.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+            {selectedGenreObjects.map((genre, index) => (
+              <div 
+                key={genre.id}
+                className="p-4 rounded-xl border"
+                style={{ 
+                  borderColor: `${genre.color}40`,
+                  backgroundColor: `${genre.color}10`,
+                }}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-3xl">{genre.icon}</span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span 
+                        className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                        style={{ backgroundColor: genre.color }}
+                      >
+                        {index + 1}
+                      </span>
+                      <h3 className="font-semibold text-white">{genre.name}</h3>
+                    </div>
+                  </div>
+                </div>
                 
-                <div className="flex items-center gap-2 mb-4">
-                  <Users className="w-4 h-4 text-board-muted" />
-                  <span className="text-sm text-board-muted">Artists:</span>
-                  <div className="flex flex-wrap gap-2">
-                    {selected.artists.map(artist => (
+                <div className="flex items-center gap-2 mb-2">
+                  <Users className="w-3 h-3 text-board-muted" />
+                  <div className="flex flex-wrap gap-1">
+                    {genre.artists.slice(0, 3).map(artist => (
                       <span 
                         key={artist}
-                        className="px-2 py-0.5 text-xs rounded-full bg-board-elevated text-zinc-300"
+                        className="text-xs text-zinc-400"
                       >
-                        {artist}
+                        {artist}{genre.artists.indexOf(artist) < Math.min(2, genre.artists.length - 1) ? ',' : ''}
                       </span>
                     ))}
                   </div>
                 </div>
                 
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-sm text-board-muted">Key pedals:</span>
-                  {selected.preferredSubtypes.slice(0, 5).map(type => (
+                <div className="flex flex-wrap gap-1">
+                  {genre.preferredSubtypes.slice(0, 4).map(type => (
                     <span 
                       key={type}
-                      className="px-2 py-0.5 text-xs rounded border"
-                      style={{ borderColor: selected.color, color: selected.color }}
+                      className="px-1.5 py-0.5 text-[10px] rounded"
+                      style={{ backgroundColor: `${genre.color}20`, color: genre.color }}
                     >
                       {type}
                     </span>
                   ))}
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       )}
@@ -141,7 +197,7 @@ export function GenrePage({ onContinue }: GenrePageProps) {
           onClick={onContinue}
           className="w-full py-4 bg-board-accent text-white font-medium rounded-xl flex items-center justify-center gap-2"
         >
-          {selectedGenre ? 'Continue' : 'Skip & Browse All'}
+          {selectedGenres.length > 0 ? 'Continue' : 'Skip & Browse All'}
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>

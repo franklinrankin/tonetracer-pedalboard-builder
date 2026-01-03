@@ -17,8 +17,8 @@ function AppContent() {
     if (window.confirm('Start over? This will clear your board and selections.')) {
       // Clear board
       dispatch({ type: 'CLEAR_BOARD' });
-      // Clear genre
-      dispatch({ type: 'SET_GENRE', genreId: null });
+      // Clear genres
+      dispatch({ type: 'CLEAR_GENRES' });
       // Go back to first step
       setCurrentStep('genre');
       window.scrollTo({ top: 0, behavior: 'smooth' });

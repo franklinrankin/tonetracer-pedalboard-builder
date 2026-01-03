@@ -15,11 +15,12 @@ type BuildTab = 'starter' | 'catalog' | 'scores' | 'recommend';
 
 export function BuildPage({ onContinue }: BuildPageProps) {
   const { state } = useBoard();
-  const { selectedGenre, board } = state;
-  const [activeTab, setActiveTab] = useState<BuildTab>(selectedGenre ? 'starter' : 'catalog');
+  const { selectedGenres, board } = state;
+  const hasGenres = selectedGenres.length > 0;
+  const [activeTab, setActiveTab] = useState<BuildTab>(hasGenres ? 'starter' : 'catalog');
   
   const tabs = [
-    ...(selectedGenre ? [{ id: 'starter' as BuildTab, label: 'Starter Kit' }] : []),
+    ...(hasGenres ? [{ id: 'starter' as BuildTab, label: selectedGenres.length > 1 ? 'Multi-Genre Kit' : 'Starter Kit' }] : []),
     { id: 'catalog' as BuildTab, label: 'All Pedals' },
     { id: 'scores' as BuildTab, label: 'Tone Tags' },
     ...(board.slots.length > 0 ? [{ id: 'recommend' as BuildTab, label: 'Recommend Setup', icon: <Sparkles className="w-4 h-4" /> }] : []),
@@ -84,7 +85,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
         <div className="grid lg:grid-cols-5 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-6">
-            {activeTab === 'starter' && selectedGenre && (
+            {activeTab === 'starter' && hasGenres && (
               <GenreStarterKit />
             )}
             

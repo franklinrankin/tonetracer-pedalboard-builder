@@ -885,7 +885,7 @@ function getGenreBonusAdditions(
 
 export function GenreStarterKit() {
   const { state, dispatch } = useBoard();
-  const { selectedGenre, allPedals, board } = state;
+  const { selectedGenres, allPedals, board } = state;
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [expandedPedal, setExpandedPedal] = useState<string | null>(null);
   const [skippedSteps, setSkippedSteps] = useState<Set<string>>(new Set());
@@ -893,9 +893,11 @@ export function GenreStarterKit() {
   const [currentAdditionIndex, setCurrentAdditionIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const genre = selectedGenre ? getGenreById(selectedGenre) : null;
+  // Get all selected genres
+  const genres = selectedGenres.map(id => getGenreById(id)).filter(Boolean) as GenreProfile[];
+  const primaryGenre = genres[0]; // Use first genre as primary for colors
   
-  if (!genre) {
+  if (genres.length === 0) {
     return (
       <div className="bg-board-surface border border-board-border rounded-xl p-6 text-center">
         <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
@@ -908,6 +910,31 @@ export function GenreStarterKit() {
       </div>
     );
   }
+  
+  // Merge recommended categories from all genres (prioritize by frequency)
+  const mergedCategories = (() => {
+    const categoryCount = new Map<Category, number>();
+    genres.forEach(g => {
+      g.recommendedCategories.forEach(cat => {
+        categoryCount.set(cat, (categoryCount.get(cat) || 0) + 1);
+      });
+    });
+    // Sort by frequency (most common first), then by first genre's order
+    return Array.from(categoryCount.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([cat]) => cat);
+  })();
+  
+  // Merge preferred subtypes from all genres
+  const mergedSubtypes = [...new Set(genres.flatMap(g => g.preferredSubtypes))];
+  
+  // Create a combined "genre" object for compatibility
+  const genre: GenreProfile = {
+    ...primaryGenre,
+    name: genres.length === 1 ? primaryGenre.name : genres.map(g => g.name).join(' + '),
+    recommendedCategories: mergedCategories,
+    preferredSubtypes: mergedSubtypes,
+  };
   
   const onBoardIds = new Set(board.slots.map(s => s.pedal.id));
   const onBoardCategories = new Set(board.slots.map(s => s.pedal.category));
@@ -1402,7 +1429,7 @@ export function GenreStarterKit() {
       </div>
       
       {/* Current Step/Addition */}
-      <div className="p-4">
+      <div className="p-4 pb-24">
         {/* Header */}
         <div className="mb-4">
           <div className="flex items-center gap-2 mb-2">
@@ -1578,29 +1605,6 @@ export function GenreStarterKit() {
         </div>
       </div>
       
-      {/* Navigation */}
-      <div className="p-4 border-t border-board-border flex items-center justify-between">
-        <button
-          onClick={handleBack}
-          disabled={!isAdditionsPhase && currentStepIndex === 0}
-          className={`flex items-center gap-1 px-3 py-2 text-sm rounded-lg transition-colors ${
-            !isAdditionsPhase && currentStepIndex === 0
-              ? 'text-board-muted/50 cursor-not-allowed'
-              : 'text-board-muted hover:text-white hover:bg-board-elevated'
-          }`}
-        >
-          <ChevronLeft className="w-4 h-4" />
-          Back
-        </button>
-        
-        <button
-          onClick={handleSkip}
-          className="flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
-        >
-          {isAdditionsPhase ? 'No Thanks' : 'Skip'}
-          <SkipForward className="w-4 h-4" />
-        </button>
-      </div>
     </div>
   );
 }

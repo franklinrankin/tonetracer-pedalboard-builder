@@ -13,7 +13,7 @@ interface BoardState {
   totalArea: number;
   totalCurrent: number;
   genres: string[];
-  selectedGenre: string | null;
+  selectedGenres: string[]; // Up to 3 genres
 }
 
 type BoardAction =
@@ -23,7 +23,8 @@ type BoardAction =
   | { type: 'CLEAR_BOARD' }
   | { type: 'SET_BOARD_NAME'; name: string }
   | { type: 'LOAD_BOARD'; board: Board }
-  | { type: 'SET_GENRE'; genreId: string | null };
+  | { type: 'TOGGLE_GENRE'; genreId: string }
+  | { type: 'CLEAR_GENRES' };
 
 const defaultConstraints: BoardConstraints = {
   maxWidthMm: 610,
@@ -265,8 +266,28 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
     case 'LOAD_BOARD':
       return { ...state, board: action.board, ...calculateState(action.board) };
       
-    case 'SET_GENRE':
-      return { ...state, selectedGenre: action.genreId };
+    case 'TOGGLE_GENRE':
+      const currentGenres = state.selectedGenres;
+      const genreIndex = currentGenres.indexOf(action.genreId);
+      
+      if (genreIndex >= 0) {
+        // Remove genre if already selected
+        return { 
+          ...state, 
+          selectedGenres: currentGenres.filter(g => g !== action.genreId) 
+        };
+      } else if (currentGenres.length < 3) {
+        // Add genre if under limit
+        return { 
+          ...state, 
+          selectedGenres: [...currentGenres, action.genreId] 
+        };
+      }
+      // Already at max (3), don't add
+      return state;
+      
+    case 'CLEAR_GENRES':
+      return { ...state, selectedGenres: [] };
       
     default:
       return state;
@@ -283,7 +304,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
   const initialState: BoardState = {
     board: defaultBoard,
     ...calculateState(defaultBoard),
-    selectedGenre: null,
+    selectedGenres: [],
   };
   
   const [state, dispatch] = useReducer(boardReducer, initialState);

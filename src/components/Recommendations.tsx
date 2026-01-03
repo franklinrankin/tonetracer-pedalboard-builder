@@ -17,9 +17,10 @@ interface Recommendation {
 
 export function Recommendations() {
   const { state, dispatch } = useBoard();
-  const { board, allPedals, sectionScores, selectedGenre } = state;
+  const { board, allPedals, sectionScores, selectedGenres } = state;
   
-  const genre = selectedGenre ? getGenreById(selectedGenre) : null;
+  // Use primary genre for recommendations (first selected)
+  const genre = selectedGenres.length > 0 ? getGenreById(selectedGenres[0]) : null;
   
   // Generate recommendations based on current board state and selected genre
   const generateRecommendations = (): Recommendation[] => {

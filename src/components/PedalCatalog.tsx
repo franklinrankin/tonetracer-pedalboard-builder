@@ -5,7 +5,7 @@ import { PedalCard } from './PedalCard';
 import { CATEGORY_INFO, CATEGORY_ORDER } from '../data/categories';
 import { Category } from '../types';
 
-type SortOption = 'name' | 'price-asc' | 'price-desc' | 'rating' | 'size';
+type SortOption = 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'rating-asc' | 'rating-desc' | 'size-asc' | 'size-desc';
 type ViewMode = 'grid' | 'list';
 
 export function PedalCatalog() {
@@ -14,15 +14,19 @@ export function PedalCatalog() {
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | 'all'>('all');
-  const [sortBy, setSortBy] = useState<SortOption>('name');
+  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [showOnlyFitting, setShowOnlyFitting] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   
-  const onBoardIds = new Set(board.slots.map(s => s.pedal.id));
+  // Memoize the board slot IDs to prevent unnecessary recalculations
+  const onBoardIds = useMemo(() => 
+    new Set(board.slots.map(s => s.pedal.id)), 
+    [board.slots]
+  );
   
-  const filteredPedals = useMemo(() => {
-    let result = allPedals;
+  // Compute filtered and sorted pedals
+  const filteredPedals = (() => {
+    let result = [...allPedals];
     
     // Search filter
     if (searchQuery) {
@@ -39,36 +43,27 @@ export function PedalCatalog() {
       result = result.filter(p => p.category === selectedCategory);
     }
     
-    // Fitting filter
-    if (showOnlyFitting) {
-      result = result.filter(p => p.fits || onBoardIds.has(p.id));
+    // Sort based on selected option
+    if (sortBy === 'name-asc') {
+      result.sort((a, b) => a.model.localeCompare(b.model));
+    } else if (sortBy === 'name-desc') {
+      result.sort((a, b) => b.model.localeCompare(a.model));
+    } else if (sortBy === 'price-asc') {
+      result.sort((a, b) => a.reverbPrice - b.reverbPrice);
+    } else if (sortBy === 'price-desc') {
+      result.sort((a, b) => b.reverbPrice - a.reverbPrice);
+    } else if (sortBy === 'rating-asc') {
+      result.sort((a, b) => a.categoryRating - b.categoryRating);
+    } else if (sortBy === 'rating-desc') {
+      result.sort((a, b) => b.categoryRating - a.categoryRating);
+    } else if (sortBy === 'size-asc') {
+      result.sort((a, b) => (a.widthMm * a.depthMm) - (b.widthMm * b.depthMm));
+    } else if (sortBy === 'size-desc') {
+      result.sort((a, b) => (b.widthMm * b.depthMm) - (a.widthMm * a.depthMm));
     }
     
-    // Sort
-    result = [...result].sort((a, b) => {
-      switch (sortBy) {
-        case 'name':
-          return a.model.localeCompare(b.model);
-        case 'price-asc':
-          return a.reverbPrice - b.reverbPrice;
-        case 'price-desc':
-          return b.reverbPrice - a.reverbPrice;
-        case 'rating':
-          return b.categoryRating - a.categoryRating;
-        case 'size':
-          return (a.widthMm * a.depthMm) - (b.widthMm * b.depthMm);
-        default:
-          return 0;
-      }
-    });
-    
     return result;
-  }, [allPedals, searchQuery, selectedCategory, sortBy, showOnlyFitting, onBoardIds]);
-  
-  const fittingCount = allPedals.filter(p => p.fits || onBoardIds.has(p.id)).length;
-  const categoryCount = selectedCategory === 'all' 
-    ? allPedals.length 
-    : allPedals.filter(p => p.category === selectedCategory).length;
+  })();
   
   return (
     <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
@@ -78,7 +73,7 @@ export function PedalCatalog() {
           <div>
             <h2 className="font-semibold text-white">Pedal Catalog</h2>
             <p className="text-xs text-board-muted">
-              {filteredPedals.length} pedals • {fittingCount} fit your constraints
+              {filteredPedals.length} pedals
             </p>
           </div>
           
@@ -171,38 +166,44 @@ export function PedalCatalog() {
             )}
           </div>
           
-          {/* Sort Dropdown */}
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="px-3 py-2 bg-board-elevated border border-board-border rounded-lg text-sm text-white focus:outline-none focus:border-board-accent cursor-pointer"
-          >
-            <option value="name">Sort: Name</option>
-            <option value="price-asc">Sort: Price ↑</option>
-            <option value="price-desc">Sort: Price ↓</option>
-            <option value="rating">Sort: Rating</option>
-            <option value="size">Sort: Size</option>
-          </select>
-          
-          {/* Fitting Toggle */}
-          <label className="flex items-center gap-2 px-3 py-2 bg-board-elevated border border-board-border rounded-lg cursor-pointer hover:border-board-accent/50 transition-colors">
-            <input
-              type="checkbox"
-              checked={showOnlyFitting}
-              onChange={(e) => setShowOnlyFitting(e.target.checked)}
-              className="w-4 h-4 rounded border-board-border bg-board-dark text-board-accent focus:ring-board-accent"
-            />
-            <span className="text-sm text-white">Only show fitting</span>
-          </label>
+          {/* Sort Buttons */}
+          <div className="flex items-center gap-1 bg-board-elevated border border-board-border rounded-lg p-1">
+            <span className="text-xs text-board-muted px-1">Sort:</span>
+            {[
+              { value: 'name-asc', label: 'Name ↑' },
+              { value: 'name-desc', label: 'Name ↓' },
+              { value: 'price-asc', label: 'Price ↑' },
+              { value: 'price-desc', label: 'Price ↓' },
+              { value: 'rating-asc', label: 'Rating ↑' },
+              { value: 'rating-desc', label: 'Rating ↓' },
+              { value: 'size-asc', label: 'Size ↑' },
+              { value: 'size-desc', label: 'Size ↓' },
+            ].map(option => (
+              <button
+                key={option.value}
+                onClick={() => setSortBy(option.value as SortOption)}
+                className={`px-2 py-1 text-xs rounded transition-colors ${
+                  sortBy === option.value
+                    ? 'bg-board-accent text-white'
+                    : 'text-board-muted hover:text-white hover:bg-board-surface'
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
       
       {/* Pedal Grid/List */}
-      <div className={`p-4 ${
-        viewMode === 'grid' 
-          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' 
-          : 'space-y-3'
-      } max-h-[600px] overflow-y-auto`}>
+      <div 
+        key={`pedal-grid-${sortBy}-${selectedCategory}`}
+        className={`p-4 ${
+          viewMode === 'grid' 
+            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' 
+            : 'space-y-3'
+        } max-h-[600px] overflow-y-auto`}
+      >
         {filteredPedals.length === 0 ? (
           <div className="col-span-full text-center py-12">
             <div className="text-4xl mb-3">🔍</div>
@@ -212,9 +213,9 @@ export function PedalCatalog() {
             </p>
           </div>
         ) : (
-          filteredPedals.map(pedal => (
+          filteredPedals.map((pedal, index) => (
             <PedalCard 
-              key={pedal.id} 
+              key={`${pedal.id}-${index}`} 
               pedal={pedal}
               isOnBoard={onBoardIds.has(pedal.id)}
               compact={viewMode === 'list'}

@@ -1,8 +1,10 @@
-import { ReactNode } from 'react';
-import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw } from 'lucide-react';
+import { ReactNode, useState } from 'react';
+import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw, HelpCircle, Database } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
 import { formatInches } from '../utils/measurements';
+import { AboutModal } from './AboutModal';
+import { PedalCatalog } from './PedalCatalog';
 
 export type WizardStep = 'genre' | 'constraints' | 'build' | 'review';
 
@@ -22,11 +24,13 @@ const STEPS: { id: WizardStep; label: string; icon: ReactNode }[] = [
 
 export function WizardLayout({ currentStep, onStepChange, onStartOver, children }: WizardLayoutProps) {
   const { state } = useBoard();
-  const { selectedGenre, board, totalCost, sectionScores } = state;
+  const { selectedGenres, board, totalCost, sectionScores } = state;
+  const [showAbout, setShowAbout] = useState(false);
+  const [showPedalIndex, setShowPedalIndex] = useState(false);
   
-  const hasProgress = selectedGenre || board.slots.length > 0;
+  const hasProgress = selectedGenres.length > 0 || board.slots.length > 0;
   
-  const genre = selectedGenre ? getGenreById(selectedGenre) : null;
+  const genres = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
   const currentStepIndex = STEPS.findIndex(s => s.id === currentStep);
   
   const canGoNext = () => {
@@ -62,26 +66,49 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
     <div className="min-h-screen bg-board-dark flex">
       {/* Left Sidebar - Progress & Choices */}
       <aside className="w-80 bg-board-surface border-r border-board-border flex flex-col">
-        {/* Logo & Start Over */}
+        {/* Logo & Quick Actions */}
         <div className="p-4 border-b border-board-border">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-board-accent to-board-highlight flex items-center justify-center">
-                <Sliders className="w-5 h-5 text-board-dark" />
-              </div>
-              <div>
-                <h1 className="text-lg font-bold">
-                  <span className="gradient-text">TONE</span>
-                  <span className="text-white">TRACER</span>
-                </h1>
-                <p className="text-xs text-board-muted">Pedalboard Builder</p>
-              </div>
+          {/* Logo */}
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-board-accent to-board-highlight flex items-center justify-center">
+              <Sliders className="w-5 h-5 text-board-dark" />
             </div>
+            <div>
+              <h1 className="text-lg font-bold">
+                <span className="gradient-text">TONE</span>
+                <span className="text-white">TRACER</span>
+              </h1>
+              <p className="text-xs text-board-muted">
+                {genres.length > 0 
+                  ? genres.map(g => g?.name).filter(Boolean).join(' + ')
+                  : 'Pedalboard Builder'}
+              </p>
+            </div>
+          </div>
+          
+          {/* Quick Action Buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowPedalIndex(true)}
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-all text-xs"
+              title="Browse All Pedals"
+            >
+              <Database className="w-4 h-4" />
+              <span>Index</span>
+            </button>
             
-            {/* Start Over Button */}
+            <button
+              onClick={() => setShowAbout(true)}
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-all text-xs"
+              title="About ToneTracer"
+            >
+              <HelpCircle className="w-4 h-4" />
+              <span>About</span>
+            </button>
+            
             <button
               onClick={onStartOver}
-              className={`p-2 rounded-lg transition-all ${
+              className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-all text-xs ${
                 hasProgress
                   ? 'text-board-muted hover:text-white hover:bg-board-danger/20 hover:text-board-danger'
                   : 'text-board-muted/30 cursor-not-allowed'
@@ -89,7 +116,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
               disabled={!hasProgress}
               title="Start Over"
             >
-              <RotateCcw className="w-5 h-5" />
+              <RotateCcw className="w-4 h-4" />
+              <span>Reset</span>
             </button>
           </div>
         </div>
@@ -147,11 +175,13 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
             {(currentStepIndex > 0 || currentStep === 'genre') && (
               <div 
                 className={`p-3 rounded-lg border transition-all ${
-                  genre ? 'border-board-border bg-board-elevated' : 'border-dashed border-board-border'
+                  genres.length > 0 ? 'border-board-border bg-board-elevated' : 'border-dashed border-board-border'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-board-muted">Genre</span>
+                  <span className="text-xs text-board-muted">
+                    {genres.length > 1 ? `Genres (${genres.length})` : 'Genre'}
+                  </span>
                   {currentStepIndex > 0 && (
                     <button
                       onClick={() => onStepChange('genre')}
@@ -161,10 +191,14 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
                     </button>
                   )}
                 </div>
-                {genre ? (
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{genre.icon}</span>
-                    <span className="font-medium text-white">{genre.name}</span>
+                {genres.length > 0 ? (
+                  <div className="space-y-1">
+                    {genres.map((g, i) => g && (
+                      <div key={g.id} className="flex items-center gap-2">
+                        <span className="text-sm">{g.icon}</span>
+                        <span className="text-sm font-medium text-white">{g.name}</span>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <span className="text-sm text-zinc-500">Not selected (optional)</span>
@@ -269,7 +303,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
                     : 'bg-board-border text-zinc-500 cursor-not-allowed'
                 }`}
               >
-                {currentStep === 'genre' && !selectedGenre ? 'Skip' : 'Continue'}
+                {currentStep === 'genre' && selectedGenres.length === 0 ? 'Skip' : 'Continue'}
                 <ChevronRight className="w-4 h-4" />
               </button>
             )}
@@ -281,6 +315,48 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
       <main className="flex-1 overflow-y-auto">
         {children}
       </main>
+      
+      
+      {/* About Modal */}
+      <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
+      
+      {/* Pedal Index Modal */}
+      {showPedalIndex && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowPedalIndex(false)}
+          />
+          
+          {/* Modal */}
+          <div className="relative bg-board-dark border border-board-border rounded-2xl w-full max-w-5xl h-[85vh] overflow-hidden shadow-2xl flex flex-col">
+            {/* Header */}
+            <div className="p-4 border-b border-board-border bg-board-surface flex items-center justify-between flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-board-accent to-board-highlight flex items-center justify-center">
+                  <Database className="w-5 h-5 text-board-dark" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-white">Pedal Index</h2>
+                  <p className="text-xs text-board-muted">Browse all pedals in the database</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowPedalIndex(false)}
+                className="px-4 py-2 rounded-lg bg-board-elevated text-white hover:bg-board-border transition-colors text-sm font-medium"
+              >
+                Close
+              </button>
+            </div>
+            
+            {/* Catalog */}
+            <div className="flex-1 overflow-y-auto p-4">
+              <PedalCatalog />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
