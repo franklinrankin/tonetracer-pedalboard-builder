@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BoardProvider, useBoard } from './context/BoardContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
-import { GenrePage, ConstraintsPage, BuildPage, ReviewPage } from './pages';
+import { GenrePage, ConstraintsPage, BuildPage, VisualizePage, ReviewPage } from './pages';
 
 function AppContent() {
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
@@ -50,7 +50,9 @@ function AppContent() {
       case 'constraints':
         return <ConstraintsPage onContinue={() => handleStepChange('build')} />;
       case 'build':
-        return <BuildPage onContinue={() => handleStepChange('review')} />;
+        return <BuildPage onContinue={() => handleStepChange('visualize')} />;
+      case 'visualize':
+        return <VisualizePage onContinue={() => handleStepChange('review')} onBack={() => handleStepChange('build')} />;
       case 'review':
         return <ReviewPage />;
       default:

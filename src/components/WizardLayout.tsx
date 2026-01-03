@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X, Eye } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
 import { BOARD_TEMPLATES } from '../data/boardTemplates';
@@ -7,7 +7,7 @@ import { formatInches } from '../utils/measurements';
 import { AboutModal } from './AboutModal';
 import { PedalCatalog } from './PedalCatalog';
 
-export type WizardStep = 'genre' | 'constraints' | 'build' | 'review';
+export type WizardStep = 'genre' | 'constraints' | 'build' | 'visualize' | 'review';
 
 interface WizardLayoutProps {
   currentStep: WizardStep;
@@ -20,6 +20,7 @@ const STEPS: { id: WizardStep; label: string; shortLabel: string; icon: ReactNod
   { id: 'genre', label: 'Choose Style', shortLabel: 'Style', icon: <Music2 className="w-4 h-4" /> },
   { id: 'constraints', label: 'Set Limits', shortLabel: 'Limits', icon: <Settings2 className="w-4 h-4" /> },
   { id: 'build', label: 'Build Board', shortLabel: 'Build', icon: <Sliders className="w-4 h-4" /> },
+  { id: 'visualize', label: 'Visualize', shortLabel: 'Visual', icon: <Eye className="w-4 h-4" /> },
   { id: 'review', label: 'Review', shortLabel: 'Review', icon: <ListChecks className="w-4 h-4" /> },
 ];
 
@@ -42,6 +43,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
       case 'constraints':
         return true;
       case 'build':
+        return board.slots.length > 0;
+      case 'visualize':
         return board.slots.length > 0;
       case 'review':
         return false;
