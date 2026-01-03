@@ -1,8 +1,6 @@
-import { useState } from 'react';
-import { Eye, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
+import { Eye, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { BoardVisualizer } from '../components/BoardVisualizer';
-import html2canvas from 'html2canvas';
 
 interface VisualizePageProps {
   onContinue: () => void;
@@ -10,31 +8,8 @@ interface VisualizePageProps {
 }
 
 export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
-  const { state, dispatch } = useBoard();
+  const { state } = useBoard();
   const { board, totalCost } = state;
-  const [isCapturing, setIsCapturing] = useState(false);
-
-  // Capture the visualizer as an image before navigating to review
-  const handleContinue = async () => {
-    const element = document.getElementById('board-visualizer-capture');
-    if (element) {
-      setIsCapturing(true);
-      try {
-        const canvas = await html2canvas(element, {
-          backgroundColor: '#1a1a1a',
-          scale: 1.5, // Higher quality
-          logging: false,
-          useCORS: true,
-        });
-        const dataUrl = canvas.toDataURL('image/png');
-        dispatch({ type: 'SET_VISUALIZER_SCREENSHOT', screenshot: dataUrl });
-      } catch (error) {
-        console.error('Failed to capture visualizer:', error);
-      }
-      setIsCapturing(false);
-    }
-    onContinue();
-  };
 
   return (
     <div className="min-h-full">
@@ -57,29 +32,18 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
             <div className="hidden lg:flex items-center gap-3">
               <button
                 onClick={onBack}
-                disabled={isCapturing}
-                className="flex items-center gap-2 px-4 py-3 text-board-muted hover:text-white border border-board-border rounded-xl hover:bg-board-elevated transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-3 text-board-muted hover:text-white border border-board-border rounded-xl hover:bg-board-elevated transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Back to Build
               </button>
               {board.slots.length > 0 && (
                 <button
-                  onClick={handleContinue}
-                  disabled={isCapturing}
-                  className="flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors disabled:opacity-50"
+                  onClick={onContinue}
+                  className="flex items-center gap-2 px-6 py-3 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors"
                 >
-                  {isCapturing ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Capturing...
-                    </>
-                  ) : (
-                    <>
-                      Review Board
-                      <ChevronRight className="w-5 h-5" />
-                    </>
-                  )}
+                  Review Board
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               )}
             </div>
