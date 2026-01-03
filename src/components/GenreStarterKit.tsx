@@ -1134,6 +1134,10 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
     return descriptions[cat] || `${CATEGORY_INFO[cat].displayName} pedal`;
   };
 
+  // Calculate average budget per pedal to ensure we can fill the board
+  const totalPedalsToFill = recommendedEssentials + recommendedBonus;
+  const avgBudgetPerPedal = board.constraints.maxBudget / Math.max(totalPedalsToFill, 4);
+
   // Generate essential steps based on genre's recommended categories AND board capacity
   const generateSteps = (): StarterKitStep[] => {
     const steps: StarterKitStep[] = [];
@@ -1250,12 +1254,13 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
       
       // Also consider position in essentialCategories (earlier = more important)
       const categoryIndex = genre.essentialCategories.indexOf(category);
-      const positionBonus = categoryIndex >= 0 && categoryIndex <= 1 ? 0.3 : 
-                            categoryIndex >= 0 && categoryIndex <= 3 ? 0.15 : 0;
+      const positionBonus = categoryIndex >= 0 && categoryIndex <= 1 ? 0.2 : 
+                            categoryIndex >= 0 && categoryIndex <= 3 ? 0.1 : 0;
       
-      // Final budget multiplier: combines target importance + position importance
-      const budgetMultiplier = Math.min(importanceScore + positionBonus + 0.5, 2.5);
-      const maxForCategory = board.constraints.maxBudget * (0.15 + budgetMultiplier * 0.1);
+      // Budget per category based on average budget per pedal, with multipliers for importance
+      // This ensures we can fill the board within budget
+      const budgetMultiplier = Math.min(importanceScore + positionBonus + 0.8, 1.8);
+      const maxForCategory = avgBudgetPerPedal * budgetMultiplier;
       
       // For the FIRST pedal in each category, consider ALL subtypes to find the best
       const isFirstOfCategory = !steps.some(s => s.category === category);
@@ -1413,8 +1418,9 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
       const idealRating = categoryTarget ? Math.min(categoryTarget.ideal, 10) : 5;
       const targetIdeal = categoryTarget?.ideal || 5;
       const importanceScore = targetIdeal / 10;
-      const budgetMultiplier = Math.min(importanceScore + 0.3, 2.0); // Slightly lower for extras
-      const maxForCategory = board.constraints.maxBudget * (0.10 + budgetMultiplier * 0.08);
+      // Lower budget for extras - they're add-ons, not essentials
+      const budgetMultiplier = Math.min(importanceScore + 0.5, 1.3);
+      const maxForCategory = avgBudgetPerPedal * budgetMultiplier;
       
       // Apply price range filter
       const priceRangeConfig = PRICE_RANGES[priceRange];
