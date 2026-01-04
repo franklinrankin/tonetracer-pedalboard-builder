@@ -46,6 +46,9 @@ export type EnclosureType =
   | 'medium'      // ~4" x 5"
   | 'large'       // ~5" x 6"
   | 'xl'          // ~7"+ 
+  | 'wah'         // wah pedal enclosure
+  | 'round'       // round fuzz face style
+  | 'rack'        // rack mount unit
   | 'custom';
 
 export interface Pedal {

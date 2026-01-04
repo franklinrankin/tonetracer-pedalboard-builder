@@ -208,7 +208,7 @@ function guessGenres(slots: BoardSlot[], sectionScores: SectionScore[]): string[
   return [...new Set(genres)].slice(0, 3);
 }
 
-function calculateState(board: Board): Omit<BoardState, 'board'> {
+function calculateState(board: Board): Omit<BoardState, 'board' | 'selectedGenres'> {
   const allPedals = PEDALS.map(p => calculatePedalStatus(p, board.constraints, board.slots));
   const sectionScores = calculateSectionScores(board.slots);
   const totalCost = board.slots.reduce((sum, s) => sum + s.pedal.reverbPrice, 0);

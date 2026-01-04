@@ -448,7 +448,8 @@ export function BoardVisualizer() {
               const color = SIGNAL_COLORS[index % SIGNAL_COLORS.length];
               
               // Line from previous pedal's output (or input from right) to this pedal's input
-              let startX: number, startY: number;
+              let startX: number = boardDisplayW + 40;
+              let startY: number = jacks.input.y;
               
               if (index === 0) {
                 // First pedal - line comes from off-screen right, directly to pedal's input jack
@@ -639,7 +640,8 @@ export function BoardVisualizer() {
               if (category === 'amp') return subtype || 'Amp Sim';
               if (category === 'synth') return subtype || 'Synth';
               
-              return subtype || category.charAt(0).toUpperCase() + category.slice(1);
+              // Fallback for any other category
+              return subtype || (category as string).charAt(0).toUpperCase() + (category as string).slice(1);
             };
             
             const pedalFunction = getEffectDescription();

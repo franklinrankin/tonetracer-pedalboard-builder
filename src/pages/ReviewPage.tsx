@@ -317,7 +317,7 @@ export function ReviewPage() {
       },
       sectionScores: sectionScores.map(s => ({
         category: s.category,
-        score: s.score,
+        score: s.totalScore,
         tag: s.tag,
       })),
     };
@@ -531,7 +531,7 @@ export function ReviewPage() {
             <div className="text-3xl font-bold text-white">{board.slots.length}</div>
             <div className="text-xs text-board-muted mt-3">
               {selectedGenreObjects.length > 0 
-                ? selectedGenreObjects.map(g => `${g.icon} ${g.name}`).join(' + ')
+                ? selectedGenreObjects.map(g => `${g!.icon} ${g!.name}`).join(' + ')
                 : genreMatches.length > 0 
                   ? genreMatches.slice(0, 2).map(m => `${m.genre.icon} ${m.genre.name}`).join(' + ')
                   : genres.length > 0 ? genres.join(', ') : 'Mixed style'}

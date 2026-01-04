@@ -1989,7 +1989,6 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                     : isSkipped
                       ? '#52525b'
                       : `${genre.color}30`,
-                  ringColor: isCurrent ? genre.color : undefined,
                 }}
                 title={step.name}
               />
@@ -2017,7 +2016,6 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                         : isCurrent
                           ? '#f59e0b'
                           : '#f59e0b30',
-                      ringColor: isCurrent ? '#f59e0b' : undefined,
                     }}
                     title={addition.name}
                   />
@@ -2298,12 +2296,10 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                         onClick={() => handleAddPedal(pedal)}
                         className="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center gap-1"
                         style={{ 
-                          backgroundColor: tier === 'top' 
-                            ? (isAdditionsPhase ? '#f59e0b' : genre.color)
-                            : tier === 'recommended'
-                              ? '#3b82f620'
-                              : '#52525b20',
-                          color: tier === 'top' ? 'white' : tier === 'recommended' ? '#3b82f6' : '#a1a1aa',
+                          backgroundColor: tier === 'recommended'
+                            ? '#3b82f620'
+                            : '#52525b20',
+                          color: tier === 'recommended' ? '#3b82f6' : '#a1a1aa',
                         }}
                       >
                         <Plus className="w-3 h-3" />
