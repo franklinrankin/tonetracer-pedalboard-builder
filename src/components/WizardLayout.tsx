@@ -81,9 +81,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
                 <Sliders className="w-4 h-4 text-board-dark" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-sm font-bold leading-tight">
-                  <span className="gradient-text">TONE</span>
-                  <span className="text-white">TRACER</span>
+                <h1 className="text-sm font-bold leading-tight text-white">
+                  BOARDSIE
                 </h1>
               </div>
             </div>

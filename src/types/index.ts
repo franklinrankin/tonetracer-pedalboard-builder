@@ -1,4 +1,4 @@
-// Core Types for ToneTracer Pedalboard Builder
+// Core Types for Boardsie Pedalboard Builder
 
 export type Category = 
   | 'gain'

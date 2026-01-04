@@ -331,7 +331,7 @@ export function ReviewPage() {
   };
   
   const handleShare = async () => {
-    const shareText = `Check out my pedalboard! ${board.slots.length} pedals, $${totalCost} total. Built with ToneTracer.`;
+    const shareText = `Check out my pedalboard! ${board.slots.length} pedals, $${totalCost} total. Built with Boardsie.`;
     
     if (navigator.share) {
       await navigator.share({

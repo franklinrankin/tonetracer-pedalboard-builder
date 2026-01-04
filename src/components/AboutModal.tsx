@@ -26,7 +26,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                 <HelpCircle className="w-6 h-6 text-board-dark" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">About ToneTracer</h2>
+                <h2 className="text-xl font-bold text-white">About Boardsie</h2>
                 <p className="text-sm text-board-muted">Your pedalboard planning companion</p>
               </div>
             </div>
@@ -41,16 +41,16 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
         
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[60vh] space-y-6">
-          {/* Why ToneTracer */}
+          {/* Why Boardsie */}
           <section>
             <div className="flex items-center gap-2 mb-3">
               <Target className="w-5 h-5 text-board-accent" />
-              <h3 className="text-lg font-semibold text-white">Why ToneTracer?</h3>
+              <h3 className="text-lg font-semibold text-white">Why Boardsie?</h3>
             </div>
             <p className="text-sm text-zinc-400 leading-relaxed">
               Building a pedalboard can be overwhelming. With thousands of pedals out there, 
               how do you know what fits your style, your budget, and your physical board space? 
-              ToneTracer helps you plan the perfect pedalboard by suggesting pedals based on 
+              Boardsie helps you plan the perfect pedalboard by suggesting pedals based on 
               your musical genre, filtering by your constraints, and showing you how pedals 
               work together.
             </p>
@@ -157,7 +157,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
               <h3 className="text-lg font-semibold text-white">Tone Tags</h3>
             </div>
             <p className="text-sm text-zinc-400 leading-relaxed mb-3">
-              As you add pedals, ToneTracer calculates your board's overall character and 
+              As you add pedals, Boardsie calculates your board's overall character and 
               gives you <span className="text-board-accent font-medium">Tone Tags</span> — 
               fun labels that describe your sound in each category.
             </p>
