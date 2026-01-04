@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, getTopGenreMatches, GenreMatch } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches, formatArea } from '../utils/measurements';
 import { BoardRecommendations } from '../components/BoardRecommendations';
 import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
+import { BoardVisualizer } from '../components/BoardVisualizer';
 
 // Genre Matches Component - shown when user didn't pre-select genres
 function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
@@ -447,6 +448,22 @@ export function ReviewPage() {
         {showRecommendations && (
           <div className="mb-8 animate-fadeIn">
             <BoardRecommendations />
+          </div>
+        )}
+        
+        {/* Board Layout Preview */}
+        {board.slots.length > 0 && (
+          <div className="mb-8 bg-board-surface border border-board-border rounded-xl overflow-hidden">
+            <div className="p-3 border-b border-board-border flex items-center gap-2">
+              <LayoutGrid className="w-4 h-4 text-board-accent" />
+              <h3 className="text-sm font-semibold text-white">Board Layout</h3>
+              <span className="text-xs text-board-muted ml-auto">
+                {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
+              </span>
+            </div>
+            <div className="pointer-events-none">
+              <BoardVisualizer />
+            </div>
           </div>
         )}
         
