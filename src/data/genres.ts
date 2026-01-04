@@ -90,16 +90,15 @@ export const GENRES: GenreProfile[] = [
     color: '#1f2937',
     artists: ['Metallica', 'Slipknot', 'Gojira', 'Meshuggah'],
     // Core metal: high gain distortion, noise gate, EQ for tight sound
-    essentialCategories: ['gain', 'dynamics', 'eq', 'amp'],
-    // Extras: boost for leads
-    extraCategories: ['gain'],
+    essentialCategories: ['gain', 'dynamics', 'eq'],
+    // Extras: boost for leads, delay for atmosphere
+    extraCategories: ['gain', 'delay'],
     sectionTargets: {
       gain: { min: 18, ideal: 25, max: 30 },
       dynamics: { min: 5, ideal: 8, max: 12 },
       eq: { min: 4, ideal: 7, max: 10 },
-      amp: { min: 3, ideal: 6, max: 10 },
     },
-    preferredSubtypes: ['Distortion', 'Boost', 'Gate', 'Compressor', 'Graphic', 'Parametric', 'Cab Sim', 'Amp Sim'],
+    preferredSubtypes: ['Distortion', 'Boost', 'Gate', 'Compressor', 'Graphic', 'Parametric'],
     keywords: ['high-gain', 'metal', 'tight', 'aggressive', 'heavy'],
     characteristics: {
       gainLevel: 'extreme',

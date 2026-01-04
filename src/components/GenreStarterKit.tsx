@@ -101,6 +101,9 @@ function getGenreBonusAdditions(
   };
   
   const findPedals = (category: Category, subtypes?: string[], excludeSubtypes?: string[]) => {
+    // Skip amp/cab sim category - not recommended for most setups
+    if (category === 'amp') return [];
+    
     let filtered = allPedals.filter(p => 
       p.category === category && 
       p.fits && 
@@ -124,6 +127,7 @@ function getGenreBonusAdditions(
     let filtered = allPedals.filter(p => 
       p.fits && 
       !onBoardIds.has(p.id) &&
+      p.category !== 'amp' && // Exclude amp/cab sim
       subtypes.includes(p.subtype || '')
     );
     
@@ -1193,6 +1197,9 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
     for (const category of genre.essentialCategories) {
       if (steps.length >= recommendedEssentials) break;
       
+      // Skip amp/cab sim category - not recommended for most setups
+      if (category === 'amp') continue;
+      
       // Only add ONE of each essential category
       const currentCategoryCount = categoryStepCount.get(category) || 0;
       if (currentCategoryCount >= 1) continue;
@@ -1358,6 +1365,9 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
     // These come AFTER all essentials have been filled
     for (const category of genre.extraCategories) {
       if (steps.length >= recommendedEssentials) break;
+      
+      // Skip amp/cab sim category - not recommended for most setups
+      if (category === 'amp') continue;
       
       const currentCategoryCount = categoryStepCount.get(category) || 0;
       
