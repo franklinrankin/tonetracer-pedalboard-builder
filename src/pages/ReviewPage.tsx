@@ -451,19 +451,18 @@ export function ReviewPage() {
           </div>
         )}
         
-        {/* Board Layout Preview */}
+        {/* Board Layout - Interactive */}
         {board.slots.length > 0 && (
           <div className="mb-8 bg-board-surface border border-board-border rounded-xl overflow-hidden">
             <div className="p-3 border-b border-board-border flex items-center gap-2">
               <LayoutGrid className="w-4 h-4 text-board-accent" />
               <h3 className="text-sm font-semibold text-white">Board Layout</h3>
+              <span className="text-xs text-board-muted">Drag to arrange • Click for details</span>
               <span className="text-xs text-board-muted ml-auto">
                 {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
               </span>
             </div>
-            <div className="pointer-events-none">
-              <BoardVisualizer />
-            </div>
+            <BoardVisualizer />
           </div>
         )}
         
