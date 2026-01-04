@@ -24,18 +24,17 @@ export function PedalCatalog() {
     [board.slots]
   );
   
-  // Compute filtered and sorted pedals with proper memoization
-  const filteredPedals = useMemo(() => {
+  // Compute filtered and sorted pedals
+  const filteredPedals = (() => {
     let result = [...allPedals];
     
     // Search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
       result = result.filter(p => 
         p.brand.toLowerCase().includes(query) ||
         p.model.toLowerCase().includes(query) ||
-        (p.subtype && p.subtype.toLowerCase().includes(query)) ||
-        p.category.toLowerCase().includes(query)
+        p.subtype?.toLowerCase().includes(query)
       );
     }
     
@@ -45,35 +44,26 @@ export function PedalCatalog() {
     }
     
     // Sort based on selected option
-    switch (sortBy) {
-      case 'name-asc':
-        result.sort((a, b) => a.model.localeCompare(b.model));
-        break;
-      case 'name-desc':
-        result.sort((a, b) => b.model.localeCompare(a.model));
-        break;
-      case 'price-asc':
-        result.sort((a, b) => a.reverbPrice - b.reverbPrice);
-        break;
-      case 'price-desc':
-        result.sort((a, b) => b.reverbPrice - a.reverbPrice);
-        break;
-      case 'rating-asc':
-        result.sort((a, b) => a.categoryRating - b.categoryRating);
-        break;
-      case 'rating-desc':
-        result.sort((a, b) => b.categoryRating - a.categoryRating);
-        break;
-      case 'size-asc':
-        result.sort((a, b) => (a.widthMm * a.depthMm) - (b.widthMm * b.depthMm));
-        break;
-      case 'size-desc':
-        result.sort((a, b) => (b.widthMm * b.depthMm) - (a.widthMm * a.depthMm));
-        break;
+    if (sortBy === 'name-asc') {
+      result.sort((a, b) => a.model.localeCompare(b.model));
+    } else if (sortBy === 'name-desc') {
+      result.sort((a, b) => b.model.localeCompare(a.model));
+    } else if (sortBy === 'price-asc') {
+      result.sort((a, b) => a.reverbPrice - b.reverbPrice);
+    } else if (sortBy === 'price-desc') {
+      result.sort((a, b) => b.reverbPrice - a.reverbPrice);
+    } else if (sortBy === 'rating-asc') {
+      result.sort((a, b) => a.categoryRating - b.categoryRating);
+    } else if (sortBy === 'rating-desc') {
+      result.sort((a, b) => b.categoryRating - a.categoryRating);
+    } else if (sortBy === 'size-asc') {
+      result.sort((a, b) => (a.widthMm * a.depthMm) - (b.widthMm * b.depthMm));
+    } else if (sortBy === 'size-desc') {
+      result.sort((a, b) => (b.widthMm * b.depthMm) - (a.widthMm * a.depthMm));
     }
     
     return result;
-  }, [allPedals, searchQuery, selectedCategory, sortBy]);
+  })();
   
   return (
     <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
@@ -112,19 +102,19 @@ export function PedalCatalog() {
         </div>
         
         {/* Search */}
-        <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-board-muted" />
+        <div className="relative mb-4 z-10">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-board-muted pointer-events-none" />
           <input
             type="text"
             placeholder="Search pedals..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-board-dark border border-board-border rounded-lg text-white placeholder:text-board-muted focus:outline-none focus:border-board-accent transition-colors"
+            className="w-full pl-10 pr-10 py-2.5 bg-board-dark border border-board-border rounded-lg text-white placeholder:text-board-muted focus:outline-none focus:border-board-accent focus:ring-2 focus:ring-board-accent/20 transition-colors"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-board-muted hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-board-muted hover:text-white z-10"
             >
               <X className="w-4 h-4" />
             </button>

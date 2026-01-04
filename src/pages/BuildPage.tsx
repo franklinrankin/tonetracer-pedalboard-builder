@@ -104,7 +104,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
       <div className="max-w-7xl mx-auto p-6">
         {/* Board Preview - Full Width at Top */}
         <div className="mb-6">
-          <div className="sticky top-20 z-5">
+          <div className="sticky top-20 z-[1]">
             <BoardBuilder />
           </div>
         </div>
