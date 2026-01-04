@@ -82,7 +82,7 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
               <Wand2 className="w-6 h-6 text-board-accent" />
             </div>
             <h3 className="font-semibold text-white text-lg mb-1">Create Your Own</h3>
-            <p className="text-sm text-zinc-400 line-clamp-2">
+            <p className="text-sm text-zinc-400">
               No limits — build freely and we'll show you what genres it fits
             </p>
             
