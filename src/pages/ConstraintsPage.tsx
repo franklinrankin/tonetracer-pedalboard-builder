@@ -69,6 +69,7 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
         maxDepthMm: template.depthMm,
         maxBudget: template.suggestedBudget || board.constraints.maxBudget,
         maxPedalCount: undefined, // Clear pedal count when using board size
+        applyAfterSize: false, // Enforce board size when selecting a template
       },
     });
   };
@@ -95,6 +96,7 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
         constraints: {
           ...board.constraints,
           maxPedalCount: undefined,
+          applyAfterSize: false, // Enforce board size when switching to board mode
         },
       });
     } else {
@@ -103,7 +105,7 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
         constraints: {
           ...board.constraints,
           maxPedalCount: pedalCount,
-          applyAfterSize: true,
+          applyAfterSize: true, // Ignore board size when using pedal count
         },
       });
     }
@@ -117,6 +119,7 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
       constraints: {
         ...board.constraints,
         maxWidthMm: Math.round(inchesToMm(inches)),
+        applyAfterSize: false, // Enforce size when manually setting dimensions
       },
     });
     setSelectedTemplate(null);
@@ -130,6 +133,7 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
       constraints: {
         ...board.constraints,
         maxDepthMm: Math.round(inchesToMm(inches)),
+        applyAfterSize: false, // Enforce size when manually setting dimensions
       },
     });
     setSelectedTemplate(null);
