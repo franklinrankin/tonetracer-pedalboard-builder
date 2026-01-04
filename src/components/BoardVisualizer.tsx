@@ -347,29 +347,42 @@ export function BoardVisualizer() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Move className="w-4 h-4 text-board-muted" />
-            <span className="text-sm text-board-muted">Drag pedals to move</span>
+            <span className="text-sm text-board-muted">Drag to move</span>
           </div>
-          {selectedPedal && (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => rotatePedal('ccw')}
-                className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
-                title="Rotate counter-clockwise"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => rotatePedal('cw')}
-                className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
-                title="Rotate clockwise"
-              >
-                <RotateCw className="w-4 h-4" />
-              </button>
-              <span className="text-sm text-board-accent ml-2">
-                {board.slots.find(s => s.pedal.id === selectedPedal)?.pedal.model} selected
-              </span>
-            </div>
-          )}
+          
+          {/* Rotate buttons - always visible, enabled when pedal selected */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => rotatePedal('ccw')}
+              disabled={!selectedPedal}
+              className={`p-2 rounded-lg transition-colors ${
+                selectedPedal 
+                  ? 'bg-board-accent hover:bg-board-accent-dim text-white' 
+                  : 'bg-board-elevated text-board-muted cursor-not-allowed'
+              }`}
+              title="Rotate counter-clockwise"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => rotatePedal('cw')}
+              disabled={!selectedPedal}
+              className={`p-2 rounded-lg transition-colors ${
+                selectedPedal 
+                  ? 'bg-board-accent hover:bg-board-accent-dim text-white' 
+                  : 'bg-board-elevated text-board-muted cursor-not-allowed'
+              }`}
+              title="Rotate clockwise"
+            >
+              <RotateCw className="w-4 h-4" />
+            </button>
+            <span className="text-sm text-board-muted">
+              {selectedPedal 
+                ? <span className="text-board-accent">{board.slots.find(s => s.pedal.id === selectedPedal)?.pedal.model} selected</span>
+                : 'Click pedal to rotate'
+              }
+            </span>
+          </div>
         </div>
         
         <div className="flex items-center gap-2">
@@ -934,11 +947,10 @@ export function BoardVisualizer() {
       <div className="bg-board-surface/50 rounded-xl p-4 border border-board-border">
         <h3 className="text-sm font-medium text-white mb-2">Tips</h3>
         <ul className="text-xs text-board-muted space-y-1">
-          <li>• <strong>Click</strong> a pedal to view its details card</li>
+          <li>• <strong>Click</strong> a pedal to select it and view details</li>
           <li>• <strong>Drag</strong> pedals to reposition them on the board</li>
-          <li>• <strong>Rotate</strong> selected pedals using the buttons above</li>
-          <li>• <strong>Colored lines</strong> show signal flow from input to output</li>
-          <li>• Pedals are shown at their actual relative sizes</li>
+          <li>• <strong>Rotate</strong> – click a pedal first, then use rotate buttons above</li>
+          <li>• <strong>Colored lines</strong> show signal flow from guitar (right) to amp (left)</li>
         </ul>
       </div>
     </div>
