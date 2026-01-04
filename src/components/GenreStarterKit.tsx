@@ -2084,9 +2084,10 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                   // so index 0 will now be the first genre pedal
                   setCurrentStepIndex(0);
                 }}
-                className="px-2.5 py-1 text-xs rounded-lg bg-board-elevated text-board-muted hover:text-white hover:bg-board-accent/20 transition-all border border-board-border hover:border-board-accent/30"
+                className="px-3 py-1.5 text-xs font-medium rounded-lg bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 transition-all border border-amber-500/50 hover:border-amber-500 flex items-center gap-2 animate-pulse"
               >
-                Skip tuner
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                Skip tuner (I use a clip-on)
               </button>
             )}
             {/* Skip Second Drive option - only show on Gain 2 step */}
@@ -2097,9 +2098,10 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                   // Move to next step - the steps will regenerate without second gain
                   setCurrentStepIndex(currentStepIndex);
                 }}
-                className="px-2.5 py-1 text-xs rounded-lg bg-board-elevated text-board-muted hover:text-white hover:bg-board-accent/20 transition-all border border-board-border hover:border-board-accent/30"
+                className="px-3 py-1.5 text-xs font-medium rounded-lg bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 transition-all border border-amber-500/50 hover:border-amber-500 flex items-center gap-2 animate-pulse"
               >
-                Skip second drive
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                Skip second drive (one is enough)
               </button>
             )}
           </div>
