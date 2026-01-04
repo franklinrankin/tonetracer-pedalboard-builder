@@ -2087,7 +2087,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                 className="px-3 py-1.5 text-xs font-medium rounded-lg bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 transition-all border border-amber-500/50 hover:border-amber-500 flex items-center gap-2 animate-pulse"
               >
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                Skip tuner (I use a clip-on)
+                Skip tuner
               </button>
             )}
             {/* Skip Second Drive option - only show on Gain 2 step */}
@@ -2101,7 +2101,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                 className="px-3 py-1.5 text-xs font-medium rounded-lg bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 transition-all border border-amber-500/50 hover:border-amber-500 flex items-center gap-2 animate-pulse"
               >
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                Skip second drive (one is enough)
+                Skip second drive
               </button>
             )}
           </div>
