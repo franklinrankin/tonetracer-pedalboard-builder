@@ -1,38 +1,13 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { BoardProvider, useBoard } from './context/BoardContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
 import { GenrePage, ConstraintsPage, BuildPage, VisualizePage, ReviewPage } from './pages';
-import html2canvas from 'html2canvas';
 
 function AppContent() {
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
   const { dispatch } = useBoard();
   
-  // Capture screenshot when leaving visualize for review
-  const captureScreenshot = useCallback(async () => {
-    const element = document.getElementById('board-visualizer-capture');
-    if (element) {
-      try {
-        const canvas = await html2canvas(element, {
-          backgroundColor: '#1a1a1a',
-          scale: 2,
-          logging: false,
-          useCORS: true,
-          allowTaint: true,
-        });
-        const dataUrl = canvas.toDataURL('image/png', 1.0);
-        dispatch({ type: 'SET_VISUALIZER_SCREENSHOT', screenshot: dataUrl });
-      } catch (error) {
-        console.error('Screenshot failed:', error);
-      }
-    }
-  }, [dispatch]);
-  
-  const handleStepChange = async (step: WizardStep) => {
-    // Capture screenshot when going from visualize to review
-    if (currentStep === 'visualize' && step === 'review') {
-      await captureScreenshot();
-    }
+  const handleStepChange = (step: WizardStep) => {
     setCurrentStep(step);
     // Scroll to top when changing steps
     window.scrollTo({ top: 0, behavior: 'smooth' });

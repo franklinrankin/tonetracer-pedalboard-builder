@@ -24,17 +24,18 @@ export function PedalCatalog() {
     [board.slots]
   );
   
-  // Compute filtered and sorted pedals
-  const filteredPedals = (() => {
+  // Compute filtered and sorted pedals with proper memoization
+  const filteredPedals = useMemo(() => {
     let result = [...allPedals];
     
     // Search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
       result = result.filter(p => 
         p.brand.toLowerCase().includes(query) ||
         p.model.toLowerCase().includes(query) ||
-        p.subtype?.toLowerCase().includes(query)
+        (p.subtype && p.subtype.toLowerCase().includes(query)) ||
+        p.category.toLowerCase().includes(query)
       );
     }
     
@@ -44,26 +45,35 @@ export function PedalCatalog() {
     }
     
     // Sort based on selected option
-    if (sortBy === 'name-asc') {
-      result.sort((a, b) => a.model.localeCompare(b.model));
-    } else if (sortBy === 'name-desc') {
-      result.sort((a, b) => b.model.localeCompare(a.model));
-    } else if (sortBy === 'price-asc') {
-      result.sort((a, b) => a.reverbPrice - b.reverbPrice);
-    } else if (sortBy === 'price-desc') {
-      result.sort((a, b) => b.reverbPrice - a.reverbPrice);
-    } else if (sortBy === 'rating-asc') {
-      result.sort((a, b) => a.categoryRating - b.categoryRating);
-    } else if (sortBy === 'rating-desc') {
-      result.sort((a, b) => b.categoryRating - a.categoryRating);
-    } else if (sortBy === 'size-asc') {
-      result.sort((a, b) => (a.widthMm * a.depthMm) - (b.widthMm * b.depthMm));
-    } else if (sortBy === 'size-desc') {
-      result.sort((a, b) => (b.widthMm * b.depthMm) - (a.widthMm * a.depthMm));
+    switch (sortBy) {
+      case 'name-asc':
+        result.sort((a, b) => a.model.localeCompare(b.model));
+        break;
+      case 'name-desc':
+        result.sort((a, b) => b.model.localeCompare(a.model));
+        break;
+      case 'price-asc':
+        result.sort((a, b) => a.reverbPrice - b.reverbPrice);
+        break;
+      case 'price-desc':
+        result.sort((a, b) => b.reverbPrice - a.reverbPrice);
+        break;
+      case 'rating-asc':
+        result.sort((a, b) => a.categoryRating - b.categoryRating);
+        break;
+      case 'rating-desc':
+        result.sort((a, b) => b.categoryRating - a.categoryRating);
+        break;
+      case 'size-asc':
+        result.sort((a, b) => (a.widthMm * a.depthMm) - (b.widthMm * b.depthMm));
+        break;
+      case 'size-desc':
+        result.sort((a, b) => (b.widthMm * b.depthMm) - (a.widthMm * a.depthMm));
+        break;
     }
     
     return result;
-  })();
+  }, [allPedals, searchQuery, selectedCategory, sortBy]);
   
   return (
     <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, getTopGenreMatches, GenreMatch } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
@@ -282,7 +282,7 @@ function PowerSupplyRecommendations({
 
 export function ReviewPage() {
   const { state } = useBoard();
-  const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres, visualizerScreenshot } = state;
+  const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres } = state;
   const [showRecommendations, setShowRecommendations] = useState(false);
   
   const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
@@ -522,29 +522,6 @@ export function ReviewPage() {
             </div>
           </div>
         </div>
-        
-        {/* Board Layout Screenshot */}
-        {visualizerScreenshot && (
-          <div className="mb-8 bg-board-surface border border-board-border rounded-xl overflow-hidden">
-            <div className="p-3 border-b border-board-border flex items-center gap-2">
-              <LayoutGrid className="w-4 h-4 text-purple-400" />
-              <h3 className="text-sm font-semibold text-white">Board Layout</h3>
-              <span className="text-xs text-board-muted ml-auto">
-                {board.constraints.maxWidthMm && board.constraints.maxDepthMm
-                  ? `${(board.constraints.maxWidthMm / 25.4).toFixed(1)}" × ${(board.constraints.maxDepthMm / 25.4).toFixed(1)}"`
-                  : 'Custom size'}
-              </span>
-            </div>
-            <div className="p-4 flex justify-center bg-[#151515]">
-              <img 
-                src={visualizerScreenshot} 
-                alt="Board Layout Preview" 
-                className="max-w-full h-auto rounded-lg shadow-xl"
-                style={{ maxHeight: '500px' }}
-              />
-            </div>
-          </div>
-        )}
         
         {/* Section Scores & Tags - Full width section */}
         {sectionScores.length > 0 && (

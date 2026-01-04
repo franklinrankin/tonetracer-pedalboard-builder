@@ -11,11 +11,6 @@ export function VisualizePage({ onContinue, onBack }: VisualizePageProps) {
   const { state } = useBoard();
   const { board, totalCost } = state;
 
-  const handleReview = async () => {
-    // Screenshot is now captured in App.tsx when step changes
-    onContinue();
-  };
-
   return (
     <div className="min-h-full">
       {/* Header */}
