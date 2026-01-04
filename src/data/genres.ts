@@ -33,7 +33,7 @@ export const GENRES: GenreProfile[] = [
     id: 'blues',
     name: 'Blues',
     description: 'Warm, expressive tones with smooth overdrive and vocal-like sustain',
-    icon: '🎸',
+    icon: '',
     color: '#3b82f6',
     artists: ['Stevie Ray Vaughan', 'B.B. King', 'John Mayer', 'Gary Clark Jr.'],
     // Core blues: drive for tone, dynamics for feel, delay/reverb for space
@@ -60,7 +60,7 @@ export const GENRES: GenreProfile[] = [
     id: 'rock',
     name: 'Classic Rock',
     description: 'Punchy overdrive and distortion with classic tone shaping',
-    icon: '🤘',
+    icon: '',
     color: '#ef4444',
     artists: ['Led Zeppelin', 'AC/DC', 'The Rolling Stones', 'Foo Fighters'],
     // Core rock: drive is king, modulation for color, delay/reverb for depth
@@ -86,7 +86,7 @@ export const GENRES: GenreProfile[] = [
     id: 'metal',
     name: 'Metal',
     description: 'High-gain aggression with tight low end and cutting mids',
-    icon: '🔥',
+    icon: '',
     color: '#1f2937',
     artists: ['Metallica', 'Slipknot', 'Gojira', 'Meshuggah'],
     // Core metal: high gain distortion, noise gate, EQ for tight sound
@@ -111,7 +111,7 @@ export const GENRES: GenreProfile[] = [
     id: 'indie',
     name: 'Alternative',
     description: 'Textured tones with creative modulation and spatial effects',
-    icon: '🌙',
+    icon: '',
     color: '#8b5cf6',
     artists: ['Radiohead', 'Arctic Monkeys', 'Tame Impala', 'The Strokes'],
     // Core alt: drive for grit, mod for texture, delay/reverb for atmosphere
@@ -137,7 +137,7 @@ export const GENRES: GenreProfile[] = [
     id: 'shoegaze',
     name: 'Shoegaze',
     description: 'Walls of sound with heavy reverb, modulation, and dreamy textures',
-    icon: '🌊',
+    icon: '',
     color: '#ec4899',
     artists: ['My Bloody Valentine', 'Slowdive', 'Ride', 'Nothing'],
     // Core shoegaze: fuzz, heavy mod, massive reverb, delay for wash
@@ -164,7 +164,7 @@ export const GENRES: GenreProfile[] = [
     id: 'ambient',
     name: 'Ambient / Post-Rock',
     description: 'Expansive soundscapes with pristine delays and ethereal reverbs',
-    icon: '✨',
+    icon: '',
     color: '#06b6d4',
     artists: ['Explosions in the Sky', 'Sigur Rós', 'Mogwai', 'Hammock'],
     // Core ambient: reverb is KING, delay for texture, mod for movement, light gain
@@ -192,7 +192,7 @@ export const GENRES: GenreProfile[] = [
     id: 'country',
     name: 'Country',
     description: 'Clean, compressed tones with twangy character and subtle effects',
-    icon: '🤠',
+    icon: '',
     color: '#f59e0b',
     artists: ['Brad Paisley', 'Keith Urban', 'Brent Mason', 'Vince Gill'],
     // Core country: compressor is essential, light drive, delay for slapback, reverb
@@ -219,7 +219,7 @@ export const GENRES: GenreProfile[] = [
     id: 'jazz',
     name: 'Jazz',
     description: 'Clean, warm tones with minimal effects and maximum expression',
-    icon: '🎷',
+    icon: '',
     color: '#6366f1',
     artists: ['Pat Metheny', 'John Scofield', 'Julian Lage', 'Kurt Rosenwinkel'],
     // Core jazz: dynamics for touch, reverb for room, EQ for tone, subtle mod
@@ -247,7 +247,7 @@ export const GENRES: GenreProfile[] = [
     id: 'funk',
     name: 'Funk / R&B',
     description: 'Dynamic, expressive tones with envelope filters and funky wahs',
-    icon: '🕺',
+    icon: '',
     color: '#10b981',
     artists: ['Nile Rodgers', 'Prince', 'Cory Wong', 'John Mayer'],
     // Core funk: compressor for snap, wah/envelope for quack, phaser, light drive
@@ -273,7 +273,7 @@ export const GENRES: GenreProfile[] = [
     id: 'prog',
     name: 'Progressive',
     description: 'Versatile rig for complex compositions with diverse tonal palette',
-    icon: '🎹',
+    icon: '',
     color: '#7c3aed',
     artists: ['Dream Theater', 'Tool', 'Porcupine Tree', 'Animals as Leaders'],
     // Core prog: versatile gain, modulation, delay, pitch effects
@@ -299,7 +299,7 @@ export const GENRES: GenreProfile[] = [
     id: 'worship',
     name: 'Worship / CCM',
     description: 'Lush ambient tones with shimmer, swells, and textured delays',
-    icon: '🙏',
+    icon: '',
     color: '#0ea5e9',
     artists: ['Lincoln Brewster', 'The War on Drugs', 'Hillsong', 'Bethel'],
     // Core worship: reverb for wash, delay for texture, mod for shimmer, drive
@@ -326,7 +326,7 @@ export const GENRES: GenreProfile[] = [
     id: 'experimental',
     name: 'Experimental / Noise',
     description: 'Unconventional sounds with synthesis, glitch, and sonic exploration',
-    icon: '🔮',
+    icon: '',
     color: '#f43f5e',
     artists: ['Sonic Youth', 'Nine Inch Nails', 'St. Vincent', 'Battles'],
     // Core experimental: fuzz, pitch shifter, filter, wild modulation
@@ -353,7 +353,7 @@ export const GENRES: GenreProfile[] = [
     id: 'pop',
     name: 'Pop',
     description: 'Polished, radio-ready tones with clean clarity and subtle enhancement',
-    icon: '🎤',
+    icon: '',
     color: '#f472b6',
     artists: ['John Mayer', 'Ed Sheeran', 'Taylor Swift', 'Harry Styles'],
     // Core pop: compressor for polish, light drive, subtle mod, reverb for space
@@ -380,7 +380,7 @@ export const GENRES: GenreProfile[] = [
     id: 'lofi',
     name: 'Lo-Fi',
     description: 'Warm, degraded tones with tape character and vintage imperfections',
-    icon: '📼',
+    icon: '',
     color: '#a78bfa',
     artists: ['Mac DeMarco', 'Clairo', 'Boy Pablo', 'Men I Trust'],
     // Core lo-fi: vibrato/chorus for wobble, tape delay, warm reverb, light drive
@@ -407,7 +407,7 @@ export const GENRES: GenreProfile[] = [
     id: 'singer-songwriter',
     name: 'Singer-Songwriter',
     description: 'Intimate, acoustic-friendly tones that support vocals without overpowering',
-    icon: '🎵',
+    icon: '',
     color: '#fbbf24',
     artists: ['James Taylor', 'Joni Mitchell', 'Iron & Wine', 'Phoebe Bridgers'],
     // Core singer-songwriter: compression, reverb, subtle delay, light modulation
@@ -433,7 +433,7 @@ export const GENRES: GenreProfile[] = [
     id: 'indie-rock',
     name: 'Indie Rock',
     description: 'Raw, character-driven tones with creative effects and multiple gain stages',
-    icon: '🎸',
+    icon: '',
     color: '#fb923c',
     artists: ['The National', 'Interpol', 'Spoon', 'Vampire Weekend'],
     // Core indie rock: drive for grit, modulation for character, delay/reverb for space

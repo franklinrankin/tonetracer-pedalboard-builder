@@ -123,7 +123,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs">🔥</span>
+                    <span className="text-xs font-bold text-orange-400">G</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Gain</div>
@@ -132,7 +132,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs">🌊</span>
+                    <span className="text-xs font-bold text-purple-400">M</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Modulation</div>
@@ -141,7 +141,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs">✨</span>
+                    <span className="text-xs font-bold text-cyan-400">R</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Ambience</div>
@@ -150,7 +150,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs">🎛️</span>
+                    <span className="text-xs font-bold text-zinc-400">C</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Complexity</div>

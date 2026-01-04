@@ -1681,7 +1681,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
           </div>
           
           <h2 className="text-xl font-bold text-white mb-2">
-            Essentials Complete! 🎸
+            Essentials Complete!
           </h2>
           <p className="text-sm text-zinc-400 mb-4">
             Your {genre.name} board has all the core pedals
@@ -1873,7 +1873,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ backgroundColor: `${genre.color}20` }}>
               <Check className="w-8 h-8" style={{ color: genre.color }} />
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">Essentials Complete! 🎸</h2>
+            <h2 className="text-xl font-bold text-white mb-2">Essentials Complete!</h2>
             <p className="text-sm text-zinc-400 mb-4">{addedCount} pedals • ${totalCost} total</p>
             <div className="space-y-3">
               <button
@@ -2233,7 +2233,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
             
             // Show tier headers only when using default sort and showing all prices
             const showTierHeader = usesTiers && (index === 0 || index === 6);
-            const tierHeaderText = index === 0 ? '👍 Highly Recommended' : index === 6 ? '✨ Could Be Cool' : null;
+            const tierHeaderText = index === 0 ? 'Highly Recommended' : index === 6 ? 'Could Be Cool' : null;
             
             // When filtering by price range, show "Best in Range" for top pick
             const showPriceRangeBadge = priceRange !== 'all' && index === 0;
