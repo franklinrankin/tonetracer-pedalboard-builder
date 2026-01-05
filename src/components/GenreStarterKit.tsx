@@ -2447,7 +2447,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                   >
                     {/* Pedal Image Placeholder - Smaller */}
                     <div className="relative aspect-square mb-1 rounded bg-board-dark/50 flex items-center justify-center overflow-hidden">
-                      <PedalImage category={pedal.category} size="sm" />
+                      <PedalImage pedalId={pedal.id} category={pedal.category} size="sm" />
                       {isOnBoard && (
                         <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
                           <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">

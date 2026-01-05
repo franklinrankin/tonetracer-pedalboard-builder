@@ -34,7 +34,7 @@ export function PedalCard({ pedal, isOnBoard = false, compact = false }: PedalCa
             : 'bg-board-surface border-board-border hover:border-board-accent/30'
         }`}
       >
-        <PedalImage category={pedal.category} size="sm" />
+        <PedalImage pedalId={pedal.id} category={pedal.category} size="sm" />
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
@@ -79,6 +79,7 @@ export function PedalCard({ pedal, isOnBoard = false, compact = false }: PedalCa
         {/* Header */}
         <div className="flex items-start gap-3 mb-3">
           <PedalImage 
+            pedalId={pedal.id}
             category={pedal.category} 
             size="lg" 
             className={isDisabled ? 'opacity-50' : ''}
