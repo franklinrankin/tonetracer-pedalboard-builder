@@ -42,8 +42,8 @@ export const GENRES: GenreProfile[] = [
     artists: ['Stevie Ray Vaughan', 'B.B. King', 'John Mayer', 'Gary Clark Jr.'],
     // Core blues: drive for tone, dynamics for feel, delay/reverb for space
     essentialCategories: ['gain', 'dynamics', 'delay', 'reverb'],
-    // Extras: second gain (boost), EQ for tone shaping
-    extraCategories: ['gain', 'eq'],
+    // Extras: second gain (boost), wah, EQ for tone shaping
+    extraCategories: ['gain', 'filter', 'eq'],
     sectionTargets: {
       gain: { min: 3, ideal: 8, max: 12 },
       dynamics: { min: 4, ideal: 7, max: 10 },
@@ -70,8 +70,8 @@ export const GENRES: GenreProfile[] = [
     artists: ['Led Zeppelin', 'AC/DC', 'The Rolling Stones', 'Foo Fighters'],
     // Core rock: drive is king, modulation for color, delay/reverb for depth
     essentialCategories: ['gain', 'modulation', 'delay', 'reverb'],
-    // Extras: second gain for stacking/boost
-    extraCategories: ['gain'],
+    // Extras: wah, EQ
+    extraCategories: ['filter', 'eq'],
     sectionTargets: {
       gain: { min: 8, ideal: 15, max: 20 },
       modulation: { min: 2, ideal: 5, max: 8 },
@@ -95,10 +95,10 @@ export const GENRES: GenreProfile[] = [
     iconImage: '/images/genres/metal.jpg',
     color: '#1f2937',
     artists: ['Metallica', 'Slipknot', 'Gojira', 'Meshuggah'],
-    // Core metal: high gain distortion, noise gate, EQ for tight sound
-    essentialCategories: ['gain', 'dynamics', 'eq'],
-    // Extras: boost for leads, delay for atmosphere
-    extraCategories: ['gain', 'delay'],
+    // Core metal: high gain distortion, noise gate, compressor, EQ for tight sound
+    essentialCategories: ['gain', 'dynamics', 'dynamics', 'eq'],
+    // Extras: second gain (boost), delay, octave
+    extraCategories: ['gain', 'delay', 'pitch'],
     sectionTargets: {
       gain: { min: 18, ideal: 25, max: 30 },
       dynamics: { min: 5, ideal: 8, max: 12 },
@@ -121,8 +121,8 @@ export const GENRES: GenreProfile[] = [
     iconImage: '/images/genres/alternative.jpg',
     color: '#8b5cf6',
     artists: ['Radiohead', 'Arctic Monkeys', 'Tame Impala', 'The Strokes'],
-    // Core alt: drive for grit, mod for texture, delay/reverb for atmosphere
-    essentialCategories: ['gain', 'modulation', 'delay', 'reverb'],
+    // Core alt: drive for grit, mod for texture, delay/reverb for atmosphere, octave
+    essentialCategories: ['gain', 'modulation', 'delay', 'reverb', 'pitch'],
     // Extras: fuzz or second drive
     extraCategories: ['gain'],
     sectionTargets: {
@@ -130,11 +130,12 @@ export const GENRES: GenreProfile[] = [
       modulation: { min: 5, ideal: 10, max: 15 },
       delay: { min: 5, ideal: 9, max: 13 },
       reverb: { min: 5, ideal: 9, max: 13 },
+      pitch: { min: 3, ideal: 6, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Fuzz', 'Chorus', 'Tremolo', 'Phaser', 'Tape', 'Digital', 'Looper'],
+    preferredSubtypes: ['Overdrive', 'Fuzz', 'Chorus', 'Tremolo', 'Phaser', 'Tape', 'Digital', 'Looper', 'Octave'],
     keywords: ['textured', 'creative', 'indie', 'alternative', 'dreamy'],
     characteristics: {
-      gainLevel: 'low',
+      gainLevel: 'medium',
       modulationAmount: 'moderate',
       ambience: 'lush',
       complexity: 'standard',
@@ -178,8 +179,8 @@ export const GENRES: GenreProfile[] = [
     artists: ['Explosions in the Sky', 'Sigur Rós', 'Mogwai', 'Hammock'],
     // Core ambient: reverb is KING, delay for texture, mod for movement, light gain
     essentialCategories: ['reverb', 'delay', 'modulation', 'gain'],
-    // Extras: volume for swells, pitch for shimmer
-    extraCategories: ['volume', 'pitch'],
+    // Extras: second delay, volume for swells, pitch for shimmer
+    extraCategories: ['delay', 'volume', 'pitch'],
     sectionTargets: {
       gain: { min: 2, ideal: 4, max: 8 },
       modulation: { min: 6, ideal: 10, max: 15 },
@@ -207,8 +208,8 @@ export const GENRES: GenreProfile[] = [
     artists: ['Brad Paisley', 'Keith Urban', 'Brent Mason', 'Vince Gill'],
     // Core country: compressor is essential, light drive, delay for slapback, reverb
     essentialCategories: ['dynamics', 'gain', 'delay', 'reverb'],
-    // Extras: volume pedal for swells
-    extraCategories: ['volume'],
+    // Extras: fuzz (for some grit), volume pedal for swells
+    extraCategories: ['gain', 'volume'],
     sectionTargets: {
       gain: { min: 2, ideal: 5, max: 8 },
       dynamics: { min: 6, ideal: 10, max: 15 },
@@ -216,10 +217,10 @@ export const GENRES: GenreProfile[] = [
       reverb: { min: 2, ideal: 5, max: 8 },
       volume: { min: 5, ideal: 8, max: 10 },
     },
-    preferredSubtypes: ['Compressor', 'Boost', 'Overdrive', 'Analog', 'Digital', 'Spring', 'Volume', 'Expression'],
+    preferredSubtypes: ['Compressor', 'Boost', 'Overdrive', 'Fuzz', 'Analog', 'Digital', 'Spring', 'Volume', 'Expression'],
     keywords: ['twang', 'chicken', 'clean', 'compressed', 'country'],
     characteristics: {
-      gainLevel: 'clean',
+      gainLevel: 'low',
       modulationAmount: 'subtle',
       ambience: 'subtle',
       complexity: 'minimal',
@@ -264,18 +265,20 @@ export const GENRES: GenreProfile[] = [
     artists: ['Nile Rodgers', 'Prince', 'Cory Wong', 'John Mayer'],
     // Core funk: compressor for snap, wah/envelope for quack, phaser, light drive
     essentialCategories: ['dynamics', 'filter', 'modulation', 'gain'],
-    // Extras: none typically needed
-    extraCategories: [],
+    // Extras: reverb, delay
+    extraCategories: ['reverb', 'delay'],
     sectionTargets: {
       dynamics: { min: 5, ideal: 9, max: 15 },
       filter: { min: 5, ideal: 8, max: 10 },
       modulation: { min: 3, ideal: 6, max: 10 },
       gain: { min: 2, ideal: 6, max: 10 },
+      reverb: { min: 2, ideal: 4, max: 7 },
+      delay: { min: 2, ideal: 4, max: 7 },
     },
     preferredSubtypes: ['Compressor', 'Wah', 'Envelope', 'Auto-Wah', 'Phaser', 'Chorus', 'Overdrive', 'Boost'],
     keywords: ['funky', 'quack', 'dynamic', 'groove', 'envelope'],
     characteristics: {
-      gainLevel: 'clean',
+      gainLevel: 'low',
       modulationAmount: 'moderate',
       ambience: 'dry',
       complexity: 'standard',
@@ -290,14 +293,15 @@ export const GENRES: GenreProfile[] = [
     iconImagePosition: '50% 25%', // Move crop up
     color: '#7c3aed',
     artists: ['Dream Theater', 'Tool', 'Porcupine Tree', 'Animals as Leaders'],
-    // Core prog: versatile gain, modulation, delay, pitch effects
-    essentialCategories: ['gain', 'modulation', 'delay', 'pitch'],
-    // Extras: additional gain, more modulation
-    extraCategories: ['gain', 'modulation'],
+    // Core prog: versatile gain, modulation, delay, reverb
+    essentialCategories: ['gain', 'modulation', 'delay', 'reverb'],
+    // Extras: second gain, pitch effects
+    extraCategories: ['gain', 'pitch'],
     sectionTargets: {
       gain: { min: 10, ideal: 18, max: 25 },
       modulation: { min: 6, ideal: 12, max: 15 },
       delay: { min: 8, ideal: 12, max: 15 },
+      reverb: { min: 6, ideal: 10, max: 14 },
       pitch: { min: 5, ideal: 8, max: 10 },
     },
     preferredSubtypes: ['Overdrive', 'Distortion', 'Boost', 'Multi', 'Chorus', 'Phaser', 'Harmonizer', 'Shifter', 'Whammy', 'Looper'],
@@ -322,7 +326,7 @@ export const GENRES: GenreProfile[] = [
     // Extras: volume for swells
     extraCategories: ['volume'],
     sectionTargets: {
-      gain: { min: 4, ideal: 10, max: 15 },
+      gain: { min: 4, ideal: 8, max: 15 },
       modulation: { min: 5, ideal: 9, max: 13 },
       delay: { min: 8, ideal: 12, max: 15 },
       reverb: { min: 10, ideal: 14, max: 15 },
@@ -405,8 +409,8 @@ export const GENRES: GenreProfile[] = [
     artists: ['Mac DeMarco', 'Clairo', 'Boy Pablo', 'Men I Trust'],
     // Core lo-fi: vibrato/chorus for wobble, tape delay, warm reverb, light drive
     essentialCategories: ['modulation', 'delay', 'reverb', 'gain'],
-    // Extras: compression
-    extraCategories: ['dynamics'],
+    // Extras: compression, more modulation
+    extraCategories: ['dynamics', 'modulation'],
     sectionTargets: {
       gain: { min: 2, ideal: 5, max: 9 },
       modulation: { min: 5, ideal: 9, max: 13 },
@@ -417,7 +421,7 @@ export const GENRES: GenreProfile[] = [
     preferredSubtypes: ['Overdrive', 'Boost', 'Preamp', 'Vibrato', 'Chorus', 'Tape', 'Analog', 'Lo-Fi', 'Compressor', 'Spring', 'Room'],
     keywords: ['lofi', 'tape', 'warm', 'vintage', 'wobbly', 'degraded', 'cassette'],
     characteristics: {
-      gainLevel: 'clean',
+      gainLevel: 'low',
       modulationAmount: 'moderate',
       ambience: 'moderate',
       complexity: 'standard',
@@ -434,8 +438,8 @@ export const GENRES: GenreProfile[] = [
     artists: ['James Taylor', 'Joni Mitchell', 'Iron & Wine', 'Phoebe Bridgers'],
     // Core singer-songwriter: compression, reverb, subtle delay, light modulation
     essentialCategories: ['dynamics', 'reverb', 'delay', 'modulation'],
-    // Extras: none typically needed
-    extraCategories: [],
+    // Extras: DI for acoustic
+    extraCategories: ['utility'],
     sectionTargets: {
       dynamics: { min: 4, ideal: 7, max: 10 },
       reverb: { min: 3, ideal: 6, max: 9 },
@@ -461,8 +465,8 @@ export const GENRES: GenreProfile[] = [
     artists: ['The National', 'Interpol', 'Spoon', 'Vampire Weekend'],
     // Core indie rock: drive for grit, modulation for character, delay/reverb for space
     essentialCategories: ['gain', 'modulation', 'delay', 'reverb'],
-    // Extras: second gain for stacking
-    extraCategories: ['gain'],
+    // Extras: compressor, second gain for stacking
+    extraCategories: ['dynamics', 'gain'],
     sectionTargets: {
       gain: { min: 6, ideal: 12, max: 18 },
       modulation: { min: 4, ideal: 8, max: 12 },

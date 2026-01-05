@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Boardsie - Genre Pedal Priorities</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    h1 {
+      text-align: center;
+      color: #1a1a2e;
+      border-bottom: 3px solid #ff6b35;
+      padding-bottom: 10px;
+      font-size: 24px;
+    }
+    .genre {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      page-break-inside: avoid;
+    }
+    .genre-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid;
+      padding-bottom: 8px;
+    }
+    .genre-icon {
+      font-size: 24px;
+    }
+    .genre-name {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .genre-desc {
+      color: #666;
+      font-style: italic;
+      margin: 0;
+      font-size: 10px;
+    }
+    .artists {
+      color: #888;
+      font-size: 9px;
+      margin-top: 3px;
+    }
+    .section {
+      margin-top: 10px;
+    }
+    .section-title {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 5px;
+      font-size: 11px;
+    }
+    .priority-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .priority-list li {
+      padding: 4px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .priority-list li:last-child {
+      border-bottom: none;
+    }
+    .priority-num {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      background: #ff6b35;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 18px;
+      font-weight: bold;
+      margin-right: 8px;
+      font-size: 10px;
+    }
+    .category-name {
+      font-weight: bold;
+    }
+    .target {
+      color: #666;
+      font-size: 10px;
+    }
+    .subtypes {
+      background: #f8f8f8;
+      padding: 6px 10px;
+      border-radius: 4px;
+      margin-top: 8px;
+      font-size: 10px;
+    }
+    .subtypes-label {
+      font-weight: bold;
+      color: #555;
+    }
+    .characteristics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 9px;
+    }
+    .char-item {
+      background: #f0f0f0;
+      padding: 4px 6px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .char-label {
+      color: #888;
+      display: block;
+    }
+    .char-value {
+      font-weight: bold;
+      color: #333;
+      text-transform: capitalize;
+    }
+    .extras {
+      color: #888;
+      font-size: 10px;
+      margin-top: 5px;
+    }
+    @media print {
+      body { background: white; }
+      .genre { box-shadow: none; border: 1px solid #ddd; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎸 Boardsie - Genre Pedal Priorities</h1>
+  
+  <!-- BLUES -->
+  <div class="genre" style="border-color: #3b82f6;">
+    <div class="genre-header" style="border-color: #3b82f6;">
+      <span class="genre-icon">🎸</span>
+      <div>
+        <h2 class="genre-name" style="color: #3b82f6;">Blues</h2>
+        <p class="genre-desc">Warm, expressive tones with smooth overdrive and vocal-like sustain</p>
+        <p class="artists">Artists: Stevie Ray Vaughan, B.B. King, John Mayer, Gary Clark Jr.</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Gain (Overdrive)</span> — <span class="target">Target: 8/10 • The heart of blues tone</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Dynamics (Compressor)</span> — <span class="target">Target: 7/10 • Touch sensitivity and sustain</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Delay</span> — <span class="target">Target: 5/10 • Subtle slapback</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Reverb</span> — <span class="target">Target: 5/10 • Room ambience</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> 2nd Gain (boost) → Wah → EQ</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Overdrive, Boost, Compressor, Wah, Analog Delay, Spring Reverb, Parametric EQ
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Low</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Subtle</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Subtle</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Minimal</span></div>
+    </div>
+  </div>
+
+  <!-- CLASSIC ROCK -->
+  <div class="genre" style="border-color: #ef4444;">
+    <div class="genre-header" style="border-color: #ef4444;">
+      <span class="genre-icon">🤘</span>
+      <div>
+        <h2 class="genre-name" style="color: #ef4444;">Classic Rock</h2>
+        <p class="genre-desc">Punchy overdrive and distortion with classic tone shaping</p>
+        <p class="artists">Artists: Led Zeppelin, AC/DC, The Rolling Stones, Foo Fighters</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Gain (Overdrive/Distortion)</span> — <span class="target">Target: 15/10 • The foundation of rock</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Modulation (Phaser/Chorus)</span> — <span class="target">Target: 5/10 • Classic swirl and color</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Delay</span> — <span class="target">Target: 5/10 • Depth and dimension</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Reverb</span> — <span class="target">Target: 5/10 • Room/hall ambience</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Wah → EQ</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Overdrive, Distortion, Phaser, Chorus, Wah, Analog Delay, Tape Delay
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Medium</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Standard</span></div>
+    </div>
+  </div>
+
+  <!-- METAL -->
+  <div class="genre" style="border-color: #1f2937;">
+    <div class="genre-header" style="border-color: #1f2937;">
+      <span class="genre-icon">🔥</span>
+      <div>
+        <h2 class="genre-name" style="color: #1f2937;">Metal</h2>
+        <p class="genre-desc">High-gain aggression with tight low end and cutting mids</p>
+        <p class="artists">Artists: Metallica, Slipknot, Gojira, Meshuggah</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Gain (High-Gain Distortion)</span> — <span class="target">Target: 25/10 • Maximum aggression</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Dynamics (Noise Gate)</span> — <span class="target">Target: 8/10 • Tight, noise-free sound</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Dynamics (Compressor)</span> — <span class="target">Target: 8/10 • Consistent attack</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">EQ</span> — <span class="target">Target: 7/10 • Sculpt the perfect metal tone</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> 2nd Gain (boost) → Delay → Octave</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Distortion, Boost, Noise Gate, Compressor, Graphic EQ, Parametric EQ, Octave
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Extreme</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">None</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Dry</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Standard</span></div>
+    </div>
+  </div>
+
+  <!-- ALTERNATIVE -->
+  <div class="genre" style="border-color: #8b5cf6;">
+    <div class="genre-header" style="border-color: #8b5cf6;">
+      <span class="genre-icon">🌙</span>
+      <div>
+        <h2 class="genre-name" style="color: #8b5cf6;">Alternative</h2>
+        <p class="genre-desc">Textured tones with creative modulation and spatial effects</p>
+        <p class="artists">Artists: Radiohead, Arctic Monkeys, Tame Impala, The Strokes</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Gain (Overdrive/Fuzz)</span> — <span class="target">Target: 10/10 • Grit and texture</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Modulation</span> — <span class="target">Target: 10/10 • Creative textures</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Delay</span> — <span class="target">Target: 9/10 • Atmospheric depth</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Reverb</span> — <span class="target">Target: 9/10 • Lush ambience</span></li>
+        <li><span class="priority-num">5</span><span class="category-name">Pitch (Octave)</span> — <span class="target">Target: 6/10 • Low-end depth</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> 2nd Gain (fuzz)</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Overdrive, Fuzz, Chorus, Tremolo, Phaser, Tape Delay, Digital Delay, Looper, Octave
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Medium</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Lush</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Standard</span></div>
+    </div>
+  </div>
+
+  <!-- SHOEGAZE -->
+  <div class="genre" style="border-color: #ec4899;">
+    <div class="genre-header" style="border-color: #ec4899;">
+      <span class="genre-icon">🌊</span>
+      <div>
+        <h2 class="genre-name" style="color: #ec4899;">Shoegaze</h2>
+        <p class="genre-desc">Walls of sound with heavy reverb, modulation, and dreamy textures</p>
+        <p class="artists">Artists: My Bloody Valentine, Slowdive, Ride, Nothing</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Gain (Fuzz/Distortion)</span> — <span class="target">Target: 16/10 • Wall of fuzz</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Modulation</span> — <span class="target">Target: 14/10 • Heavy chorus/flanger</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Reverb</span> — <span class="target">Target: 15/10 • Massive wash (most important!)</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Delay</span> — <span class="target">Target: 12/10 • Adds to the wash</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Pitch (shimmer/octave) → More modulation</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Fuzz, Distortion, Chorus, Flanger, Vibrato, Ambient Reverb, Multi Delay, Shimmer, Octave, Pitch Shifter
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Medium</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Heavy</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Ambient</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Complex</span></div>
+    </div>
+  </div>
+
+  <!-- AMBIENT / POST-ROCK -->
+  <div class="genre" style="border-color: #06b6d4;">
+    <div class="genre-header" style="border-color: #06b6d4;">
+      <span class="genre-icon">✨</span>
+      <div>
+        <h2 class="genre-name" style="color: #06b6d4;">Ambient / Post-Rock</h2>
+        <p class="genre-desc">Expansive soundscapes with pristine delays and ethereal reverbs</p>
+        <p class="artists">Artists: Explosions in the Sky, Sigur Rós, Mogwai, Hammock</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Reverb</span> — <span class="target">Target: 15/10 • THE most important pedal</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Delay</span> — <span class="target">Target: 14/10 • Textural layers</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Modulation</span> — <span class="target">Target: 10/10 • Movement and shimmer</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Gain (Light)</span> — <span class="target">Target: 4/10 • Just warmth, stay clean</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> 2nd Delay → Volume pedal (swells) → Pitch (shimmer)</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Boost, Overdrive, Tremolo, Chorus, Tape Delay, Multi Delay, Ambient Reverb, Shimmer, Octave, Volume, Looper
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Low</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Ambient</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Complex</span></div>
+    </div>
+  </div>
+
+  <!-- COUNTRY -->
+  <div class="genre" style="border-color: #f59e0b;">
+    <div class="genre-header" style="border-color: #f59e0b;">
+      <span class="genre-icon">🤠</span>
+      <div>
+        <h2 class="genre-name" style="color: #f59e0b;">Country</h2>
+        <p class="genre-desc">Clean, compressed tones with twangy character and subtle effects</p>
+        <p class="artists">Artists: Brad Paisley, Keith Urban, Brent Mason, Vince Gill</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Dynamics (Compressor)</span> — <span class="target">Target: 10/10 • Essential for chicken pickin'</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Gain (Light Overdrive)</span> — <span class="target">Target: 5/10 • Just a touch of warmth</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Delay</span> — <span class="target">Target: 6/10 • Slapback is king</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Reverb</span> — <span class="target">Target: 5/10 • Subtle room sound</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Fuzz (for some grit) → Volume pedal (swells)</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Compressor, Boost, Overdrive, Fuzz, Analog Delay, Digital Delay, Spring Reverb, Volume, Expression
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Low</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Subtle</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Subtle</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Minimal</span></div>
+    </div>
+  </div>
+
+  <!-- JAZZ -->
+  <div class="genre" style="border-color: #6366f1;">
+    <div class="genre-header" style="border-color: #6366f1;">
+      <span class="genre-icon">🎷</span>
+      <div>
+        <h2 class="genre-name" style="color: #6366f1;">Jazz</h2>
+        <p class="genre-desc">Clean, warm tones with minimal effects and maximum expression</p>
+        <p class="artists">Artists: Pat Metheny, John Scofield, Julian Lage, Kurt Rosenwinkel</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Dynamics (Compressor)</span> — <span class="target">Target: 6/10 • Touch and feel</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Reverb</span> — <span class="target">Target: 5/10 • Room ambience</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">EQ</span> — <span class="target">Target: 6/10 • Tone shaping</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Modulation (Subtle)</span> — <span class="target">Target: 4/10 • Light chorus/vibrato</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Light boost → Volume pedal</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Boost, Compressor, Chorus, Vibrato, Parametric EQ, Spring Reverb, Volume, Expression
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Clean</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Subtle</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Subtle</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Minimal</span></div>
+    </div>
+  </div>
+
+  <!-- FUNK / R&B -->
+  <div class="genre" style="border-color: #10b981;">
+    <div class="genre-header" style="border-color: #10b981;">
+      <span class="genre-icon">🕺</span>
+      <div>
+        <h2 class="genre-name" style="color: #10b981;">Funk / R&B</h2>
+        <p class="genre-desc">Dynamic, expressive tones with envelope filters and funky wahs</p>
+        <p class="artists">Artists: Nile Rodgers, Prince, Cory Wong, John Mayer</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Dynamics (Compressor)</span> — <span class="target">Target: 9/10 • Snap and pop</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Filter (Wah/Envelope)</span> — <span class="target">Target: 8/10 • The funky quack</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Modulation (Phaser)</span> — <span class="target">Target: 6/10 • Classic funk swirl</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Gain (Light)</span> — <span class="target">Target: 6/10 • Warmth, stay clean</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Reverb → Delay</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Compressor, Wah, Envelope Filter, Auto-Wah, Phaser, Chorus, Overdrive, Boost
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Low</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Dry</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Standard</span></div>
+    </div>
+  </div>
+
+  <!-- PROGRESSIVE -->
+  <div class="genre" style="border-color: #7c3aed;">
+    <div class="genre-header" style="border-color: #7c3aed;">
+      <span class="genre-icon">🎹</span>
+      <div>
+        <h2 class="genre-name" style="color: #7c3aed;">Progressive</h2>
+        <p class="genre-desc">Versatile rig for complex compositions with diverse tonal palette</p>
+        <p class="artists">Artists: Dream Theater, Tool, Porcupine Tree, Animals as Leaders</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Gain (Versatile)</span> — <span class="target">Target: 18/10 • From clean to high gain</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Modulation</span> — <span class="target">Target: 12/10 • Varied textures</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Delay</span> — <span class="target">Target: 12/10 • Complex rhythmic delays</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Reverb</span> — <span class="target">Target: 10/10 • Atmospheric depth</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> 2nd Gain → Pitch (harmonizer/whammy)</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Overdrive, Distortion, Boost, Multi-Mod, Chorus, Phaser, Harmonizer, Pitch Shifter, Whammy, Looper
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">High</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Heavy</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Complex</span></div>
+    </div>
+  </div>
+
+  <!-- WORSHIP / CCM -->
+  <div class="genre" style="border-color: #0ea5e9;">
+    <div class="genre-header" style="border-color: #0ea5e9;">
+      <span class="genre-icon">🙏</span>
+      <div>
+        <h2 class="genre-name" style="color: #0ea5e9;">Worship / CCM</h2>
+        <p class="genre-desc">Lush ambient tones with shimmer, swells, and textured delays</p>
+        <p class="artists">Artists: Lincoln Brewster, The War on Drugs, Hillsong, Bethel</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Reverb</span> — <span class="target">Target: 14/10 • Lush wash is essential</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Delay</span> — <span class="target">Target: 12/10 • Dotted eighth heaven</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Modulation</span> — <span class="target">Target: 9/10 • Shimmer and movement</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Gain</span> — <span class="target">Target: 8/10 • Edge for anthems</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Volume pedal (swells)</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Overdrive, Boost, Tremolo, Chorus, Tape Delay, Multi Delay, Ambient Reverb, Shimmer, Volume, Expression
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Low</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Ambient</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Standard</span></div>
+    </div>
+  </div>
+
+  <!-- EXPERIMENTAL / NOISE -->
+  <div class="genre" style="border-color: #f43f5e;">
+    <div class="genre-header" style="border-color: #f43f5e;">
+      <span class="genre-icon">🔮</span>
+      <div>
+        <h2 class="genre-name" style="color: #f43f5e;">Experimental / Noise</h2>
+        <p class="genre-desc">Unconventional sounds with synthesis, glitch, and sonic exploration</p>
+        <p class="artists">Artists: Sonic Youth, Nine Inch Nails, St. Vincent, Battles</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Gain (Fuzz)</span> — <span class="target">Target: 18/10 • Wild, chaotic fuzz</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Pitch</span> — <span class="target">Target: 9/10 • Weird pitch effects</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Filter</span> — <span class="target">Target: 7/10 • Synthy sweeps</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Modulation</span> — <span class="target">Target: 13/10 • Extreme textures</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Synth pedals → More chaos</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Fuzz, Distortion, Synth, Fuzz/Synth, Pitch Shifter, Whammy, Harmonizer, Wah, Envelope, Special, Glitch, Looper
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">High</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Heavy</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Complex</span></div>
+    </div>
+  </div>
+
+  <!-- POP -->
+  <div class="genre" style="border-color: #f472b6;">
+    <div class="genre-header" style="border-color: #f472b6;">
+      <span class="genre-icon">🎤</span>
+      <div>
+        <h2 class="genre-name" style="color: #f472b6;">Pop</h2>
+        <p class="genre-desc">Polished, radio-ready tones with clean clarity and subtle enhancement</p>
+        <p class="artists">Artists: John Mayer, Ed Sheeran, Taylor Swift, Harry Styles</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Dynamics (Compressor)</span> — <span class="target">Target: 8/10 • Polished, even tone</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Gain (Light)</span> — <span class="target">Target: 5/10 • Clean with edge option</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Modulation</span> — <span class="target">Target: 6/10 • Subtle enhancement</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Reverb</span> — <span class="target">Target: 7/10 • Professional space</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Delay</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Overdrive, Boost, Chorus, Compressor, Digital Delay, Plate Reverb, Hall Reverb, Room Reverb
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Clean</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Subtle</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Minimal</span></div>
+    </div>
+  </div>
+
+  <!-- LO-FI -->
+  <div class="genre" style="border-color: #a78bfa;">
+    <div class="genre-header" style="border-color: #a78bfa;">
+      <span class="genre-icon">📼</span>
+      <div>
+        <h2 class="genre-name" style="color: #a78bfa;">Lo-Fi</h2>
+        <p class="genre-desc">Warm, degraded tones with tape character and vintage imperfections</p>
+        <p class="artists">Artists: Mac DeMarco, Clairo, Boy Pablo, Men I Trust</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Modulation (Vibrato/Chorus)</span> — <span class="target">Target: 9/10 • Wobbly tape feel</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Delay</span> — <span class="target">Target: 8/10 • Warm tape echo</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Reverb</span> — <span class="target">Target: 8/10 • Vintage warmth</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Gain (Light)</span> — <span class="target">Target: 5/10 • Warm preamp tones</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Compressor → More modulation</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Overdrive, Boost, Preamp, Vibrato, Chorus, Tape Delay, Analog Delay, Lo-Fi, Compressor, Spring Reverb, Room Reverb
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Low</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Standard</span></div>
+    </div>
+  </div>
+
+  <!-- SINGER-SONGWRITER -->
+  <div class="genre" style="border-color: #fbbf24;">
+    <div class="genre-header" style="border-color: #fbbf24;">
+      <span class="genre-icon">🎵</span>
+      <div>
+        <h2 class="genre-name" style="color: #fbbf24;">Singer-Songwriter</h2>
+        <p class="genre-desc">Intimate, acoustic-friendly tones that support vocals without overpowering</p>
+        <p class="artists">Artists: James Taylor, Joni Mitchell, Iron & Wine, Phoebe Bridgers</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Dynamics (Compressor)</span> — <span class="target">Target: 7/10 • Even fingerpicking</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Reverb</span> — <span class="target">Target: 6/10 • Intimate room sound</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Delay</span> — <span class="target">Target: 5/10 • Subtle depth</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Modulation (Subtle)</span> — <span class="target">Target: 4/10 • Light chorus/tremolo</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> DI (for acoustic)</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Compressor, Plate Reverb, Room Reverb, Analog Delay, Chorus, Tremolo, Boost, DI
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Clean</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Subtle</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Subtle</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Minimal</span></div>
+    </div>
+  </div>
+
+  <!-- INDIE ROCK -->
+  <div class="genre" style="border-color: #fb923c;">
+    <div class="genre-header" style="border-color: #fb923c;">
+      <span class="genre-icon">🎸</span>
+      <div>
+        <h2 class="genre-name" style="color: #fb923c;">Indie Rock</h2>
+        <p class="genre-desc">Raw, character-driven tones with creative effects and multiple gain stages</p>
+        <p class="artists">Artists: The National, Interpol, Spoon, Vampire Weekend</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Essential Pedals (in priority order):</div>
+      <ol class="priority-list">
+        <li><span class="priority-num">1</span><span class="category-name">Gain</span> — <span class="target">Target: 12/10 • Character and grit</span></li>
+        <li><span class="priority-num">2</span><span class="category-name">Modulation</span> — <span class="target">Target: 8/10 • Creative textures</span></li>
+        <li><span class="priority-num">3</span><span class="category-name">Delay</span> — <span class="target">Target: 8/10 • Atmospheric depth</span></li>
+        <li><span class="priority-num">4</span><span class="category-name">Reverb</span> — <span class="target">Target: 7/10 • Room ambience</span></li>
+      </ol>
+      <p class="extras"><strong>Extras (in order):</strong> Compressor → 2nd Gain</p>
+    </div>
+    <div class="subtypes">
+      <span class="subtypes-label">Preferred Types:</span> Overdrive, Distortion, Fuzz, Chorus, Phaser, Vibrato, Tape Delay, Analog Delay, Digital Delay, Compressor
+    </div>
+    <div class="characteristics">
+      <div class="char-item"><span class="char-label">Gain</span><span class="char-value">Medium</span></div>
+      <div class="char-item"><span class="char-label">Modulation</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Ambience</span><span class="char-value">Moderate</span></div>
+      <div class="char-item"><span class="char-label">Complexity</span><span class="char-value">Standard</span></div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Boardsie - Pedal Categories & Effect Types</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    h1 {
+      text-align: center;
+      color: #1a1a2e;
+      border-bottom: 3px solid #ff6b35;
+      padding-bottom: 10px;
+      font-size: 24px;
+    }
+    .category {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      page-break-inside: avoid;
+    }
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid;
+    }
+    .color-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+    .category-name {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .signal-order {
+      font-size: 10px;
+      color: #888;
+      margin-left: auto;
+    }
+    .subtypes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .subtype {
+      background: #f0f0f0;
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-size: 11px;
+      border: 1px solid #ddd;
+    }
+    .tags {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+    }
+    .tags-title {
+      font-weight: bold;
+      color: #555;
+      font-size: 10px;
+      margin-bottom: 5px;
+    }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tag {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      color: white;
+    }
+    .rating-labels {
+      margin-top: 10px;
+      font-size: 10px;
+      color: #666;
+    }
+    .rating-label {
+      margin: 2px 0;
+    }
+    .rating-range {
+      font-weight: bold;
+      color: #333;
+    }
+    @media print {
+      body { background: white; }
+      .category { box-shadow: none; border: 1px solid #ddd; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎸 Boardsie - Pedal Categories & Effect Types</h1>
+  <p style="text-align: center; color: #666; margin-bottom: 20px;">Categories listed in typical signal chain order (guitar → amp)</p>
+  
+  <!-- UTILITY -->
+  <div class="category">
+    <div class="category-header" style="border-color: #9e9e9e;">
+      <div class="color-dot" style="background: #9e9e9e;"></div>
+      <h2 class="category-name" style="color: #9e9e9e;">Utility / Routing</h2>
+      <span class="signal-order">Signal Chain: 1st (Tuner at front)</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Tuner</span>
+      <span class="subtype">Buffer</span>
+      <span class="subtype">Buffer/Boost</span>
+      <span class="subtype">Switcher</span>
+      <span class="subtype">Loop</span>
+      <span class="subtype">A/B Box</span>
+      <span class="subtype">Mixer</span>
+      <span class="subtype">DI</span>
+      <span class="subtype">Looper</span>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #9e9e9e;">work smarter (0-2)</span>
+        <span class="tag" style="background: #7d7d7d;">router (3-4)</span>
+        <span class="tag" style="background: #6d6d6d;">pedal nerd (5-6)</span>
+        <span class="tag" style="background: #5d5d5d;">geeked out (7-8)</span>
+        <span class="tag" style="background: #4d4d4d;">board scholar (9-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER -->
+  <div class="category">
+    <div class="category-header" style="border-color: #f1c40f;">
+      <div class="color-dot" style="background: #f1c40f;"></div>
+      <h2 class="category-name" style="color: #d4a90a;">Filter</h2>
+      <span class="signal-order">Signal Chain: 2nd (Early for expressiveness)</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Wah</span>
+      <span class="subtype">Envelope (Auto-Wah)</span>
+      <span class="subtype">Lowpass</span>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #f1c40f; color: #333;">town crier (0-2)</span>
+        <span class="tag" style="background: #d4a90a; color: #333;">quack doctor (3-4)</span>
+        <span class="tag" style="background: #b8930a;">funky chicken (5-6)</span>
+        <span class="tag" style="background: #9c7d08;">street sweeper (7-8)</span>
+        <span class="tag" style="background: #806707;">what are you talking about (9-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DYNAMICS -->
+  <div class="category">
+    <div class="category-header" style="border-color: #e67e22;">
+      <div class="color-dot" style="background: #e67e22;"></div>
+      <h2 class="category-name" style="color: #e67e22;">Dynamics</h2>
+      <span class="signal-order">Signal Chain: 3rd (Before dirt)</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Compressor</span>
+      <span class="subtype">Sustainer</span>
+      <span class="subtype">Gate (Noise Gate)</span>
+      <span class="subtype">Limiter</span>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #e67e22;">wide open (0-2)</span>
+        <span class="tag" style="background: #cf6d17;">gluey (3-4)</span>
+        <span class="tag" style="background: #b85c0d;">smooth operator (5-6)</span>
+        <span class="tag" style="background: #a14b05;">squashed (7-8)</span>
+        <span class="tag" style="background: #8a3a00;">clamped down (9-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PITCH -->
+  <div class="category">
+    <div class="category-header" style="border-color: #e91e63;">
+      <div class="color-dot" style="background: #e91e63;"></div>
+      <h2 class="category-name" style="color: #e91e63;">Pitch</h2>
+      <span class="signal-order">Signal Chain: 4th (Before or after dirt)</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Octave</span>
+      <span class="subtype">Harmonizer</span>
+      <span class="subtype">Shifter (Pitch Shifter)</span>
+      <span class="subtype">Whammy</span>
+      <span class="subtype">Detune</span>
+      <span class="subtype">Arpeggiator</span>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #e91e63;">pitchy (0-2)</span>
+        <span class="tag" style="background: #d11555;">pitchier (3-4)</span>
+        <span class="tag" style="background: #b91048;">harmonious (5-6)</span>
+        <span class="tag" style="background: #a10c3b;">warped (7-8)</span>
+        <span class="tag" style="background: #89082e;">unrecognizable (9-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAIN -->
+  <div class="category">
+    <div class="category-header" style="border-color: #ff4444;">
+      <div class="color-dot" style="background: #ff4444;"></div>
+      <h2 class="category-name" style="color: #ff4444;">Gain / Dirt</h2>
+      <span class="signal-order">Signal Chain: 5th (The heart of tone)</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Boost</span>
+      <span class="subtype">Overdrive</span>
+      <span class="subtype">Distortion</span>
+      <span class="subtype">Fuzz</span>
+      <span class="subtype">Preamp</span>
+    </div>
+    <div class="rating-labels">
+      <div class="rating-label"><span class="rating-range">1-2:</span> Boost</div>
+      <div class="rating-label"><span class="rating-range">3-5:</span> Low-Gain Overdrive</div>
+      <div class="rating-label"><span class="rating-range">5-7:</span> Mid-Gain Drive / Low Fuzz</div>
+      <div class="rating-label"><span class="rating-range">8-10:</span> Burning Drive / Big Fuzz</div>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #ff4444;">mr. clean (0-2)</span>
+        <span class="tag" style="background: #e63939;">dirty bird (3-4)</span>
+        <span class="tag" style="background: #cc2e2e;">burner (5-6)</span>
+        <span class="tag" style="background: #b32424;">screamer (7-8)</span>
+        <span class="tag" style="background: #991a1a;">melt my face (9-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EQ -->
+  <div class="category">
+    <div class="category-header" style="border-color: #00bcd4;">
+      <div class="color-dot" style="background: #00bcd4;"></div>
+      <h2 class="category-name" style="color: #00a5bb;">EQ / Tone Shaping</h2>
+      <span class="signal-order">Signal Chain: 6th (Shape tone after dirt)</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Graphic EQ</span>
+      <span class="subtype">Parametric EQ</span>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #00bcd4;">shaper (0-3)</span>
+        <span class="tag" style="background: #009aaf;">sculptor (4-7)</span>
+        <span class="tag" style="background: #00788a;">surgical (8-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYNTH -->
+  <div class="category">
+    <div class="category-header" style="border-color: #673ab7;">
+      <div class="color-dot" style="background: #673ab7;"></div>
+      <h2 class="category-name" style="color: #673ab7;">Synth / Special Effects</h2>
+      <span class="signal-order">Signal Chain: 7th</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Synth</span>
+      <span class="subtype">Bitcrusher</span>
+      <span class="subtype">Ring Mod</span>
+      <span class="subtype">Granular</span>
+      <span class="subtype">Slicer</span>
+      <span class="subtype">Sampler</span>
+      <span class="subtype">Organ</span>
+      <span class="subtype">Acoustic Sim</span>
+      <span class="subtype">Special</span>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #673ab7;">effect flavor (0-3)</span>
+        <span class="tag" style="background: #5530a0;">texture / synth-like (4-7)</span>
+        <span class="tag" style="background: #432689;">sound design tool (8-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULATION -->
+  <div class="category">
+    <div class="category-header" style="border-color: #9b59b6;">
+      <div class="color-dot" style="background: #9b59b6;"></div>
+      <h2 class="category-name" style="color: #9b59b6;">Modulation</h2>
+      <span class="signal-order">Signal Chain: 8th (After dirt)</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Chorus</span>
+      <span class="subtype">Phaser</span>
+      <span class="subtype">Flanger</span>
+      <span class="subtype">Tremolo</span>
+      <span class="subtype">Vibrato</span>
+      <span class="subtype">Rotary</span>
+      <span class="subtype">Multi (Multi-Mod)</span>
+      <span class="subtype">Other</span>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #9b59b6;">still water (0-2)</span>
+        <span class="tag" style="background: #8847a3;">a little motion (3-4)</span>
+        <span class="tag" style="background: #753590;">swirly (5-6)</span>
+        <span class="tag" style="background: #62237d;">spin cycle (7-8)</span>
+        <span class="tag" style="background: #4f116a;">it's a twister (9-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOLUME -->
+  <div class="category">
+    <div class="category-header" style="border-color: #607d8b;">
+      <div class="color-dot" style="background: #607d8b;"></div>
+      <h2 class="category-name" style="color: #607d8b;">Volume & Control</h2>
+      <span class="signal-order">Signal Chain: 9th</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Volume</span>
+      <span class="subtype">Expression</span>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #607d8b;">in control (0-3)</span>
+        <span class="tag" style="background: #4d6570;">manager (4-7)</span>
+        <span class="tag" style="background: #3a4d55;">board administrator (8-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AMP -->
+  <div class="category">
+    <div class="category-header" style="border-color: #795548;">
+      <div class="color-dot" style="background: #795548;"></div>
+      <h2 class="category-name" style="color: #795548;">Amp & Cab</h2>
+      <span class="signal-order">Signal Chain: 10th</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Amp Sim</span>
+      <span class="subtype">Cab Sim</span>
+      <span class="subtype">Preamp</span>
+      <span class="subtype">Bass Preamp</span>
+      <span class="subtype">Acoustic</span>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #795548;">direct (0-3)</span>
+        <span class="tag" style="background: #5d423a;">amplifier (4-7)</span>
+        <span class="tag" style="background: #412f2c;">simulator (8-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELAY -->
+  <div class="category">
+    <div class="category-header" style="border-color: #3498db;">
+      <div class="color-dot" style="background: #3498db;"></div>
+      <h2 class="category-name" style="color: #3498db;">Delay</h2>
+      <span class="signal-order">Signal Chain: 11th (Time-based effects)</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Analog</span>
+      <span class="subtype">Digital</span>
+      <span class="subtype">Tape</span>
+      <span class="subtype">Slapback</span>
+      <span class="subtype">Multi</span>
+      <span class="subtype">Lo-Fi</span>
+      <span class="subtype">Looper</span>
+    </div>
+    <div class="rating-labels">
+      <div class="rating-label"><span class="rating-range">1-3:</span> Simple Delay (3-Knob)</div>
+      <div class="rating-label"><span class="rating-range">4-7:</span> Tap-Tempo / Shaped Delay</div>
+      <div class="rating-label"><span class="rating-range">8-10:</span> Preset / Multi Delay</div>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #3498db;">come again? (0-2)</span>
+        <span class="tag" style="background: #2980b9;">repeater (3-4)</span>
+        <span class="tag" style="background: #1f6897;">spelunker (5-6)</span>
+        <span class="tag" style="background: #155075;">long term memory (7-8)</span>
+        <span class="tag" style="background: #0b3853;">time traveler (9-10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVERB -->
+  <div class="category">
+    <div class="category-header" style="border-color: #1abc9c;">
+      <div class="color-dot" style="background: #1abc9c;"></div>
+      <h2 class="category-name" style="color: #1abc9c;">Reverb</h2>
+      <span class="signal-order">Signal Chain: 12th (Usually last)</span>
+    </div>
+    <div class="subtypes">
+      <span class="subtype">Spring</span>
+      <span class="subtype">Plate</span>
+      <span class="subtype">Hall</span>
+      <span class="subtype">Room</span>
+      <span class="subtype">Ambient</span>
+      <span class="subtype">Shimmer</span>
+      <span class="subtype">Multi</span>
+    </div>
+    <div class="rating-labels">
+      <div class="rating-label"><span class="rating-range">1-3:</span> Simple Reverb (3-Knob)</div>
+      <div class="rating-label"><span class="rating-range">4-7:</span> Shaped Reverb</div>
+      <div class="rating-label"><span class="rating-range">8-10:</span> Preset / Ambient Reverb</div>
+    </div>
+    <div class="tags">
+      <div class="tags-title">Board Tags (by score):</div>
+      <div class="tag-list">
+        <span class="tag" style="background: #1abc9c;">bone dry (0-2)</span>
+        <span class="tag" style="background: #16a085;">moist (3-4)</span>
+        <span class="tag" style="background: #11846e;">drippy (5-6)</span>
+        <span class="tag" style="background: #0d6857;">dreamy (7-8)</span>
+        <span class="tag" style="background: #084c40;">floating (9-10)</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
+

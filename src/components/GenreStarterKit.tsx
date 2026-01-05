@@ -2440,7 +2440,10 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                   </button>
                   
                   {/* Desktop Hover Tooltip - Only shows on hover-capable devices */}
-                  <div className={`hover-tooltip absolute ${tooltipPosition} bottom-full mb-1 w-56 p-2.5 rounded-lg bg-board-elevated border border-board-border shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none`}>
+                  <div className={`hover-tooltip absolute ${tooltipPosition} bottom-full w-56 rounded-lg bg-board-elevated border border-board-border shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50`}>
+                    {/* Invisible bridge to keep hover when moving to tooltip */}
+                    <div className="absolute left-0 right-0 top-full h-2" />
+                    <div className="p-2.5">
                     <div className="text-xs font-semibold text-white mb-1">{pedal.brand} {pedal.model}</div>
                     
                     <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[10px] mb-1.5">
@@ -2474,14 +2477,14 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="mt-2 flex items-center gap-1 text-[10px] text-red-400 hover:text-red-300 transition-colors pointer-events-auto"
+                      className="mt-2 flex items-center gap-1 text-[10px] text-red-400 hover:text-red-300 transition-colors"
                     >
                       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                       </svg>
                       Watch review
                     </a>
-                    
+                    </div>
                     {/* Tooltip arrow - Position-aware */}
                     <div className={`absolute ${arrowPosition} top-full w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-board-elevated`} />
                   </div>
