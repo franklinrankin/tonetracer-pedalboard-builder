@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from 'react';
-import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, ArrowUpDown, RefreshCw } from 'lucide-react';
+import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, ArrowUpDown, RefreshCw, Pencil } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, GenreProfile } from '../data/genres';
 import { getPedalEducation } from '../data/pedalEducation';
@@ -284,45 +284,10 @@ function getGenreBonusAdditions(
       break;
       
     case 'metal':
-      // Noise Gate
-      if (!onBoardSubtypes.has('Gate')) {
-        const gates = findBySubtype(['Gate', 'Noise Gate']);
-        if (gates.length > 0) {
-          additions.push({
-            id: 'noise-gate',
-            name: 'Noise Gate',
-            reason: 'Eliminate hum and tighten high-gain tones',
-            subtype: 'Gate',
-            pedals: gates,
-          });
-        }
-      }
-      // Graphic EQ (post-gain)
-      if (!onBoardSubtypes.has('Graphic')) {
-        const eqs = findPedals('eq', ['Graphic']);
-        if (eqs.length > 0) {
-          additions.push({
-            id: 'graphic-eq',
-            name: 'Graphic EQ',
-            reason: 'Sculpt your tone - boost mids, tighten lows',
-            category: 'eq',
-            subtype: 'Graphic',
-            pedals: eqs,
-          });
-        }
-      }
-      // Pitch (octave down / harmonizer)
-      const metalPitch = findPedals('pitch', ['Octave', 'Harmonizer', 'Shifter']);
-      if (metalPitch.length > 0) {
-        additions.push({
-          id: 'pitch',
-          name: 'Pitch Shifter',
-          reason: 'Drop-tune on the fly or add harmonies',
-          category: 'pitch',
-          pedals: metalPitch,
-        });
-      }
-      // Boost (tightening, not gain)
+      // Metal extras: 2nd gain (boost), delay - per genre config
+      // Don't add things already covered in essentials (gain, dynamics x2, eq, pitch)
+      
+      // Boost (tightening, not gain) - this is the 2nd gain in extras
       if (!onBoardSubtypes.has('Boost')) {
         const boosts = findPedals('gain', ['Boost']);
         if (boosts.length > 0) {
@@ -335,6 +300,17 @@ function getGenreBonusAdditions(
             pedals: boosts,
           });
         }
+      }
+      // Delay - analog or digital for metal
+      const metalDelays = findPedals('delay', ['Analog', 'Digital']);
+      if (metalDelays.length > 0) {
+        additions.push({
+          id: 'delay',
+          name: 'Delay',
+          reason: 'Add depth to leads and create atmosphere',
+          category: 'delay',
+          pedals: metalDelays,
+        });
       }
       break;
       
@@ -1296,22 +1272,29 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
     }
     
     // NEW PRIORITY SYSTEM: 
-    // 1. First, fill ESSENTIAL categories (one of each) - these define the core sound
+    // 1. First, fill ESSENTIAL categories (as specified - duplicates allowed if explicit)
     // 2. Then, fill EXTRA categories for larger boards (second gain, etc.)
     
     // Track how many of each category we've added
     const categoryStepCount = new Map<Category, number>();
     
-    // PHASE 1: Essential categories first (one of each, in priority order)
+    // Count how many times each category is explicitly listed in essentialCategories
+    const categoryAllowedCount = new Map<Category, number>();
+    for (const cat of genre.essentialCategories) {
+      categoryAllowedCount.set(cat, (categoryAllowedCount.get(cat) || 0) + 1);
+    }
+    
+    // PHASE 1: Essential categories (allow duplicates only if explicitly listed multiple times)
     for (const category of genre.essentialCategories) {
       if (steps.length >= recommendedEssentials) break;
       
       // Skip amp/cab sim category - not recommended for most setups
       if (category === 'amp') continue;
       
-      // Only add ONE of each essential category
+      // Only add as many steps as explicitly specified in essentialCategories
       const currentCategoryCount = categoryStepCount.get(category) || 0;
-      if (currentCategoryCount >= 1) continue;
+      const allowedCount = categoryAllowedCount.get(category) || 1;
+      if (currentCategoryCount >= allowedCount) continue;
       
       const categoryInfo = CATEGORY_INFO[category];
       
@@ -1756,10 +1739,11 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
           
           <div className="flex gap-3 justify-center flex-wrap">
             <button
-              onClick={handleRestart}
-              className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+              onClick={() => { setPhase('essentials'); setCurrentStepIndex(0); }}
+              className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors flex items-center gap-2"
             >
-              Start Over
+              <Pencil className="w-4 h-4" />
+              Edit Board
             </button>
             {onFinishUp && (
               <button
@@ -1771,11 +1755,10 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
               </button>
             )}
             <button
-              onClick={() => { setPhase('essentials'); setCurrentStepIndex(0); }}
-              className="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
-              style={{ backgroundColor: `${genre.color}20`, color: genre.color }}
+              onClick={handleRestart}
+              className="px-4 py-2 text-sm font-medium rounded-lg text-zinc-500 hover:text-zinc-300 transition-colors"
             >
-              Review Steps
+              Start Over
             </button>
           </div>
         </div>
@@ -1924,12 +1907,13 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
             {addedCount} pedals • ${totalCost} total
           </p>
           
-          <div className="flex justify-center gap-3">
+          <div className="flex justify-center gap-3 flex-wrap">
             <button
-              onClick={handleRestart}
-              className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+              onClick={() => { setPhase('essentials'); setCurrentStepIndex(0); }}
+              className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors flex items-center gap-2"
             >
-              Start Over
+              <Pencil className="w-4 h-4" />
+              Edit Board
             </button>
             {onFinishUp && (
               <button
@@ -1940,6 +1924,12 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                 <ChevronRight className="w-4 h-4" />
               </button>
             )}
+            <button
+              onClick={handleRestart}
+              className="px-4 py-2 text-sm font-medium rounded-lg text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              Start Over
+            </button>
           </div>
         </div>
       </div>
@@ -2017,6 +2007,13 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                 <Plus className="w-4 h-4" />
                 Add More Pedals ({bonusAdditions.length} available)
               </button>
+              <button
+                onClick={() => { setPhase('essentials'); setCurrentStepIndex(0); }}
+                className="w-full px-4 py-2 text-sm font-medium rounded-lg text-zinc-500 hover:text-zinc-300 transition-colors flex items-center justify-center gap-2"
+              >
+                <Pencil className="w-4 h-4" />
+                Edit Board
+              </button>
             </div>
           </div>
         </div>
@@ -2031,9 +2028,13 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
           </div>
           <h2 className="text-xl font-bold text-white mb-2">Your {genre.name} Board is Ready!</h2>
           <p className="text-sm text-zinc-400 mb-4">{board.slots.length} pedals added</p>
-          <div className="flex justify-center gap-3">
-            <button onClick={handleRestart} className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors">
-              Start Over
+          <div className="flex justify-center gap-3 flex-wrap">
+            <button 
+              onClick={() => { setPhase('essentials'); setCurrentStepIndex(0); }} 
+              className="px-4 py-2 text-sm font-medium rounded-lg border border-board-border text-board-muted hover:text-white hover:bg-board-elevated transition-colors flex items-center gap-2"
+            >
+              <Pencil className="w-4 h-4" />
+              Edit Board
             </button>
             {onFinishUp && (
               <button onClick={onFinishUp} className="px-4 py-2 text-sm font-medium rounded-lg bg-board-accent text-white hover:bg-board-accent-dim transition-colors flex items-center gap-2">
@@ -2041,6 +2042,12 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                 <ChevronRight className="w-4 h-4" />
               </button>
             )}
+            <button 
+              onClick={handleRestart} 
+              className="px-4 py-2 text-sm font-medium rounded-lg text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              Start Over
+            </button>
           </div>
         </div>
       </div>
@@ -2093,31 +2100,51 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
         </div>
         
         {/* Progress Bar */}
-        <div className="flex gap-1">
+        <div className="flex gap-1.5">
           {/* Essential steps */}
           {steps.map((step, index) => {
             const isCurrent = !isAdditionsPhase && index === safeStepIndex;
             const isPast = index < safeStepIndex || isAdditionsPhase;
             const isSkipped = skippedSteps.has(step.id);
             
+            // Find the pedal selected for this step (match by category and subtype)
+            const selectedPedal = board.slots.find(slot => 
+              slot.pedal.category === step.category && 
+              (!step.subtype || slot.pedal.subtype === step.subtype)
+            )?.pedal;
+            
+            // For steps with same category, match by order added
+            const sameCategorySteps = steps.filter((s, i) => s.category === step.category && i <= index);
+            const sameCategoryPedals = board.slots.filter(s => s.pedal.category === step.category);
+            const stepIndexInCategory = sameCategorySteps.length - 1;
+            const matchedPedal = sameCategoryPedals[stepIndexInCategory]?.pedal || selectedPedal;
+            
+            const displayName = matchedPedal && isPast
+              ? `${step.name}: ${matchedPedal.model.split(' ').slice(0, 2).join(' ')}`
+              : step.name;
+            
             return (
               <button
                 key={step.id}
-                onClick={() => { setPhase('essentials'); setCurrentStepIndex(index); }}
-                className={`flex-1 h-2 rounded-full transition-all ${
+                onClick={() => { setPhase('essentials'); setCurrentStepIndex(index); setActiveTooltip(null); }}
+                className={`flex-1 h-7 rounded-lg transition-all flex items-center justify-center px-1.5 ${
                   isCurrent ? 'ring-2 ring-offset-1 ring-offset-board-surface' : ''
                 }`}
                 style={{
-                  // Only show as complete if actually past - not based on satisfaction
-                  // This prevents future steps from lighting up out of order
                   backgroundColor: isPast
                     ? genre.color
                     : isSkipped
                       ? '#52525b'
                       : `${genre.color}30`,
                 }}
-                title={step.name}
-              />
+                title={matchedPedal ? `${step.name}: ${matchedPedal.brand} ${matchedPedal.model}` : step.name}
+              >
+                <span className={`text-[8px] font-medium truncate ${
+                  isPast ? 'text-white' : isSkipped ? 'text-zinc-400' : 'text-zinc-300'
+                }`}>
+                  {displayName}
+                </span>
+              </button>
             );
           })}
           
@@ -2129,11 +2156,22 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                 const isCurrent = isAdditionsPhase && index === currentAdditionIndex;
                 const isPast = isAdditionsPhase && index < currentAdditionIndex;
                 
+                // Find the pedal selected for this addition
+                const sameCategoryAdditions = bonusAdditions.filter((a, i) => a.category === addition.category && i <= index);
+                const essentialSameCat = steps.filter(s => s.category === addition.category).length;
+                const additionIndexInCategory = essentialSameCat + sameCategoryAdditions.length - 1;
+                const sameCategoryPedals = board.slots.filter(s => s.pedal.category === addition.category);
+                const matchedPedal = sameCategoryPedals[additionIndexInCategory]?.pedal;
+                
+                const displayName = matchedPedal && isPast
+                  ? `${addition.name}: ${matchedPedal.model.split(' ').slice(0, 2).join(' ')}`
+                  : addition.name;
+                
                 return (
                   <button
                     key={addition.id}
-                    onClick={() => { setPhase('additions'); setCurrentAdditionIndex(index); }}
-                    className={`flex-1 h-2 rounded-full transition-all ${
+                    onClick={() => { setPhase('additions'); setCurrentAdditionIndex(index); setActiveTooltip(null); }}
+                    className={`flex-1 h-7 rounded-lg transition-all flex items-center justify-center px-1.5 ${
                       isCurrent ? 'ring-2 ring-offset-1 ring-offset-board-surface' : ''
                     }`}
                     style={{
@@ -2143,8 +2181,14 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                           ? '#f59e0b'
                           : '#f59e0b30',
                     }}
-                    title={addition.name}
-                  />
+                    title={matchedPedal ? `${addition.name}: ${matchedPedal.brand} ${matchedPedal.model}` : addition.name}
+                  >
+                    <span className={`text-[8px] font-medium truncate ${
+                      isPast || isCurrent ? 'text-white' : 'text-amber-200/70'
+                    }`}>
+                      {displayName}
+                    </span>
+                  </button>
                 );
               })}
             </>

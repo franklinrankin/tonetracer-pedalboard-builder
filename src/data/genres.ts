@@ -95,10 +95,10 @@ export const GENRES: GenreProfile[] = [
     iconImage: '/images/genres/metal.jpg',
     color: '#1f2937',
     artists: ['Metallica', 'Slipknot', 'Gojira', 'Meshuggah'],
-    // Core metal: high gain distortion, noise gate, EQ, then compressor
-    essentialCategories: ['gain', 'dynamics', 'eq', 'dynamics'],
-    // Extras: second gain (boost), delay, octave
-    extraCategories: ['gain', 'delay', 'pitch'],
+    // Core metal: high gain distortion, noise gate, EQ, compressor, octave
+    essentialCategories: ['gain', 'dynamics', 'eq', 'dynamics', 'pitch'],
+    // Extras: second gain (boost), delay
+    extraCategories: ['gain', 'delay'],
     sectionTargets: {
       gain: { min: 18, ideal: 25, max: 30 },
       dynamics: { min: 5, ideal: 8, max: 12 },
