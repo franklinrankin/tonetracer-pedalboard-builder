@@ -1,0 +1,2910 @@
+{
+  "boss-mt2-metal-zone": {
+    "large": "https://pedalplayground.com/public/pedals/boss-mt-2-metal-zone.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-mt-2-metal-zone.png"
+  },
+  "boss-mt2w-waza": {
+    "large": "https://pedalplayground.com/public/pedals/boss-mt-2w-waza-craft-metal-zone.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-mt-2w-waza-craft-metal-zone.png"
+  },
+  "revv-g4": {
+    "large": "https://pedalplayground.com/public/pedals/revv-g4-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/revv-g4-distortion.png"
+  },
+  "revv-g3": {
+    "large": "https://pedalplayground.com/public/pedals/revv-g3-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/revv-g3-distortion.png"
+  },
+  "friedman-be-od": {
+    "large": "https://pedalplayground.com/public/pedals/friedman-be-od.png",
+    "small": "https://pedalplayground.com/public/pedals/friedman-be-od.png"
+  },
+  "friedman-be-od-deluxe": {
+    "large": "https://pedalplayground.com/public/pedals/friedman-be-od-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/friedman-be-od-deluxe.png"
+  },
+  "friedman-dirty-shirley": {
+    "large": "https://pedalplayground.com/public/pedals/friedman-dirty-shirley.png",
+    "small": "https://pedalplayground.com/public/pedals/friedman-dirty-shirley.png"
+  },
+  "suhr-riot": {
+    "large": "https://pedalplayground.com/public/pedals/suhr-riot-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/suhr-riot-distortion.png"
+  },
+  "diezel-vh4": {
+    "large": "https://pedalplayground.com/public/pedals/diezel-vh4-pedal.png",
+    "small": "https://pedalplayground.com/public/pedals/diezel-vh4-pedal.png"
+  },
+  "5150-overdrive": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-evh-5150-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-evh-5150-overdrive.png"
+  },
+  "amptweaker-tight-metal": {
+    "large": "https://pedalplayground.com/public/pedals/amptweaker-tightmetal-pro-ii.png",
+    "small": "https://pedalplayground.com/public/pedals/amptweaker-tightmetal-pro-ii.png"
+  },
+  "mesa-flux-five": {
+    "large": "https://pedalplayground.com/public/pedals/mesa-boogie-flux-five-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/mesa-boogie-flux-five-overdrive.png"
+  },
+  "earthquaker-hoof": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-hoof-fuzz-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-hoof-fuzz-v2.png"
+  },
+  "earthquaker-hoof-reaper": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-hoof-reaper-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-hoof-reaper-v2.png"
+  },
+  "earthquaker-terminal": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-terminal-fuzz-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-terminal-fuzz-v2.png"
+  },
+  "caroline-shigeharu": {
+    "large": "https://pedalplayground.com/public/pedals/caroline-guitar-company-shigeharu.png",
+    "small": "https://pedalplayground.com/public/pedals/caroline-guitar-company-shigeharu.png"
+  },
+  "death-by-audio-fuzz-war": {
+    "large": "https://pedalplayground.com/public/pedals/death-by-audio-fuzz-war.png",
+    "small": "https://pedalplayground.com/public/pedals/death-by-audio-fuzz-war.png"
+  },
+  "death-by-audio-supersonic": {
+    "large": "https://pedalplayground.com/public/pedals/death-by-audio-supersonic-fuzz-gun.png",
+    "small": "https://pedalplayground.com/public/pedals/death-by-audio-supersonic-fuzz-gun.png"
+  },
+  "walrus-jupiter": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-jupiter-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-jupiter-v2.png"
+  },
+  "wren-and-cuff-tall-font": {
+    "large": "https://pedalplayground.com/public/pedals/wren-and-cuff-tall-font-russian.png",
+    "small": "https://pedalplayground.com/public/pedals/wren-and-cuff-tall-font-russian.png"
+  },
+  "black-arts-pharaoh": {
+    "large": "https://pedalplayground.com/public/pedals/black-arts-toneworks-pharaoh.png",
+    "small": "https://pedalplayground.com/public/pedals/black-arts-toneworks-pharaoh.png"
+  },
+  "boss-ce2w-chorus": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ce-2w-waza-craft-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ce-2w-waza-craft-chorus.png"
+  },
+  "strymon-mobius": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-mobius.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-mobius.png"
+  },
+  "chase-bliss-thermae": {
+    "large": "https://pedalplayground.com/public/pedals/chase-bliss-thermae.png",
+    "small": "https://pedalplayground.com/public/pedals/chase-bliss-thermae.png"
+  },
+  "meris-ottobit": {
+    "large": "https://pedalplayground.com/public/pedals/meris-ottobit-jr.png",
+    "small": "https://pedalplayground.com/public/pedals/meris-ottobit-jr.png"
+  },
+  "walrus-julia": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-julia-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-julia-v2.png"
+  },
+  "walrus-lillian": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-lillian-multi-stage-analog-phaser.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-lillian-multi-stage-analog-phaser.png"
+  },
+  "ehx-neo-clone": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-neo-clone.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-neo-clone.png"
+  },
+  "strymon-dig": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-dig.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-dig.png"
+  },
+  "eventide-timefactor": {
+    "large": "https://pedalplayground.com/public/pedals/eventide-timefactor.png",
+    "small": "https://pedalplayground.com/public/pedals/eventide-timefactor.png"
+  },
+  "boss-dm2w-delay": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dm-2w-waza-craft-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dm-2w-waza-craft-delay.png"
+  },
+  "walrus-d1-delay": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-d1-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-d1-v2.png"
+  },
+  "meris-polymoon": {
+    "large": "https://pedalplayground.com/public/pedals/meris-polymoon.png",
+    "small": "https://pedalplayground.com/public/pedals/meris-polymoon.png"
+  },
+  "caroline-megabyte": {
+    "large": "https://pedalplayground.com/public/pedals/caroline-guitar-company-megabyte.png",
+    "small": "https://pedalplayground.com/public/pedals/caroline-guitar-company-megabyte.png"
+  },
+  "meris-mercury7": {
+    "large": "https://pedalplayground.com/public/pedals/meris-mercury7.png",
+    "small": "https://pedalplayground.com/public/pedals/meris-mercury7.png"
+  },
+  "eventide-space": {
+    "large": "https://pedalplayground.com/public/pedals/eventide-space.png",
+    "small": "https://pedalplayground.com/public/pedals/eventide-space.png"
+  },
+  "walrus-slo": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-sl.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-sl.png"
+  },
+  "walrus-fathom": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-fathom.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-fathom.png"
+  },
+  "ehx-cathedral": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-cathedral-stereo-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-cathedral-stereo-reverb.png"
+  },
+  "neunaber-immerse": {
+    "large": "https://pedalplayground.com/public/pedals/neunaber-immerse-mk-ii.png",
+    "small": "https://pedalplayground.com/public/pedals/neunaber-immerse-mk-ii.png"
+  },
+  "digitech-whammy-5": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-whammy-5.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-whammy-5.png"
+  },
+  "digitech-drop": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-drop.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-drop.png"
+  },
+  "tc-brainwaves": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-brainwaves.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-brainwaves.png"
+  },
+  "ehx-pitch-fork": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-pitch-fork.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-pitch-fork.png"
+  },
+  "keeley-compressor-plus": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-compressor-plus.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-compressor-plus.png"
+  },
+  "diamond-compressor": {
+    "large": "https://pedalplayground.com/public/pedals/diamond-compressor.png",
+    "small": "https://pedalplayground.com/public/pedals/diamond-compressor.png"
+  },
+  "cali76-compressor": {
+    "large": "https://pedalplayground.com/public/pedals/origin-effects-cali76-compact-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/origin-effects-cali76-compact-deluxe.png"
+  },
+  "empress-compressor": {
+    "large": "https://pedalplayground.com/public/pedals/empress-effects-compressor-mkii.png",
+    "small": "https://pedalplayground.com/public/pedals/empress-effects-compressor-mkii.png"
+  },
+  "boss-cs3-compressor": {
+    "large": "https://pedalplayground.com/public/pedals/boss-cs-3-compression-sustainer.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-cs-3-compression-sustainer.png"
+  },
+  "tc-polytune-3-noir": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-polytune-3-noir.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-polytune-3-noir.png"
+  },
+  "tc-polytune-3-mini-noir": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-polytune-3-mini-noir.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-polytune-3-mini-noir.png"
+  },
+  "korg-pitchblack-advance": {
+    "large": "https://pedalplayground.com/public/pedals/korg-pitchblack-advance.png",
+    "small": "https://pedalplayground.com/public/pedals/korg-pitchblack-advance.png"
+  },
+  "strobostomp-hd": {
+    "large": "https://pedalplayground.com/public/pedals/peterson-strobostomp-hd.png",
+    "small": "https://pedalplayground.com/public/pedals/peterson-strobostomp-hd.png"
+  },
+  "strymon-iridium": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-iridium.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-iridium.png"
+  },
+  "ua-dream-65": {
+    "large": "https://pedalplayground.com/public/pedals/universal-audio-dream.png",
+    "small": "https://pedalplayground.com/public/pedals/universal-audio-dream.png"
+  },
+  "ua-ruby-63": {
+    "large": "https://pedalplayground.com/public/pedals/universal-audio-ruby.png",
+    "small": "https://pedalplayground.com/public/pedals/universal-audio-ruby.png"
+  },
+  "ua-woodrow-55": {
+    "large": "https://pedalplayground.com/public/pedals/universal-audio-woodrow.png",
+    "small": "https://pedalplayground.com/public/pedals/universal-audio-woodrow.png"
+  },
+  "boss-ir200": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ir-200.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ir-200.png"
+  },
+  "line6-hx-stomp": {
+    "large": "https://pedalplayground.com/public/pedals/line-6-hx-stomp.png",
+    "small": "https://pedalplayground.com/public/pedals/line-6-hx-stomp.png"
+  },
+  "line6-hx-stomp-xl": {
+    "large": "https://pedalplayground.com/public/pedals/line-6-hx-stomp-xl.png",
+    "small": "https://pedalplayground.com/public/pedals/line-6-hx-stomp-xl.png"
+  },
+  "walrus-acs1": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-acs1.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-acs1.png"
+  },
+  "tech21-sansamp-classic": {
+    "large": "https://pedalplayground.com/public/pedals/tech-21-sansamp-classic.png",
+    "small": "https://pedalplayground.com/public/pedals/tech-21-sansamp-classic.png"
+  },
+  "tech21-fly-rig-5": {
+    "large": "https://pedalplayground.com/public/pedals/tech-21-fly-rig-5.png",
+    "small": "https://pedalplayground.com/public/pedals/tech-21-fly-rig-5.png"
+  },
+  "two-notes-cab-m-plus": {
+    "large": "https://pedalplayground.com/public/pedals/two-notes-cab-m.png",
+    "small": "https://pedalplayground.com/public/pedals/two-notes-cab-m.png"
+  },
+  "mooer-radar": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-radar.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-radar.png"
+  },
+  "nux-solid-studio": {
+    "large": "https://pedalplayground.com/public/pedals/nux-solid-studio.png",
+    "small": "https://pedalplayground.com/public/pedals/nux-solid-studio.png"
+  },
+  "hotone-omni-ac": {
+    "large": "https://pedalplayground.com/public/pedals/hotone-omni-ac.png",
+    "small": "https://pedalplayground.com/public/pedals/hotone-omni-ac.png"
+  },
+  "boss-ac3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ac-3-acoustic-simulator.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ac-3-acoustic-simulator.png"
+  },
+  "neunaber-iconoclast": {
+    "large": "https://pedalplayground.com/public/pedals/neunaber-iconoclast.png",
+    "small": "https://pedalplayground.com/public/pedals/neunaber-iconoclast.png"
+  },
+  "dsm-simplifier": {
+    "large": "https://pedalplayground.com/public/pedals/dsm-humboldt-simplifier.png",
+    "small": "https://pedalplayground.com/public/pedals/dsm-humboldt-simplifier.png"
+  },
+  "dsm-simplifier-dlx": {
+    "large": "https://pedalplayground.com/public/pedals/dsm-humboldt-simplifier-dlx.png",
+    "small": "https://pedalplayground.com/public/pedals/dsm-humboldt-simplifier-dlx.png"
+  },
+  "strymon-timeline": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-timeline.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-timeline.png"
+  },
+  "empress-echosystem": {
+    "large": "https://pedalplayground.com/public/pedals/empress-echosystem.png",
+    "small": "https://pedalplayground.com/public/pedals/empress-echosystem.png"
+  },
+  "eventide-h9-max": {
+    "large": "https://pedalplayground.com/public/pedals/eventide-h9-max.png",
+    "small": "https://pedalplayground.com/public/pedals/eventide-h9-max.png"
+  },
+  "source-audio-nemesis": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-nemesis.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-nemesis.png"
+  },
+  "chase-bliss-tonal-recall": {
+    "large": "https://pedalplayground.com/public/pedals/chase-bliss-tonal-recall.png",
+    "small": "https://pedalplayground.com/public/pedals/chase-bliss-tonal-recall.png"
+  },
+  "gfi-specular-tempus-delay": {
+    "large": "https://pedalplayground.com/public/pedals/gfi-system-specular-tempus.png",
+    "small": "https://pedalplayground.com/public/pedals/gfi-system-specular-tempus.png"
+  },
+  "walrus-d1": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-d1-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-d1-v2.png"
+  },
+  "walrus-arp87": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-arp-87.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-arp-87.png"
+  },
+  "earthquaker-avalanche-run-v2": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-avalanche-run-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-avalanche-run-v2.png"
+  },
+  "earthquaker-space-spiral": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-space-spiral.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-space-spiral.png"
+  },
+  "earthquaker-pyramids": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-pyramids.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-pyramids.png"
+  },
+  "keeley-eccos": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-eccos.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-eccos.png"
+  },
+  "keeley-delay-workstation": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-delay-workstation.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-delay-workstation.png"
+  },
+  "old-blood-visitor": {
+    "large": "https://pedalplayground.com/public/pedals/old-blood-noise-visitor.png",
+    "small": "https://pedalplayground.com/public/pedals/old-blood-noise-visitor.png"
+  },
+  "old-blood-black-fountain": {
+    "large": "https://pedalplayground.com/public/pedals/old-blood-noise-black-fountain-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/old-blood-noise-black-fountain-v3.png"
+  },
+  "death-by-audio-echo-master": {
+    "large": "https://pedalplayground.com/public/pedals/death-by-audio-echo-master.png",
+    "small": "https://pedalplayground.com/public/pedals/death-by-audio-echo-master.png"
+  },
+  "dba-reverberation-machine": {
+    "large": "https://pedalplayground.com/public/pedals/death-by-audio-reverberation-machine.png",
+    "small": "https://pedalplayground.com/public/pedals/death-by-audio-reverberation-machine.png"
+  },
+  "red-panda-particle-2": {
+    "large": "https://pedalplayground.com/public/pedals/red-panda-particle-2.png",
+    "small": "https://pedalplayground.com/public/pedals/red-panda-particle-2.png"
+  },
+  "red-panda-raster-2": {
+    "large": "https://pedalplayground.com/public/pedals/red-panda-raster-2.png",
+    "small": "https://pedalplayground.com/public/pedals/red-panda-raster-2.png"
+  },
+  "cooper-fx-generation-loss-mkii": {
+    "large": "https://pedalplayground.com/public/pedals/cooper-fx-generation-loss-mkii.png",
+    "small": "https://pedalplayground.com/public/pedals/cooper-fx-generation-loss-mkii.png"
+  },
+  "alexander-history-lesson-v3": {
+    "large": "https://pedalplayground.com/public/pedals/alexander-history-lesson-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/alexander-history-lesson-v3.png"
+  },
+  "jhs-panther-cub-v2": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-panther-cub-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-panther-cub-v2.png"
+  },
+  "jhs-milkman": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-milkman.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-milkman.png"
+  },
+  "jhs-3-series-delay": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-3-series-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-3-series-delay.png"
+  },
+  "malekko-ekko-616": {
+    "large": "https://pedalplayground.com/public/pedals/malekko-ekko-616.png",
+    "small": "https://pedalplayground.com/public/pedals/malekko-ekko-616.png"
+  },
+  "fairfield-meet-maude": {
+    "large": "https://pedalplayground.com/public/pedals/fairfield-circuitry-meet-maude.png",
+    "small": "https://pedalplayground.com/public/pedals/fairfield-circuitry-meet-maude.png"
+  },
+  "mxr-carbon-copy": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-carbon-copy.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-carbon-copy.png"
+  },
+  "mxr-carbon-copy-bright": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-carbon-copy-bright.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-carbon-copy-bright.png"
+  },
+  "mxr-carbon-copy-mini": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-carbon-copy-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-carbon-copy-mini.png"
+  },
+  "mxr-carbon-copy-deluxe": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-carbon-copy-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-carbon-copy-deluxe.png"
+  },
+  "boss-dm2w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dm-2w-waza.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dm-2w-waza.png"
+  },
+  "ehx-memory-man-deluxe": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-memory-man.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-memory-man.png"
+  },
+  "ehx-memory-man-550tt": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-memory-man-550-tt.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-memory-man-550-tt.png"
+  },
+  "ehx-memory-toy": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-memory-toy.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-memory-toy.png"
+  },
+  "ehx-canyon": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-canyon.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-canyon.png"
+  },
+  "way-huge-aqua-puss": {
+    "large": "https://pedalplayground.com/public/pedals/way-huge-aqua-puss.png",
+    "small": "https://pedalplayground.com/public/pedals/way-huge-aqua-puss.png"
+  },
+  "way-huge-supa-puss": {
+    "large": "https://pedalplayground.com/public/pedals/way-huge-supa-puss.png",
+    "small": "https://pedalplayground.com/public/pedals/way-huge-supa-puss.png"
+  },
+  "tc-echobrain": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-echobrain.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-echobrain.png"
+  },
+  "ibanez-ad9": {
+    "large": "https://pedalplayground.com/public/pedals/ibanez-ad9-analog-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/ibanez-ad9-analog-delay.png"
+  },
+  "ibanez-admini": {
+    "large": "https://pedalplayground.com/public/pedals/ibanez-ad-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/ibanez-ad-mini.png"
+  },
+  "maxon-ad999": {
+    "large": "https://pedalplayground.com/public/pedals/maxon-ad999-analog-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/maxon-ad999-analog-delay.png"
+  },
+  "strymon-el-capistan": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-el-capistan.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-el-capistan.png"
+  },
+  "strymon-volante": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-volante.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-volante.png"
+  },
+  "catalinbread-belle-epoch": {
+    "large": "https://pedalplayground.com/public/pedals/catalinbread-belle-epoch.png",
+    "small": "https://pedalplayground.com/public/pedals/catalinbread-belle-epoch.png"
+  },
+  "catalinbread-belle-epoch-deluxe": {
+    "large": "https://pedalplayground.com/public/pedals/catalinbread-belle-epoch-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/catalinbread-belle-epoch-deluxe.png"
+  },
+  "mxr-echoplex-delay": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-ep103-echoplex-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-ep103-echoplex-delay.png"
+  },
+  "tc-alter-ego-2": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-alter-ego-2.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-alter-ego-2.png"
+  },
+  "fulltone-tt2": {
+    "large": "https://pedalplayground.com/public/pedals/fulltone-tube-tape-echo-tte.png",
+    "small": "https://pedalplayground.com/public/pedals/fulltone-tube-tape-echo-tte.png"
+  },
+  "universal-audio-starlight": {
+    "large": "https://pedalplayground.com/public/pedals/universal-audio-starlight-echo-station.png",
+    "small": "https://pedalplayground.com/public/pedals/universal-audio-starlight-echo-station.png"
+  },
+  "wampler-faux-tape-echo-v2": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-faux-tape-echo-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-faux-tape-echo-v2.png"
+  },
+  "keeley-mag-echo": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-mag-echo.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-mag-echo.png"
+  },
+  "danelectro-reel-echo": {
+    "large": "https://pedalplayground.com/public/pedals/danelectro-reel-echo.png",
+    "small": "https://pedalplayground.com/public/pedals/danelectro-reel-echo.png"
+  },
+  "seymour-duncan-vapor-trail": {
+    "large": "https://pedalplayground.com/public/pedals/seymour-duncan-vapor-trail.png",
+    "small": "https://pedalplayground.com/public/pedals/seymour-duncan-vapor-trail.png"
+  },
+  "earthquaker-disaster-transport-sr": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-disaster-transport-sr.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-disaster-transport-sr.png"
+  },
+  "ehx-deluxe-memory-boy": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-memory-boy.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-memory-boy.png"
+  },
+  "ehx-memory-boy": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-memory-boy.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-memory-boy.png"
+  },
+  "boss-dd3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dd-3.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dd-3.png"
+  },
+  "boss-dd5": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dd-5.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dd-5.png"
+  },
+  "boss-dd6": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dd-6.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dd-6.png"
+  },
+  "boss-dd7": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dd-7.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dd-7.png"
+  },
+  "boss-dd8": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dd-8.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dd-8.png"
+  },
+  "boss-dd200": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dd-200.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dd-200.png"
+  },
+  "boss-dd500": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dd-500.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dd-500.png"
+  },
+  "tc-flashback-2": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-flashback-2.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-flashback-2.png"
+  },
+  "tc-flashback-mini": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-flashback-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-flashback-mini.png"
+  },
+  "tc-flashback-x4": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-flashback-x4.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-flashback-x4.png"
+  },
+  "line6-dl4-mkii": {
+    "large": "https://pedalplayground.com/public/pedals/line-6-dl4-mkii.png",
+    "small": "https://pedalplayground.com/public/pedals/line-6-dl4-mkii.png"
+  },
+  "digitech-timebender": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-timebender.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-timebender.png"
+  },
+  "digitech-obscura": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-obscura.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-obscura.png"
+  },
+  "mooer-d7": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-d7-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-d7-delay.png"
+  },
+  "joyo-d-seed": {
+    "large": "https://pedalplayground.com/public/pedals/joyo-d-seed-dual-channel-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/joyo-d-seed-dual-channel-delay.png"
+  },
+  "joyo-aquarius": {
+    "large": "https://pedalplayground.com/public/pedals/joyo-aquarius-delay-looper.png",
+    "small": "https://pedalplayground.com/public/pedals/joyo-aquarius-delay-looper.png"
+  },
+  "nux-time-core-deluxe": {
+    "large": "https://pedalplayground.com/public/pedals/nux-time-core-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/nux-time-core-deluxe.png"
+  },
+  "donner-yellow-fall": {
+    "large": "https://pedalplayground.com/public/pedals/donner-yellow-fall.png",
+    "small": "https://pedalplayground.com/public/pedals/donner-yellow-fall.png"
+  },
+  "zoom-ms70cdr-delay": {
+    "large": "https://pedalplayground.com/public/pedals/zoom-ms-70cdr.png",
+    "small": "https://pedalplayground.com/public/pedals/zoom-ms-70cdr.png"
+  },
+  "behringer-vd400": {
+    "large": "https://pedalplayground.com/public/pedals/behringer-vd400-vintage-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/behringer-vd400-vintage-delay.png"
+  },
+  "keeley-compressor-mini": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-compressor-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-compressor-mini.png"
+  },
+  "walrus-deep-six-v3": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-deep-six-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-deep-six-v3.png"
+  },
+  "wampler-ego-compressor": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-ego-compressor.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-ego-compressor.png"
+  },
+  "wampler-mini-ego": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-mini-ego.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-mini-ego.png"
+  },
+  "origin-cali76-compact-deluxe": {
+    "large": "https://pedalplayground.com/public/pedals/origin-effects-cali76-compact-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/origin-effects-cali76-compact-deluxe.png"
+  },
+  "origin-cali76-stacked": {
+    "large": "https://pedalplayground.com/public/pedals/origin-effects-cali76-stacked-edition.png",
+    "small": "https://pedalplayground.com/public/pedals/origin-effects-cali76-stacked-edition.png"
+  },
+  "empress-compressor-mkii": {
+    "large": "https://pedalplayground.com/public/pedals/empress-compressor-mkii.png",
+    "small": "https://pedalplayground.com/public/pedals/empress-compressor-mkii.png"
+  },
+  "universal-audio-la2a": {
+    "large": "https://pedalplayground.com/public/pedals/universal-audio-la-2a.png",
+    "small": "https://pedalplayground.com/public/pedals/universal-audio-la-2a.png"
+  },
+  "effectrode-pc-2a": {
+    "large": "https://pedalplayground.com/public/pedals/effectrode-pc-2a.png",
+    "small": "https://pedalplayground.com/public/pedals/effectrode-pc-2a.png"
+  },
+  "mxr-dynacomp": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-dyna-comp.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-dyna-comp.png"
+  },
+  "mxr-dynacomp-deluxe": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-dyna-comp-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-dyna-comp-deluxe.png"
+  },
+  "boss-cs3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-cs-3.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-cs-3.png"
+  },
+  "boss-cp1x": {
+    "large": "https://pedalplayground.com/public/pedals/boss-cp-1x.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-cp-1x.png"
+  },
+  "analogman-bicomp": {
+    "large": "https://pedalplayground.com/public/pedals/analog-man-bi-comp.png",
+    "small": "https://pedalplayground.com/public/pedals/analog-man-bi-comp.png"
+  },
+  "xotic-sp-comp": {
+    "large": "https://pedalplayground.com/public/pedals/xotic-sp-compressor.png",
+    "small": "https://pedalplayground.com/public/pedals/xotic-sp-compressor.png"
+  },
+  "jhs-whitey-tighty": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-whitey-tighty.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-whitey-tighty.png"
+  },
+  "jhs-pulp-n-peel-v4": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-pulp.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-pulp.png"
+  },
+  "tc-hypergravity": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-hypergravity.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-hypergravity.png"
+  },
+  "tc-hypergravity-mini": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-hypergravity-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-hypergravity-mini.png"
+  },
+  "ehx-soul-preacher": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-soul-preacher.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-soul-preacher.png"
+  },
+  "earthquaker-warden-v2": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-warden-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-warden-v2.png"
+  },
+  "mooer-yellow-comp": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-yellow-comp.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-yellow-comp.png"
+  },
+  "donner-ultimate-comp": {
+    "large": "https://pedalplayground.com/public/pedals/donner-ultimate-comp.png",
+    "small": "https://pedalplayground.com/public/pedals/donner-ultimate-comp.png"
+  },
+  "caline-snake-bite": {
+    "large": "https://pedalplayground.com/public/pedals/caline-snake-bite.png",
+    "small": "https://pedalplayground.com/public/pedals/caline-snake-bite.png"
+  },
+  "joyo-dyna-compressor": {
+    "large": "https://pedalplayground.com/public/pedals/joyo-jf-10-dyna-compressor.png",
+    "small": "https://pedalplayground.com/public/pedals/joyo-jf-10-dyna-compressor.png"
+  },
+  "source-audio-atlas": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-atlas.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-atlas.png"
+  },
+  "boss-ns2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ns-2-noise-suppressor.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ns-2-noise-suppressor.png"
+  },
+  "isp-decimator-ii": {
+    "large": "https://pedalplayground.com/public/pedals/isp-decimator-ii.png",
+    "small": "https://pedalplayground.com/public/pedals/isp-decimator-ii.png"
+  },
+  "isp-decimator-g-string-ii": {
+    "large": "https://pedalplayground.com/public/pedals/isp-decimator-ii-g-string.png",
+    "small": "https://pedalplayground.com/public/pedals/isp-decimator-ii-g-string.png"
+  },
+  "fortin-zuul": {
+    "large": "https://pedalplayground.com/public/pedals/fortin-zuul.png",
+    "small": "https://pedalplayground.com/public/pedals/fortin-zuul.png"
+  },
+  "ehx-silencer": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-silencer.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-silencer.png"
+  },
+  "tc-sentry": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-sentry-noise-gate.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-sentry-noise-gate.png"
+  },
+  "mxr-smart-gate": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-smart-gate.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-smart-gate.png"
+  },
+  "donner-noise-killer": {
+    "large": "https://pedalplayground.com/public/pedals/donner-noise-killer.png",
+    "small": "https://pedalplayground.com/public/pedals/donner-noise-killer.png"
+  },
+  "mooer-noise-killer": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-noise-killer.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-noise-killer.png"
+  },
+  "revv-g8": {
+    "large": "https://pedalplayground.com/public/pedals/revv-g8-noise-gate.png",
+    "small": "https://pedalplayground.com/public/pedals/revv-g8-noise-gate.png"
+  },
+  "fender-noise-gate": {
+    "large": "https://pedalplayground.com/public/pedals/fender-noise-gate.png",
+    "small": "https://pedalplayground.com/public/pedals/fender-noise-gate.png"
+  },
+  "rocktron-hush": {
+    "large": "https://pedalplayground.com/public/pedals/rocktron-micro-hush.png",
+    "small": "https://pedalplayground.com/public/pedals/rocktron-micro-hush.png"
+  },
+  "joyo-noise-gate": {
+    "large": "https://pedalplayground.com/public/pedals/joyo-jf-31-noise-gate.png",
+    "small": "https://pedalplayground.com/public/pedals/joyo-jf-31-noise-gate.png"
+  },
+  "boss-lm2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-lm-2-limiter.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-lm-2-limiter.png"
+  },
+  "ehx-platform": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-platform.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-platform.png"
+  },
+  "darkglass-hyper-luminal": {
+    "large": "https://pedalplayground.com/public/pedals/darkglass-hyper-luminal.png",
+    "small": "https://pedalplayground.com/public/pedals/darkglass-hyper-luminal.png"
+  },
+  "dod-280": {
+    "large": "https://pedalplayground.com/public/pedals/dod-280-compressor.png",
+    "small": "https://pedalplayground.com/public/pedals/dod-280-compressor.png"
+  },
+  "pigtronix-philosophers-tone": {
+    "large": "https://pedalplayground.com/public/pedals/pigtronix-philosopher.png",
+    "small": "https://pedalplayground.com/public/pedals/pigtronix-philosopher.png"
+  },
+  "seymour-duncan-vise-grip": {
+    "large": "https://pedalplayground.com/public/pedals/seymour-duncan-vise-grip.png",
+    "small": "https://pedalplayground.com/public/pedals/seymour-duncan-vise-grip.png"
+  },
+  "fender-the-bends": {
+    "large": "https://pedalplayground.com/public/pedals/fender-the-bends.png",
+    "small": "https://pedalplayground.com/public/pedals/fender-the-bends.png"
+  },
+  "mad-professor-forest-green": {
+    "large": "https://pedalplayground.com/public/pedals/mad-professor-forest-green.png",
+    "small": "https://pedalplayground.com/public/pedals/mad-professor-forest-green.png"
+  },
+  "tone-city-comp-engine": {
+    "large": "https://pedalplayground.com/public/pedals/tone-city-comp-engine.png",
+    "small": "https://pedalplayground.com/public/pedals/tone-city-comp-engine.png"
+  },
+  "cali76-bass": {
+    "large": "https://pedalplayground.com/public/pedals/origin-effects-cali76-bass.png",
+    "small": "https://pedalplayground.com/public/pedals/origin-effects-cali76-bass.png"
+  },
+  "fairfield-accountant": {
+    "large": "https://pedalplayground.com/public/pedals/fairfield-circuitry-the-accountant.png",
+    "small": "https://pedalplayground.com/public/pedals/fairfield-circuitry-the-accountant.png"
+  },
+  "becos-stella": {
+    "large": "https://pedalplayground.com/public/pedals/becos-stella-compressor.png",
+    "small": "https://pedalplayground.com/public/pedals/becos-stella-compressor.png"
+  },
+  "strymon-compadre": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-compadre.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-compadre.png"
+  },
+  "boss-ge7": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ge-7-graphic-eq.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ge-7-graphic-eq.png"
+  },
+  "mxr-m108s": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m108s-10-band-eq.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m108s-10-band-eq.png"
+  },
+  "mxr-m109s": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m109s-6-band-eq.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m109s-6-band-eq.png"
+  },
+  "source-audio-eq2": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-eq2.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-eq2.png"
+  },
+  "boss-eq200": {
+    "large": "https://pedalplayground.com/public/pedals/boss-eq-200.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-eq-200.png"
+  },
+  "empress-paraeq": {
+    "large": "https://pedalplayground.com/public/pedals/empress-paraeq.png",
+    "small": "https://pedalplayground.com/public/pedals/empress-paraeq.png"
+  },
+  "wampler-eq": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-equator.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-equator.png"
+  },
+  "ehx-knockout": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-knockout.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-knockout.png"
+  },
+  "mooer-graphic-g": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-graphic-g.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-graphic-g.png"
+  },
+  "caline-10-band": {
+    "large": "https://pedalplayground.com/public/pedals/caline-cp-24-10-band-eq.png",
+    "small": "https://pedalplayground.com/public/pedals/caline-cp-24-10-band-eq.png"
+  },
+  "joyo-jeq-band": {
+    "large": "https://pedalplayground.com/public/pedals/joyo-jf-11-6-band-eq.png",
+    "small": "https://pedalplayground.com/public/pedals/joyo-jf-11-6-band-eq.png"
+  },
+  "dod-fx40b": {
+    "large": "https://pedalplayground.com/public/pedals/dod-fx40b-eq.png",
+    "small": "https://pedalplayground.com/public/pedals/dod-fx40b-eq.png"
+  },
+  "xotic-ep-booster": {
+    "large": "https://pedalplayground.com/public/pedals/xotic-ep-booster.png",
+    "small": "https://pedalplayground.com/public/pedals/xotic-ep-booster.png"
+  },
+  "catalinbread-galileo": {
+    "large": "https://pedalplayground.com/public/pedals/catalinbread-galileo.png",
+    "small": "https://pedalplayground.com/public/pedals/catalinbread-galileo.png"
+  },
+  "tc-bodyrez": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-bodyrez.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-bodyrez.png"
+  },
+  "lr-baggs-align": {
+    "large": "https://pedalplayground.com/public/pedals/lr-baggs-align-eq.png",
+    "small": "https://pedalplayground.com/public/pedals/lr-baggs-align-eq.png"
+  },
+  "fishman-aura": {
+    "large": "https://pedalplayground.com/public/pedals/fishman-aura-spectrum-di.png",
+    "small": "https://pedalplayground.com/public/pedals/fishman-aura-spectrum-di.png"
+  },
+  "darkglass-vintage-ultra-v2": {
+    "large": "https://pedalplayground.com/public/pedals/darkglass-vintage-ultra-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/darkglass-vintage-ultra-v2.png"
+  },
+  "sansamp-bass-di": {
+    "large": "https://pedalplayground.com/public/pedals/tech-21-sansamp-bass-driver-di.png",
+    "small": "https://pedalplayground.com/public/pedals/tech-21-sansamp-bass-driver-di.png"
+  },
+  "mxr-m80-bass-di": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m80-bass-d-i.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m80-bass-d-i.png"
+  },
+  "aguilar-tone-hammer": {
+    "large": "https://pedalplayground.com/public/pedals/aguilar-tone-hammer.png",
+    "small": "https://pedalplayground.com/public/pedals/aguilar-tone-hammer.png"
+  },
+  "keeley-katana": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-katana-clean-boost.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-katana-clean-boost.png"
+  },
+  "suhr-koko": {
+    "large": "https://pedalplayground.com/public/pedals/suhr-koko-boost.png",
+    "small": "https://pedalplayground.com/public/pedals/suhr-koko-boost.png"
+  },
+  "tc-spark-booster": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-spark-booster.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-spark-booster.png"
+  },
+  "tc-spark-mini": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-spark-mini-booster.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-spark-mini-booster.png"
+  },
+  "ehx-lpb1": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-lpb-1-linear-power-booster.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-lpb-1-linear-power-booster.png"
+  },
+  "jhs-prestige": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-prestige.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-prestige.png"
+  },
+  "mxr-m133": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m133-micro-amp.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m133-micro-amp.png"
+  },
+  "zvex-sho": {
+    "large": "https://pedalplayground.com/public/pedals/z-vex-super-hard-on.png",
+    "small": "https://pedalplayground.com/public/pedals/z-vex-super-hard-on.png"
+  },
+  "ehx-qtron-plus": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-q-tron.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-q-tron.png"
+  },
+  "ehx-micro-qtron": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-micro-q-tron.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-micro-q-tron.png"
+  },
+  "ehx-enigma": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-enigma-q-balls.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-enigma-q-balls.png"
+  },
+  "boss-aw3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-aw-3-dynamic-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-aw-3-dynamic-wah.png"
+  },
+  "mxr-envelope-filter": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m82-envelope-filter.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m82-envelope-filter.png"
+  },
+  "source-audio-spectrum": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-spectrum.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-spectrum.png"
+  },
+  "3leaf-proton": {
+    "large": "https://pedalplayground.com/public/pedals/3leaf-audio-proton-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/3leaf-audio-proton-v3.png"
+  },
+  "pigtronix-envelope-phaser": {
+    "large": "https://pedalplayground.com/public/pedals/pigtronix-ep2.png",
+    "small": "https://pedalplayground.com/public/pedals/pigtronix-ep2.png"
+  },
+  "mad-professor-snow-white": {
+    "large": "https://pedalplayground.com/public/pedals/mad-professor-snow-white-auto-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/mad-professor-snow-white-auto-wah.png"
+  },
+  "earthquaker-spatial-delivery": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-spatial-delivery-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-spatial-delivery-v2.png"
+  },
+  "dod-440-envelope-filter": {
+    "large": "https://pedalplayground.com/public/pedals/dod-440-envelope-filter.png",
+    "small": "https://pedalplayground.com/public/pedals/dod-440-envelope-filter.png"
+  },
+  "mooer-envelope": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-envelope.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-envelope.png"
+  },
+  "wmd-protostar": {
+    "large": "https://pedalplayground.com/public/pedals/wmd-protostar.png",
+    "small": "https://pedalplayground.com/public/pedals/wmd-protostar.png"
+  },
+  "mutron-3": {
+    "large": "https://pedalplayground.com/public/pedals/mu-tron-micro-tron-iii.png",
+    "small": "https://pedalplayground.com/public/pedals/mu-tron-micro-tron-iii.png"
+  },
+  "boss-ft2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ft-2-dynamic-filter.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ft-2-dynamic-filter.png"
+  },
+  "moog-mf101": {
+    "large": "https://pedalplayground.com/public/pedals/moog-mf-101-lowpass-filter.png",
+    "small": "https://pedalplayground.com/public/pedals/moog-mf-101-lowpass-filter.png"
+  },
+  "malekko-scrutator": {
+    "large": "https://pedalplayground.com/public/pedals/malekko-scrutator.png",
+    "small": "https://pedalplayground.com/public/pedals/malekko-scrutator.png"
+  },
+  "zvex-seek-wah": {
+    "large": "https://pedalplayground.com/public/pedals/z-vex-seek-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/z-vex-seek-wah.png"
+  },
+  "tc-sub-n-up": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-sub.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-sub.png"
+  },
+  "caroline-somersault": {
+    "large": "https://pedalplayground.com/public/pedals/caroline-guitar-company-somersault.png",
+    "small": "https://pedalplayground.com/public/pedals/caroline-guitar-company-somersault.png"
+  },
+  "joyo-wow-wah": {
+    "large": "https://pedalplayground.com/public/pedals/joyo-jf-09-wow-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/joyo-jf-09-wow-wah.png"
+  },
+  "behringer-fm600": {
+    "large": "https://pedalplayground.com/public/pedals/behringer-fm600-filter-machine.png",
+    "small": "https://pedalplayground.com/public/pedals/behringer-fm600-filter-machine.png"
+  },
+  "aguilar-filter-twin": {
+    "large": "https://pedalplayground.com/public/pedals/aguilar-filter-twin.png",
+    "small": "https://pedalplayground.com/public/pedals/aguilar-filter-twin.png"
+  },
+  "subdecay-prometheus-dlx": {
+    "large": "https://pedalplayground.com/public/pedals/subdecay-prometheus-dlx.png",
+    "small": "https://pedalplayground.com/public/pedals/subdecay-prometheus-dlx.png"
+  },
+  "dunlop-crybaby-gcb95": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-cry-baby-gcb95.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-cry-baby-gcb95.png"
+  },
+  "dunlop-crybaby-95q": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-cry-baby-95q.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-cry-baby-95q.png"
+  },
+  "dunlop-crybaby-mini": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-cry-baby-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-cry-baby-mini.png"
+  },
+  "dunlop-jh1d": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-jh-1d-jimi-hendrix-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-jh-1d-jimi-hendrix-wah.png"
+  },
+  "dunlop-535q": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-535q-multi-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-535q-multi-wah.png"
+  },
+  "dunlop-cbm95": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-cbm95-cry-baby-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-cbm95-cry-baby-mini.png"
+  },
+  "vox-v845": {
+    "large": "https://pedalplayground.com/public/pedals/vox-v845-classic-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/vox-v845-classic-wah.png"
+  },
+  "vox-v847": {
+    "large": "https://pedalplayground.com/public/pedals/vox-v847-a-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/vox-v847-a-wah.png"
+  },
+  "wilson-ten-spot-ii": {
+    "large": "https://pedalplayground.com/public/pedals/wilson-effects-ten-spot-ii.png",
+    "small": "https://pedalplayground.com/public/pedals/wilson-effects-ten-spot-ii.png"
+  },
+  "teese-rmc3": {
+    "large": "https://pedalplayground.com/public/pedals/real-mccoy-custom-rmc3-fl.png",
+    "small": "https://pedalplayground.com/public/pedals/real-mccoy-custom-rmc3-fl.png"
+  },
+  "xotic-xw1": {
+    "large": "https://pedalplayground.com/public/pedals/xotic-xw-1.png",
+    "small": "https://pedalplayground.com/public/pedals/xotic-xw-1.png"
+  },
+  "morley-bad-horsie-2": {
+    "large": "https://pedalplayground.com/public/pedals/morley-bad-horsie-2.png",
+    "small": "https://pedalplayground.com/public/pedals/morley-bad-horsie-2.png"
+  },
+  "morley-classic-wah": {
+    "large": "https://pedalplayground.com/public/pedals/morley-classic-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/morley-classic-wah.png"
+  },
+  "morley-mini-wah": {
+    "large": "https://pedalplayground.com/public/pedals/morley-20-20-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/morley-20-20-wah.png"
+  },
+  "boss-pw3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-pw-3-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-pw-3-wah.png"
+  },
+  "fulltone-clyde": {
+    "large": "https://pedalplayground.com/public/pedals/fulltone-clyde-standard.png",
+    "small": "https://pedalplayground.com/public/pedals/fulltone-clyde-standard.png"
+  },
+  "mxr-mc404-wah": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-mc404-cae-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-mc404-cae-wah.png"
+  },
+  "xotic-rc-booster": {
+    "large": "https://pedalplayground.com/public/pedals/xotic-rc-booster-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/xotic-rc-booster-v2.png"
+  },
+  "xotic-ac-booster": {
+    "large": "https://pedalplayground.com/public/pedals/xotic-ac-booster.png",
+    "small": "https://pedalplayground.com/public/pedals/xotic-ac-booster.png"
+  },
+  "mxr-m133-micro-amp": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m133-micro-amp.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m133-micro-amp.png"
+  },
+  "mxr-m293-booster-mini": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m293-booster-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m293-booster-mini.png"
+  },
+  "earthquaker-arrows": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-arrows-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-arrows-v2.png"
+  },
+  "walrus-monument": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-monument-v2-harmonic-tap-tremolo.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-monument-v2-harmonic-tap-tremolo.png"
+  },
+  "catalinbread-naga-viper": {
+    "large": "https://pedalplayground.com/public/pedals/catalinbread-naga-viper.png",
+    "small": "https://pedalplayground.com/public/pedals/catalinbread-naga-viper.png"
+  },
+  "bsp-treble-booster": {
+    "large": "https://pedalplayground.com/public/pedals/bsm-rm-treble-booster.png",
+    "small": "https://pedalplayground.com/public/pedals/bsm-rm-treble-booster.png"
+  },
+  "analog-man-beano-boost": {
+    "large": "https://pedalplayground.com/public/pedals/analog-man-beano-boost.png",
+    "small": "https://pedalplayground.com/public/pedals/analog-man-beano-boost.png"
+  },
+  "jhs-angry-driver": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-angry-driver.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-angry-driver.png"
+  },
+  "boss-fb2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-fb-2-feedbacker-booster.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-fb-2-feedbacker-booster.png"
+  },
+  "zvex-super-hard-on": {
+    "large": "https://pedalplayground.com/public/pedals/zvex-super-hard-on.png",
+    "small": "https://pedalplayground.com/public/pedals/zvex-super-hard-on.png"
+  },
+  "emerson-paramount": {
+    "large": "https://pedalplayground.com/public/pedals/emerson-custom-paramount.png",
+    "small": "https://pedalplayground.com/public/pedals/emerson-custom-paramount.png"
+  },
+  "wampler-decibel": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-db-boost-buffer.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-db-boost-buffer.png"
+  },
+  "chase-bliss-condor": {
+    "large": "https://pedalplayground.com/public/pedals/chase-bliss-audio-condor.png",
+    "small": "https://pedalplayground.com/public/pedals/chase-bliss-audio-condor.png"
+  },
+  "greer-southland": {
+    "large": "https://pedalplayground.com/public/pedals/greer-amps-southland.png",
+    "small": "https://pedalplayground.com/public/pedals/greer-amps-southland.png"
+  },
+  "ehx-screaming-bird": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-screaming-bird-treble-booster.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-screaming-bird-treble-booster.png"
+  },
+  "ehx-mole": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-mole-bass-booster.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-mole-bass-booster.png"
+  },
+  "earthquaker-tone-job": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-tone-job-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-tone-job-v2.png"
+  },
+  "orange-getaway-driver": {
+    "large": "https://pedalplayground.com/public/pedals/orange-getaway-driver.png",
+    "small": "https://pedalplayground.com/public/pedals/orange-getaway-driver.png"
+  },
+  "boss-ds1": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ds-1-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ds-1-distortion.png"
+  },
+  "boss-ds1w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ds-1w-waza-craft-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ds-1w-waza-craft-distortion.png"
+  },
+  "boss-ds2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ds-2-turbo-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ds-2-turbo-distortion.png"
+  },
+  "boss-mt2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-mt-2-metal-zone.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-mt-2-metal-zone.png"
+  },
+  "boss-mt2w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-mt-2w-waza-craft-metal-zone.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-mt-2w-waza-craft-metal-zone.png"
+  },
+  "boss-md2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-md-2-mega-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-md-2-mega-distortion.png"
+  },
+  "boss-st2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-st-2-power-stack.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-st-2-power-stack.png"
+  },
+  "boss-da2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-da-2-adaptive-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-da-2-adaptive-distortion.png"
+  },
+  "proco-rat2": {
+    "large": "https://pedalplayground.com/public/pedals/pro-co-rat-2.png",
+    "small": "https://pedalplayground.com/public/pedals/pro-co-rat-2.png"
+  },
+  "proco-fat-rat": {
+    "large": "https://pedalplayground.com/public/pedals/pro-co-fat-rat.png",
+    "small": "https://pedalplayground.com/public/pedals/pro-co-fat-rat.png"
+  },
+  "proco-lil-rat": {
+    "large": "https://pedalplayground.com/public/pedals/pro-co-lil.png",
+    "small": "https://pedalplayground.com/public/pedals/pro-co-lil.png"
+  },
+  "jhs-packrat": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-packrat.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-packrat.png"
+  },
+  "mxr-m104-distortion-plus": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m104-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m104-distortion.png"
+  },
+  "mxr-m116-fullbore-metal": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m116-fullbore-metal.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m116-fullbore-metal.png"
+  },
+  "mxr-m75-super-badass": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m75-super-badass-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m75-super-badass-distortion.png"
+  },
+  "friedman-smallbox": {
+    "large": "https://pedalplayground.com/public/pedals/friedman-smallbox.png",
+    "small": "https://pedalplayground.com/public/pedals/friedman-smallbox.png"
+  },
+  "suhr-riot-mini": {
+    "large": "https://pedalplayground.com/public/pedals/suhr-riot-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/suhr-riot-mini.png"
+  },
+  "revv-g2": {
+    "large": "https://pedalplayground.com/public/pedals/revv-g2-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/revv-g2-overdrive.png"
+  },
+  "wampler-dracarys": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-dracarys-high-gain.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-dracarys-high-gain.png"
+  },
+  "wampler-sovereign": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-sovereign-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-sovereign-distortion.png"
+  },
+  "wampler-triple-wreck": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-triple-wreck.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-triple-wreck.png"
+  },
+  "diezel-herbert": {
+    "large": "https://pedalplayground.com/public/pedals/diezel-herbert-pedal.png",
+    "small": "https://pedalplayground.com/public/pedals/diezel-herbert-pedal.png"
+  },
+  "mesa-flux-drive": {
+    "large": "https://pedalplayground.com/public/pedals/mesa-boogie-flux-drive.png",
+    "small": "https://pedalplayground.com/public/pedals/mesa-boogie-flux-drive.png"
+  },
+  "mesa-throttle-box": {
+    "large": "https://pedalplayground.com/public/pedals/mesa-boogie-throttle-box.png",
+    "small": "https://pedalplayground.com/public/pedals/mesa-boogie-throttle-box.png"
+  },
+  "bogner-uberschall": {
+    "large": "https://pedalplayground.com/public/pedals/bogner-berschall-pedal.png",
+    "small": "https://pedalplayground.com/public/pedals/bogner-berschall-pedal.png"
+  },
+  "bogner-ecstasy-red": {
+    "large": "https://pedalplayground.com/public/pedals/bogner-ecstasy-red.png",
+    "small": "https://pedalplayground.com/public/pedals/bogner-ecstasy-red.png"
+  },
+  "bogner-ecstasy-blue": {
+    "large": "https://pedalplayground.com/public/pedals/bogner-ecstasy-blue.png",
+    "small": "https://pedalplayground.com/public/pedals/bogner-ecstasy-blue.png"
+  },
+  "prs-horsemeat": {
+    "large": "https://pedalplayground.com/public/pedals/prs-horsemeat-transparent-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/prs-horsemeat-transparent-overdrive.png"
+  },
+  "irs-plasma-pedal": {
+    "large": "https://pedalplayground.com/public/pedals/gamechanger-audio-plasma-pedal.png",
+    "small": "https://pedalplayground.com/public/pedals/gamechanger-audio-plasma-pedal.png"
+  },
+  "earthquaker-acapulco-gold": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-acapulco-gold.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-acapulco-gold.png"
+  },
+  "earthquaker-life-pedal": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-life-pedal-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-life-pedal-v2.png"
+  },
+  "kma-wurm": {
+    "large": "https://pedalplayground.com/public/pedals/kma-machines-wurm-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/kma-machines-wurm-distortion.png"
+  },
+  "tc-dark-matter": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-dark-matter-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-dark-matter-distortion.png"
+  },
+  "digitech-dirty-robot": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-dirty-robot-stereo-mini-synth.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-dirty-robot-stereo-mini-synth.png"
+  },
+  "ehx-big-muff": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-big-muff-pi.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-big-muff-pi.png"
+  },
+  "ehx-nano-big-muff": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-nano-big-muff-pi.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-nano-big-muff-pi.png"
+  },
+  "ehx-op-amp-big-muff": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-op-amp-big-muff.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-op-amp-big-muff.png"
+  },
+  "ehx-triangle-big-muff": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-triangle-big-muff.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-triangle-big-muff.png"
+  },
+  "ehx-rams-head-big-muff": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-ram.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-ram.png"
+  },
+  "ehx-green-russian-big-muff": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-green-russian-big-muff.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-green-russian-big-muff.png"
+  },
+  "ehx-deluxe-big-muff": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-big-muff-pi.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-big-muff-pi.png"
+  },
+  "earthquaker-cloven-hoof": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-cloven-hoof.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-cloven-hoof.png"
+  },
+  "wren-and-cuff-tall-font-russian": {
+    "large": "https://pedalplayground.com/public/pedals/wren-and-cuff-tall-font-russian.png",
+    "small": "https://pedalplayground.com/public/pedals/wren-and-cuff-tall-font-russian.png"
+  },
+  "dunlop-ffm1": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-ffm1-fuzz-face-mini-silicon.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-ffm1-fuzz-face-mini-silicon.png"
+  },
+  "dunlop-ffm2": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-ffm2-fuzz-face-mini-germanium.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-ffm2-fuzz-face-mini-germanium.png"
+  },
+  "dunlop-ffm3": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-ffm3-fuzz-face-mini-hendrix.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-ffm3-fuzz-face-mini-hendrix.png"
+  },
+  "dunlop-jhf1": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-jhf1-jimi-hendrix-fuzz-face.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-jhf1-jimi-hendrix-fuzz-face.png"
+  },
+  "analogman-sunface": {
+    "large": "https://pedalplayground.com/public/pedals/analog-man-sun-face.png",
+    "small": "https://pedalplayground.com/public/pedals/analog-man-sun-face.png"
+  },
+  "jhs-bender": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-bender.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-bender.png"
+  },
+  "earthquaker-tone-reaper": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-tone-reaper.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-tone-reaper.png"
+  },
+  "zvex-fuzz-factory": {
+    "large": "https://pedalplayground.com/public/pedals/zvex-fuzz-factory.png",
+    "small": "https://pedalplayground.com/public/pedals/zvex-fuzz-factory.png"
+  },
+  "zvex-fuzz-factory-7": {
+    "large": "https://pedalplayground.com/public/pedals/zvex-fuzz-factory-7.png",
+    "small": "https://pedalplayground.com/public/pedals/zvex-fuzz-factory-7.png"
+  },
+  "zvex-woolly-mammoth": {
+    "large": "https://pedalplayground.com/public/pedals/zvex-woolly-mammoth.png",
+    "small": "https://pedalplayground.com/public/pedals/zvex-woolly-mammoth.png"
+  },
+  "death-by-audio-supersonic-fuzz-gun": {
+    "large": "https://pedalplayground.com/public/pedals/death-by-audio-supersonic-fuzz-gun.png",
+    "small": "https://pedalplayground.com/public/pedals/death-by-audio-supersonic-fuzz-gun.png"
+  },
+  "earthquaker-data-corrupter": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-data-corrupter.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-data-corrupter.png"
+  },
+  "dba-apocalypse": {
+    "large": "https://pedalplayground.com/public/pedals/death-by-audio-apocalypse.png",
+    "small": "https://pedalplayground.com/public/pedals/death-by-audio-apocalypse.png"
+  },
+  "fulltone-octafuzz": {
+    "large": "https://pedalplayground.com/public/pedals/fulltone-octafuzz-of-2.png",
+    "small": "https://pedalplayground.com/public/pedals/fulltone-octafuzz-of-2.png"
+  },
+  "dunlop-jh-octavio": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-jh3s-jimi-hendrix-octavio.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-jh3s-jimi-hendrix-octavio.png"
+  },
+  "earthquaker-tentacle": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-tentacle-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-tentacle-v2.png"
+  },
+  "jhs-supreme": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-supreme.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-supreme.png"
+  },
+  "jhs-muffuletta": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-muffuletta.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-muffuletta.png"
+  },
+  "keeley-fuzz-bender": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-fuzz-bender.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-fuzz-bender.png"
+  },
+  "walrus-contraband": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-contraband.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-contraband.png"
+  },
+  "boss-fz1w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-fz-1w-waza-craft-fuzz.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-fz-1w-waza-craft-fuzz.png"
+  },
+  "tc-rusty-fuzz": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-rusty-fuzz.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-rusty-fuzz.png"
+  },
+  "ehx-big-muff-op-amp": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-op-amp-big-muff-reissue.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-op-amp-big-muff-reissue.png"
+  },
+  "ibanez-ts9": {
+    "large": "https://pedalplayground.com/public/pedals/ibanez-ts9-tube-screamer.png",
+    "small": "https://pedalplayground.com/public/pedals/ibanez-ts9-tube-screamer.png"
+  },
+  "ibanez-ts808": {
+    "large": "https://pedalplayground.com/public/pedals/ibanez-ts808-tube-screamer.png",
+    "small": "https://pedalplayground.com/public/pedals/ibanez-ts808-tube-screamer.png"
+  },
+  "ibanez-ts9dx": {
+    "large": "https://pedalplayground.com/public/pedals/ibanez-ts9dx-turbo-tube-screamer.png",
+    "small": "https://pedalplayground.com/public/pedals/ibanez-ts9dx-turbo-tube-screamer.png"
+  },
+  "ibanez-tsmini": {
+    "large": "https://pedalplayground.com/public/pedals/ibanez-ts-mini-tube-screamer.png",
+    "small": "https://pedalplayground.com/public/pedals/ibanez-ts-mini-tube-screamer.png"
+  },
+  "maxon-od808": {
+    "large": "https://pedalplayground.com/public/pedals/maxon-od808-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/maxon-od808-overdrive.png"
+  },
+  "maxon-od9": {
+    "large": "https://pedalplayground.com/public/pedals/maxon-od9-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/maxon-od9-overdrive.png"
+  },
+  "earthquaker-plumes": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-plumes.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-plumes.png"
+  },
+  "jhs-bonsai": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-bonsai.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-bonsai.png"
+  },
+  "keeley-red-dirt": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-red-dirt-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-red-dirt-overdrive.png"
+  },
+  "wampler-clarksdale": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-clarksdale-delta-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-clarksdale-delta-overdrive.png"
+  },
+  "visual-sound-v2-rt": {
+    "large": "https://pedalplayground.com/public/pedals/visual-sound-route-66-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/visual-sound-route-66-v2.png"
+  },
+  "klon-ktr": {
+    "large": "https://pedalplayground.com/public/pedals/klon-ktr.png",
+    "small": "https://pedalplayground.com/public/pedals/klon-ktr.png"
+  },
+  "wampler-tumnus": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-tumnus.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-tumnus.png"
+  },
+  "wampler-tumnus-deluxe": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-tumnus-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-tumnus-deluxe.png"
+  },
+  "mxr-sugar-drive": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m294-sugar-drive.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m294-sugar-drive.png"
+  },
+  "ehx-soul-food": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-soul-food.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-soul-food.png"
+  },
+  "tc-zeus-drive": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-zeus-drive.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-zeus-drive.png"
+  },
+  "jrockett-archer": {
+    "large": "https://pedalplayground.com/public/pedals/j-rockett-archer.png",
+    "small": "https://pedalplayground.com/public/pedals/j-rockett-archer.png"
+  },
+  "jrockett-archer-ikon": {
+    "large": "https://pedalplayground.com/public/pedals/j-rockett-archer-ikon.png",
+    "small": "https://pedalplayground.com/public/pedals/j-rockett-archer-ikon.png"
+  },
+  "ryra-klone": {
+    "large": "https://pedalplayground.com/public/pedals/ryra-the-klone.png",
+    "small": "https://pedalplayground.com/public/pedals/ryra-the-klone.png"
+  },
+  "ceriatone-centura": {
+    "large": "https://pedalplayground.com/public/pedals/ceriatone-centura.png",
+    "small": "https://pedalplayground.com/public/pedals/ceriatone-centura.png"
+  },
+  "jhs-morning-glory": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-morning-glory-v4.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-morning-glory-v4.png"
+  },
+  "analogman-king-of-tone": {
+    "large": "https://pedalplayground.com/public/pedals/analog-man-king-of-tone.png",
+    "small": "https://pedalplayground.com/public/pedals/analog-man-king-of-tone.png"
+  },
+  "analogman-prince-of-tone": {
+    "large": "https://pedalplayground.com/public/pedals/analog-man-prince-of-tone.png",
+    "small": "https://pedalplayground.com/public/pedals/analog-man-prince-of-tone.png"
+  },
+  "snouse-blackbox2": {
+    "large": "https://pedalplayground.com/public/pedals/snouse-blackbox-2.png",
+    "small": "https://pedalplayground.com/public/pedals/snouse-blackbox-2.png"
+  },
+  "jhs-double-barrel": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-double-barrel-v4.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-double-barrel-v4.png"
+  },
+  "boss-bd2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-bd-2-blues-driver.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-bd-2-blues-driver.png"
+  },
+  "boss-bd2w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-bd-2w-waza-craft-blues-driver.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-bd-2w-waza-craft-blues-driver.png"
+  },
+  "boss-sd1": {
+    "large": "https://pedalplayground.com/public/pedals/boss-sd-1-super-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-sd-1-super-overdrive.png"
+  },
+  "boss-sd1w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-sd-1w-waza-craft-super-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-sd-1w-waza-craft-super-overdrive.png"
+  },
+  "boss-od3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-od-3-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-od-3-overdrive.png"
+  },
+  "boss-od1x": {
+    "large": "https://pedalplayground.com/public/pedals/boss-od-1x-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-od-1x-overdrive.png"
+  },
+  "fulltone-ocd": {
+    "large": "https://pedalplayground.com/public/pedals/fulltone-ocd.png",
+    "small": "https://pedalplayground.com/public/pedals/fulltone-ocd.png"
+  },
+  "fulltone-fulldrive2": {
+    "large": "https://pedalplayground.com/public/pedals/fulltone-fulldrive-2.png",
+    "small": "https://pedalplayground.com/public/pedals/fulltone-fulldrive-2.png"
+  },
+  "fulltone-plimsoul": {
+    "large": "https://pedalplayground.com/public/pedals/fulltone-plimsoul.png",
+    "small": "https://pedalplayground.com/public/pedals/fulltone-plimsoul.png"
+  },
+  "walrus-ages": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-ages-five-state-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-ages-five-state-overdrive.png"
+  },
+  "walrus-voyager": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-voyager-preamp-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-voyager-preamp-overdrive.png"
+  },
+  "walrus-385": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-385-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-385-overdrive.png"
+  },
+  "paul-cochrane-timmy": {
+    "large": "https://pedalplayground.com/public/pedals/paul-cochrane-timmy-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/paul-cochrane-timmy-v3.png"
+  },
+  "mxr-timmy": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-csp027-timmy-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-csp027-timmy-overdrive.png"
+  },
+  "mxr-m193-gt-od": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m193-gt-od.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m193-gt-od.png"
+  },
+  "mxr-m77-badass-od": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m77-custom-badass-modified-od.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m77-custom-badass-modified-od.png"
+  },
+  "mxr-m78-badass-distortion": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m78-custom-badass-78-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m78-custom-badass-78-distortion.png"
+  },
+  "greer-lightspeed": {
+    "large": "https://pedalplayground.com/public/pedals/greer-amps-lightspeed-organic-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/greer-amps-lightspeed-organic-overdrive.png"
+  },
+  "bondi-sick-as": {
+    "large": "https://pedalplayground.com/public/pedals/bondi-effects-sick-as-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/bondi-effects-sick-as-overdrive.png"
+  },
+  "benson-preamp": {
+    "large": "https://pedalplayground.com/public/pedals/benson-amps-preamp-pedal.png",
+    "small": "https://pedalplayground.com/public/pedals/benson-amps-preamp-pedal.png"
+  },
+  "nordvang-89-od": {
+    "large": "https://pedalplayground.com/public/pedals/nordvang-89-od.png",
+    "small": "https://pedalplayground.com/public/pedals/nordvang-89-od.png"
+  },
+  "supro-drive": {
+    "large": "https://pedalplayground.com/public/pedals/supro-1305-drive.png",
+    "small": "https://pedalplayground.com/public/pedals/supro-1305-drive.png"
+  },
+  "vertex-steel-string": {
+    "large": "https://pedalplayground.com/public/pedals/vertex-steel-string-clean-drive.png",
+    "small": "https://pedalplayground.com/public/pedals/vertex-steel-string-clean-drive.png"
+  },
+  "lovepedal-eternity": {
+    "large": "https://pedalplayground.com/public/pedals/lovepedal-eternity.png",
+    "small": "https://pedalplayground.com/public/pedals/lovepedal-eternity.png"
+  },
+  "mad-professor-sweet-honey": {
+    "large": "https://pedalplayground.com/public/pedals/mad-professor-sweet-honey-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/mad-professor-sweet-honey-overdrive.png"
+  },
+  "barber-gain-changer": {
+    "large": "https://pedalplayground.com/public/pedals/barber-electronics-gain-changer.png",
+    "small": "https://pedalplayground.com/public/pedals/barber-electronics-gain-changer.png"
+  },
+  "cmatmods-brownie": {
+    "large": "https://pedalplayground.com/public/pedals/cmatmods-brownie.png",
+    "small": "https://pedalplayground.com/public/pedals/cmatmods-brownie.png"
+  },
+  "earthquaker-westwood": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-westwood.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-westwood.png"
+  },
+  "earthquaker-special-cranker": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-special-cranker.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-special-cranker.png"
+  },
+  "tc-mojomojo": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-mojomojo-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-mojomojo-overdrive.png"
+  },
+  "tc-cinders": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-cinders-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-cinders-overdrive.png"
+  },
+  "jhs-3-series-screamer": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-3-series-screamer.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-3-series-screamer.png"
+  },
+  "jhs-3-series-distortion": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-3-series-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-3-series-distortion.png"
+  },
+  "jhs-moonshine": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-moonshine-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-moonshine-v2.png"
+  },
+  "jhs-angry-charlie": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-angry-charlie-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-angry-charlie-v3.png"
+  },
+  "keeley-d-and-m-drive": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-d-m-drive.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-d-m-drive.png"
+  },
+  "keeley-oxblood": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-oxblood-overdrive.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-oxblood-overdrive.png"
+  },
+  "blackstar-lt-drive": {
+    "large": "https://pedalplayground.com/public/pedals/blackstar-lt-drive.png",
+    "small": "https://pedalplayground.com/public/pedals/blackstar-lt-drive.png"
+  },
+  "orange-two-stroke": {
+    "large": "https://pedalplayground.com/public/pedals/orange-two-stroke-boost-eq.png",
+    "small": "https://pedalplayground.com/public/pedals/orange-two-stroke-boost-eq.png"
+  },
+  "fender-pugilist": {
+    "large": "https://pedalplayground.com/public/pedals/fender-pugilist-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/fender-pugilist-distortion.png"
+  },
+  "fender-full-moon": {
+    "large": "https://pedalplayground.com/public/pedals/fender-full-moon-distortion.png",
+    "small": "https://pedalplayground.com/public/pedals/fender-full-moon-distortion.png"
+  },
+  "boss-ce2w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ce-2w-waza-craft-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ce-2w-waza-craft-chorus.png"
+  },
+  "boss-ch1": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ch-1-super-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ch-1-super-chorus.png"
+  },
+  "boss-dc2w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dc-2w-waza-craft-dimension-c.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dc-2w-waza-craft-dimension-c.png"
+  },
+  "mxr-m234-chorus": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m234-analog-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m234-analog-chorus.png"
+  },
+  "mxr-m83-chorus": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m83-bass-chorus-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m83-bass-chorus-deluxe.png"
+  },
+  "ehx-small-clone": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-small-clone.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-small-clone.png"
+  },
+  "ehx-eddy": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-eddy-analog-vibrato-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-eddy-analog-vibrato-chorus.png"
+  },
+  "ehx-bass-clone": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-bass-clone.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-bass-clone.png"
+  },
+  "strymon-ola": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-ola-dbucket-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-ola-dbucket-chorus.png"
+  },
+  "walrus-julianna": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-julianna-stereo-chorus-vibrato.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-julianna-stereo-chorus-vibrato.png"
+  },
+  "jhs-emperor": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-emperor-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-emperor-v2.png"
+  },
+  "jhs-3-series-chorus": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-3-series-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-3-series-chorus.png"
+  },
+  "tc-corona-chorus": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-corona-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-corona-chorus.png"
+  },
+  "tc-corona-mini": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-corona-mini-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-corona-mini-chorus.png"
+  },
+  "tc-afterglow": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-afterglow-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-afterglow-chorus.png"
+  },
+  "earthquaker-sea-machine": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-sea-machine-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-sea-machine-v3.png"
+  },
+  "keeley-seafoam-plus": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-seafoam-plus-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-seafoam-plus-chorus.png"
+  },
+  "keeley-dynatrem": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-dyno-my-roto.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-dyno-my-roto.png"
+  },
+  "chase-bliss-warped-vinyl": {
+    "large": "https://pedalplayground.com/public/pedals/chase-bliss-audio-warped-vinyl-hifi.png",
+    "small": "https://pedalplayground.com/public/pedals/chase-bliss-audio-warped-vinyl-hifi.png"
+  },
+  "deco-saturator": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-deco-tape-saturation.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-deco-tape-saturation.png"
+  },
+  "analogman-chorus": {
+    "large": "https://pedalplayground.com/public/pedals/analog-man-bi-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/analog-man-bi-chorus.png"
+  },
+  "way-huge-blue-hippo": {
+    "large": "https://pedalplayground.com/public/pedals/way-huge-blue-hippo.png",
+    "small": "https://pedalplayground.com/public/pedals/way-huge-blue-hippo.png"
+  },
+  "foxgear-fenix": {
+    "large": "https://pedalplayground.com/public/pedals/foxgear-fenix.png",
+    "small": "https://pedalplayground.com/public/pedals/foxgear-fenix.png"
+  },
+  "source-audio-gemini": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-gemini-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-gemini-chorus.png"
+  },
+  "mad-professor-electric-blue": {
+    "large": "https://pedalplayground.com/public/pedals/mad-professor-electric-blue-chorus.png",
+    "small": "https://pedalplayground.com/public/pedals/mad-professor-electric-blue-chorus.png"
+  },
+  "boss-bf3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-bf-3-flanger.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-bf-3-flanger.png"
+  },
+  "mxr-m117r-flanger": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m117r-flanger.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m117r-flanger.png"
+  },
+  "mxr-m152-micro-flanger": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m152-micro-flanger.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m152-micro-flanger.png"
+  },
+  "ehx-electric-mistress": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-electric-mistress.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-electric-mistress.png"
+  },
+  "ehx-neo-mistress": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-neo-mistress.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-neo-mistress.png"
+  },
+  "tc-vortex-flanger": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-vortex-flanger.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-vortex-flanger.png"
+  },
+  "walrus-polychrome": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-polychrome-analog-flanger.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-polychrome-analog-flanger.png"
+  },
+  "boss-tr2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-tr-2-tremolo.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-tr-2-tremolo.png"
+  },
+  "ehx-pulsar": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-pulsar-stereo-tremolo.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-pulsar-stereo-tremolo.png"
+  },
+  "strymon-flint": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-flint-tremolo-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-flint-tremolo-reverb.png"
+  },
+  "jhs-kodiak": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-kodiak.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-kodiak.png"
+  },
+  "fulltone-supa-trem": {
+    "large": "https://pedalplayground.com/public/pedals/fulltone-supa-trem-2.png",
+    "small": "https://pedalplayground.com/public/pedals/fulltone-supa-trem-2.png"
+  },
+  "keeley-tremolo": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-tremolo-workstation.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-tremolo-workstation.png"
+  },
+  "tc-pipeline": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-pipeline-tap-tremolo.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-pipeline-tap-tremolo.png"
+  },
+  "earthquaker-hummingbird": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-hummingbird-v4.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-hummingbird-v4.png"
+  },
+  "source-audio-vertigo": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-vertigo-tremolo.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-vertigo-tremolo.png"
+  },
+  "fender-tre-verb": {
+    "large": "https://pedalplayground.com/public/pedals/fender-tre-verb.png",
+    "small": "https://pedalplayground.com/public/pedals/fender-tre-verb.png"
+  },
+  "boss-vb2w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-vb-2w-waza-craft-vibrato.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-vb-2w-waza-craft-vibrato.png"
+  },
+  "tc-shaker": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-shaker-vibrato.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-shaker-vibrato.png"
+  },
+  "earthquaker-aqueduct": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-aqueduct-vibrato.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-aqueduct-vibrato.png"
+  },
+  "jhs-unicorn": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-unicorn-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-unicorn-v2.png"
+  },
+  "fulltone-deja-vibe": {
+    "large": "https://pedalplayground.com/public/pedals/fulltone-mdv3-mini-deja-vibe.png",
+    "small": "https://pedalplayground.com/public/pedals/fulltone-mdv3-mini-deja-vibe.png"
+  },
+  "mxr-uni-vibe": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m68-uni-vibe.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m68-uni-vibe.png"
+  },
+  "dunlop-jh-univibe": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-jhm3-jimi-hendrix-uni-vibe.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-jhm3-jimi-hendrix-uni-vibe.png"
+  },
+  "ehx-good-vibes": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-good-vibes.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-good-vibes.png"
+  },
+  "strymon-lex": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-lex-rotary.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-lex-rotary.png"
+  },
+  "ehx-lester-g": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-lester-g-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-lester-g-deluxe.png"
+  },
+  "ehx-lester-k": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-lester-k.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-lester-k.png"
+  },
+  "boss-rt20": {
+    "large": "https://pedalplayground.com/public/pedals/boss-rt-20-rotary-ensemble.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-rt-20-rotary-ensemble.png"
+  },
+  "neo-instruments-ventilator": {
+    "large": "https://pedalplayground.com/public/pedals/neo-instruments-ventilator-ii.png",
+    "small": "https://pedalplayground.com/public/pedals/neo-instruments-ventilator-ii.png"
+  },
+  "source-audio-orbital": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-orbital-modulation.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-orbital-modulation.png"
+  },
+  "mxr-phase90": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m101-phase-90.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m101-phase-90.png"
+  },
+  "mxr-phase95": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m290-phase-95-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m290-phase-95-mini.png"
+  },
+  "mxr-phase99": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m99-phase-99.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m99-phase-99.png"
+  },
+  "mxr-evh-phase90": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-evh-phase-90.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-evh-phase-90.png"
+  },
+  "boss-ph3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ph-3-phase-shifter.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ph-3-phase-shifter.png"
+  },
+  "boss-ph1r": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ph-1r-phaser.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ph-1r-phaser.png"
+  },
+  "ehx-small-stone": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-small-stone-nano.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-small-stone-nano.png"
+  },
+  "ehx-bad-stone": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-bad-stone.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-bad-stone.png"
+  },
+  "ehx-nano-small-stone": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-nano-small-stone.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-nano-small-stone.png"
+  },
+  "jhs-3-series-phaser": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-3-series-phaser.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-3-series-phaser.png"
+  },
+  "keeley-phaser": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-bubbletron-dynamic-flanger-phaser.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-bubbletron-dynamic-flanger-phaser.png"
+  },
+  "earthquaker-grand-orbiter": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-grand-orbiter-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-grand-orbiter-v3.png"
+  },
+  "tc-helix-phaser": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-helix-phaser.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-helix-phaser.png"
+  },
+  "tc-blood-moon": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-blood-moon-phaser.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-blood-moon-phaser.png"
+  },
+  "source-audio-lunar": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-lunar-phaser.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-lunar-phaser.png"
+  },
+  "pigtronix-quantum-time": {
+    "large": "https://pedalplayground.com/public/pedals/pigtronix-quantum-time-modulator.png",
+    "small": "https://pedalplayground.com/public/pedals/pigtronix-quantum-time-modulator.png"
+  },
+  "empress-phaser": {
+    "large": "https://pedalplayground.com/public/pedals/empress-effects-phaser.png",
+    "small": "https://pedalplayground.com/public/pedals/empress-effects-phaser.png"
+  },
+  "way-huge-aqua-puss-mk3": {
+    "large": "https://pedalplayground.com/public/pedals/way-huge-ring-worm.png",
+    "small": "https://pedalplayground.com/public/pedals/way-huge-ring-worm.png"
+  },
+  "boss-oc3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-oc-3-super-octave.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-oc-3-super-octave.png"
+  },
+  "boss-oc5": {
+    "large": "https://pedalplayground.com/public/pedals/boss-oc-5-octave.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-oc-5-octave.png"
+  },
+  "ehx-pog2": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-pog2.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-pog2.png"
+  },
+  "ehx-micro-pog": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-micro-pog.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-micro-pog.png"
+  },
+  "ehx-nano-pog": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-nano-pog.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-nano-pog.png"
+  },
+  "ehx-pitchfork": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-pitch-fork.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-pitch-fork.png"
+  },
+  "ehx-pitchfork-plus": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-pitch-fork.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-pitch-fork.png"
+  },
+  "tc-subnup": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-sub.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-sub.png"
+  },
+  "tc-subnup-mini": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-sub.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-sub.png"
+  },
+  "mxr-bass-octave-deluxe": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-bass-octave-deluxe.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-bass-octave-deluxe.png"
+  },
+  "mooer-tender-octaver": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-tender-octaver-pro.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-tender-octaver-pro.png"
+  },
+  "boss-ps6": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ps-6-harmonist.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ps-6-harmonist.png"
+  },
+  "eventide-pitchfactor": {
+    "large": "https://pedalplayground.com/public/pedals/eventide-pitchfactor.png",
+    "small": "https://pedalplayground.com/public/pedals/eventide-pitchfactor.png"
+  },
+  "digitech-ricochet": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-ricochet.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-ricochet.png"
+  },
+  "digitech-whammy-dt": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-whammy-dt.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-whammy-dt.png"
+  },
+  "boss-whammy-ricochet-clone": {
+    "large": "https://pedalplayground.com/public/pedals/morpheus-bomber.png",
+    "small": "https://pedalplayground.com/public/pedals/morpheus-bomber.png"
+  },
+  "meris-hedra": {
+    "large": "https://pedalplayground.com/public/pedals/meris-hedra.png",
+    "small": "https://pedalplayground.com/public/pedals/meris-hedra.png"
+  },
+  "earthquaker-rainbow-machine": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-rainbow-machine.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-rainbow-machine.png"
+  },
+  "earthquaker-arpanoid": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-arpanoid.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-arpanoid.png"
+  },
+  "earthquaker-organizer-v2": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-organizer-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-organizer-v2.png"
+  },
+  "walrus-luminary-v2": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-luminary-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-luminary-v2.png"
+  },
+  "mooer-pitchbox": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-pitch-box.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-pitch-box.png"
+  },
+  "hotone-harmony": {
+    "large": "https://pedalplayground.com/public/pedals/hotone-harmony.png",
+    "small": "https://pedalplayground.com/public/pedals/hotone-harmony.png"
+  },
+  "joyo-ironman-acooustic": {
+    "large": "https://pedalplayground.com/public/pedals/joyo-ironman-jf-319-green-legend.png",
+    "small": "https://pedalplayground.com/public/pedals/joyo-ironman-jf-319-green-legend.png"
+  },
+  "boss-ps3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ps-3-pitch-shifter-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ps-3-pitch-shifter-delay.png"
+  },
+  "boss-ps5": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ps-5-super-shifter.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ps-5-super-shifter.png"
+  },
+  "eventide-microshift": {
+    "large": "https://pedalplayground.com/public/pedals/eventide-microshift.png",
+    "small": "https://pedalplayground.com/public/pedals/eventide-microshift.png"
+  },
+  "soundblox-pitch": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-c4-synth.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-c4-synth.png"
+  },
+  "red-panda-tensor": {
+    "large": "https://pedalplayground.com/public/pedals/red-panda-tensor.png",
+    "small": "https://pedalplayground.com/public/pedals/red-panda-tensor.png"
+  },
+  "chase-bliss-mood": {
+    "large": "https://pedalplayground.com/public/pedals/chase-bliss-mood.png",
+    "small": "https://pedalplayground.com/public/pedals/chase-bliss-mood.png"
+  },
+  "hologram-microcosm": {
+    "large": "https://pedalplayground.com/public/pedals/hologram-microcosm.png",
+    "small": "https://pedalplayground.com/public/pedals/hologram-microcosm.png"
+  },
+  "gamechanger-plasma": {
+    "large": "https://pedalplayground.com/public/pedals/gamechanger-audio-plasma-coil.png",
+    "small": "https://pedalplayground.com/public/pedals/gamechanger-audio-plasma-coil.png"
+  },
+  "pigtronix-disnortion": {
+    "large": "https://pedalplayground.com/public/pedals/pigtronix-disnortion.png",
+    "small": "https://pedalplayground.com/public/pedals/pigtronix-disnortion.png"
+  },
+  "keeley-synth-1": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-synth-1.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-synth-1.png"
+  },
+  "boss-sy1": {
+    "large": "https://pedalplayground.com/public/pedals/boss-sy-1-synthesizer.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-sy-1-synthesizer.png"
+  },
+  "boss-sy200": {
+    "large": "https://pedalplayground.com/public/pedals/boss-sy-200.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-sy-200.png"
+  },
+  "strymon-bigsky": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-bigsky.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-bigsky.png"
+  },
+  "boss-rv-500": {
+    "large": "https://pedalplayground.com/public/pedals/boss-rv-500.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-rv-500.png"
+  },
+  "boss-rv6": {
+    "large": "https://pedalplayground.com/public/pedals/boss-rv-6.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-rv-6.png"
+  },
+  "neunaber-wet": {
+    "large": "https://pedalplayground.com/public/pedals/neunaber-wet-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/neunaber-wet-reverb.png"
+  },
+  "tc-hof2": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-hall-of-fame-2.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-hall-of-fame-2.png"
+  },
+  "tc-hof-mini": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-hall-of-fame-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-hall-of-fame-mini.png"
+  },
+  "earthquaker-afterneath-v3": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-afterneath-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-afterneath-v3.png"
+  },
+  "earthquaker-dispatch-master": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-dispatch-master-v3.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-dispatch-master-v3.png"
+  },
+  "earthquaker-ghost-echo": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-ghost-echo.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-ghost-echo.png"
+  },
+  "walrus-slotva": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-slotv.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-slotv.png"
+  },
+  "walrus-descent": {
+    "large": "https://pedalplayground.com/public/pedals/walrus-audio-descent.png",
+    "small": "https://pedalplayground.com/public/pedals/walrus-audio-descent.png"
+  },
+  "keeley-caverns-v2": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-caverns-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-caverns-v2.png"
+  },
+  "empress-reverb": {
+    "large": "https://pedalplayground.com/public/pedals/empress-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/empress-reverb.png"
+  },
+  "gfi-specular-tempus": {
+    "large": "https://pedalplayground.com/public/pedals/gfi-system-specular-tempus.png",
+    "small": "https://pedalplayground.com/public/pedals/gfi-system-specular-tempus.png"
+  },
+  "chase-bliss-cxm1978": {
+    "large": "https://pedalplayground.com/public/pedals/chase-bliss-cxm-1978.png",
+    "small": "https://pedalplayground.com/public/pedals/chase-bliss-cxm-1978.png"
+  },
+  "eventide-blackhole": {
+    "large": "https://pedalplayground.com/public/pedals/eventide-blackhole.png",
+    "small": "https://pedalplayground.com/public/pedals/eventide-blackhole.png"
+  },
+  "death-by-audio-rooms": {
+    "large": "https://pedalplayground.com/public/pedals/death-by-audio-rooms.png",
+    "small": "https://pedalplayground.com/public/pedals/death-by-audio-rooms.png"
+  },
+  "caroline-meteore": {
+    "large": "https://pedalplayground.com/public/pedals/caroline-guitar-m-t-ore.png",
+    "small": "https://pedalplayground.com/public/pedals/caroline-guitar-m-t-ore.png"
+  },
+  "old-blood-dark-star-v2": {
+    "large": "https://pedalplayground.com/public/pedals/old-blood-noise-dark-star-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/old-blood-noise-dark-star-v2.png"
+  },
+  "old-blood-procession": {
+    "large": "https://pedalplayground.com/public/pedals/old-blood-noise-procession.png",
+    "small": "https://pedalplayground.com/public/pedals/old-blood-noise-procession.png"
+  },
+  "mxr-m300": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m300-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m300-reverb.png"
+  },
+  "matthews-cosmonaut": {
+    "large": "https://pedalplayground.com/public/pedals/matthews-effects-cosmonaut-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/matthews-effects-cosmonaut-v2.png"
+  },
+  "alexander-sky5000": {
+    "large": "https://pedalplayground.com/public/pedals/alexander-sky-5000.png",
+    "small": "https://pedalplayground.com/public/pedals/alexander-sky-5000.png"
+  },
+  "dr-scientist-reverberator": {
+    "large": "https://pedalplayground.com/public/pedals/dr-scientist-reverberator.png",
+    "small": "https://pedalplayground.com/public/pedals/dr-scientist-reverberator.png"
+  },
+  "cooper-fx-outward": {
+    "large": "https://pedalplayground.com/public/pedals/cooper-fx-outward-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/cooper-fx-outward-v2.png"
+  },
+  "digitech-polara": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-polara.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-polara.png"
+  },
+  "digitech-supernatural": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-supernatural.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-supernatural.png"
+  },
+  "red-panda-context-v2": {
+    "large": "https://pedalplayground.com/public/pedals/red-panda-context-v2.png",
+    "small": "https://pedalplayground.com/public/pedals/red-panda-context-v2.png"
+  },
+  "crazy-tube-splash-v4": {
+    "large": "https://pedalplayground.com/public/pedals/crazy-tube-circuits-splash-mk-iv.png",
+    "small": "https://pedalplayground.com/public/pedals/crazy-tube-circuits-splash-mk-iv.png"
+  },
+  "hamstead-zenith": {
+    "large": "https://pedalplayground.com/public/pedals/hamstead-zenith.png",
+    "small": "https://pedalplayground.com/public/pedals/hamstead-zenith.png"
+  },
+  "pladask-tåken": {
+    "large": "https://pedalplayground.com/public/pedals/pladask-elektrisk-t-ken.png",
+    "small": "https://pedalplayground.com/public/pedals/pladask-elektrisk-t-ken.png"
+  },
+  "hungry-robot-wardenclyffe": {
+    "large": "https://pedalplayground.com/public/pedals/hungry-robot-wardenclyffe.png",
+    "small": "https://pedalplayground.com/public/pedals/hungry-robot-wardenclyffe.png"
+  },
+  "jhs-3-series-reverb": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-3-series-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-3-series-reverb.png"
+  },
+  "electro-harmonix-cathedral": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-cathedral.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-cathedral.png"
+  },
+  "nativeaudio-ghost-ridge": {
+    "large": "https://pedalplayground.com/public/pedals/nativeaudio-ghost-ridge.png",
+    "small": "https://pedalplayground.com/public/pedals/nativeaudio-ghost-ridge.png"
+  },
+  "boss-waza-rv200": {
+    "large": "https://pedalplayground.com/public/pedals/boss-rv-200.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-rv-200.png"
+  },
+  "boss-rv3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-rv-3.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-rv-3.png"
+  },
+  "boss-rv5": {
+    "large": "https://pedalplayground.com/public/pedals/boss-rv-5.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-rv-5.png"
+  },
+  "line6-verbzilla": {
+    "large": "https://pedalplayground.com/public/pedals/line-6-verbzilla.png",
+    "small": "https://pedalplayground.com/public/pedals/line-6-verbzilla.png"
+  },
+  "ehx-nano-holy-grail": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-nano-holy-grail.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-nano-holy-grail.png"
+  },
+  "tc-skysurfer": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-skysurfer.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-skysurfer.png"
+  },
+  "tc-drip": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-drip-spring-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-drip-spring-reverb.png"
+  },
+  "fender-marine-layer": {
+    "large": "https://pedalplayground.com/public/pedals/fender-marine-layer-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/fender-marine-layer-reverb.png"
+  },
+  "donner-verb-square": {
+    "large": "https://pedalplayground.com/public/pedals/donner-verb-square.png",
+    "small": "https://pedalplayground.com/public/pedals/donner-verb-square.png"
+  },
+  "mooer-leveline": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-leveline.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-leveline.png"
+  },
+  "mooer-r7": {
+    "large": "https://pedalplayground.com/public/pedals/mooer-r7-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/mooer-r7-reverb.png"
+  },
+  "zoom-ms70cdr": {
+    "large": "https://pedalplayground.com/public/pedals/zoom-ms-70cdr.png",
+    "small": "https://pedalplayground.com/public/pedals/zoom-ms-70cdr.png"
+  },
+  "flint-strymon": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-flint.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-flint.png"
+  },
+  "keeley-omni-reverb": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-omni-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-omni-reverb.png"
+  },
+  "source-audio-ventris": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-ventris.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-ventris.png"
+  },
+  "strymon-nightsky": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-nightsky.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-nightsky.png"
+  },
+  "free-the-tone-ambi-space": {
+    "large": "https://pedalplayground.com/public/pedals/free-the-tone-ambi-space.png",
+    "small": "https://pedalplayground.com/public/pedals/free-the-tone-ambi-space.png"
+  },
+  "alexander-space-race": {
+    "large": "https://pedalplayground.com/public/pedals/alexander-space-race.png",
+    "small": "https://pedalplayground.com/public/pedals/alexander-space-race.png"
+  },
+  "boss-rv2": {
+    "large": "https://pedalplayground.com/public/pedals/boss-rv-2.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-rv-2.png"
+  },
+  "hardwire-rv7": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-hardwire-rv-7.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-hardwire-rv-7.png"
+  },
+  "jhs-spring-tank": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-spring-tank.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-spring-tank.png"
+  },
+  "foxpedal-defector": {
+    "large": "https://pedalplayground.com/public/pedals/foxpedal-defector.png",
+    "small": "https://pedalplayground.com/public/pedals/foxpedal-defector.png"
+  },
+  "anasounds-element": {
+    "large": "https://pedalplayground.com/public/pedals/anasounds-element.png",
+    "small": "https://pedalplayground.com/public/pedals/anasounds-element.png"
+  },
+  "ehx-r1": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-r1-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-r1-reverb.png"
+  },
+  "mosky-spring-reverb": {
+    "large": "https://pedalplayground.com/public/pedals/mosky-spring-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/mosky-spring-reverb.png"
+  },
+  "nux-atlantic": {
+    "large": "https://pedalplayground.com/public/pedals/nux-atlantic.png",
+    "small": "https://pedalplayground.com/public/pedals/nux-atlantic.png"
+  },
+  "valeton-coral-verb": {
+    "large": "https://pedalplayground.com/public/pedals/valeton-coral-verb.png",
+    "small": "https://pedalplayground.com/public/pedals/valeton-coral-verb.png"
+  },
+  "joyo-atmosphere": {
+    "large": "https://pedalplayground.com/public/pedals/joyo-atmosphere.png",
+    "small": "https://pedalplayground.com/public/pedals/joyo-atmosphere.png"
+  },
+  "caline-snakebite": {
+    "large": "https://pedalplayground.com/public/pedals/caline-snakebite.png",
+    "small": "https://pedalplayground.com/public/pedals/caline-snakebite.png"
+  },
+  "biyang-rv10": {
+    "large": "https://pedalplayground.com/public/pedals/biyang-rv-10.png",
+    "small": "https://pedalplayground.com/public/pedals/biyang-rv-10.png"
+  },
+  "xvive-golden-brownie": {
+    "large": "https://pedalplayground.com/public/pedals/xvive-golden-brownie.png",
+    "small": "https://pedalplayground.com/public/pedals/xvive-golden-brownie.png"
+  },
+  "akai-analogcustom-reverb": {
+    "large": "https://pedalplayground.com/public/pedals/akai-analog-custom-shop-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/akai-analog-custom-shop-reverb.png"
+  },
+  "hotone-verb": {
+    "large": "https://pedalplayground.com/public/pedals/hotone-verb.png",
+    "small": "https://pedalplayground.com/public/pedals/hotone-verb.png"
+  },
+  "one-control-purple-humper": {
+    "large": "https://pedalplayground.com/public/pedals/one-control-purple-humper.png",
+    "small": "https://pedalplayground.com/public/pedals/one-control-purple-humper.png"
+  },
+  "blackstar-lt-reverb": {
+    "large": "https://pedalplayground.com/public/pedals/blackstar-lt-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/blackstar-lt-reverb.png"
+  },
+  "dunlop-echoplex-delay": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-m169-carbon-copy.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-m169-carbon-copy.png"
+  },
+  "ehx-holy-grail-nano": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-holy-grail-nano.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-holy-grail-nano.png"
+  },
+  "ehx-holy-grail-max": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-holy-grail-max.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-holy-grail-max.png"
+  },
+  "ehx-oceans-11": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-oceans-11.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-oceans-11.png"
+  },
+  "ehx-oceans-12": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-oceans-12.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-oceans-12.png"
+  },
+  "catalinbread-topanga": {
+    "large": "https://pedalplayground.com/public/pedals/catalinbread-topanga.png",
+    "small": "https://pedalplayground.com/public/pedals/catalinbread-topanga.png"
+  },
+  "jrockett-boing": {
+    "large": "https://pedalplayground.com/public/pedals/j-rockett-boing-spring-reverb.png",
+    "small": "https://pedalplayground.com/public/pedals/j-rockett-boing-spring-reverb.png"
+  },
+  "fender-63-reverb-pedal": {
+    "large": "https://pedalplayground.com/public/pedals/fender.png",
+    "small": "https://pedalplayground.com/public/pedals/fender.png"
+  },
+  "wampler-reflection": {
+    "large": "https://pedalplayground.com/public/pedals/wampler-reflection.png",
+    "small": "https://pedalplayground.com/public/pedals/wampler-reflection.png"
+  },
+  "surfy-surfybear": {
+    "large": "https://pedalplayground.com/public/pedals/surfy-industries-surfybear-compact.png",
+    "small": "https://pedalplayground.com/public/pedals/surfy-industries-surfybear-compact.png"
+  },
+  "mr-black-spring": {
+    "large": "https://pedalplayground.com/public/pedals/mr-black-spring-eternal.png",
+    "small": "https://pedalplayground.com/public/pedals/mr-black-spring-eternal.png"
+  },
+  "source-audio-true-spring": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-true-spring.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-true-spring.png"
+  },
+  "strymon-blusky": {
+    "large": "https://pedalplayground.com/public/pedals/strymon-bluesky.png",
+    "small": "https://pedalplayground.com/public/pedals/strymon-bluesky.png"
+  },
+  "gamechanger-light": {
+    "large": "https://pedalplayground.com/public/pedals/gamechanger-audio-light-pedal.png",
+    "small": "https://pedalplayground.com/public/pedals/gamechanger-audio-light-pedal.png"
+  },
+  "universal-audio-golden": {
+    "large": "https://pedalplayground.com/public/pedals/universal-audio-golden-reverberator.png",
+    "small": "https://pedalplayground.com/public/pedals/universal-audio-golden-reverberator.png"
+  },
+  "keeley-realizer": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-realizer-reverberator.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-realizer-reverberator.png"
+  },
+  "boss-sy1-synth": {
+    "large": "https://pedalplayground.com/public/pedals/boss-sy-1.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-sy-1.png"
+  },
+  "boss-sy200-synth": {
+    "large": "https://pedalplayground.com/public/pedals/boss-sy-200.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-sy-200.png"
+  },
+  "ehx-synth9": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-synth9.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-synth9.png"
+  },
+  "ehx-mel9": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-mel9.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-mel9.png"
+  },
+  "ehx-key9": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-key9.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-key9.png"
+  },
+  "ehx-b9": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-b9-organ-machine.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-b9-organ-machine.png"
+  },
+  "ehx-c9": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-c9-organ-machine.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-c9-organ-machine.png"
+  },
+  "source-audio-c4": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-c4-synth.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-c4-synth.png"
+  },
+  "keeley-synth-1-synth": {
+    "large": "https://pedalplayground.com/public/pedals/keeley-synth-1.png",
+    "small": "https://pedalplayground.com/public/pedals/keeley-synth-1.png"
+  },
+  "meris-enzo": {
+    "large": "https://pedalplayground.com/public/pedals/meris-enzo.png",
+    "small": "https://pedalplayground.com/public/pedals/meris-enzo.png"
+  },
+  "earthquaker-bit-commander": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-bit-commander.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-bit-commander.png"
+  },
+  "earthquaker-data-corruptor": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-data-corruptor.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-data-corruptor.png"
+  },
+  "ehx-freeze": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-freeze.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-freeze.png"
+  },
+  "ehx-superego-plus": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-superego.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-superego.png"
+  },
+  "gamechanger-plus": {
+    "large": "https://pedalplayground.com/public/pedals/gamechanger-audio-plus-pedal.png",
+    "small": "https://pedalplayground.com/public/pedals/gamechanger-audio-plus-pedal.png"
+  },
+  "boss-slicer": {
+    "large": "https://pedalplayground.com/public/pedals/boss-sl-20-slicer.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-sl-20-slicer.png"
+  },
+  "earthquaker-rainbow-machine-synth": {
+    "large": "https://pedalplayground.com/public/pedals/earthquaker-devices-rainbow-machine.png",
+    "small": "https://pedalplayground.com/public/pedals/earthquaker-devices-rainbow-machine.png"
+  },
+  "zvex-lo-fi-junky": {
+    "large": "https://pedalplayground.com/public/pedals/z-vex-lo-fi-junky.png",
+    "small": "https://pedalplayground.com/public/pedals/z-vex-lo-fi-junky.png"
+  },
+  "zvex-instant-lofi-junky": {
+    "large": "https://pedalplayground.com/public/pedals/z-vex-instant-lo-fi-junky.png",
+    "small": "https://pedalplayground.com/public/pedals/z-vex-instant-lo-fi-junky.png"
+  },
+  "cooper-genloss-synth": {
+    "large": "https://pedalplayground.com/public/pedals/cooper-fx-generation-loss-mkii.png",
+    "small": "https://pedalplayground.com/public/pedals/cooper-fx-generation-loss-mkii.png"
+  },
+  "caroline-somersault-synth": {
+    "large": "https://pedalplayground.com/public/pedals/caroline-guitar-somersault.png",
+    "small": "https://pedalplayground.com/public/pedals/caroline-guitar-somersault.png"
+  },
+  "fairfield-shallow-water": {
+    "large": "https://pedalplayground.com/public/pedals/fairfield-circuitry-shallow-water.png",
+    "small": "https://pedalplayground.com/public/pedals/fairfield-circuitry-shallow-water.png"
+  },
+  "hologram-microcosm-synth": {
+    "large": "https://pedalplayground.com/public/pedals/hologram-microcosm.png",
+    "small": "https://pedalplayground.com/public/pedals/hologram-microcosm.png"
+  },
+  "chase-bliss-blooper": {
+    "large": "https://pedalplayground.com/public/pedals/chase-bliss-blooper.png",
+    "small": "https://pedalplayground.com/public/pedals/chase-bliss-blooper.png"
+  },
+  "montreal-count-to-5": {
+    "large": "https://pedalplayground.com/public/pedals/montreal-assembly-count-to-5.png",
+    "small": "https://pedalplayground.com/public/pedals/montreal-assembly-count-to-5.png"
+  },
+  "boss-tu3": {
+    "large": "https://pedalplayground.com/public/pedals/boss-tu-3.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-tu-3.png"
+  },
+  "boss-tu3w": {
+    "large": "https://pedalplayground.com/public/pedals/boss-tu-3w-waza.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-tu-3w-waza.png"
+  },
+  "tc-polytune3": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-polytune-3.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-polytune-3.png"
+  },
+  "tc-polytune3-mini": {
+    "large": "https://pedalplayground.com/public/pedals/tc-electronic-polytune-3-mini.png",
+    "small": "https://pedalplayground.com/public/pedals/tc-electronic-polytune-3-mini.png"
+  },
+  "peterson-strobostomp-hd": {
+    "large": "https://pedalplayground.com/public/pedals/peterson-strobostomp-hd.png",
+    "small": "https://pedalplayground.com/public/pedals/peterson-strobostomp-hd.png"
+  },
+  "korg-pitchblack": {
+    "large": "https://pedalplayground.com/public/pedals/korg-pitchblack-advance.png",
+    "small": "https://pedalplayground.com/public/pedals/korg-pitchblack-advance.png"
+  },
+  "jhs-little-black-buffer": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-little-black-buffer.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-little-black-buffer.png"
+  },
+  "empress-buffer-plus": {
+    "large": "https://pedalplayground.com/public/pedals/empress-buffer.png",
+    "small": "https://pedalplayground.com/public/pedals/empress-buffer.png"
+  },
+  "boss-es5": {
+    "large": "https://pedalplayground.com/public/pedals/boss-es-5.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-es-5.png"
+  },
+  "boss-es8": {
+    "large": "https://pedalplayground.com/public/pedals/boss-es-8.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-es-8.png"
+  },
+  "gig-rig-g2": {
+    "large": "https://pedalplayground.com/public/pedals/thegigrig-g2.png",
+    "small": "https://pedalplayground.com/public/pedals/thegigrig-g2.png"
+  },
+  "one-control-crocodile": {
+    "large": "https://pedalplayground.com/public/pedals/one-control-crocodile-tail-loop.png",
+    "small": "https://pedalplayground.com/public/pedals/one-control-crocodile-tail-loop.png"
+  },
+  "jhs-summing-amp": {
+    "large": "https://pedalplayground.com/public/pedals/jhs-summing-amp.png",
+    "small": "https://pedalplayground.com/public/pedals/jhs-summing-amp.png"
+  },
+  "saturnworks-ab": {
+    "large": "https://pedalplayground.com/public/pedals/saturnworks-active-a-b.png",
+    "small": "https://pedalplayground.com/public/pedals/saturnworks-active-a-b.png"
+  },
+  "lehle-d-loop": {
+    "large": "https://pedalplayground.com/public/pedals/lehle-d-loop-sgos.png",
+    "small": "https://pedalplayground.com/public/pedals/lehle-d-loop-sgos.png"
+  },
+  "radial-j48": {
+    "large": "https://pedalplayground.com/public/pedals/radial-j48.png",
+    "small": "https://pedalplayground.com/public/pedals/radial-j48.png"
+  },
+  "countryman-type85": {
+    "large": "https://pedalplayground.com/public/pedals/countryman-type-85.png",
+    "small": "https://pedalplayground.com/public/pedals/countryman-type-85.png"
+  },
+  "klon-centaur-gold": {
+    "large": "https://pedalplayground.com/public/pedals/klon-centaur-gold.png",
+    "small": "https://pedalplayground.com/public/pedals/klon-centaur-gold.png"
+  },
+  "klon-centaur-silver": {
+    "large": "https://pedalplayground.com/public/pedals/klon-centaur-silver.png",
+    "small": "https://pedalplayground.com/public/pedals/klon-centaur-silver.png"
+  },
+  "dallas-arbiter-fuzz-face-germanium": {
+    "large": "https://pedalplayground.com/public/pedals/dallas-arbiter-fuzz-face-germanium.png",
+    "small": "https://pedalplayground.com/public/pedals/dallas-arbiter-fuzz-face-germanium.png"
+  },
+  "dallas-arbiter-fuzz-face-silicon": {
+    "large": "https://pedalplayground.com/public/pedals/dallas-arbiter-fuzz-face-silicon.png",
+    "small": "https://pedalplayground.com/public/pedals/dallas-arbiter-fuzz-face-silicon.png"
+  },
+  "ehx-big-muff-triangle": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-big-muff-pi-triangle.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-big-muff-pi-triangle.png"
+  },
+  "ehx-big-muff-rams-head": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-big-muff-pi-ram.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-big-muff-pi-ram.png"
+  },
+  "ehx-big-muff-civil-war": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-big-muff-pi-civil-war.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-big-muff-pi-civil-war.png"
+  },
+  "ibanez-ts808-original": {
+    "large": "https://pedalplayground.com/public/pedals/ibanez-ts808-original-1979.png",
+    "small": "https://pedalplayground.com/public/pedals/ibanez-ts808-original-1979.png"
+  },
+  "proco-rat-vintage": {
+    "large": "https://pedalplayground.com/public/pedals/proco-rat-vintage-1980s.png",
+    "small": "https://pedalplayground.com/public/pedals/proco-rat-vintage-1980s.png"
+  },
+  "boss-ce1-chorus-ensemble": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ce-1-chorus-ensemble.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ce-1-chorus-ensemble.png"
+  },
+  "boss-dm2-delay": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dm-2-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dm-2-delay.png"
+  },
+  "boss-hm2-heavy-metal": {
+    "large": "https://pedalplayground.com/public/pedals/boss-hm-2-heavy-metal.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-hm-2-heavy-metal.png"
+  },
+  "boss-oc2-octave": {
+    "large": "https://pedalplayground.com/public/pedals/boss-oc-2-octave.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-oc-2-octave.png"
+  },
+  "mxr-script-phase-90": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-phase-90-script-logo.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-phase-90-script-logo.png"
+  },
+  "mxr-script-dyna-comp": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-dyna-comp-script-logo.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-dyna-comp-script-logo.png"
+  },
+  "mxr-distortion-plus-vintage": {
+    "large": "https://pedalplayground.com/public/pedals/mxr-distortion-block-logo.png",
+    "small": "https://pedalplayground.com/public/pedals/mxr-distortion-block-logo.png"
+  },
+  "univox-super-fuzz": {
+    "large": "https://pedalplayground.com/public/pedals/univox-super-fuzz.png",
+    "small": "https://pedalplayground.com/public/pedals/univox-super-fuzz.png"
+  },
+  "shin-ei-fuzz-wah": {
+    "large": "https://pedalplayground.com/public/pedals/shin-ei-fy-6-super-fuzz.png",
+    "small": "https://pedalplayground.com/public/pedals/shin-ei-fy-6-super-fuzz.png"
+  },
+  "sola-sound-tonebender-mk1": {
+    "large": "https://pedalplayground.com/public/pedals/sola-sound-tone-bender-mk1.png",
+    "small": "https://pedalplayground.com/public/pedals/sola-sound-tone-bender-mk1.png"
+  },
+  "sola-sound-tonebender-mk2": {
+    "large": "https://pedalplayground.com/public/pedals/sola-sound-tone-bender-mk2.png",
+    "small": "https://pedalplayground.com/public/pedals/sola-sound-tone-bender-mk2.png"
+  },
+  "colorsound-overdriver": {
+    "large": "https://pedalplayground.com/public/pedals/colorsound-overdriver.png",
+    "small": "https://pedalplayground.com/public/pedals/colorsound-overdriver.png"
+  },
+  "colorsound-power-boost": {
+    "large": "https://pedalplayground.com/public/pedals/colorsound-power-boost.png",
+    "small": "https://pedalplayground.com/public/pedals/colorsound-power-boost.png"
+  },
+  "boss-bf2-flanger": {
+    "large": "https://pedalplayground.com/public/pedals/boss-bf-2-flanger.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-bf-2-flanger.png"
+  },
+  "ehx-small-stone-v1": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-small-stone-v1.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-small-stone-v1.png"
+  },
+  "ehx-electric-mistress-v1": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-electric-mistress-deluxe-v1.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-electric-mistress-deluxe-v1.png"
+  },
+  "mutron-bi-phase": {
+    "large": "https://pedalplayground.com/public/pedals/mu-tron-bi-phase.png",
+    "small": "https://pedalplayground.com/public/pedals/mu-tron-bi-phase.png"
+  },
+  "mutron-iii": {
+    "large": "https://pedalplayground.com/public/pedals/mu-tron-mu-tron-iii.png",
+    "small": "https://pedalplayground.com/public/pedals/mu-tron-mu-tron-iii.png"
+  },
+  "roland-jet-phaser-ap7": {
+    "large": "https://pedalplayground.com/public/pedals/roland-ap-7-jet-phaser.png",
+    "small": "https://pedalplayground.com/public/pedals/roland-ap-7-jet-phaser.png"
+  },
+  "univox-univibe": {
+    "large": "https://pedalplayground.com/public/pedals/univox-uni-vibe.png",
+    "small": "https://pedalplayground.com/public/pedals/univox-uni-vibe.png"
+  },
+  "echoplex-ep3": {
+    "large": "https://pedalplayground.com/public/pedals/echoplex-ep-3.png",
+    "small": "https://pedalplayground.com/public/pedals/echoplex-ep-3.png"
+  },
+  "roland-space-echo-re201": {
+    "large": "https://pedalplayground.com/public/pedals/roland-re-201-space-echo.png",
+    "small": "https://pedalplayground.com/public/pedals/roland-re-201-space-echo.png"
+  },
+  "ibanez-ad9-analog-delay": {
+    "large": "https://pedalplayground.com/public/pedals/ibanez-ad9-analog-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/ibanez-ad9-analog-delay.png"
+  },
+  "electro-harmonix-memory-man-v1": {
+    "large": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-memory-man-original.png",
+    "small": "https://pedalplayground.com/public/pedals/electro-harmonix-deluxe-memory-man-original.png"
+  },
+  "fender-reverb-tank-6g15": {
+    "large": "https://pedalplayground.com/public/pedals/fender-6g15-reverb-unit.png",
+    "small": "https://pedalplayground.com/public/pedals/fender-6g15-reverb-unit.png"
+  },
+  "ross-compressor": {
+    "large": "https://pedalplayground.com/public/pedals/ross-compressor.png",
+    "small": "https://pedalplayground.com/public/pedals/ross-compressor.png"
+  },
+  "orange-squeezer": {
+    "large": "https://pedalplayground.com/public/pedals/dan-armstrong-orange-squeezer.png",
+    "small": "https://pedalplayground.com/public/pedals/dan-armstrong-orange-squeezer.png"
+  },
+  "zvex-fuzz-factory-hand-painted": {
+    "large": "https://pedalplayground.com/public/pedals/z-vex-fuzz-factory-hand-painted.png",
+    "small": "https://pedalplayground.com/public/pedals/z-vex-fuzz-factory-hand-painted.png"
+  },
+  "fulltone-clyde-wah": {
+    "large": "https://pedalplayground.com/public/pedals/fulltone-clyde-standard-wah.png",
+    "small": "https://pedalplayground.com/public/pedals/fulltone-clyde-standard-wah.png"
+  },
+  "digitech-whammy-iv": {
+    "large": "https://pedalplayground.com/public/pedals/digitech-whammy-iv.png",
+    "small": "https://pedalplayground.com/public/pedals/digitech-whammy-iv.png"
+  },
+  "line6-dl4": {
+    "large": "https://pedalplayground.com/public/pedals/line-6-dl4-delay-modeler.png",
+    "small": "https://pedalplayground.com/public/pedals/line-6-dl4-delay-modeler.png"
+  },
+  "line6-mm4": {
+    "large": "https://pedalplayground.com/public/pedals/line-6-mm4-modulation-modeler.png",
+    "small": "https://pedalplayground.com/public/pedals/line-6-mm4-modulation-modeler.png"
+  },
+  "boss-ps3-pitch-shifter": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ps-3-pitch-shifter-delay.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ps-3-pitch-shifter-delay.png"
+  },
+  "boss-vb2-vibrato": {
+    "large": "https://pedalplayground.com/public/pedals/boss-vb-2-vibrato.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-vb-2-vibrato.png"
+  },
+  "boss-dd3-japan": {
+    "large": "https://pedalplayground.com/public/pedals/boss-dd-3-digital-delay-mij.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-dd-3-digital-delay-mij.png"
+  },
+  "dod-250-overdrive": {
+    "large": "https://pedalplayground.com/public/pedals/dod-250-overdrive-preamp-yellow.png",
+    "small": "https://pedalplayground.com/public/pedals/dod-250-overdrive-preamp-yellow.png"
+  },
+  "dod-fx13-gonkulator": {
+    "large": "https://pedalplayground.com/public/pedals/dod-fx13-gonkulator.png",
+    "small": "https://pedalplayground.com/public/pedals/dod-fx13-gonkulator.png"
+  },
+  "ampeg-scrambler": {
+    "large": "https://pedalplayground.com/public/pedals/ampeg-scrambler.png",
+    "small": "https://pedalplayground.com/public/pedals/ampeg-scrambler.png"
+  },
+  "lovetone-meatball": {
+    "large": "https://pedalplayground.com/public/pedals/lovetone-meatball.png",
+    "small": "https://pedalplayground.com/public/pedals/lovetone-meatball.png"
+  },
+  "lovetone-doppelganger": {
+    "large": "https://pedalplayground.com/public/pedals/lovetone-doppelganger.png",
+    "small": "https://pedalplayground.com/public/pedals/lovetone-doppelganger.png"
+  },
+  "crowther-hotcake": {
+    "large": "https://pedalplayground.com/public/pedals/crowther-audio-hotcake.png",
+    "small": "https://pedalplayground.com/public/pedals/crowther-audio-hotcake.png"
+  },
+  "ernie-ball-vp-jr": {
+    "large": "https://pedalplayground.com/public/pedals/ernie-ball-vp-jr-250k.png",
+    "small": "https://pedalplayground.com/public/pedals/ernie-ball-vp-jr-250k.png"
+  },
+  "ernie-ball-vp-jr-25k": {
+    "large": "https://pedalplayground.com/public/pedals/ernie-ball-vp-jr-25k.png",
+    "small": "https://pedalplayground.com/public/pedals/ernie-ball-vp-jr-25k.png"
+  },
+  "ernie-ball-mvp": {
+    "large": "https://pedalplayground.com/public/pedals/ernie-ball-mvp-most-valuable-pedal.png",
+    "small": "https://pedalplayground.com/public/pedals/ernie-ball-mvp-most-valuable-pedal.png"
+  },
+  "dunlop-dvp4": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-dvp4-mini-volume.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-dvp4-mini-volume.png"
+  },
+  "boss-fv500h": {
+    "large": "https://pedalplayground.com/public/pedals/boss-fv-500h.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-fv-500h.png"
+  },
+  "boss-fv500l": {
+    "large": "https://pedalplayground.com/public/pedals/boss-fv-500l.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-fv-500l.png"
+  },
+  "boss-fv30h": {
+    "large": "https://pedalplayground.com/public/pedals/boss-fv-30h.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-fv-30h.png"
+  },
+  "morley-pvo": {
+    "large": "https://pedalplayground.com/public/pedals/morley-pvo-pro-series-volume.png",
+    "small": "https://pedalplayground.com/public/pedals/morley-pvo-pro-series-volume.png"
+  },
+  "morley-volume-plus": {
+    "large": "https://pedalplayground.com/public/pedals/morley-volume-plus.png",
+    "small": "https://pedalplayground.com/public/pedals/morley-volume-plus.png"
+  },
+  "moog-ep3": {
+    "large": "https://pedalplayground.com/public/pedals/moog-ep-3.png",
+    "small": "https://pedalplayground.com/public/pedals/moog-ep-3.png"
+  },
+  "boss-ev30": {
+    "large": "https://pedalplayground.com/public/pedals/boss-ev-30.png",
+    "small": "https://pedalplayground.com/public/pedals/boss-ev-30.png"
+  },
+  "mission-exp": {
+    "large": "https://pedalplayground.com/public/pedals/mission-engineering-ep-1.png",
+    "small": "https://pedalplayground.com/public/pedals/mission-engineering-ep-1.png"
+  },
+  "dunlop-dvp3": {
+    "large": "https://pedalplayground.com/public/pedals/dunlop-dvp3-volume-x.png",
+    "small": "https://pedalplayground.com/public/pedals/dunlop-dvp3-volume-x.png"
+  },
+  "source-audio-dual-exp": {
+    "large": "https://pedalplayground.com/public/pedals/source-audio-dual-expression.png",
+    "small": "https://pedalplayground.com/public/pedals/source-audio-dual-expression.png"
+  },
+  "hotone-volume-exp": {
+    "large": "https://pedalplayground.com/public/pedals/hotone-soul-press-ii.png",
+    "small": "https://pedalplayground.com/public/pedals/hotone-soul-press-ii.png"
+  },
+  "xotic-xvp-250k": {
+    "large": "https://pedalplayground.com/public/pedals/xotic-xvp-250k.png",
+    "small": "https://pedalplayground.com/public/pedals/xotic-xvp-250k.png"
+  },
+  "lehle-mono-volume": {
+    "large": "https://pedalplayground.com/public/pedals/lehle-mono-volume.png",
+    "small": "https://pedalplayground.com/public/pedals/lehle-mono-volume.png"
+  }
+}
