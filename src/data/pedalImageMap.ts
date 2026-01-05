@@ -4,7 +4,7 @@
  * Auto-generated from Reverb API data.
  * Run `node scripts/fetch-reverb-images.js` to update.
  * 
- * Generated: 2026-01-05T23:06:47.854Z
+ * Generated: 2026-01-05T23:33:09.973Z
  * Total pedals: 727
  * With images: 701
  */
@@ -419,8 +419,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "/images/pedals/ehx-memory-man-deluxe.jpg"
   },
   "ehx-memory-man-550tt": {
-    "large": "/images/pedals/ehx-memory-man-550tt.jpg",
-    "small": "/images/pedals/ehx-memory-man-550tt.jpg"
+    "large": "/images/pedals/ehx-memory-man-550tt.png",
+    "small": "/images/pedals/ehx-memory-man-550tt.png"
   },
   "ehx-memory-toy": {
     "large": "/images/pedals/ehx-memory-toy.jpg",
@@ -651,8 +651,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "/images/pedals/analogman-bicomp.jpg"
   },
   "xotic-sp-comp": {
-    "large": "/images/pedals/xotic-sp-comp.jpg",
-    "small": "/images/pedals/xotic-sp-comp.jpg"
+    "large": "/images/pedals/xotic-sp-comp.png",
+    "small": "/images/pedals/xotic-sp-comp.png"
   },
   "jhs-whitey-tighty": {
     "large": "/images/pedals/jhs-whitey-tighty.jpg",
@@ -936,8 +936,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "/images/pedals/mxr-envelope-filter.jpg"
   },
   "source-audio-spectrum": {
-    "large": "/images/pedals/source-audio-spectrum.jpg",
-    "small": "/images/pedals/source-audio-spectrum.jpg"
+    "large": "/images/pedals/source-audio-spectrum.png",
+    "small": "/images/pedals/source-audio-spectrum.png"
   },
   "3leaf-proton": null,
   "pigtronix-envelope-phaser": {
@@ -1831,8 +1831,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "/images/pedals/earthquaker-hummingbird.jpg"
   },
   "source-audio-vertigo": {
-    "large": "/images/pedals/source-audio-vertigo.jpg",
-    "small": "/images/pedals/source-audio-vertigo.jpg"
+    "large": "/images/pedals/source-audio-vertigo.png",
+    "small": "/images/pedals/source-audio-vertigo.png"
   },
   "fender-tre-verb": {
     "large": "/images/pedals/fender-tre-verb.jpg",
@@ -2570,8 +2570,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "/images/pedals/one-control-crocodile.jpg"
   },
   "jhs-summing-amp": {
-    "large": "/images/pedals/jhs-summing-amp.jpg",
-    "small": "/images/pedals/jhs-summing-amp.jpg"
+    "large": "/images/pedals/jhs-summing-amp.png",
+    "small": "/images/pedals/jhs-summing-amp.png"
   },
   "saturnworks-ab": {
     "large": "/images/pedals/saturnworks-ab.jpg",
@@ -2793,8 +2793,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "/images/pedals/ernie-ball-mvp.jpg"
   },
   "dunlop-dvp4": {
-    "large": "/images/pedals/dunlop-dvp4.jpg",
-    "small": "/images/pedals/dunlop-dvp4.jpg"
+    "large": "/images/pedals/dunlop-dvp4.png",
+    "small": "/images/pedals/dunlop-dvp4.png"
   },
   "boss-fv500h": {
     "large": "/images/pedals/boss-fv500h.jpg",
@@ -2837,8 +2837,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "/images/pedals/source-audio-dual-exp.jpg"
   },
   "hotone-volume-exp": {
-    "large": "/images/pedals/hotone-volume-exp.jpg",
-    "small": "/images/pedals/hotone-volume-exp.jpg"
+    "large": "/images/pedals/hotone-volume-exp.png",
+    "small": "/images/pedals/hotone-volume-exp.png"
   },
   "xotic-xvp-250k": {
     "large": "/images/pedals/xotic-xvp-250k.jpg",

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pedal Image Review</title>
+  <style>
+    body {
+      background: #1a1a1a;
+      color: white;
+      font-family: system-ui, sans-serif;
+      padding: 20px;
+    }
+    h1 { text-align: center; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+    }
+    .card {
+      background: #2a2a2a;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .card img {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+      background: #333;
+      border-radius: 4px;
+    }
+    .card p {
+      margin: 8px 0 0;
+      font-size: 11px;
+      color: #aaa;
+      word-break: break-all;
+    }
+    .card.top-down {
+      border: 3px solid #22c55e;
+    }
+    .card.angled {
+      border: 3px solid #ef4444;
+    }
+    .controls {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #333;
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 100;
+    }
+    .controls button {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-topdown { background: #22c55e; color: white; }
+    .btn-angled { background: #ef4444; color: white; }
+    .btn-export { background: #3b82f6; color: white; }
+    .stats {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎸 Pedal Image Review</h1>
+  <p style="text-align: center; color: #888;">Click an image, then mark it as "Top-Down" or "Angled". Export when done.</p>
+  
+  <div class="controls">
+    <strong>Selected:</strong> <span id="selected">None</span>
+    <button class="btn-topdown" onclick="markTopDown()">✅ Top-Down</button>
+    <button class="btn-angled" onclick="markAngled()">❌ Angled/Side</button>
+    <button class="btn-export" onclick="exportList()">📋 Export Top-Down List</button>
+    <div class="stats">
+      Top-Down: <span id="topdown-count">0</span><br>
+      Angled: <span id="angled-count">0</span>
+    </div>
+  </div>
+  
+  <div class="grid" id="grid"></div>
+
+  <script>
+    const images = ["5150-overdrive","aguilar-filter-twin","aguilar-tone-hammer","akai-analogcustom-reverb","alexander-history-lesson-v3","alexander-sky5000","alexander-space-race","ampeg-scrambler","analog-man-beano-boost","analogman-bicomp","analogman-chorus","analogman-king-of-tone","analogman-prince-of-tone","analogman-sunface","anasounds-element","barber-gain-changer","becos-stella","behringer-fm600","behringer-vd400","benson-preamp","biyang-rv10","black-arts-pharaoh","blackstar-lt-drive","blackstar-lt-reverb","bogner-ecstasy-blue","bogner-ecstasy-red","bogner-uberschall","bondi-sick-as","boss-ac3","boss-aw3","boss-bd2","boss-bd2w","boss-bf2-flanger","boss-bf3","boss-ce1-chorus-ensemble","boss-ce2w-chorus","boss-ce2w","boss-ch1","boss-cp1x","boss-cs3-compressor","boss-cs3","boss-da2","boss-dc2w","boss-dd200","boss-dd3-japan","boss-dd3","boss-dd5","boss-dd500","boss-dd6","boss-dd7","boss-dd8","boss-dm2-delay","boss-dm2w-delay","boss-dm2w","boss-ds1","boss-ds1w","boss-ds2","boss-eq200","boss-es5","boss-es8","boss-ev30","boss-fb2","boss-ft2","boss-fv30h","boss-fv500h","boss-fv500l","boss-fz1w","boss-ge7","boss-hm2-heavy-metal","boss-ir200","boss-lm2","boss-md2","boss-mt2-metal-zone","boss-mt2","boss-mt2w-waza","boss-mt2w","boss-ns2","boss-oc2-octave","boss-oc3","boss-oc5","boss-od1x","boss-od3","boss-ph1r","boss-ph3","boss-ps3-pitch-shifter","boss-ps3","boss-ps5","boss-ps6","boss-pw3","boss-rt20","boss-rv-500","boss-rv2","boss-rv3","boss-rv5","boss-rv6","boss-sd1","boss-sd1w","boss-slicer","boss-st2","boss-sy1-synth","boss-sy1","boss-sy200-synth","boss-sy200","boss-tr2","boss-tu3","boss-tu3w","boss-vb2-vibrato","boss-vb2w","boss-waza-rv200","boss-whammy-ricochet-clone","bsp-treble-booster","cali76-bass","cali76-compressor","caline-10-band","caline-snake-bite","caroline-megabyte","caroline-meteore","caroline-shigeharu","caroline-somersault-synth","caroline-somersault","catalinbread-belle-epoch-deluxe","catalinbread-belle-epoch","catalinbread-galileo","catalinbread-naga-viper","catalinbread-topanga","ceriatone-centura","chase-bliss-blooper","chase-bliss-condor","chase-bliss-cxm1978","chase-bliss-mood","chase-bliss-thermae","chase-bliss-tonal-recall","chase-bliss-warped-vinyl","cmatmods-brownie","colorsound-overdriver","colorsound-power-boost","cooper-fx-outward","crowther-hotcake","dallas-arbiter-fuzz-face-germanium","dallas-arbiter-fuzz-face-silicon","danelectro-reel-echo","darkglass-hyper-luminal","darkglass-vintage-ultra-v2","dba-apocalypse","dba-reverberation-machine","death-by-audio-echo-master","death-by-audio-fuzz-war","death-by-audio-rooms","death-by-audio-supersonic-fuzz-gun","death-by-audio-supersonic","deco-saturator","diamond-compressor","diezel-herbert","diezel-vh4","digitech-drop","digitech-obscura","digitech-polara","digitech-ricochet","digitech-supernatural","digitech-timebender","digitech-whammy-5","digitech-whammy-dt","digitech-whammy-iv","dod-250-overdrive","dod-280","dod-440-envelope-filter","dod-fx13-gonkulator","dod-fx40b","donner-noise-killer","donner-ultimate-comp","donner-verb-square","donner-yellow-fall","dr-scientist-reverberator","dsm-simplifier-dlx","dsm-simplifier","dunlop-535q","dunlop-cbm95","dunlop-crybaby-95q","dunlop-crybaby-gcb95","dunlop-crybaby-mini","dunlop-dvp3","dunlop-dvp4","dunlop-echoplex-delay","dunlop-ffm1","dunlop-ffm2","dunlop-ffm3","dunlop-jh1d","dunlop-jhf1","earthquaker-acapulco-gold","earthquaker-afterneath-v3","earthquaker-aqueduct","earthquaker-arpanoid","earthquaker-arrows","earthquaker-avalanche-run-v2","earthquaker-bit-commander","earthquaker-cloven-hoof","earthquaker-data-corrupter","earthquaker-data-corruptor","earthquaker-disaster-transport-sr","earthquaker-dispatch-master","earthquaker-ghost-echo","earthquaker-grand-orbiter","earthquaker-hoof-reaper","earthquaker-hoof","earthquaker-hummingbird","earthquaker-life-pedal","earthquaker-organizer-v2","earthquaker-plumes","earthquaker-pyramids","earthquaker-rainbow-machine-synth","earthquaker-rainbow-machine","earthquaker-sea-machine","earthquaker-space-spiral","earthquaker-spatial-delivery","earthquaker-special-cranker","earthquaker-tentacle","earthquaker-tone-job","earthquaker-tone-reaper","earthquaker-warden-v2","earthquaker-westwood","echoplex-ep3","effectrode-pc-2a","ehx-b9","ehx-bad-stone","ehx-bass-clone","ehx-big-muff-civil-war","ehx-big-muff-op-amp","ehx-big-muff-rams-head","ehx-big-muff-triangle","ehx-big-muff","ehx-c9","ehx-canyon","ehx-cathedral","ehx-deluxe-big-muff","ehx-deluxe-memory-boy","ehx-eddy","ehx-electric-mistress-v1","ehx-electric-mistress","ehx-enigma","ehx-freeze","ehx-good-vibes","ehx-green-russian-big-muff","ehx-holy-grail-max","ehx-holy-grail-nano","ehx-key9","ehx-knockout","ehx-lester-g","ehx-lester-k","ehx-lpb1","ehx-mel9","ehx-memory-boy","ehx-memory-man-550tt","ehx-memory-man-deluxe","ehx-memory-toy","ehx-micro-pog","ehx-micro-qtron","ehx-mole","ehx-nano-big-muff","ehx-nano-holy-grail","ehx-nano-pog","ehx-nano-small-stone","ehx-neo-clone","ehx-neo-mistress","ehx-oceans-11","ehx-oceans-12","ehx-op-amp-big-muff","ehx-pitch-fork","ehx-pitchfork-plus","ehx-pitchfork","ehx-platform","ehx-pog2","ehx-pulsar","ehx-qtron-plus","ehx-rams-head-big-muff","ehx-screaming-bird","ehx-silencer","ehx-small-clone","ehx-small-stone-v1","ehx-small-stone","ehx-soul-food","ehx-soul-preacher","ehx-superego-plus","ehx-synth9","ehx-triangle-big-muff","electro-harmonix-cathedral","electro-harmonix-memory-man-v1","emerson-paramount","empress-buffer-plus","empress-compressor-mkii","empress-compressor","empress-echosystem","empress-paraeq","empress-phaser","empress-reverb","ernie-ball-mvp","ernie-ball-vp-jr-25k","ernie-ball-vp-jr","eventide-blackhole","eventide-h9-max","eventide-pitchfactor","eventide-space","eventide-timefactor","fairfield-accountant","fairfield-meet-maude","fender-63-reverb-pedal","fender-full-moon","fender-marine-layer","fender-pugilist","fender-reverb-tank-6g15","fender-the-bends","fender-tre-verb","fishman-aura","flint-strymon","fortin-zuul","foxgear-fenix","foxpedal-defector","free-the-tone-ambi-space","friedman-be-od-deluxe","friedman-be-od","friedman-dirty-shirley","friedman-smallbox","fulltone-clyde-wah","fulltone-clyde","fulltone-deja-vibe","fulltone-fulldrive2","fulltone-ocd","fulltone-octafuzz","fulltone-plimsoul","fulltone-supa-trem","fulltone-tt2","gamechanger-light","gamechanger-plasma","gamechanger-plus","gfi-specular-tempus-delay","gfi-specular-tempus","greer-lightspeed","greer-southland","hamstead-zenith","hardwire-rv7","hologram-microcosm-synth","hologram-microcosm","hotone-harmony","hotone-omni-ac","hotone-verb","hotone-volume-exp","hungry-robot-wardenclyffe","ibanez-ad9-analog-delay","ibanez-ad9","ibanez-admini","ibanez-ts808-original","ibanez-ts808","ibanez-ts9","ibanez-ts9dx","ibanez-tsmini","irs-plasma-pedal","isp-decimator-g-string-ii","isp-decimator-ii","jhs-3-series-chorus","jhs-3-series-delay","jhs-3-series-distortion","jhs-3-series-phaser","jhs-3-series-reverb","jhs-3-series-screamer","jhs-angry-charlie","jhs-angry-driver","jhs-bender","jhs-bonsai","jhs-double-barrel","jhs-emperor","jhs-kodiak","jhs-little-black-buffer","jhs-milkman","jhs-moonshine","jhs-morning-glory","jhs-muffuletta","jhs-packrat","jhs-panther-cub-v2","jhs-prestige","jhs-pulp-n-peel-v4","jhs-spring-tank","jhs-summing-amp","jhs-supreme","jhs-unicorn","jhs-whitey-tighty","joyo-aquarius","joyo-atmosphere","joyo-d-seed","joyo-dyna-compressor","joyo-ironman-acooustic","joyo-jeq-band","joyo-noise-gate","jrockett-archer-ikon","jrockett-archer","jrockett-boing","keeley-caverns-v2","keeley-compressor-mini","keeley-compressor-plus","keeley-d-and-m-drive","keeley-delay-workstation","keeley-dynatrem","keeley-eccos","keeley-fuzz-bender","keeley-katana","keeley-mag-echo","keeley-omni-reverb","keeley-oxblood","keeley-phaser","keeley-realizer","keeley-red-dirt","keeley-seafoam-plus","keeley-synth-1-synth","keeley-synth-1","keeley-tremolo","klon-centaur-gold","klon-centaur-silver","klon-ktr","kma-wurm","korg-pitchblack-advance","korg-pitchblack","lehle-d-loop","lehle-mono-volume","line6-dl4-mkii","line6-dl4","line6-hx-stomp-xl","line6-hx-stomp","line6-mm4","line6-verbzilla","lovepedal-eternity","lovetone-doppelganger","lovetone-meatball","lr-baggs-align","mad-professor-electric-blue","mad-professor-forest-green","mad-professor-snow-white","mad-professor-sweet-honey","malekko-ekko-616","malekko-scrutator","matthews-cosmonaut","maxon-ad999","maxon-od808","maxon-od9","meris-enzo","meris-hedra","meris-mercury7","meris-ottobit","meris-polymoon","mesa-flux-drive","mesa-throttle-box","mission-exp","montreal-count-to-5","mooer-d7","mooer-envelope","mooer-graphic-g","mooer-leveline","mooer-noise-killer","mooer-pitchbox","mooer-r7","mooer-radar","mooer-tender-octaver","mooer-yellow-comp","moog-ep3","moog-mf101","morley-bad-horsie-2","morley-classic-wah","morley-mini-wah","morley-pvo","morley-volume-plus","mosky-spring-reverb","mutron-3","mutron-bi-phase","mutron-iii","mxr-bass-octave-deluxe","mxr-carbon-copy-bright","mxr-carbon-copy-deluxe","mxr-carbon-copy-mini","mxr-carbon-copy","mxr-distortion-plus-vintage","mxr-dynacomp-deluxe","mxr-dynacomp","mxr-echoplex-delay","mxr-envelope-filter","mxr-evh-phase90","mxr-m104-distortion-plus","mxr-m108s","mxr-m109s","mxr-m116-fullbore-metal","mxr-m117r-flanger","mxr-m133-micro-amp","mxr-m133","mxr-m152-micro-flanger","mxr-m193-gt-od","mxr-m234-chorus","mxr-m293-booster-mini","mxr-m300","mxr-m75-super-badass","mxr-m77-badass-od","mxr-m78-badass-distortion","mxr-m80-bass-di","mxr-m83-chorus","mxr-mc404-wah","mxr-phase90","mxr-phase95","mxr-script-dyna-comp","mxr-script-phase-90","mxr-smart-gate","mxr-sugar-drive","mxr-timmy","mxr-uni-vibe","nativeaudio-ghost-ridge","neo-instruments-ventilator","neunaber-iconoclast","neunaber-immerse","neunaber-wet","nux-atlantic","nux-solid-studio","nux-time-core-deluxe","old-blood-black-fountain","old-blood-dark-star-v2","old-blood-procession","old-blood-visitor","one-control-crocodile","one-control-purple-humper","orange-getaway-driver","orange-squeezer","orange-two-stroke","origin-cali76-compact-deluxe","origin-cali76-stacked","paul-cochrane-timmy","peterson-strobostomp-hd","pigtronix-disnortion","pigtronix-envelope-phaser","pigtronix-philosophers-tone","pigtronix-quantum-time","pladask-tåken","proco-fat-rat","proco-lil-rat","proco-rat2","prs-horsemeat","radial-j48","red-panda-context-v2","red-panda-particle-2","red-panda-raster-2","red-panda-tensor","revv-g2","revv-g3","revv-g4","revv-g8","rocktron-hush","roland-jet-phaser-ap7","roland-space-echo-re201","ross-compressor","ryra-klone","sansamp-bass-di","saturnworks-ab","seymour-duncan-vapor-trail","seymour-duncan-vise-grip","shin-ei-fuzz-wah","snouse-blackbox2","sola-sound-tonebender-mk1","sola-sound-tonebender-mk2","soundblox-pitch","source-audio-atlas","source-audio-c4","source-audio-dual-exp","source-audio-eq2","source-audio-gemini","source-audio-lunar","source-audio-nemesis","source-audio-orbital","source-audio-spectrum","source-audio-true-spring","source-audio-ventris","source-audio-vertigo","strobostomp-hd","strymon-bigsky","strymon-blusky","strymon-compadre","strymon-dig","strymon-el-capistan","strymon-flint","strymon-iridium","strymon-lex","strymon-mobius","strymon-nightsky","strymon-ola","strymon-timeline","strymon-volante","subdecay-prometheus-dlx","suhr-koko","suhr-riot-mini","suhr-riot","supro-drive","surfy-surfybear","tc-afterglow","tc-alter-ego-2","tc-blood-moon","tc-bodyrez","tc-brainwaves","tc-cinders","tc-corona-chorus","tc-corona-mini","tc-dark-matter","tc-drip","tc-echobrain","tc-flashback-2","tc-flashback-mini","tc-flashback-x4","tc-helix-phaser","tc-hof-mini","tc-hof2","tc-hypergravity-mini","tc-hypergravity","tc-mojomojo","tc-pipeline","tc-polytune-3-mini-noir","tc-polytune-3-noir","tc-polytune3-mini","tc-polytune3","tc-rusty-fuzz","tc-sentry","tc-shaker","tc-skysurfer","tc-spark-booster","tc-spark-mini","tc-sub-n-up","tc-subnup-mini","tc-subnup","tc-vortex-flanger","tc-zeus-drive","tech21-fly-rig-5","tech21-sansamp-classic","tone-city-comp-engine","two-notes-cab-m-plus","ua-dream-65","ua-ruby-63","ua-woodrow-55","universal-audio-golden","universal-audio-la2a","universal-audio-starlight","univox-super-fuzz","univox-univibe","valeton-coral-verb","vertex-steel-string","visual-sound-v2-rt","vox-v845","vox-v847","walrus-385","walrus-acs1","walrus-ages","walrus-arp87","walrus-contraband","walrus-d1-delay","walrus-d1","walrus-deep-six-v3","walrus-descent","walrus-fathom","walrus-julia","walrus-julianna","walrus-jupiter","walrus-lillian","walrus-luminary-v2","walrus-monument","walrus-polychrome","walrus-slo","walrus-slotva","walrus-voyager","wampler-clarksdale","wampler-decibel","wampler-dracarys","wampler-ego-compressor","wampler-eq","wampler-faux-tape-echo-v2","wampler-mini-ego","wampler-reflection","wampler-sovereign","wampler-triple-wreck","wampler-tumnus-deluxe","wampler-tumnus","way-huge-aqua-puss","way-huge-blue-hippo","way-huge-supa-puss","wilson-ten-spot-ii","wmd-protostar","wren-and-cuff-tall-font-russian","wren-and-cuff-tall-font","xotic-ac-booster","xotic-ep-booster","xotic-rc-booster","xotic-sp-comp","xotic-xvp-250k","xotic-xw1","xvive-golden-brownie","zoom-ms70cdr-delay","zoom-ms70cdr","zvex-fuzz-factory-7","zvex-fuzz-factory","zvex-instant-lofi-junky","zvex-lo-fi-junky","zvex-sho","zvex-super-hard-on","zvex-woolly-mammoth"];
+    const classifications = {};
+    let selectedId = null;
+    
+    const grid = document.getElementById('grid');
+    
+    images.forEach(id => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.id = `card-${id}`;
+      card.innerHTML = `
+        <img src="/images/pedals/${id}.jpg" 
+             onerror="this.src='/images/pedals/${id}.png'" 
+             onclick="selectImage('${id}')">
+        <p>${id}</p>
+      `;
+      grid.appendChild(card);
+    });
+    
+    function selectImage(id) {
+      document.querySelectorAll('.card').forEach(c => c.style.outline = 'none');
+      document.getElementById(`card-${id}`).style.outline = '3px solid #fff';
+      selectedId = id;
+      document.getElementById('selected').textContent = id;
+    }
+    
+    function markTopDown() {
+      if (!selectedId) return;
+      classifications[selectedId] = 'top-down';
+      document.getElementById(`card-${selectedId}`).className = 'card top-down';
+      updateStats();
+      selectNext();
+    }
+    
+    function markAngled() {
+      if (!selectedId) return;
+      classifications[selectedId] = 'angled';
+      document.getElementById(`card-${selectedId}`).className = 'card angled';
+      updateStats();
+      selectNext();
+    }
+    
+    function selectNext() {
+      const idx = images.indexOf(selectedId);
+      if (idx < images.length - 1) {
+        selectImage(images[idx + 1]);
+        document.getElementById(`card-${images[idx + 1]}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    
+    function updateStats() {
+      const topdown = Object.values(classifications).filter(v => v === 'top-down').length;
+      const angled = Object.values(classifications).filter(v => v === 'angled').length;
+      document.getElementById('topdown-count').textContent = topdown;
+      document.getElementById('angled-count').textContent = angled;
+    }
+    
+    function exportList() {
+      const topDownIds = Object.entries(classifications)
+        .filter(([_, v]) => v === 'top-down')
+        .map(([k, _]) => k);
+      
+      const text = topDownIds.join('\\n');
+      navigator.clipboard.writeText(text);
+      alert(`Copied ${topDownIds.length} top-down pedal IDs to clipboard!`);
+    }
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '1' || e.key === 't') markTopDown();
+      if (e.key === '2' || e.key === 'a') markAngled();
+    });
+  </script>
+</body>
+</html>
+
