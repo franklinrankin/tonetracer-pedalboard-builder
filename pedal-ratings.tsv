@@ -1,0 +1,716 @@
+Pedal	Category	Type	Current Rating	Current Tag	New Rating	New Tag
+=HYPERLINK("https://www.google.com/search?q=Boss%20AC-3%20Acoustic%20Simulator%20guitar%20pedal"; "Boss AC-3 Acoustic Simulator")	amp	Acoustic Sim	6	amplifier		
+=HYPERLINK("https://www.google.com/search?q=Boss%20IR-200%20guitar%20pedal"; "Boss IR-200")	amp	Amp Sim	10	simulator		
+=HYPERLINK("https://www.google.com/search?q=DSM%20%26%20Humboldt%20Simplifier%20guitar%20pedal"; "DSM & Humboldt Simplifier")	amp	Amp Sim	9	simulator		
+=HYPERLINK("https://www.google.com/search?q=DSM%20%26%20Humboldt%20Simplifier%20DLX%20guitar%20pedal"; "DSM & Humboldt Simplifier DLX")	amp	Amp Sim	10	simulator		
+=HYPERLINK("https://www.google.com/search?q=Hotone%20Omni%20AC%20guitar%20pedal"; "Hotone Omni AC")	amp	Cab Sim	6	amplifier		
+=HYPERLINK("https://www.google.com/search?q=Line%206%20HX%20Stomp%20guitar%20pedal"; "Line 6 HX Stomp")	amp	Amp Sim	10	simulator		
+=HYPERLINK("https://www.google.com/search?q=Line%206%20HX%20Stomp%20XL%20guitar%20pedal"; "Line 6 HX Stomp XL")	amp	Amp Sim	10	simulator		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20Radar%20guitar%20pedal"; "Mooer Radar")	amp	Cab Sim	7	amplifier		
+=HYPERLINK("https://www.google.com/search?q=Neunaber%20Iconoclast%20guitar%20pedal"; "Neunaber Iconoclast")	amp	Cab Sim	9	simulator		
+=HYPERLINK("https://www.google.com/search?q=NUX%20Solid%20Studio%20guitar%20pedal"; "NUX Solid Studio")	amp	Cab Sim	8	simulator		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Iridium%20guitar%20pedal"; "Strymon Iridium")	amp	Amp Sim	10	simulator		
+=HYPERLINK("https://www.google.com/search?q=Tech%2021%20Fly%20Rig%205%20guitar%20pedal"; "Tech 21 Fly Rig 5")	amp	Amp Sim	8	simulator		
+=HYPERLINK("https://www.google.com/search?q=Tech%2021%20SansAmp%20Classic%20guitar%20pedal"; "Tech 21 SansAmp Classic")	amp	Amp Sim	7	amplifier		
+=HYPERLINK("https://www.google.com/search?q=Two%20Notes%20Cab%20M%2B%20guitar%20pedal"; "Two Notes Cab M+")	amp	Cab Sim	9	simulator		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20ACS1%20guitar%20pedal"; "Walrus Audio ACS1")	amp	Amp Sim	9	simulator		
+=HYPERLINK("https://www.google.com/search?q=Alexander%20History%20Lesson%20V3%20guitar%20pedal"; "Alexander History Lesson V3")	delay	Multi	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Behringer%20VD400%20Vintage%20Delay%20guitar%20pedal"; "Behringer VD400 Vintage Delay")	delay	Analog	4	repeater		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DD-200%20guitar%20pedal"; "Boss DD-200")	delay	Digital	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DD-3%20guitar%20pedal"; "Boss DD-3")	delay	Digital	6	spelunker		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DD-3%20Digital%20Delay%20(MIJ)%20guitar%20pedal"; "Boss DD-3 Digital Delay (MIJ)")	delay	Digital	6	spelunker		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DD-5%20guitar%20pedal"; "Boss DD-5")	delay	Digital	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DD-500%20guitar%20pedal"; "Boss DD-500")	delay	Digital	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DD-6%20guitar%20pedal"; "Boss DD-6")	delay	Digital	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DD-7%20guitar%20pedal"; "Boss DD-7")	delay	Digital	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DD-8%20guitar%20pedal"; "Boss DD-8")	delay	Digital	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DM-2%20Delay%20guitar%20pedal"; "Boss DM-2 Delay")	delay	Analog	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DM-2W%20Waza%20guitar%20pedal"; "Boss DM-2W Waza")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DM-2W%20Waza%20Craft%20Delay%20guitar%20pedal"; "Boss DM-2W Waza Craft Delay")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Caroline%20Guitar%20Company%20Megabyte%20guitar%20pedal"; "Caroline Guitar Company Megabyte")	delay	Digital	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Catalinbread%20Belle%20Epoch%20guitar%20pedal"; "Catalinbread Belle Epoch")	delay	Tape	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Catalinbread%20Belle%20Epoch%20Deluxe%20guitar%20pedal"; "Catalinbread Belle Epoch Deluxe")	delay	Tape	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Chase%20Bliss%20Thermae%20guitar%20pedal"; "Chase Bliss Thermae")	delay	Analog	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Chase%20Bliss%20Tonal%20Recall%20guitar%20pedal"; "Chase Bliss Tonal Recall")	delay	Analog	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Cooper%20FX%20Generation%20Loss%20MKII%20guitar%20pedal"; "Cooper FX Generation Loss MKII")	delay	Lo-Fi	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Danelectro%20Reel%20Echo%20guitar%20pedal"; "Danelectro Reel Echo")	delay	Tape	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Death%20By%20Audio%20Echo%20Master%20guitar%20pedal"; "Death By Audio Echo Master")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Death%20By%20Audio%20Reverberation%20Machine%20guitar%20pedal"; "Death By Audio Reverberation Machine")	delay	Lo-Fi	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Obscura%20guitar%20pedal"; "DigiTech Obscura")	delay	Digital	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20TimeBender%20guitar%20pedal"; "DigiTech TimeBender")	delay	Digital	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Donner%20Yellow%20Fall%20guitar%20pedal"; "Donner Yellow Fall")	delay	Analog	4	repeater		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Avalanche%20Run%20V2%20guitar%20pedal"; "EarthQuaker Devices Avalanche Run V2")	delay	Ambient	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Disaster%20Transport%20Sr.%20guitar%20pedal"; "EarthQuaker Devices Disaster Transport Sr.")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Space%20Spiral%20guitar%20pedal"; "EarthQuaker Devices Space Spiral")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Echoplex%20EP-3%20guitar%20pedal"; "Echoplex EP-3")	delay	Tape	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Canyon%20guitar%20pedal"; "Electro-Harmonix Canyon")	delay	Digital	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Deluxe%20Memory%20Boy%20guitar%20pedal"; "Electro-Harmonix Deluxe Memory Boy")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Deluxe%20Memory%20Man%20guitar%20pedal"; "Electro-Harmonix Deluxe Memory Man")	delay	Analog	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Deluxe%20Memory%20Man%20(Original)%20guitar%20pedal"; "Electro-Harmonix Deluxe Memory Man (Original)")	delay	Analog	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Deluxe%20Memory%20Man%20550-TT%20guitar%20pedal"; "Electro-Harmonix Deluxe Memory Man 550-TT")	delay	Analog	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Memory%20Boy%20guitar%20pedal"; "Electro-Harmonix Memory Boy")	delay	Analog	6	spelunker		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Memory%20Toy%20guitar%20pedal"; "Electro-Harmonix Memory Toy")	delay	Analog	5	spelunker		
+=HYPERLINK("https://www.google.com/search?q=Empress%20Echosystem%20guitar%20pedal"; "Empress Echosystem")	delay	Multi	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Eventide%20H9%20Max%20guitar%20pedal"; "Eventide H9 Max")	delay	Multi	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Eventide%20TimeFactor%20guitar%20pedal"; "Eventide TimeFactor")	delay	Multi	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Fairfield%20Circuitry%20Meet%20Maude%20guitar%20pedal"; "Fairfield Circuitry Meet Maude")	delay	Analog	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Fulltone%20Tube%20Tape%20Echo%20TTE%20guitar%20pedal"; "Fulltone Tube Tape Echo TTE")	delay	Tape	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=GFI%20System%20Specular%20Tempus%20guitar%20pedal"; "GFI System Specular Tempus")	delay	Multi	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Ibanez%20AD%20Mini%20guitar%20pedal"; "Ibanez AD Mini")	delay	Analog	5	spelunker		
+=HYPERLINK("https://www.google.com/search?q=Ibanez%20AD9%20Analog%20Delay%20guitar%20pedal"; "Ibanez AD9 Analog Delay")	delay	Analog	6	spelunker		
+=HYPERLINK("https://www.google.com/search?q=Ibanez%20AD9%20Analog%20Delay%20guitar%20pedal"; "Ibanez AD9 Analog Delay")	delay	Analog	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=JHS%203%20Series%20Delay%20guitar%20pedal"; "JHS 3 Series Delay")	delay	Digital	6	spelunker		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Milkman%20guitar%20pedal"; "JHS Milkman")	delay	Slapback	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Panther%20Cub%20V2%20guitar%20pedal"; "JHS Panther Cub V2")	delay	Analog	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Joyo%20Aquarius%20Delay%20%2B%20Looper%20guitar%20pedal"; "Joyo Aquarius Delay + Looper")	delay	Digital	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Joyo%20D-Seed%20Dual%20Channel%20Delay%20guitar%20pedal"; "Joyo D-Seed Dual Channel Delay")	delay	Digital	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Delay%20Workstation%20guitar%20pedal"; "Keeley Delay Workstation")	delay	Multi	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20ECCOS%20guitar%20pedal"; "Keeley ECCOS")	delay	Tape	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Mag%20Echo%20guitar%20pedal"; "Keeley Mag Echo")	delay	Tape	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Line%206%20DL4%20Delay%20Modeler%20guitar%20pedal"; "Line 6 DL4 Delay Modeler")	delay	Digital	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Line%206%20DL4%20MkII%20guitar%20pedal"; "Line 6 DL4 MkII")	delay	Digital	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Malekko%20Ekko%20616%20guitar%20pedal"; "Malekko Ekko 616")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Maxon%20AD999%20Analog%20Delay%20guitar%20pedal"; "Maxon AD999 Analog Delay")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Meris%20Polymoon%20guitar%20pedal"; "Meris Polymoon")	delay	Multi	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20D7%20Delay%20guitar%20pedal"; "Mooer D7 Delay")	delay	Digital	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Carbon%20Copy%20guitar%20pedal"; "MXR Carbon Copy")	delay	Analog	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Carbon%20Copy%20Bright%20guitar%20pedal"; "MXR Carbon Copy Bright")	delay	Analog	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Carbon%20Copy%20Deluxe%20guitar%20pedal"; "MXR Carbon Copy Deluxe")	delay	Analog	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Carbon%20Copy%20Mini%20guitar%20pedal"; "MXR Carbon Copy Mini")	delay	Analog	5	spelunker		
+=HYPERLINK("https://www.google.com/search?q=MXR%20EP103%20Echoplex%20Delay%20guitar%20pedal"; "MXR EP103 Echoplex Delay")	delay	Tape	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=NUX%20Time%20Core%20Deluxe%20guitar%20pedal"; "NUX Time Core Deluxe")	delay	Digital	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Old%20Blood%20Noise%20Black%20Fountain%20V3%20guitar%20pedal"; "Old Blood Noise Black Fountain V3")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Old%20Blood%20Noise%20Visitor%20guitar%20pedal"; "Old Blood Noise Visitor")	delay	Multi	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Red%20Panda%20Particle%202%20guitar%20pedal"; "Red Panda Particle 2")	delay	Granular	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Red%20Panda%20Raster%202%20guitar%20pedal"; "Red Panda Raster 2")	delay	Pitch	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Roland%20RE-201%20Space%20Echo%20guitar%20pedal"; "Roland RE-201 Space Echo")	delay	Tape	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Seymour%20Duncan%20Vapor%20Trail%20guitar%20pedal"; "Seymour Duncan Vapor Trail")	delay	Analog	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20Nemesis%20guitar%20pedal"; "Source Audio Nemesis")	delay	Multi	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Dig%20guitar%20pedal"; "Strymon Dig")	delay	Digital	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20El%20Capistan%20guitar%20pedal"; "Strymon El Capistan")	delay	Tape	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Timeline%20guitar%20pedal"; "Strymon Timeline")	delay	Multi	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Volante%20guitar%20pedal"; "Strymon Volante")	delay	Tape	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Alter%20Ego%202%20guitar%20pedal"; "TC Electronic Alter Ego 2")	delay	Tape	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20EchoBrain%20guitar%20pedal"; "TC Electronic EchoBrain")	delay	Analog	5	spelunker		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Flashback%202%20guitar%20pedal"; "TC Electronic Flashback 2")	delay	Digital	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Flashback%20Mini%20guitar%20pedal"; "TC Electronic Flashback Mini")	delay	Digital	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Flashback%20X4%20guitar%20pedal"; "TC Electronic Flashback X4")	delay	Digital	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Universal%20Audio%20Starlight%20Echo%20Station%20guitar%20pedal"; "Universal Audio Starlight Echo Station")	delay	Tape	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20ARP-87%20guitar%20pedal"; "Walrus Audio ARP-87")	delay	Multi	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20D1%20V2%20guitar%20pedal"; "Walrus Audio D1 V2")	delay	Digital	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20D1%20V2%20guitar%20pedal"; "Walrus Audio D1 V2")	delay	Digital	8	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Faux%20Tape%20Echo%20V2%20guitar%20pedal"; "Wampler Faux Tape Echo V2")	delay	Tape	9	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Way%20Huge%20Aqua-Puss%20guitar%20pedal"; "Way Huge Aqua-Puss")	delay	Analog	6	spelunker		
+=HYPERLINK("https://www.google.com/search?q=Way%20Huge%20Supa-Puss%20guitar%20pedal"; "Way Huge Supa-Puss")	delay	Analog	10	time traveler		
+=HYPERLINK("https://www.google.com/search?q=Zoom%20MS-70CDR%20guitar%20pedal"; "Zoom MS-70CDR")	delay	Digital	7	long term memory		
+=HYPERLINK("https://www.google.com/search?q=Analog%20Man%20Bi-Comp%20guitar%20pedal"; "Analog Man Bi-Comp")	dynamics	Compressor	7	squashed		
+=HYPERLINK("https://www.google.com/search?q=Becos%20Stella%20Compressor%20guitar%20pedal"; "Becos Stella Compressor")	dynamics	Compressor	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=Boss%20CP-1X%20guitar%20pedal"; "Boss CP-1X")	dynamics	Compressor	10	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Boss%20CS-3%20guitar%20pedal"; "Boss CS-3")	dynamics	Compressor	7	squashed		
+=HYPERLINK("https://www.google.com/search?q=Boss%20CS-3%20Compression%20Sustainer%20guitar%20pedal"; "Boss CS-3 Compression Sustainer")	dynamics	Compressor	6	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Boss%20LM-2%20Limiter%20guitar%20pedal"; "Boss LM-2 Limiter")	dynamics	Limiter	7	squashed		
+=HYPERLINK("https://www.google.com/search?q=Boss%20NS-2%20Noise%20Suppressor%20guitar%20pedal"; "Boss NS-2 Noise Suppressor")	dynamics	Gate	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=Caline%20Snake%20Bite%20guitar%20pedal"; "Caline Snake Bite")	dynamics	Compressor	4	gluey		
+=HYPERLINK("https://www.google.com/search?q=Dan%20Armstrong%20Orange%20Squeezer%20guitar%20pedal"; "Dan Armstrong Orange Squeezer")	dynamics	Compressor	5	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Darkglass%20Hyper%20Luminal%20guitar%20pedal"; "Darkglass Hyper Luminal")	dynamics	Limiter	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Diamond%20Compressor%20guitar%20pedal"; "Diamond Compressor")	dynamics	Compressor	7	squashed		
+=HYPERLINK("https://www.google.com/search?q=DOD%20280%20Compressor%20guitar%20pedal"; "DOD 280 Compressor")	dynamics	Compressor	6	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Donner%20Noise%20Killer%20guitar%20pedal"; "Donner Noise Killer")	dynamics	Gate	5	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Donner%20Ultimate%20Comp%20guitar%20pedal"; "Donner Ultimate Comp")	dynamics	Compressor	4	gluey		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Warden%20V2%20guitar%20pedal"; "EarthQuaker Devices Warden V2")	dynamics	Compressor	10	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Effectrode%20PC-2A%20guitar%20pedal"; "Effectrode PC-2A")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Platform%20guitar%20pedal"; "Electro-Harmonix Platform")	dynamics	Limiter	7	squashed		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Silencer%20guitar%20pedal"; "Electro-Harmonix Silencer")	dynamics	Gate	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Soul%20Preacher%20guitar%20pedal"; "Electro-Harmonix Soul Preacher")	dynamics	Compressor	6	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Empress%20Compressor%20MKII%20guitar%20pedal"; "Empress Compressor MKII")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Empress%20Effects%20Compressor%20MKII%20guitar%20pedal"; "Empress Effects Compressor MKII")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Fairfield%20Circuitry%20The%20Accountant%20guitar%20pedal"; "Fairfield Circuitry The Accountant")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Fender%20Noise%20Gate%20guitar%20pedal"; "Fender Noise Gate")	dynamics	Gate	7	squashed		
+=HYPERLINK("https://www.google.com/search?q=Fender%20The%20Bends%20guitar%20pedal"; "Fender The Bends")	dynamics	Compressor	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=Fortin%20Zuul%2B%20guitar%20pedal"; "Fortin Zuul+")	dynamics	Gate	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=ISP%20Decimator%20II%20guitar%20pedal"; "ISP Decimator II")	dynamics	Gate	7	squashed		
+=HYPERLINK("https://www.google.com/search?q=ISP%20Decimator%20II%20G%20String%20guitar%20pedal"; "ISP Decimator II G String")	dynamics	Gate	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Whitey%20Tighty%20guitar%20pedal"; "JHS Whitey Tighty")	dynamics	Compressor	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=Joyo%20JF-10%20Dyna%20Compressor%20guitar%20pedal"; "Joyo JF-10 Dyna Compressor")	dynamics	Compressor	5	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Joyo%20JF-31%20Noise%20Gate%20guitar%20pedal"; "Joyo JF-31 Noise Gate")	dynamics	Gate	5	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Compressor%20Mini%20guitar%20pedal"; "Keeley Compressor Mini")	dynamics	Compressor	7	squashed		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Compressor%20Plus%20guitar%20pedal"; "Keeley Compressor Plus")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Mad%20Professor%20Forest%20Green%20guitar%20pedal"; "Mad Professor Forest Green")	dynamics	Compressor	10	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20Noise%20Killer%20guitar%20pedal"; "Mooer Noise Killer")	dynamics	Gate	6	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20Yellow%20Comp%20guitar%20pedal"; "Mooer Yellow Comp")	dynamics	Compressor	5	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Dyna%20Comp%20guitar%20pedal"; "MXR Dyna Comp")	dynamics	Compressor	6	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Dyna%20Comp%20(Script%20Logo)%20guitar%20pedal"; "MXR Dyna Comp (Script Logo)")	dynamics	Compressor	6	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Dyna%20Comp%20Deluxe%20guitar%20pedal"; "MXR Dyna Comp Deluxe")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Smart%20Gate%20guitar%20pedal"; "MXR Smart Gate")	dynamics	Gate	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=Origin%20Effects%20Cali76%20Bass%20guitar%20pedal"; "Origin Effects Cali76 Bass")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Origin%20Effects%20Cali76%20Compact%20Deluxe%20guitar%20pedal"; "Origin Effects Cali76 Compact Deluxe")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Origin%20Effects%20Cali76%20Compact%20Deluxe%20guitar%20pedal"; "Origin Effects Cali76 Compact Deluxe")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Origin%20Effects%20Cali76%20Stacked%20Edition%20guitar%20pedal"; "Origin Effects Cali76 Stacked Edition")	dynamics	Compressor	10	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Revv%20G8%20Noise%20Gate%20guitar%20pedal"; "Revv G8 Noise Gate")	dynamics	Gate	7	squashed		
+=HYPERLINK("https://www.google.com/search?q=Rocktron%20Micro%20HUSH%20guitar%20pedal"; "Rocktron Micro HUSH")	dynamics	Gate	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Ross%20Compressor%20guitar%20pedal"; "Ross Compressor")	dynamics	Compressor	6	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Seymour%20Duncan%20Vise%20Grip%20guitar%20pedal"; "Seymour Duncan Vise Grip")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20Atlas%20guitar%20pedal"; "Source Audio Atlas")	dynamics	Compressor	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Compadre%20guitar%20pedal"; "Strymon Compadre")	dynamics	Compressor	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20HyperGravity%20guitar%20pedal"; "TC Electronic HyperGravity")	dynamics	Compressor	10	clamped down		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20HyperGravity%20Mini%20guitar%20pedal"; "TC Electronic HyperGravity Mini")	dynamics	Compressor	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Sentry%20Noise%20Gate%20guitar%20pedal"; "TC Electronic Sentry Noise Gate")	dynamics	Gate	10	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Tone%20City%20Comp%20Engine%20guitar%20pedal"; "Tone City Comp Engine")	dynamics	Compressor	6	smooth operator		
+=HYPERLINK("https://www.google.com/search?q=Universal%20Audio%20LA-2A%20guitar%20pedal"; "Universal Audio LA-2A")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Deep%20Six%20V3%20guitar%20pedal"; "Walrus Audio Deep Six V3")	dynamics	Compressor	10	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Ego%20Compressor%20guitar%20pedal"; "Wampler Ego Compressor")	dynamics	Compressor	10	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Mini%20Ego%20guitar%20pedal"; "Wampler Mini Ego")	dynamics	Compressor	8	squashed		
+=HYPERLINK("https://www.google.com/search?q=Xotic%20SP%20Compressor%20guitar%20pedal"; "Xotic SP Compressor")	dynamics	Compressor	9	clamped down		
+=HYPERLINK("https://www.google.com/search?q=Aguilar%20Tone%20Hammer%20guitar%20pedal"; "Aguilar Tone Hammer")	eq	Bass Preamp	9	surgical		
+=HYPERLINK("https://www.google.com/search?q=Boss%20EQ-200%20guitar%20pedal"; "Boss EQ-200")	eq	Graphic	10	surgical		
+=HYPERLINK("https://www.google.com/search?q=Boss%20GE-7%20Graphic%20EQ%20guitar%20pedal"; "Boss GE-7 Graphic EQ")	eq	Graphic	7	sculptor		
+=HYPERLINK("https://www.google.com/search?q=Caline%20CP-24%2010-Band%20EQ%20guitar%20pedal"; "Caline CP-24 10-Band EQ")	eq	Graphic	6	sculptor		
+=HYPERLINK("https://www.google.com/search?q=Catalinbread%20Galileo%20guitar%20pedal"; "Catalinbread Galileo")	eq	Preamp	7	sculptor		
+=HYPERLINK("https://www.google.com/search?q=Darkglass%20Vintage%20Ultra%20V2%20guitar%20pedal"; "Darkglass Vintage Ultra V2")	eq	Bass Preamp	9	surgical		
+=HYPERLINK("https://www.google.com/search?q=DOD%20FX40B%20EQ%20guitar%20pedal"; "DOD FX40B EQ")	eq	Graphic	6	sculptor		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Knockout%20guitar%20pedal"; "Electro-Harmonix Knockout")	eq	Special	6	sculptor		
+=HYPERLINK("https://www.google.com/search?q=Empress%20ParaEQ%20guitar%20pedal"; "Empress ParaEQ")	eq	Parametric	10	surgical		
+=HYPERLINK("https://www.google.com/search?q=Fishman%20Aura%20Spectrum%20DI%20guitar%20pedal"; "Fishman Aura Spectrum DI")	eq	Acoustic	9	surgical		
+=HYPERLINK("https://www.google.com/search?q=Joyo%20JF-11%206-Band%20EQ%20guitar%20pedal"; "Joyo JF-11 6-Band EQ")	eq	Graphic	5	sculptor		
+=HYPERLINK("https://www.google.com/search?q=LR%20Baggs%20Align%20EQ%20guitar%20pedal"; "LR Baggs Align EQ")	eq	Acoustic	8	surgical		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20Graphic%20G%20guitar%20pedal"; "Mooer Graphic G")	eq	Graphic	5	sculptor		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M108S%2010-Band%20EQ%20guitar%20pedal"; "MXR M108S 10-Band EQ")	eq	Graphic	9	surgical		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M109S%206-Band%20EQ%20guitar%20pedal"; "MXR M109S 6-Band EQ")	eq	Graphic	6	sculptor		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M133%20Micro%20Amp%20guitar%20pedal"; "MXR M133 Micro Amp")	eq	Boost	5	sculptor		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M80%20Bass%20D.I.%2B%20guitar%20pedal"; "MXR M80 Bass D.I.+")	eq	Bass Preamp	8	surgical		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20EQ2%20guitar%20pedal"; "Source Audio EQ2")	eq	Graphic	10	surgical		
+=HYPERLINK("https://www.google.com/search?q=Suhr%20Koko%20Boost%20guitar%20pedal"; "Suhr Koko Boost")	eq	Boost	8	surgical		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20BodyRez%20guitar%20pedal"; "TC Electronic BodyRez")	eq	Acoustic	6	sculptor		
+=HYPERLINK("https://www.google.com/search?q=Tech%2021%20SansAmp%20Bass%20Driver%20DI%20guitar%20pedal"; "Tech 21 SansAmp Bass Driver DI")	eq	Bass Preamp	8	surgical		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20EQuator%20guitar%20pedal"; "Wampler EQuator")	eq	Parametric	9	surgical		
+=HYPERLINK("https://www.google.com/search?q=Z.Vex%20Super%20Hard%20On%20guitar%20pedal"; "Z.Vex Super Hard On")	eq	Boost	6	sculptor		
+=HYPERLINK("https://www.google.com/search?q=3Leaf%20Audio%20Proton%20V3%20guitar%20pedal"; "3Leaf Audio Proton V3")	filter	Envelope	9	talking		
+=HYPERLINK("https://www.google.com/search?q=Aguilar%20Filter%20Twin%20guitar%20pedal"; "Aguilar Filter Twin")	filter	Envelope	9	talking		
+=HYPERLINK("https://www.google.com/search?q=Behringer%20FM600%20Filter%20Machine%20guitar%20pedal"; "Behringer FM600 Filter Machine")	filter	Envelope	4	quack doctor		
+=HYPERLINK("https://www.google.com/search?q=Boss%20AW-3%20Dynamic%20Wah%20guitar%20pedal"; "Boss AW-3 Dynamic Wah")	filter	Envelope	7	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Boss%20FT-2%20Dynamic%20Filter%20guitar%20pedal"; "Boss FT-2 Dynamic Filter")	filter	Envelope	7	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Boss%20PW-3%20Wah%20guitar%20pedal"; "Boss PW-3 Wah")	filter	Wah	6	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=DOD%20440%20Envelope%20Filter%20guitar%20pedal"; "DOD 440 Envelope Filter")	filter	Envelope	7	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20535Q%20Multi-Wah%20guitar%20pedal"; "Dunlop 535Q Multi-Wah")	filter	Wah	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20CBM95%20Cry%20Baby%20Mini%20guitar%20pedal"; "Dunlop CBM95 Cry Baby Mini")	filter	Wah	6	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20Cry%20Baby%2095Q%20guitar%20pedal"; "Dunlop Cry Baby 95Q")	filter	Wah	6	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20Cry%20Baby%20GCB95%20guitar%20pedal"; "Dunlop Cry Baby GCB95")	filter	Wah	5	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20Cry%20Baby%20Mini%20guitar%20pedal"; "Dunlop Cry Baby Mini")	filter	Wah	5	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20JH-1D%20Jimi%20Hendrix%20Wah%20guitar%20pedal"; "Dunlop JH-1D Jimi Hendrix Wah")	filter	Wah	6	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Spatial%20Delivery%20V2%20guitar%20pedal"; "EarthQuaker Devices Spatial Delivery V2")	filter	Envelope	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Enigma%3A%20Q-Balls%20guitar%20pedal"; "Electro-Harmonix Enigma: Q-Balls")	filter	Envelope	9	talking		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Micro%20Q-Tron%20guitar%20pedal"; "Electro-Harmonix Micro Q-Tron")	filter	Envelope	6	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Q-Tron%2B%20guitar%20pedal"; "Electro-Harmonix Q-Tron+")	filter	Envelope	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Fulltone%20Clyde%20Standard%20guitar%20pedal"; "Fulltone Clyde Standard")	filter	Wah	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Fulltone%20Clyde%20Standard%20Wah%20guitar%20pedal"; "Fulltone Clyde Standard Wah")	filter	Wah	7	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Joyo%20JF-09%20Wow%20Wah%20guitar%20pedal"; "Joyo JF-09 Wow Wah")	filter	Envelope	5	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Lovetone%20Meatball%20guitar%20pedal"; "Lovetone Meatball")	filter	Envelope	10	talking		
+=HYPERLINK("https://www.google.com/search?q=Mad%20Professor%20Snow%20White%20Auto%20Wah%20guitar%20pedal"; "Mad Professor Snow White Auto Wah")	filter	Envelope	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Malekko%20Scrutator%20guitar%20pedal"; "Malekko Scrutator")	filter	Bitcrusher	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20Envelope%20guitar%20pedal"; "Mooer Envelope")	filter	Envelope	5	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Moog%20MF-101%20Lowpass%20Filter%20guitar%20pedal"; "Moog MF-101 Lowpass Filter")	filter	Lowpass	10	talking		
+=HYPERLINK("https://www.google.com/search?q=Morley%2020%2F20%20Wah%20guitar%20pedal"; "Morley 20/20 Wah")	filter	Wah	6	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Morley%20Bad%20Horsie%202%20guitar%20pedal"; "Morley Bad Horsie 2")	filter	Wah	7	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Morley%20Classic%20Wah%20guitar%20pedal"; "Morley Classic Wah")	filter	Wah	6	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Mu-Tron%20Micro-Tron%20III%20guitar%20pedal"; "Mu-Tron Micro-Tron III")	filter	Envelope	9	talking		
+=HYPERLINK("https://www.google.com/search?q=Mu-Tron%20Mu-Tron%20III%20guitar%20pedal"; "Mu-Tron Mu-Tron III")	filter	Envelope	9	talking		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M82%20Envelope%20Filter%20guitar%20pedal"; "MXR M82 Envelope Filter")	filter	Envelope	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=MXR%20MC404%20CAE%20Wah%20guitar%20pedal"; "MXR MC404 CAE Wah")	filter	Wah	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Pigtronix%20EP2%20guitar%20pedal"; "Pigtronix EP2")	filter	Envelope	9	talking		
+=HYPERLINK("https://www.google.com/search?q=Real%20McCoy%20Custom%20RMC3%20FL%20guitar%20pedal"; "Real McCoy Custom RMC3 FL")	filter	Wah	9	talking		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20Spectrum%20guitar%20pedal"; "Source Audio Spectrum")	filter	Envelope	10	talking		
+=HYPERLINK("https://www.google.com/search?q=Subdecay%20Prometheus%20DLX%20guitar%20pedal"; "Subdecay Prometheus DLX")	filter	Envelope	9	talking		
+=HYPERLINK("https://www.google.com/search?q=Vox%20V845%20Classic%20Wah%20guitar%20pedal"; "Vox V845 Classic Wah")	filter	Wah	5	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Vox%20V847-A%20Wah%20guitar%20pedal"; "Vox V847-A Wah")	filter	Wah	6	funky chicken		
+=HYPERLINK("https://www.google.com/search?q=Wilson%20Effects%20Ten%20Spot%20II%20guitar%20pedal"; "Wilson Effects Ten Spot II")	filter	Wah	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=WMD%20Protostar%20guitar%20pedal"; "WMD Protostar")	filter	Envelope	9	talking		
+=HYPERLINK("https://www.google.com/search?q=Xotic%20XW-1%20guitar%20pedal"; "Xotic XW-1")	filter	Wah	8	street sweeper		
+=HYPERLINK("https://www.google.com/search?q=Z.Vex%20Seek%20Wah%20guitar%20pedal"; "Z.Vex Seek Wah")	filter	Sequenced	9	talking		
+=HYPERLINK("https://www.google.com/search?q=Ampeg%20Scrambler%20guitar%20pedal"; "Ampeg Scrambler")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Amptweaker%20TightMetal%20Pro%20II%20guitar%20pedal"; "Amptweaker TightMetal Pro II")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Analog%20Man%20Beano%20Boost%20guitar%20pedal"; "Analog Man Beano Boost")	gain	Boost	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Analog%20Man%20King%20of%20Tone%20guitar%20pedal"; "Analog Man King of Tone")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Analog%20Man%20Prince%20of%20Tone%20guitar%20pedal"; "Analog Man Prince of Tone")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Analog%20Man%20Sun%20Face%20guitar%20pedal"; "Analog Man Sun Face")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Barber%20Electronics%20Gain%20Changer%20guitar%20pedal"; "Barber Electronics Gain Changer")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Benson%20Amps%20Preamp%20Pedal%20guitar%20pedal"; "Benson Amps Preamp Pedal")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Black%20Arts%20Toneworks%20Pharaoh%20guitar%20pedal"; "Black Arts Toneworks Pharaoh")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Blackstar%20LT-Drive%20guitar%20pedal"; "Blackstar LT-Drive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Bogner%20Ecstasy%20Blue%20guitar%20pedal"; "Bogner Ecstasy Blue")	gain	Distortion	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Bogner%20Ecstasy%20Red%20guitar%20pedal"; "Bogner Ecstasy Red")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Bogner%20%C3%9Cberschall%20Pedal%20guitar%20pedal"; "Bogner Überschall Pedal")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Bondi%20Effects%20Sick%20As%20Overdrive%20guitar%20pedal"; "Bondi Effects Sick As Overdrive")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Boss%20BD-2%20Blues%20Driver%20guitar%20pedal"; "Boss BD-2 Blues Driver")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Boss%20BD-2W%20Waza%20Craft%20Blues%20Driver%20guitar%20pedal"; "Boss BD-2W Waza Craft Blues Driver")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DA-2%20Adaptive%20Distortion%20guitar%20pedal"; "Boss DA-2 Adaptive Distortion")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DS-1%20Distortion%20guitar%20pedal"; "Boss DS-1 Distortion")	gain	Distortion	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DS-1W%20Waza%20Craft%20Distortion%20guitar%20pedal"; "Boss DS-1W Waza Craft Distortion")	gain	Distortion	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DS-2%20Turbo%20Distortion%20guitar%20pedal"; "Boss DS-2 Turbo Distortion")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Boss%20FB-2%20Feedbacker%2FBooster%20guitar%20pedal"; "Boss FB-2 Feedbacker/Booster")	gain	Boost	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Boss%20FZ-1W%20Waza%20Craft%20Fuzz%20guitar%20pedal"; "Boss FZ-1W Waza Craft Fuzz")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Boss%20HM-2%20Heavy%20Metal%20guitar%20pedal"; "Boss HM-2 Heavy Metal")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Boss%20MD-2%20Mega%20Distortion%20guitar%20pedal"; "Boss MD-2 Mega Distortion")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Boss%20MT-2%20Metal%20Zone%20guitar%20pedal"; "Boss MT-2 Metal Zone")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Boss%20MT-2%20Metal%20Zone%20guitar%20pedal"; "Boss MT-2 Metal Zone")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Boss%20MT-2W%20Waza%20Craft%20Metal%20Zone%20guitar%20pedal"; "Boss MT-2W Waza Craft Metal Zone")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Boss%20MT-2W%20Waza%20Craft%20Metal%20Zone%20guitar%20pedal"; "Boss MT-2W Waza Craft Metal Zone")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Boss%20OD-1X%20Overdrive%20guitar%20pedal"; "Boss OD-1X Overdrive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Boss%20OD-3%20OverDrive%20guitar%20pedal"; "Boss OD-3 OverDrive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Boss%20SD-1%20Super%20Overdrive%20guitar%20pedal"; "Boss SD-1 Super Overdrive")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Boss%20SD-1W%20Waza%20Craft%20Super%20Overdrive%20guitar%20pedal"; "Boss SD-1W Waza Craft Super Overdrive")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Boss%20ST-2%20Power%20Stack%20guitar%20pedal"; "Boss ST-2 Power Stack")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=BSM%20RM%20Treble%20Booster%20guitar%20pedal"; "BSM RM Treble Booster")	gain	Boost	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Caroline%20Guitar%20Company%20Shigeharu%20guitar%20pedal"; "Caroline Guitar Company Shigeharu")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Catalinbread%20Naga%20Viper%20guitar%20pedal"; "Catalinbread Naga Viper")	gain	Boost	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Ceriatone%20Centura%20guitar%20pedal"; "Ceriatone Centura")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Chase%20Bliss%20Audio%20Condor%20guitar%20pedal"; "Chase Bliss Audio Condor")	gain	Boost	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=CMATMODS%20Brownie%20guitar%20pedal"; "CMATMODS Brownie")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Colorsound%20Overdriver%20guitar%20pedal"; "Colorsound Overdriver")	gain	Overdrive	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Colorsound%20Power%20Boost%20guitar%20pedal"; "Colorsound Power Boost")	gain	Boost	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Crowther%20Audio%20Hotcake%20guitar%20pedal"; "Crowther Audio Hotcake")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Dallas%20Arbiter%20Fuzz%20Face%20(Germanium)%20guitar%20pedal"; "Dallas Arbiter Fuzz Face (Germanium)")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Dallas%20Arbiter%20Fuzz%20Face%20(Silicon)%20guitar%20pedal"; "Dallas Arbiter Fuzz Face (Silicon)")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Death%20By%20Audio%20Apocalypse%20guitar%20pedal"; "Death By Audio Apocalypse")	gain	Fuzz	10	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Death%20By%20Audio%20Fuzz%20War%20guitar%20pedal"; "Death By Audio Fuzz War")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Death%20By%20Audio%20Supersonic%20Fuzz%20Gun%20guitar%20pedal"; "Death By Audio Supersonic Fuzz Gun")	gain	Fuzz	10	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Death%20By%20Audio%20Supersonic%20Fuzz%20Gun%20guitar%20pedal"; "Death By Audio Supersonic Fuzz Gun")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Diezel%20Herbert%20Pedal%20guitar%20pedal"; "Diezel Herbert Pedal")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Diezel%20VH4%20Pedal%20guitar%20pedal"; "Diezel VH4 Pedal")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Dirty%20Robot%20Stereo%20Mini%20Synth%20guitar%20pedal"; "DigiTech Dirty Robot Stereo Mini Synth")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=DOD%20250%20Overdrive%20Preamp%20(Yellow)%20guitar%20pedal"; "DOD 250 Overdrive Preamp (Yellow)")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20FFM1%20Fuzz%20Face%20Mini%20Silicon%20guitar%20pedal"; "Dunlop FFM1 Fuzz Face Mini Silicon")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20FFM2%20Fuzz%20Face%20Mini%20Germanium%20guitar%20pedal"; "Dunlop FFM2 Fuzz Face Mini Germanium")	gain	Fuzz	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20FFM3%20Fuzz%20Face%20Mini%20Hendrix%20guitar%20pedal"; "Dunlop FFM3 Fuzz Face Mini Hendrix")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20JH3S%20Jimi%20Hendrix%20Octavio%20guitar%20pedal"; "Dunlop JH3S Jimi Hendrix Octavio")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20JHF1%20Jimi%20Hendrix%20Fuzz%20Face%20guitar%20pedal"; "Dunlop JHF1 Jimi Hendrix Fuzz Face")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Acapulco%20Gold%20guitar%20pedal"; "EarthQuaker Devices Acapulco Gold")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Arrows%20V2%20guitar%20pedal"; "EarthQuaker Devices Arrows V2")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Cloven%20Hoof%20guitar%20pedal"; "EarthQuaker Devices Cloven Hoof")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Data%20Corrupter%20guitar%20pedal"; "EarthQuaker Devices Data Corrupter")	gain	Fuzz	10	melt my face		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Hoof%20Fuzz%20V2%20guitar%20pedal"; "EarthQuaker Devices Hoof Fuzz V2")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Hoof%20Reaper%20V2%20guitar%20pedal"; "EarthQuaker Devices Hoof Reaper V2")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Life%20Pedal%20V2%20guitar%20pedal"; "EarthQuaker Devices Life Pedal V2")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Plumes%20guitar%20pedal"; "EarthQuaker Devices Plumes")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Special%20Cranker%20guitar%20pedal"; "EarthQuaker Devices Special Cranker")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Tentacle%20V2%20guitar%20pedal"; "EarthQuaker Devices Tentacle V2")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Terminal%20Fuzz%20V2%20guitar%20pedal"; "EarthQuaker Devices Terminal Fuzz V2")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Tone%20Job%20V2%20guitar%20pedal"; "EarthQuaker Devices Tone Job V2")	gain	Boost	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Tone%20Reaper%20guitar%20pedal"; "EarthQuaker Devices Tone Reaper")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Westwood%20guitar%20pedal"; "EarthQuaker Devices Westwood")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Big%20Muff%20Pi%20guitar%20pedal"; "Electro-Harmonix Big Muff Pi")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Big%20Muff%20Pi%20(Civil%20War)%20guitar%20pedal"; "Electro-Harmonix Big Muff Pi (Civil War)")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Big%20Muff%20Pi%20(Triangle)%20guitar%20pedal"; "Electro-Harmonix Big Muff Pi (Triangle)")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Deluxe%20Big%20Muff%20Pi%20guitar%20pedal"; "Electro-Harmonix Deluxe Big Muff Pi")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Green%20Russian%20Big%20Muff%20guitar%20pedal"; "Electro-Harmonix Green Russian Big Muff")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20LPB-1%20Linear%20Power%20Booster%20guitar%20pedal"; "Electro-Harmonix LPB-1 Linear Power Booster")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Mole%20Bass%20Booster%20guitar%20pedal"; "Electro-Harmonix Mole Bass Booster")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Nano%20Big%20Muff%20Pi%20guitar%20pedal"; "Electro-Harmonix Nano Big Muff Pi")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Op-Amp%20Big%20Muff%20guitar%20pedal"; "Electro-Harmonix Op-Amp Big Muff")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Op-Amp%20Big%20Muff%20Reissue%20guitar%20pedal"; "Electro-Harmonix Op-Amp Big Muff Reissue")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Screaming%20Bird%20Treble%20Booster%20guitar%20pedal"; "Electro-Harmonix Screaming Bird Treble Booster")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Soul%20Food%20guitar%20pedal"; "Electro-Harmonix Soul Food")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Triangle%20Big%20Muff%20guitar%20pedal"; "Electro-Harmonix Triangle Big Muff")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Emerson%20Custom%20Paramount%20guitar%20pedal"; "Emerson Custom Paramount")	gain	Boost	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Fender%20Full%20Moon%20Distortion%20guitar%20pedal"; "Fender Full Moon Distortion")	gain	Overdrive	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Fender%20Pugilist%20Distortion%20guitar%20pedal"; "Fender Pugilist Distortion")	gain	Overdrive	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Friedman%20BE-OD%20guitar%20pedal"; "Friedman BE-OD")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Friedman%20BE-OD%20Deluxe%20guitar%20pedal"; "Friedman BE-OD Deluxe")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Friedman%20Dirty%20Shirley%20guitar%20pedal"; "Friedman Dirty Shirley")	gain	Distortion	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Friedman%20Smallbox%20guitar%20pedal"; "Friedman Smallbox")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Fulltone%20Fulldrive%202%20guitar%20pedal"; "Fulltone Fulldrive 2")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Fulltone%20OCD%20guitar%20pedal"; "Fulltone OCD")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Fulltone%20Octafuzz%20OF-2%20guitar%20pedal"; "Fulltone Octafuzz OF-2")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Fulltone%20Plimsoul%20guitar%20pedal"; "Fulltone Plimsoul")	gain	Overdrive	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Gamechanger%20Audio%20Plasma%20Pedal%20guitar%20pedal"; "Gamechanger Audio Plasma Pedal")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Greer%20Amps%20Lightspeed%20Organic%20Overdrive%20guitar%20pedal"; "Greer Amps Lightspeed Organic Overdrive")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Greer%20Amps%20Southland%20guitar%20pedal"; "Greer Amps Southland")	gain	Boost	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Ibanez%20TS%20Mini%20Tube%20Screamer%20guitar%20pedal"; "Ibanez TS Mini Tube Screamer")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Ibanez%20TS808%20(Original%201979)%20guitar%20pedal"; "Ibanez TS808 (Original 1979)")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Ibanez%20TS808%20Tube%20Screamer%20guitar%20pedal"; "Ibanez TS808 Tube Screamer")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Ibanez%20TS9%20Tube%20Screamer%20guitar%20pedal"; "Ibanez TS9 Tube Screamer")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Ibanez%20TS9DX%20Turbo%20Tube%20Screamer%20guitar%20pedal"; "Ibanez TS9DX Turbo Tube Screamer")	gain	Overdrive	6	burner		
+=HYPERLINK("https://www.google.com/search?q=J.%20Rockett%20Archer%20guitar%20pedal"; "J. Rockett Archer")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=J.%20Rockett%20Archer%20Ikon%20guitar%20pedal"; "J. Rockett Archer Ikon")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=JHS%203%20Series%20Distortion%20guitar%20pedal"; "JHS 3 Series Distortion")	gain	Overdrive	6	burner		
+=HYPERLINK("https://www.google.com/search?q=JHS%203%20Series%20Screamer%20guitar%20pedal"; "JHS 3 Series Screamer")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Angry%20Charlie%20V3%20guitar%20pedal"; "JHS Angry Charlie V3")	gain	Overdrive	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Angry%20Driver%20guitar%20pedal"; "JHS Angry Driver")	gain	Boost	5	burner		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Bender%20guitar%20pedal"; "JHS Bender")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Bonsai%20guitar%20pedal"; "JHS Bonsai")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Double%20Barrel%20V4%20guitar%20pedal"; "JHS Double Barrel V4")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Moonshine%20V2%20guitar%20pedal"; "JHS Moonshine V2")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Morning%20Glory%20V4%20guitar%20pedal"; "JHS Morning Glory V4")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Muffuletta%20guitar%20pedal"; "JHS Muffuletta")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=JHS%20PackRat%20guitar%20pedal"; "JHS PackRat")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Prestige%20guitar%20pedal"; "JHS Prestige")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Supreme%20guitar%20pedal"; "JHS Supreme")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20D%26M%20Drive%20guitar%20pedal"; "Keeley D&M Drive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Fuzz%20Bender%20guitar%20pedal"; "Keeley Fuzz Bender")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Katana%20Clean%20Boost%20guitar%20pedal"; "Keeley Katana Clean Boost")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Oxblood%20Overdrive%20guitar%20pedal"; "Keeley Oxblood Overdrive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Red%20Dirt%20Overdrive%20guitar%20pedal"; "Keeley Red Dirt Overdrive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Klon%20Centaur%20(Gold)%20guitar%20pedal"; "Klon Centaur (Gold)")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Klon%20Centaur%20(Silver)%20guitar%20pedal"; "Klon Centaur (Silver)")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Klon%20KTR%20guitar%20pedal"; "Klon KTR")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=KMA%20Machines%20Wurm%20Distortion%20guitar%20pedal"; "KMA Machines Wurm Distortion")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Lovepedal%20Eternity%20guitar%20pedal"; "Lovepedal Eternity")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Mad%20Professor%20Sweet%20Honey%20Overdrive%20guitar%20pedal"; "Mad Professor Sweet Honey Overdrive")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Maxon%20OD808%20Overdrive%20guitar%20pedal"; "Maxon OD808 Overdrive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Maxon%20OD9%20Overdrive%20guitar%20pedal"; "Maxon OD9 Overdrive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Mesa%20Boogie%20Flux-Five%20Overdrive%20guitar%20pedal"; "Mesa Boogie Flux-Five Overdrive")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Mesa%2FBoogie%20Flux-Drive%20guitar%20pedal"; "Mesa/Boogie Flux-Drive")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Mesa%2FBoogie%20Throttle%20Box%20guitar%20pedal"; "Mesa/Boogie Throttle Box")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=MXR%20CSP027%20Timmy%20Overdrive%20guitar%20pedal"; "MXR CSP027 Timmy Overdrive")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Distortion%2B%20(Block%20Logo)%20guitar%20pedal"; "MXR Distortion+ (Block Logo)")	gain	Distortion	6	burner		
+=HYPERLINK("https://www.google.com/search?q=MXR%20EVH%205150%20Overdrive%20guitar%20pedal"; "MXR EVH 5150 Overdrive")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M104%20Distortion%2B%20guitar%20pedal"; "MXR M104 Distortion+")	gain	Distortion	6	burner		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M116%20Fullbore%20Metal%20guitar%20pedal"; "MXR M116 Fullbore Metal")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M133%20Micro%20Amp%20guitar%20pedal"; "MXR M133 Micro Amp")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M193%20GT-OD%20guitar%20pedal"; "MXR M193 GT-OD")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M293%20Booster%20Mini%20guitar%20pedal"; "MXR M293 Booster Mini")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M294%20Sugar%20Drive%20guitar%20pedal"; "MXR M294 Sugar Drive")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M75%20Super%20Badass%20Distortion%20guitar%20pedal"; "MXR M75 Super Badass Distortion")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M77%20Custom%20Badass%20Modified%20OD%20guitar%20pedal"; "MXR M77 Custom Badass Modified OD")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M78%20Custom%20Badass%2078%20Distortion%20guitar%20pedal"; "MXR M78 Custom Badass 78 Distortion")	gain	Overdrive	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Nordvang%2089%20OD%20guitar%20pedal"; "Nordvang 89 OD")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Orange%20Getaway%20Driver%20guitar%20pedal"; "Orange Getaway Driver")	gain	Boost	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Orange%20Two%20Stroke%20Boost%20EQ%20guitar%20pedal"; "Orange Two Stroke Boost EQ")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Paul%20Cochrane%20Timmy%20V3%20guitar%20pedal"; "Paul Cochrane Timmy V3")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Pro%20Co%20Fat%20Rat%20guitar%20pedal"; "Pro Co Fat Rat")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Pro%20Co%20RAT%202%20guitar%20pedal"; "Pro Co RAT 2")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=ProCo%20RAT%20(Vintage%201980s)%20guitar%20pedal"; "ProCo RAT (Vintage 1980s)")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=PRS%20Horsemeat%20Transparent%20Overdrive%20guitar%20pedal"; "PRS Horsemeat Transparent Overdrive")	gain	Distortion	6	burner		
+=HYPERLINK("https://www.google.com/search?q=Revv%20G2%20Overdrive%20guitar%20pedal"; "Revv G2 Overdrive")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Revv%20G3%20Distortion%20guitar%20pedal"; "Revv G3 Distortion")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Revv%20G4%20Distortion%20guitar%20pedal"; "Revv G4 Distortion")	gain	Distortion	10	melt my face		
+=HYPERLINK("https://www.google.com/search?q=RYRA%20The%20Klone%20guitar%20pedal"; "RYRA The Klone")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Shin-ei%20FY-6%20Super%20Fuzz%20guitar%20pedal"; "Shin-ei FY-6 Super Fuzz")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Snouse%20BlackBox%202%20guitar%20pedal"; "Snouse BlackBox 2")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Sola%20Sound%20Tone%20Bender%20MK1%20guitar%20pedal"; "Sola Sound Tone Bender MK1")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Sola%20Sound%20Tone%20Bender%20MK2%20guitar%20pedal"; "Sola Sound Tone Bender MK2")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Suhr%20Riot%20Distortion%20guitar%20pedal"; "Suhr Riot Distortion")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Suhr%20Riot%20Mini%20guitar%20pedal"; "Suhr Riot Mini")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Supro%201305%20Drive%20guitar%20pedal"; "Supro 1305 Drive")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Cinders%20Overdrive%20guitar%20pedal"; "TC Electronic Cinders Overdrive")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Dark%20Matter%20Distortion%20guitar%20pedal"; "TC Electronic Dark Matter Distortion")	gain	Distortion	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20MojoMojo%20Overdrive%20guitar%20pedal"; "TC Electronic MojoMojo Overdrive")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Rusty%20Fuzz%20guitar%20pedal"; "TC Electronic Rusty Fuzz")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Spark%20Booster%20guitar%20pedal"; "TC Electronic Spark Booster")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Spark%20Mini%20Booster%20guitar%20pedal"; "TC Electronic Spark Mini Booster")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Zeus%20Drive%20guitar%20pedal"; "TC Electronic Zeus Drive")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Univox%20Super-Fuzz%20guitar%20pedal"; "Univox Super-Fuzz")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Vertex%20Steel%20String%20Clean%20Drive%20guitar%20pedal"; "Vertex Steel String Clean Drive")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Visual%20Sound%20Route%2066%20V2%20guitar%20pedal"; "Visual Sound Route 66 V2")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20385%20Overdrive%20guitar%20pedal"; "Walrus Audio 385 Overdrive")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Ages%20Five-State%20Overdrive%20guitar%20pedal"; "Walrus Audio Ages Five-State Overdrive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Contraband%20guitar%20pedal"; "Walrus Audio Contraband")	gain	Fuzz	7	screamer		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Jupiter%20V2%20guitar%20pedal"; "Walrus Audio Jupiter V2")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Monument%20V2%20guitar%20pedal"; "Walrus Audio Monument V2")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Voyager%20Preamp%2FOverdrive%20guitar%20pedal"; "Walrus Audio Voyager Preamp/Overdrive")	gain	Overdrive	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Clarksdale%20Delta%20Overdrive%20guitar%20pedal"; "Wampler Clarksdale Delta Overdrive")	gain	Overdrive	5	burner		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20dB%2B%20Boost%2FBuffer%20guitar%20pedal"; "Wampler dB+ Boost/Buffer")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Dracarys%20High%20Gain%20guitar%20pedal"; "Wampler Dracarys High Gain")	gain	Distortion	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Sovereign%20Distortion%20guitar%20pedal"; "Wampler Sovereign Distortion")	gain	Distortion	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Triple%20Wreck%20guitar%20pedal"; "Wampler Triple Wreck")	gain	Distortion	10	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Tumnus%20guitar%20pedal"; "Wampler Tumnus")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Tumnus%20Deluxe%20guitar%20pedal"; "Wampler Tumnus Deluxe")	gain	Overdrive	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Wren%20and%20Cuff%20Tall%20Font%20Russian%20guitar%20pedal"; "Wren and Cuff Tall Font Russian")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Wren%20and%20Cuff%20Tall%20Font%20Russian%20guitar%20pedal"; "Wren and Cuff Tall Font Russian")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=Xotic%20AC%20Booster%20guitar%20pedal"; "Xotic AC Booster")	gain	Boost	4	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Xotic%20EP%20Booster%20guitar%20pedal"; "Xotic EP Booster")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=Xotic%20RC%20Booster%20V2%20guitar%20pedal"; "Xotic RC Booster V2")	gain	Boost	3	dirty bird		
+=HYPERLINK("https://www.google.com/search?q=Z.Vex%20Fuzz%20Factory%20(Hand-Painted)%20guitar%20pedal"; "Z.Vex Fuzz Factory (Hand-Painted)")	gain	Fuzz	8	screamer		
+=HYPERLINK("https://www.google.com/search?q=ZVEX%20Fuzz%20Factory%20guitar%20pedal"; "ZVEX Fuzz Factory")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=ZVEX%20Fuzz%20Factory%207%20guitar%20pedal"; "ZVEX Fuzz Factory 7")	gain	Fuzz	10	melt my face		
+=HYPERLINK("https://www.google.com/search?q=ZVEX%20Super%20Hard%20On%20guitar%20pedal"; "ZVEX Super Hard On")	gain	Boost	2	mr. clean		
+=HYPERLINK("https://www.google.com/search?q=ZVEX%20Woolly%20Mammoth%20guitar%20pedal"; "ZVEX Woolly Mammoth")	gain	Fuzz	9	melt my face		
+=HYPERLINK("https://www.google.com/search?q=Analog%20Man%20Bi-Chorus%20guitar%20pedal"; "Analog Man Bi-Chorus")	modulation	Chorus	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Boss%20BF-2%20Flanger%20guitar%20pedal"; "Boss BF-2 Flanger")	modulation	Flanger	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Boss%20BF-3%20Flanger%20guitar%20pedal"; "Boss BF-3 Flanger")	modulation	Flanger	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Boss%20CE-1%20Chorus%20Ensemble%20guitar%20pedal"; "Boss CE-1 Chorus Ensemble")	modulation	Chorus	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Boss%20CE-2W%20Waza%20Craft%20Chorus%20guitar%20pedal"; "Boss CE-2W Waza Craft Chorus")	modulation	Chorus	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Boss%20CE-2W%20Waza%20Craft%20Chorus%20guitar%20pedal"; "Boss CE-2W Waza Craft Chorus")	modulation	Chorus	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Boss%20CH-1%20Super%20Chorus%20guitar%20pedal"; "Boss CH-1 Super Chorus")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Boss%20DC-2W%20Waza%20Craft%20Dimension%20C%20guitar%20pedal"; "Boss DC-2W Waza Craft Dimension C")	modulation	Chorus	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Boss%20PH-1R%20Phaser%20guitar%20pedal"; "Boss PH-1R Phaser")	modulation	Phaser	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=Boss%20PH-3%20Phase%20Shifter%20guitar%20pedal"; "Boss PH-3 Phase Shifter")	modulation	Phaser	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Boss%20RT-20%20Rotary%20Ensemble%20guitar%20pedal"; "Boss RT-20 Rotary Ensemble")	modulation	Rotary	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Boss%20TR-2%20Tremolo%20guitar%20pedal"; "Boss TR-2 Tremolo")	modulation	Tremolo	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=Boss%20VB-2%20Vibrato%20guitar%20pedal"; "Boss VB-2 Vibrato")	modulation	Vibrato	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Boss%20VB-2W%20Waza%20Craft%20Vibrato%20guitar%20pedal"; "Boss VB-2W Waza Craft Vibrato")	modulation	Vibrato	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Caroline%20Guitar%20Company%20Somersault%20guitar%20pedal"; "Caroline Guitar Company Somersault")	modulation	Chorus	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Chase%20Bliss%20Audio%20Warped%20Vinyl%20HiFi%20guitar%20pedal"; "Chase Bliss Audio Warped Vinyl HiFi")	modulation	Chorus	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=DOD%20FX13%20Gonkulator%20guitar%20pedal"; "DOD FX13 Gonkulator")	modulation	Ring Mod	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20JHM3%20Jimi%20Hendrix%20Uni-Vibe%20guitar%20pedal"; "Dunlop JHM3 Jimi Hendrix Uni-Vibe")	modulation	Vibrato	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Aqueduct%20Vibrato%20guitar%20pedal"; "EarthQuaker Devices Aqueduct Vibrato")	modulation	Vibrato	9	twister		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Grand%20Orbiter%20V3%20guitar%20pedal"; "EarthQuaker Devices Grand Orbiter V3")	modulation	Phaser	9	twister		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Hummingbird%20V4%20guitar%20pedal"; "EarthQuaker Devices Hummingbird V4")	modulation	Tremolo	9	twister		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Pyramids%20guitar%20pedal"; "EarthQuaker Devices Pyramids")	modulation	Flanger	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Sea%20Machine%20V3%20guitar%20pedal"; "EarthQuaker Devices Sea Machine V3")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Bad%20Stone%20guitar%20pedal"; "Electro-Harmonix Bad Stone")	modulation	Phaser	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Bass%20Clone%20guitar%20pedal"; "Electro-Harmonix Bass Clone")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Eddy%20Analog%20Vibrato%2FChorus%20guitar%20pedal"; "Electro-Harmonix Eddy Analog Vibrato/Chorus")	modulation	Chorus	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Electric%20Mistress%20guitar%20pedal"; "Electro-Harmonix Electric Mistress")	modulation	Flanger	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Electric%20Mistress%20(Deluxe%20V1)%20guitar%20pedal"; "Electro-Harmonix Electric Mistress (Deluxe V1)")	modulation	Flanger	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Good%20Vibes%20guitar%20pedal"; "Electro-Harmonix Good Vibes")	modulation	Vibrato	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Lester%20G%20Deluxe%20guitar%20pedal"; "Electro-Harmonix Lester G Deluxe")	modulation	Rotary	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Lester%20K%20guitar%20pedal"; "Electro-Harmonix Lester K")	modulation	Rotary	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Nano%20Small%20Stone%20guitar%20pedal"; "Electro-Harmonix Nano Small Stone")	modulation	Phaser	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Neo%20Clone%20guitar%20pedal"; "Electro-Harmonix Neo Clone")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Neo%20Mistress%20guitar%20pedal"; "Electro-Harmonix Neo Mistress")	modulation	Flanger	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Pulsar%20Stereo%20Tremolo%20guitar%20pedal"; "Electro-Harmonix Pulsar Stereo Tremolo")	modulation	Tremolo	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Small%20Clone%20guitar%20pedal"; "Electro-Harmonix Small Clone")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Small%20Stone%20(V1)%20guitar%20pedal"; "Electro-Harmonix Small Stone (V1)")	modulation	Phaser	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Small%20Stone%20Nano%20guitar%20pedal"; "Electro-Harmonix Small Stone Nano")	modulation	Phaser	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=Empress%20Effects%20Phaser%20guitar%20pedal"; "Empress Effects Phaser")	modulation	Phaser	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Fender%20Tre-Verb%20guitar%20pedal"; "Fender Tre-Verb")	modulation	Tremolo	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Foxgear%20Fenix%20guitar%20pedal"; "Foxgear Fenix")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Fulltone%20MDV3%20Mini%20Deja-Vibe%20guitar%20pedal"; "Fulltone MDV3 Mini Deja-Vibe")	modulation	Vibrato	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Fulltone%20Supa-Trem%202%20guitar%20pedal"; "Fulltone Supa-Trem 2")	modulation	Tremolo	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=JHS%203%20Series%20Chorus%20guitar%20pedal"; "JHS 3 Series Chorus")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=JHS%203%20Series%20Phaser%20guitar%20pedal"; "JHS 3 Series Phaser")	modulation	Phaser	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Emperor%20V2%20guitar%20pedal"; "JHS Emperor V2")	modulation	Chorus	9	twister		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Kodiak%20guitar%20pedal"; "JHS Kodiak")	modulation	Tremolo	9	twister		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Unicorn%20V2%20guitar%20pedal"; "JHS Unicorn V2")	modulation	Vibrato	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Bubbletron%20Dynamic%20Flanger%2FPhaser%20guitar%20pedal"; "Keeley Bubbletron Dynamic Flanger/Phaser")	modulation	Phaser	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Dyno%20My%20Roto%20guitar%20pedal"; "Keeley Dyno My Roto")	modulation	Chorus	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Seafoam%20Plus%20Chorus%20guitar%20pedal"; "Keeley Seafoam Plus Chorus")	modulation	Chorus	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Tremolo%20Workstation%20guitar%20pedal"; "Keeley Tremolo Workstation")	modulation	Tremolo	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Line%206%20MM4%20Modulation%20Modeler%20guitar%20pedal"; "Line 6 MM4 Modulation Modeler")	modulation	Multi	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Lovetone%20Doppelganger%20guitar%20pedal"; "Lovetone Doppelganger")	modulation	Phaser	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Mad%20Professor%20Electric%20Blue%20Chorus%20guitar%20pedal"; "Mad Professor Electric Blue Chorus")	modulation	Chorus	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Meris%20Ottobit%20Jr.%20guitar%20pedal"; "Meris Ottobit Jr.")	modulation	Other	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Mu-Tron%20Bi-Phase%20guitar%20pedal"; "Mu-Tron Bi-Phase")	modulation	Phaser	9	twister		
+=HYPERLINK("https://www.google.com/search?q=MXR%20EVH%20Phase%2090%20guitar%20pedal"; "MXR EVH Phase 90")	modulation	Phaser	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M101%20Phase%2090%20guitar%20pedal"; "MXR M101 Phase 90")	modulation	Phaser	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M117R%20Flanger%20guitar%20pedal"; "MXR M117R Flanger")	modulation	Flanger	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M152%20Micro%20Flanger%20guitar%20pedal"; "MXR M152 Micro Flanger")	modulation	Flanger	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M234%20Analog%20Chorus%20guitar%20pedal"; "MXR M234 Analog Chorus")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M290%20Phase%2095%20Mini%20guitar%20pedal"; "MXR M290 Phase 95 Mini")	modulation	Phaser	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M68%20Uni-Vibe%20guitar%20pedal"; "MXR M68 Uni-Vibe")	modulation	Vibrato	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M83%20Bass%20Chorus%20Deluxe%20guitar%20pedal"; "MXR M83 Bass Chorus Deluxe")	modulation	Chorus	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M99%20Phase%2099%20guitar%20pedal"; "MXR M99 Phase 99")	modulation	Phaser	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Phase%2090%20(Script%20Logo)%20guitar%20pedal"; "MXR Phase 90 (Script Logo)")	modulation	Phaser	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=Neo%20Instruments%20Ventilator%20II%20guitar%20pedal"; "Neo Instruments Ventilator II")	modulation	Rotary	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Pigtronix%20Quantum%20Time%20Modulator%20guitar%20pedal"; "Pigtronix Quantum Time Modulator")	modulation	Phaser	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Roland%20AP-7%20Jet%20Phaser%20guitar%20pedal"; "Roland AP-7 Jet Phaser")	modulation	Phaser	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20Gemini%20Chorus%20guitar%20pedal"; "Source Audio Gemini Chorus")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20Lunar%20Phaser%20guitar%20pedal"; "Source Audio Lunar Phaser")	modulation	Phaser	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20Orbital%20Modulation%20guitar%20pedal"; "Source Audio Orbital Modulation")	modulation	Rotary	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20Vertigo%20Tremolo%20guitar%20pedal"; "Source Audio Vertigo Tremolo")	modulation	Tremolo	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Deco%20Tape%20Saturation%20guitar%20pedal"; "Strymon Deco Tape Saturation")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Flint%20Tremolo%20%26%20Reverb%20guitar%20pedal"; "Strymon Flint Tremolo & Reverb")	modulation	Tremolo	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Lex%20Rotary%20guitar%20pedal"; "Strymon Lex Rotary")	modulation	Rotary	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Mobius%20guitar%20pedal"; "Strymon Mobius")	modulation	Multi	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Ola%20dBucket%20Chorus%20guitar%20pedal"; "Strymon Ola dBucket Chorus")	modulation	Chorus	10	twister		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Afterglow%20Chorus%20guitar%20pedal"; "TC Electronic Afterglow Chorus")	modulation	Chorus	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Blood%20Moon%20Phaser%20guitar%20pedal"; "TC Electronic Blood Moon Phaser")	modulation	Phaser	6	swirly		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Corona%20Chorus%20guitar%20pedal"; "TC Electronic Corona Chorus")	modulation	Chorus	9	twister		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Corona%20Mini%20Chorus%20guitar%20pedal"; "TC Electronic Corona Mini Chorus")	modulation	Chorus	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Helix%20Phaser%20guitar%20pedal"; "TC Electronic Helix Phaser")	modulation	Phaser	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Pipeline%20Tap%20Tremolo%20guitar%20pedal"; "TC Electronic Pipeline Tap Tremolo")	modulation	Tremolo	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Shaker%20Vibrato%20guitar%20pedal"; "TC Electronic Shaker Vibrato")	modulation	Vibrato	7	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Vortex%20Flanger%20guitar%20pedal"; "TC Electronic Vortex Flanger")	modulation	Flanger	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Univox%20Uni-Vibe%20guitar%20pedal"; "Univox Uni-Vibe")	modulation	Vibrato	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Julia%20V2%20guitar%20pedal"; "Walrus Audio Julia V2")	modulation	Chorus	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Julianna%20Stereo%20Chorus%2FVibrato%20guitar%20pedal"; "Walrus Audio Julianna Stereo Chorus/Vibrato")	modulation	Chorus	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Lillian%20Multi-Stage%20Analog%20Phaser%20guitar%20pedal"; "Walrus Audio Lillian Multi-Stage Analog Phaser")	modulation	Phaser	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Polychrome%20Analog%20Flanger%20guitar%20pedal"; "Walrus Audio Polychrome Analog Flanger")	modulation	Flanger	10	twister		
+=HYPERLINK("https://www.google.com/search?q=Way%20Huge%20Blue%20Hippo%20guitar%20pedal"; "Way Huge Blue Hippo")	modulation	Chorus	8	spin cycle		
+=HYPERLINK("https://www.google.com/search?q=Way%20Huge%20Ring%20Worm%20guitar%20pedal"; "Way Huge Ring Worm")	modulation	Phaser	9	twister		
+=HYPERLINK("https://www.google.com/search?q=Boss%20OC-2%20Octave%20guitar%20pedal"; "Boss OC-2 Octave")	pitch	Octave	7	warped		
+=HYPERLINK("https://www.google.com/search?q=Boss%20OC-3%20Super%20Octave%20guitar%20pedal"; "Boss OC-3 Super Octave")	pitch	Octave	6	harmonious		
+=HYPERLINK("https://www.google.com/search?q=Boss%20OC-5%20Octave%20guitar%20pedal"; "Boss OC-5 Octave")	pitch	Octave	8	warped		
+=HYPERLINK("https://www.google.com/search?q=Boss%20PS-3%20Pitch%20Shifter%2FDelay%20guitar%20pedal"; "Boss PS-3 Pitch Shifter/Delay")	pitch	Shifter	7	warped		
+=HYPERLINK("https://www.google.com/search?q=Boss%20PS-3%20Pitch%20Shifter%2FDelay%20guitar%20pedal"; "Boss PS-3 Pitch Shifter/Delay")	pitch	Shifter	7	warped		
+=HYPERLINK("https://www.google.com/search?q=Boss%20PS-5%20Super%20Shifter%20guitar%20pedal"; "Boss PS-5 Super Shifter")	pitch	Shifter	7	warped		
+=HYPERLINK("https://www.google.com/search?q=Boss%20PS-6%20Harmonist%20guitar%20pedal"; "Boss PS-6 Harmonist")	pitch	Harmonizer	8	warped		
+=HYPERLINK("https://www.google.com/search?q=Boss%20SY-1%20Synthesizer%20guitar%20pedal"; "Boss SY-1 Synthesizer")	pitch	Synth	9	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Boss%20SY-200%20guitar%20pedal"; "Boss SY-200")	pitch	Synth	10	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Chase%20Bliss%20MOOD%20guitar%20pedal"; "Chase Bliss MOOD")	pitch	Granular	10	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Drop%20guitar%20pedal"; "DigiTech Drop")	pitch	Shifter	8	warped		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Ricochet%20guitar%20pedal"; "DigiTech Ricochet")	pitch	Shifter	8	warped		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Whammy%205%20guitar%20pedal"; "DigiTech Whammy 5")	pitch	Shifter	9	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Whammy%20DT%20guitar%20pedal"; "DigiTech Whammy DT")	pitch	Shifter	9	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Whammy%20IV%20guitar%20pedal"; "DigiTech Whammy IV")	pitch	Whammy	8	warped		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Arpanoid%20guitar%20pedal"; "EarthQuaker Devices Arpanoid")	pitch	Arpeggiator	8	warped		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Organizer%20V2%20guitar%20pedal"; "EarthQuaker Devices Organizer V2")	pitch	Organ	8	warped		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Rainbow%20Machine%20guitar%20pedal"; "EarthQuaker Devices Rainbow Machine")	pitch	Harmonizer	8	warped		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Micro%20POG%20guitar%20pedal"; "Electro-Harmonix Micro POG")	pitch	Octave	7	warped		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Nano%20POG%20guitar%20pedal"; "Electro-Harmonix Nano POG")	pitch	Octave	6	harmonious		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Pitch%20Fork%20guitar%20pedal"; "Electro-Harmonix Pitch Fork")	pitch	Shifter	8	warped		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Pitch%20Fork%20guitar%20pedal"; "Electro-Harmonix Pitch Fork")	pitch	Shifter	8	warped		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Pitch%20Fork%2B%20guitar%20pedal"; "Electro-Harmonix Pitch Fork+")	pitch	Shifter	10	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20POG2%20guitar%20pedal"; "Electro-Harmonix POG2")	pitch	Octave	10	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Eventide%20MicroShift%20guitar%20pedal"; "Eventide MicroShift")	pitch	Detune	8	warped		
+=HYPERLINK("https://www.google.com/search?q=Eventide%20PitchFactor%20guitar%20pedal"; "Eventide PitchFactor")	pitch	Harmonizer	10	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Gamechanger%20Audio%20Plasma%20Coil%20guitar%20pedal"; "Gamechanger Audio Plasma Coil")	pitch	Special	8	warped		
+=HYPERLINK("https://www.google.com/search?q=Hologram%20Microcosm%20guitar%20pedal"; "Hologram Microcosm")	pitch	Granular	10	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Hotone%20Harmony%20guitar%20pedal"; "Hotone Harmony")	pitch	Harmonizer	5	harmonious		
+=HYPERLINK("https://www.google.com/search?q=Joyo%20Ironman%20JF-319%20Green%20Legend%20guitar%20pedal"; "Joyo Ironman JF-319 Green Legend")	pitch	Octave	5	harmonious		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Synth-1%20guitar%20pedal"; "Keeley Synth-1")	pitch	Synth	8	warped		
+=HYPERLINK("https://www.google.com/search?q=Meris%20Hedra%20guitar%20pedal"; "Meris Hedra")	pitch	Harmonizer	10	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20Pitch%20Box%20guitar%20pedal"; "Mooer Pitch Box")	pitch	Harmonizer	6	harmonious		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20Tender%20Octaver%20Pro%20guitar%20pedal"; "Mooer Tender Octaver Pro")	pitch	Octave	6	harmonious		
+=HYPERLINK("https://www.google.com/search?q=Morpheus%20Bomber%20guitar%20pedal"; "Morpheus Bomber")	pitch	Shifter	8	warped		
+=HYPERLINK("https://www.google.com/search?q=MXR%20Bass%20Octave%20Deluxe%20guitar%20pedal"; "MXR Bass Octave Deluxe")	pitch	Octave	7	warped		
+=HYPERLINK("https://www.google.com/search?q=Pigtronix%20Disnortion%20guitar%20pedal"; "Pigtronix Disnortion")	pitch	Octave	7	warped		
+=HYPERLINK("https://www.google.com/search?q=Red%20Panda%20Tensor%20guitar%20pedal"; "Red Panda Tensor")	pitch	Shifter	10	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20C4%20Synth%20guitar%20pedal"; "Source Audio C4 Synth")	pitch	Synth	10	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Brainwaves%20guitar%20pedal"; "TC Electronic Brainwaves")	pitch	Harmonizer	9	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Luminary%20V2%20guitar%20pedal"; "Walrus Audio Luminary V2")	pitch	Octave	9	unrecognizable		
+=HYPERLINK("https://www.google.com/search?q=Akai%20Analog%20Custom%20Shop%20Reverb%20guitar%20pedal"; "Akai Analog Custom Shop Reverb")	reverb	Hall	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Alexander%20Sky%205000%20guitar%20pedal"; "Alexander Sky 5000")	reverb	Ambient	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Alexander%20Space%20Race%20guitar%20pedal"; "Alexander Space Race")	reverb	Hall	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Anasounds%20Element%20guitar%20pedal"; "Anasounds Element")	reverb	Spring	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Biyang%20RV-10%20guitar%20pedal"; "Biyang RV-10")	reverb	Room	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=Blackstar%20LT%20Reverb%20guitar%20pedal"; "Blackstar LT Reverb")	reverb	Hall	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=Boss%20RV-2%20guitar%20pedal"; "Boss RV-2")	reverb	Room	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=Boss%20RV-200%20guitar%20pedal"; "Boss RV-200")	reverb	Ambient	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Boss%20RV-3%20guitar%20pedal"; "Boss RV-3")	reverb	Hall	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Boss%20RV-5%20guitar%20pedal"; "Boss RV-5")	reverb	Hall	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Boss%20RV-500%20guitar%20pedal"; "Boss RV-500")	reverb	Shimmer	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Boss%20RV-6%20guitar%20pedal"; "Boss RV-6")	reverb	Shimmer	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Caline%20Snakebite%20guitar%20pedal"; "Caline Snakebite")	reverb	Room	5	drippy		
+=HYPERLINK("https://www.google.com/search?q=Caroline%20Guitar%20M%C3%A9t%C3%A9ore%20guitar%20pedal"; "Caroline Guitar Météore")	reverb	Lo-Fi	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Catalinbread%20Topanga%20guitar%20pedal"; "Catalinbread Topanga")	reverb	Spring	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Chase%20Bliss%20CXM%201978%20guitar%20pedal"; "Chase Bliss CXM 1978")	reverb	Ambient	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Cooper%20FX%20Outward%20V2%20guitar%20pedal"; "Cooper FX Outward V2")	reverb	Special	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Crazy%20Tube%20Circuits%20Splash%20Mk%20IV%20guitar%20pedal"; "Crazy Tube Circuits Splash Mk IV")	reverb	Spring	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Death%20By%20Audio%20Rooms%20guitar%20pedal"; "Death By Audio Rooms")	reverb	Ambient	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Hardwire%20RV-7%20guitar%20pedal"; "DigiTech Hardwire RV-7")	reverb	Room	9	floating		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Polara%20guitar%20pedal"; "DigiTech Polara")	reverb	Hall	9	floating		
+=HYPERLINK("https://www.google.com/search?q=DigiTech%20Supernatural%20guitar%20pedal"; "DigiTech Supernatural")	reverb	Ambient	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Donner%20Verb%20Square%20guitar%20pedal"; "Donner Verb Square")	reverb	Hall	5	drippy		
+=HYPERLINK("https://www.google.com/search?q=Dr.%20Scientist%20Reverberator%20guitar%20pedal"; "Dr. Scientist Reverberator")	reverb	Ambient	10	floating		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Afterneath%20V3%20guitar%20pedal"; "EarthQuaker Devices Afterneath V3")	reverb	Ambient	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Dispatch%20Master%20V3%20guitar%20pedal"; "EarthQuaker Devices Dispatch Master V3")	reverb	Ambient	9	floating		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Ghost%20Echo%20guitar%20pedal"; "EarthQuaker Devices Ghost Echo")	reverb	Ambient	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Cathedral%20guitar%20pedal"; "Electro-Harmonix Cathedral")	reverb	Ambient	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Cathedral%20Stereo%20Reverb%20guitar%20pedal"; "Electro-Harmonix Cathedral Stereo Reverb")	reverb	Hall	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Holy%20Grail%20Max%20guitar%20pedal"; "Electro-Harmonix Holy Grail Max")	reverb	Spring	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Holy%20Grail%20Nano%20guitar%20pedal"; "Electro-Harmonix Holy Grail Nano")	reverb	Spring	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Nano%20Holy%20Grail%20guitar%20pedal"; "Electro-Harmonix Nano Holy Grail")	reverb	Hall	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Oceans%2011%20guitar%20pedal"; "Electro-Harmonix Oceans 11")	reverb	Spring	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Oceans%2012%20guitar%20pedal"; "Electro-Harmonix Oceans 12")	reverb	Spring	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20R1%20Reverb%20guitar%20pedal"; "Electro-Harmonix R1 Reverb")	reverb	Room	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=Empress%20Reverb%20guitar%20pedal"; "Empress Reverb")	reverb	Ambient	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Eventide%20Blackhole%20guitar%20pedal"; "Eventide Blackhole")	reverb	Ambient	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Eventide%20Space%20guitar%20pedal"; "Eventide Space")	reverb	Ambient	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Fender%206G15%20Reverb%20Unit%20guitar%20pedal"; "Fender 6G15 Reverb Unit")	reverb	Spring	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Fender%20Marine%20Layer%20Reverb%20guitar%20pedal"; "Fender Marine Layer Reverb")	reverb	Hall	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Foxpedal%20Defector%20guitar%20pedal"; "Foxpedal Defector")	reverb	Room	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Free%20The%20Tone%20Ambi%20Space%20guitar%20pedal"; "Free The Tone Ambi Space")	reverb	Hall	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Gamechanger%20Audio%20Light%20Pedal%20guitar%20pedal"; "Gamechanger Audio Light Pedal")	reverb	Plate	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=GFI%20System%20Specular%20Tempus%20guitar%20pedal"; "GFI System Specular Tempus")	reverb	Ambient	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Hamstead%20Zenith%20guitar%20pedal"; "Hamstead Zenith")	reverb	Ambient	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Hotone%20Verb%20guitar%20pedal"; "Hotone Verb")	reverb	Hall	5	drippy		
+=HYPERLINK("https://www.google.com/search?q=Hungry%20Robot%20Wardenclyffe%20guitar%20pedal"; "Hungry Robot Wardenclyffe")	reverb	Lo-Fi	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=J.%20Rockett%20Boing%20Spring%20Reverb%20guitar%20pedal"; "J. Rockett Boing Spring Reverb")	reverb	Spring	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=JHS%203%20Series%20Reverb%20guitar%20pedal"; "JHS 3 Series Reverb")	reverb	Hall	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Spring%20Tank%20guitar%20pedal"; "JHS Spring Tank")	reverb	Spring	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Joyo%20Atmosphere%20guitar%20pedal"; "Joyo Atmosphere")	reverb	Hall	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Caverns%20V2%20guitar%20pedal"; "Keeley Caverns V2")	reverb	Ambient	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Omni%20Reverb%20guitar%20pedal"; "Keeley Omni Reverb")	reverb	Hall	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Realizer%20Reverberator%20guitar%20pedal"; "Keeley Realizer Reverberator")	reverb	Plate	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Line%206%20Verbzilla%20guitar%20pedal"; "Line 6 Verbzilla")	reverb	Hall	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Matthews%20Effects%20Cosmonaut%20V2%20guitar%20pedal"; "Matthews Effects Cosmonaut V2")	reverb	Ambient	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Meris%20Mercury7%20guitar%20pedal"; "Meris Mercury7")	reverb	Ambient	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20Leveline%20guitar%20pedal"; "Mooer Leveline")	reverb	Hall	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=Mooer%20R7%20Reverb%20guitar%20pedal"; "Mooer R7 Reverb")	reverb	Hall	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Mosky%20Spring%20Reverb%20guitar%20pedal"; "Mosky Spring Reverb")	reverb	Spring	5	drippy		
+=HYPERLINK("https://www.google.com/search?q=Mr.%20Black%20Spring%20Eternal%20guitar%20pedal"; "Mr. Black Spring Eternal")	reverb	Spring	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M169%20Carbon%20Copy%20guitar%20pedal"; "MXR M169 Carbon Copy")	reverb	Room	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=MXR%20M300%20Reverb%20guitar%20pedal"; "MXR M300 Reverb")	reverb	Hall	10	floating		
+=HYPERLINK("https://www.google.com/search?q=NativeAudio%20Ghost%20Ridge%20guitar%20pedal"; "NativeAudio Ghost Ridge")	reverb	Ambient	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Neunaber%20Immerse%20Mk%20II%20guitar%20pedal"; "Neunaber Immerse Mk II")	reverb	Shimmer	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Neunaber%20Wet%20Reverb%20guitar%20pedal"; "Neunaber Wet Reverb")	reverb	Shimmer	10	floating		
+=HYPERLINK("https://www.google.com/search?q=NUX%20Atlantic%20guitar%20pedal"; "NUX Atlantic")	reverb	Room	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Old%20Blood%20Noise%20Dark%20Star%20V2%20guitar%20pedal"; "Old Blood Noise Dark Star V2")	reverb	Ambient	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Old%20Blood%20Noise%20Procession%20guitar%20pedal"; "Old Blood Noise Procession")	reverb	Ambient	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=One%20Control%20Purple%20Humper%20guitar%20pedal"; "One Control Purple Humper")	reverb	Hall	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Pladask%20Elektrisk%20T%C3%A5ken%20guitar%20pedal"; "Pladask Elektrisk Tåken")	reverb	Ambient	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Red%20Panda%20Context%20V2%20guitar%20pedal"; "Red Panda Context V2")	reverb	Ambient	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20True%20Spring%20guitar%20pedal"; "Source Audio True Spring")	reverb	Spring	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20Ventris%20guitar%20pedal"; "Source Audio Ventris")	reverb	Hall	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20BigSky%20guitar%20pedal"; "Strymon BigSky")	reverb	Shimmer	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20blueSky%20guitar%20pedal"; "Strymon blueSky")	reverb	Plate	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20Flint%20guitar%20pedal"; "Strymon Flint")	reverb	Hall	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Strymon%20NightSky%20guitar%20pedal"; "Strymon NightSky")	reverb	Ambient	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Surfy%20Industries%20SurfyBear%20Compact%20guitar%20pedal"; "Surfy Industries SurfyBear Compact")	reverb	Spring	9	floating		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Drip%20Spring%20Reverb%20guitar%20pedal"; "TC Electronic Drip Spring Reverb")	reverb	Spring	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Hall%20of%20Fame%202%20guitar%20pedal"; "TC Electronic Hall of Fame 2")	reverb	Shimmer	10	floating		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Hall%20of%20Fame%20Mini%20guitar%20pedal"; "TC Electronic Hall of Fame Mini")	reverb	Hall	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20Skysurfer%20guitar%20pedal"; "TC Electronic Skysurfer")	reverb	Hall	5	drippy		
+=HYPERLINK("https://www.google.com/search?q=Universal%20Audio%20Golden%20Reverberator%20guitar%20pedal"; "Universal Audio Golden Reverberator")	reverb	Plate	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Valeton%20Coral%20Verb%20guitar%20pedal"; "Valeton Coral Verb")	reverb	Hall	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Descent%20guitar%20pedal"; "Walrus Audio Descent")	reverb	Shimmer	8	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Fathom%20guitar%20pedal"; "Walrus Audio Fathom")	reverb	Ambient	10	floating		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Sl%C3%B6%20guitar%20pedal"; "Walrus Audio Slö")	reverb	Ambient	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Walrus%20Audio%20Slotv%C3%A5%20guitar%20pedal"; "Walrus Audio Slotvå")	reverb	Ambient	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Wampler%20Reflection%20guitar%20pedal"; "Wampler Reflection")	reverb	Spring	9	floating		
+=HYPERLINK("https://www.google.com/search?q=Xvive%20Golden%20Brownie%20guitar%20pedal"; "Xvive Golden Brownie")	reverb	Room	6	drippy		
+=HYPERLINK("https://www.google.com/search?q=Zoom%20MS-70CDR%20guitar%20pedal"; "Zoom MS-70CDR")	reverb	Multi	7	dreamy		
+=HYPERLINK("https://www.google.com/search?q=Boss%20SL-20%20Slicer%20guitar%20pedal"; "Boss SL-20 Slicer")	synth	Slicer	8	sound design		
+=HYPERLINK("https://www.google.com/search?q=Boss%20SY-1%20guitar%20pedal"; "Boss SY-1")	synth	Synth	9	sound design		
+=HYPERLINK("https://www.google.com/search?q=Boss%20SY-200%20guitar%20pedal"; "Boss SY-200")	synth	Synth	10	sound design		
+=HYPERLINK("https://www.google.com/search?q=Caroline%20Guitar%20Somersault%20guitar%20pedal"; "Caroline Guitar Somersault")	synth	Lo-Fi	8	sound design		
+=HYPERLINK("https://www.google.com/search?q=Chase%20Bliss%20Blooper%20guitar%20pedal"; "Chase Bliss Blooper")	synth	Looper	10	sound design		
+=HYPERLINK("https://www.google.com/search?q=Cooper%20FX%20Generation%20Loss%20MKII%20guitar%20pedal"; "Cooper FX Generation Loss MKII")	synth	Lo-Fi	10	sound design		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Bit%20Commander%20guitar%20pedal"; "EarthQuaker Devices Bit Commander")	synth	Synth	7	synth-like		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Data%20Corruptor%20guitar%20pedal"; "EarthQuaker Devices Data Corruptor")	synth	Synth	9	sound design		
+=HYPERLINK("https://www.google.com/search?q=EarthQuaker%20Devices%20Rainbow%20Machine%20guitar%20pedal"; "EarthQuaker Devices Rainbow Machine")	synth	Special	8	sound design		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20B9%20Organ%20Machine%20guitar%20pedal"; "Electro-Harmonix B9 Organ Machine")	synth	Organ	7	synth-like		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20C9%20Organ%20Machine%20guitar%20pedal"; "Electro-Harmonix C9 Organ Machine")	synth	Organ	7	synth-like		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Freeze%20guitar%20pedal"; "Electro-Harmonix Freeze")	synth	Sustainer	7	synth-like		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20KEY9%20guitar%20pedal"; "Electro-Harmonix KEY9")	synth	Synth	7	synth-like		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Mel9%20guitar%20pedal"; "Electro-Harmonix Mel9")	synth	Synth	8	sound design		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Superego%2B%20guitar%20pedal"; "Electro-Harmonix Superego+")	synth	Sustainer	9	sound design		
+=HYPERLINK("https://www.google.com/search?q=Electro-Harmonix%20Synth9%20guitar%20pedal"; "Electro-Harmonix Synth9")	synth	Synth	8	sound design		
+=HYPERLINK("https://www.google.com/search?q=Fairfield%20Circuitry%20Shallow%20Water%20guitar%20pedal"; "Fairfield Circuitry Shallow Water")	synth	Lo-Fi	9	sound design		
+=HYPERLINK("https://www.google.com/search?q=Gamechanger%20Audio%20Plus%20Pedal%20guitar%20pedal"; "Gamechanger Audio Plus Pedal")	synth	Sustainer	9	sound design		
+=HYPERLINK("https://www.google.com/search?q=Hologram%20Microcosm%20guitar%20pedal"; "Hologram Microcosm")	synth	Granular	10	sound design		
+=HYPERLINK("https://www.google.com/search?q=Keeley%20Synth-1%20guitar%20pedal"; "Keeley Synth-1")	synth	Synth	8	sound design		
+=HYPERLINK("https://www.google.com/search?q=Meris%20Enzo%20guitar%20pedal"; "Meris Enzo")	synth	Synth	10	sound design		
+=HYPERLINK("https://www.google.com/search?q=Montreal%20Assembly%20Count%20to%205%20guitar%20pedal"; "Montreal Assembly Count to 5")	synth	Sampler	10	sound design		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20C4%20Synth%20guitar%20pedal"; "Source Audio C4 Synth")	synth	Synth	10	sound design		
+=HYPERLINK("https://www.google.com/search?q=Z.Vex%20Instant%20Lo-Fi%20Junky%20guitar%20pedal"; "Z.Vex Instant Lo-Fi Junky")	synth	Lo-Fi	6	synth-like		
+=HYPERLINK("https://www.google.com/search?q=Z.Vex%20Lo-Fi%20Junky%20guitar%20pedal"; "Z.Vex Lo-Fi Junky")	synth	Lo-Fi	7	synth-like		
+=HYPERLINK("https://www.google.com/search?q=Boss%20ES-5%20guitar%20pedal"; "Boss ES-5")	utility	Switcher	8	geeked out		
+=HYPERLINK("https://www.google.com/search?q=Boss%20ES-8%20guitar%20pedal"; "Boss ES-8")	utility	Switcher	9	board scholar		
+=HYPERLINK("https://www.google.com/search?q=Boss%20TU-3%20guitar%20pedal"; "Boss TU-3")	utility	Tuner	5	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=Boss%20TU-3W%20Waza%20guitar%20pedal"; "Boss TU-3W Waza")	utility	Tuner	6	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=Countryman%20Type%2085%20guitar%20pedal"; "Countryman Type 85")	utility	DI	9	board scholar		
+=HYPERLINK("https://www.google.com/search?q=Empress%20Buffer%2B%20guitar%20pedal"; "Empress Buffer+")	utility	Buffer	7	geeked out		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Little%20Black%20Buffer%20guitar%20pedal"; "JHS Little Black Buffer")	utility	Buffer	4	router		
+=HYPERLINK("https://www.google.com/search?q=JHS%20Summing%20Amp%20guitar%20pedal"; "JHS Summing Amp")	utility	Mixer	6	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=Korg%20Pitchblack%20Advance%20guitar%20pedal"; "Korg Pitchblack Advance")	utility	Tuner	5	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=Korg%20Pitchblack%20Advance%20guitar%20pedal"; "Korg Pitchblack Advance")	utility	Tuner	5	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=Lehle%20D.Loop%20SGoS%20guitar%20pedal"; "Lehle D.Loop SGoS")	utility	Loop	9	board scholar		
+=HYPERLINK("https://www.google.com/search?q=One%20Control%20Crocodile%20Tail%20Loop%20guitar%20pedal"; "One Control Crocodile Tail Loop")	utility	Loop	8	geeked out		
+=HYPERLINK("https://www.google.com/search?q=Peterson%20StroboStomp%20HD%20guitar%20pedal"; "Peterson StroboStomp HD")	utility	Tuner	9	board scholar		
+=HYPERLINK("https://www.google.com/search?q=Peterson%20StroboStomp%20HD%20guitar%20pedal"; "Peterson StroboStomp HD")	utility	Tuner	5	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=Radial%20J48%20guitar%20pedal"; "Radial J48")	utility	DI	8	geeked out		
+=HYPERLINK("https://www.google.com/search?q=Saturnworks%20Active%20A%2FB%20guitar%20pedal"; "Saturnworks Active A/B")	utility	A/B Box	5	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20PolyTune%203%20guitar%20pedal"; "TC Electronic PolyTune 3")	utility	Tuner	7	geeked out		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20PolyTune%203%20Mini%20guitar%20pedal"; "TC Electronic PolyTune 3 Mini")	utility	Tuner	6	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20PolyTune%203%20Mini%20Noir%20guitar%20pedal"; "TC Electronic PolyTune 3 Mini Noir")	utility	Tuner	5	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=TC%20Electronic%20PolyTune%203%20Noir%20guitar%20pedal"; "TC Electronic PolyTune 3 Noir")	utility	Tuner	5	pedal nerd		
+=HYPERLINK("https://www.google.com/search?q=TheGigRig%20G2%20guitar%20pedal"; "TheGigRig G2")	utility	Switcher	10	board scholar		
+=HYPERLINK("https://www.google.com/search?q=Boss%20EV-30%20guitar%20pedal"; "Boss EV-30")	volume	Expression	6	manager		
+=HYPERLINK("https://www.google.com/search?q=Boss%20FV-30H%20guitar%20pedal"; "Boss FV-30H")	volume	Volume	5	manager		
+=HYPERLINK("https://www.google.com/search?q=Boss%20FV-500H%20guitar%20pedal"; "Boss FV-500H")	volume	Volume	6	manager		
+=HYPERLINK("https://www.google.com/search?q=Boss%20FV-500L%20guitar%20pedal"; "Boss FV-500L")	volume	Volume	6	manager		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20DVP3%20Volume%20(X)%20guitar%20pedal"; "Dunlop DVP3 Volume (X)")	volume	Volume	7	manager		
+=HYPERLINK("https://www.google.com/search?q=Dunlop%20DVP4%20Mini%20Volume%20guitar%20pedal"; "Dunlop DVP4 Mini Volume")	volume	Volume	5	manager		
+=HYPERLINK("https://www.google.com/search?q=Ernie%20Ball%20MVP%20Most%20Valuable%20Pedal%20guitar%20pedal"; "Ernie Ball MVP Most Valuable Pedal")	volume	Volume	7	manager		
+=HYPERLINK("https://www.google.com/search?q=Ernie%20Ball%20VP%20Jr%20250K%20guitar%20pedal"; "Ernie Ball VP Jr 250K")	volume	Volume	5	manager		
+=HYPERLINK("https://www.google.com/search?q=Ernie%20Ball%20VP%20Jr%2025K%20guitar%20pedal"; "Ernie Ball VP Jr 25K")	volume	Volume	5	manager		
+=HYPERLINK("https://www.google.com/search?q=Hotone%20Soul%20Press%20II%20guitar%20pedal"; "Hotone Soul Press II")	volume	Volume	6	manager		
+=HYPERLINK("https://www.google.com/search?q=Lehle%20Mono%20Volume%20guitar%20pedal"; "Lehle Mono Volume")	volume	Volume	9	board admin		
+=HYPERLINK("https://www.google.com/search?q=Mission%20Engineering%20EP-1%20guitar%20pedal"; "Mission Engineering EP-1")	volume	Expression	7	manager		
+=HYPERLINK("https://www.google.com/search?q=Moog%20EP-3%20guitar%20pedal"; "Moog EP-3")	volume	Expression	6	manager		
+=HYPERLINK("https://www.google.com/search?q=Morley%20PVO%20Pro%20Series%20Volume%20guitar%20pedal"; "Morley PVO Pro Series Volume")	volume	Volume	6	manager		
+=HYPERLINK("https://www.google.com/search?q=Morley%20Volume%20Plus%20guitar%20pedal"; "Morley Volume Plus")	volume	Volume	7	manager		
+=HYPERLINK("https://www.google.com/search?q=Source%20Audio%20Dual%20Expression%20guitar%20pedal"; "Source Audio Dual Expression")	volume	Expression	8	board admin		
+=HYPERLINK("https://www.google.com/search?q=Xotic%20XVP-250K%20guitar%20pedal"; "Xotic XVP-250K")	volume	Volume	7	manager		

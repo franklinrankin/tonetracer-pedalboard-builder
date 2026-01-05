@@ -2,7 +2,24 @@ import { Sparkles, ArrowRight, Music2 } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { CATEGORY_INFO } from '../data/categories';
 import { getGenreById } from '../data/genres';
-import { Pedal, Category } from '../types';
+import { Pedal, Category, PedalWithStatus } from '../types';
+
+// Fisher-Yates shuffle for variety
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+// Pick a random item from the top N best options
+function pickRandomFromTopN<T>(items: T[], n: number = 5): T | undefined {
+  if (items.length === 0) return undefined;
+  const topN = items.slice(0, Math.min(n, items.length));
+  return topN[Math.floor(Math.random() * topN.length)];
+}
 
 interface Recommendation {
   type: 'swap' | 'add' | 'remove' | 'upgrade' | 'genre';
@@ -62,7 +79,8 @@ export function Recommendations() {
             return aToIdeal - bToIdeal;
           });
           
-          const bestMatch = genrePedals[0] || fallbackPedals[0];
+          // Pick randomly from top options for variety
+          const bestMatch = pickRandomFromTopN(genrePedals, 5) || pickRandomFromTopN(fallbackPedals, 5);
           
           if (bestMatch) {
             const neededPoints = target.min - currentScore;

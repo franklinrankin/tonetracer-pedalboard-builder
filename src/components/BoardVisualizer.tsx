@@ -3,6 +3,7 @@ import { RotateCw, Move, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { BoardSlot } from '../types';
 import { CATEGORY_INFO } from '../data/categories';
+import { getYouTubeReviewUrl } from '../utils/youtube';
 
 interface PedalPosition {
   id: string;
@@ -859,7 +860,7 @@ export function BoardVisualizer() {
                         </div>
                         
                         {/* Additional Info */}
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex flex-wrap gap-1 mb-3">
                           <span className="px-2 py-0.5 rounded-full bg-board-elevated text-[10px] text-board-muted">
                             {slot.pedal.bypassType} bypass
                           </span>
@@ -874,6 +875,19 @@ export function BoardVisualizer() {
                             </span>
                           )}
                         </div>
+                        
+                        {/* Watch Review Link */}
+                        <a
+                          href={getYouTubeReviewUrl(slot.pedal.brand, slot.pedal.model)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 transition-colors"
+                        >
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                          </svg>
+                          Watch review
+                        </a>
                         
                         {/* Arrow pointing to pedal */}
                         <div 

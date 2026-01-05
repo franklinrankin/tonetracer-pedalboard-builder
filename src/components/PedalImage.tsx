@@ -7,20 +7,20 @@ interface PedalImageProps {
   className?: string;
 }
 
-// Category abbreviations (replacing emojis)
-const CATEGORY_ABBREV: Record<Category, string> = {
-  gain: 'G',
-  modulation: 'M',
-  delay: 'D',
-  reverb: 'R',
-  dynamics: 'C',
-  filter: 'F',
-  pitch: 'P',
-  eq: 'EQ',
-  volume: 'V',
-  amp: 'A',
-  utility: 'U',
-  synth: 'S',
+// Category emoji icons
+const CATEGORY_ICONS: Record<Category, string> = {
+  gain: '🔥',
+  modulation: '🌊',
+  delay: '⏱️',
+  reverb: '✨',
+  dynamics: '💪',
+  filter: '🎭',
+  pitch: '🎵',
+  eq: '📊',
+  volume: '🎚️',
+  amp: '🔊',
+  utility: '🔧',
+  synth: '🎹',
 };
 
 const SIZE_CLASSES = {
@@ -29,10 +29,10 @@ const SIZE_CLASSES = {
   lg: 'w-20 h-20',
 };
 
-const ABBREV_SIZES = {
-  sm: 'text-xs font-bold',
-  md: 'text-sm font-bold',
-  lg: 'text-lg font-bold',
+const ICON_SIZES = {
+  sm: 'text-lg',
+  md: 'text-2xl',
+  lg: 'text-3xl',
 };
 
 export function PedalImage({ 
@@ -41,14 +41,14 @@ export function PedalImage({
   className = '' 
 }: PedalImageProps) {
   const categoryInfo = CATEGORY_INFO[category];
-  const abbrev = CATEGORY_ABBREV[category];
+  const icon = CATEGORY_ICONS[category];
 
   return (
     <div 
       className={`${SIZE_CLASSES[size]} rounded-lg flex items-center justify-center flex-shrink-0 ${className}`}
       style={{ backgroundColor: `${categoryInfo.color}20` }}
     >
-      <span className={ABBREV_SIZES[size]} style={{ color: categoryInfo.color }}>{abbrev}</span>
+      <span className={ICON_SIZES[size]}>{icon}</span>
     </div>
   );
 }

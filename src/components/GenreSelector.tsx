@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Music2, ChevronDown, Check, Sparkles, Users, Target } from 'lucide-react';
 import { GENRES, GenreProfile, calculateGenreFit } from '../data/genres';
 import { useBoard } from '../context/BoardContext';
+import { GenreIcon } from './GenreIcon';
 
 interface GenreSelectorProps {
   selectedGenre: string | null;
@@ -78,7 +79,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                     </div>
                   )}
                   
-                  <div className="text-xl mb-1">{genre.icon}</div>
+                  <div className="mb-1"><GenreIcon genre={genre} size="md" /></div>
                   <div className="text-xs font-medium text-white truncate">{genre.name}</div>
                   
                   {/* Fit indicator */}
@@ -123,7 +124,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs font-bold text-orange-400">G</span>
+                    <span className="text-xs">🔥</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Gain</div>
@@ -132,7 +133,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs font-bold text-purple-400">M</span>
+                    <span className="text-xs">🌊</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Modulation</div>
@@ -141,7 +142,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs font-bold text-cyan-400">R</span>
+                    <span className="text-xs">✨</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Ambience</div>
@@ -150,7 +151,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs font-bold text-zinc-400">C</span>
+                    <span className="text-xs">🎛️</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Complexity</div>

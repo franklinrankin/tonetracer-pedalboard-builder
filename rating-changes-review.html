@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Boardsie - Rating Changes Review</title>
+  <style>
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      max-width: 1100px; 
+      margin: 40px auto; 
+      padding: 20px; 
+      background: #1a1a1a; 
+      color: #fff;
+      font-size: 11px;
+    }
+    h1 { text-align: center; color: #a855f7; margin-bottom: 10px; }
+    h2 { color: #a855f7; border-bottom: 2px solid #a855f7; padding-bottom: 5px; margin-top: 30px; font-size: 16px; }
+    .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+    .summary-box { 
+      background: #333; 
+      border-radius: 10px; 
+      padding: 20px; 
+      margin: 20px 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .summary-item { text-align: center; }
+    .summary-number { font-size: 32px; font-weight: bold; color: #a855f7; }
+    .summary-label { color: #888; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    th { background: #333; color: #a855f7; padding: 8px 6px; text-align: left; font-size: 10px; }
+    td { padding: 6px; border-bottom: 1px solid #333; font-size: 10px; }
+    tr:hover { background: #252525; }
+    .removed { background: #3b1515; }
+    .dual { background: #1a2a1a; }
+    .up { color: #4ade80; }
+    .down { color: #f87171; }
+    .tag { 
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      background: #333;
+    }
+    .category-section { margin-bottom: 30px; }
+    .page-break { page-break-before: always; }
+    @media print {
+      body { background: white; color: black; }
+      th { background: #eee; color: #333; }
+      td { border-bottom: 1px solid #ddd; }
+      .summary-box { background: #f5f5f5; }
+      .tag { background: #eee; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎸 Boardsie Rating Changes Review</h1>
+  <p class="subtitle">Summary of all proposed changes</p>
+  
+  <div class="summary-box">
+    <div class="summary-item">
+      <div class="summary-number">3</div>
+      <div class="summary-label">Pedals to Remove</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-number">1</div>
+      <div class="summary-label">Dual Category</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-number">414</div>
+      <div class="summary-label">Rating Changes</div>
+    </div>
+  </div>
+
+  <h2>🗑️ Pedals to Remove (3)</h2>
+  <table>
+    <tr><th>Pedal</th><th>Reason</th></tr>
+    <tr class="removed"><td>Dan Armstrong Orange Squeezer</td><td>Marked for removal</td></tr>
+    <tr class="removed"><td>Fender 6G15 Reverb Unit</td><td>Marked for removal</td></tr>
+    <tr class="removed"><td>MXR M169 Carbon Copy</td><td>Marked for removal</td></tr>
+  </table>
+
+  <h2>🔀 Dual Category Pedals (1)</h2>
+  <table>
+    <tr><th>Pedal</th><th>Categories</th><th>Rating</th><th>Tags</th></tr>
+    <tr class="dual">
+      <td>Strymon Flint Tremolo & Reverb</td>
+      <td>modulation + reverb</td>
+      <td>4</td>
+      <td><span class="tag">a little motion</span> + <span class="tag">moist</span></td>
+    </tr>
+  </table>
+
+  <h2>📊 Rating Changes by Category</h2>
+  
+  <div class="category-section">
+    <h3 style="color: #795548;">Amp & Cab (12 changes)</h3>
+    <table>
+      <tr><th>Pedal</th><th>Type</th><th>Old</th><th>New</th><th>Old Tag → New Tag</th></tr>
+      <tr><td>Boss AC-3 Acoustic Simulator</td><td>Acoustic Sim</td><td>6</td><td>3</td><td><span class="down">amplifier → direct ↓</span></td></tr>
+      <tr><td>Boss IR-200</td><td>Amp Sim</td><td>10</td><td>6</td><td><span class="down">simulator → amplifier ↓</span></td></tr>
+      <tr><td>DSM & Humboldt Simplifier</td><td>Amp Sim</td><td>9</td><td>6</td><td><span class="down">simulator → amplifier ↓</span></td></tr>
+      <tr><td>DSM & Humboldt Simplifier DLX</td><td>Amp Sim</td><td>10</td><td>8</td><td><span class="down">simulator → simulator ↓</span></td></tr>
+      <tr><td>Hotone Omni AC</td><td>Cab Sim</td><td>6</td><td>2</td><td><span class="down">amplifier → direct ↓</span></td></tr>
+      <tr><td>Line 6 HX Stomp</td><td>Amp Sim</td><td>10</td><td>9</td><td><span class="down">simulator → simulator ↓</span></td></tr>
+      <tr><td>Mooer Radar</td><td>Cab Sim</td><td>7</td><td>2</td><td><span class="down">amplifier → direct ↓</span></td></tr>
+      <tr><td>Neunaber Iconoclast</td><td>Cab Sim</td><td>9</td><td>3</td><td><span class="down">simulator → direct ↓</span></td></tr>
+      <tr><td>NUX Solid Studio</td><td>Cab Sim</td><td>8</td><td>7</td><td><span class="down">simulator → amplifier ↓</span></td></tr>
+      <tr><td>Tech 21 SansAmp Classic</td><td>Amp Sim</td><td>7</td><td>8</td><td><span class="up">amplifier → simulator ↑</span></td></tr>
+      <tr><td>Two Notes Cab M+</td><td>Cab Sim</td><td>9</td><td>4</td><td><span class="down">simulator → amplifier ↓</span></td></tr>
+      <tr><td>Walrus Audio ACS1</td><td>Amp Sim</td><td>9</td><td>7</td><td><span class="down">simulator → amplifier ↓</span></td></tr>
+    </table>
+  </div>
+
+  <div class="category-section">
+    <h3 style="color: #3498db;">Delay (68 changes)</h3>
+    <table>
+      <tr><th>Pedal</th><th>Type</th><th>Old</th><th>New</th><th>Tag Change</th></tr>
+      <tr><td>Boss DD-6</td><td>Digital</td><td>9</td><td>6</td><td><span class="down">time traveler → spelunker ↓</span></td></tr>
+      <tr><td>Boss DD-7</td><td>Digital</td><td>10</td><td>6</td><td><span class="down">time traveler → spelunker ↓</span></td></tr>
+      <tr><td>Boss DD-8</td><td>Digital</td><td>7</td><td>6</td><td><span class="down">long term memory → spelunker ↓</span></td></tr>
+      <tr><td>Boss DM-2 Delay</td><td>Analog</td><td>7</td><td>4</td><td><span class="down">long term memory → repeater ↓</span></td></tr>
+      <tr><td>Boss DM-2W Waza</td><td>Analog</td><td>8</td><td>4</td><td><span class="down">long term memory → repeater ↓</span></td></tr>
+      <tr><td>Catalinbread Belle Epoch</td><td>Tape</td><td>9</td><td>4</td><td><span class="down">time traveler → repeater ↓</span></td></tr>
+      <tr><td>Catalinbread Belle Epoch Deluxe</td><td>Tape</td><td>7</td><td>8</td><td><span class="up">long term memory → long term memory ↑</span></td></tr>
+      <tr><td>Chase Bliss Thermae</td><td>Analog</td><td>9</td><td>6</td><td><span class="down">time traveler → spelunker ↓</span></td></tr>
+      <tr><td>Chase Bliss Tonal Recall</td><td>Analog</td><td>9</td><td>7</td><td><span class="down">time traveler → long term memory ↓</span></td></tr>
+      <tr><td>DigiTech TimeBender</td><td>Digital</td><td>8</td><td>9</td><td><span class="up">long term memory → time traveler ↑</span></td></tr>
+      <tr><td>Electro-Harmonix Canyon</td><td>Digital</td><td>10</td><td>4</td><td><span class="down">time traveler → repeater ↓</span></td></tr>
+      <tr><td>Electro-Harmonix Deluxe Memory Man</td><td>Analog</td><td>10</td><td>6</td><td><span class="down">time traveler → spelunker ↓</span></td></tr>
+      <tr><td>Empress Echosystem</td><td>Multi</td><td>10</td><td>9</td><td><span class="down">time traveler → time traveler ↓</span></td></tr>
+      <tr><td>Eventide TimeFactor</td><td>Multi</td><td>9</td><td>10</td><td><span class="up">time traveler → time traveler ↑</span></td></tr>
+      <tr><td>Fulltone Tube Tape Echo TTE</td><td>Tape</td><td>9</td><td>10</td><td><span class="up">time traveler → time traveler ↑</span></td></tr>
+      <tr><td>Line 6 DL4 Delay Modeler</td><td>Digital</td><td>8</td><td>9</td><td><span class="up">long term memory → time traveler ↑</span></td></tr>
+      <tr><td>MXR Carbon Copy</td><td>Analog</td><td>7</td><td>4</td><td><span class="down">long term memory → repeater ↓</span></td></tr>
+      <tr><td>Roland RE-201 Space Echo</td><td>Tape</td><td>9</td><td>10</td><td><span class="up">time traveler → time traveler ↑</span></td></tr>
+      <tr><td>Strymon Dig</td><td>Digital</td><td>7</td><td>8</td><td><span class="up">long term memory → long term memory ↑</span></td></tr>
+      <tr><td>Strymon El Capistan</td><td>Tape</td><td>9</td><td>8</td><td><span class="down">time traveler → long term memory ↓</span></td></tr>
+      <tr><td>Strymon Timeline</td><td>Multi</td><td>10</td><td>10</td><td>time traveler (no change)</td></tr>
+      <tr><td>Strymon Volante</td><td>Tape</td><td>10</td><td>10</td><td>time traveler (no change)</td></tr>
+      <tr><td>TC Electronic Flashback 2</td><td>Digital</td><td>10</td><td>4</td><td><span class="down">time traveler → repeater ↓</span></td></tr>
+      <tr><td colspan="5" style="color:#666; font-style:italic;">... and 44 more delay pedals (see full TSV file)</td></tr>
+    </table>
+  </div>
+
+  <div class="category-section">
+    <h3 style="color: #e67e22;">Dynamics (49 changes)</h3>
+    <table>
+      <tr><th>Pedal</th><th>Type</th><th>Old</th><th>New</th><th>Tag Change</th></tr>
+      <tr><td>Analog Man Bi-Comp</td><td>Compressor</td><td>7</td><td>8</td><td><span class="up">squashed → squashed ↑</span></td></tr>
+      <tr><td>Boss CP-1X</td><td>Compressor</td><td>10</td><td>6</td><td><span class="down">clamped down → smooth operator ↓</span></td></tr>
+      <tr><td>Boss LM-2 Limiter</td><td>Limiter</td><td>7</td><td>10</td><td><span class="up">squashed → clamped down ↑</span></td></tr>
+      <tr><td>Darkglass Hyper Luminal</td><td>Limiter</td><td>9</td><td>10</td><td><span class="up">clamped down → clamped down ↑</span></td></tr>
+      <tr><td>Empress Compressor MKII</td><td>Compressor</td><td>9</td><td>8</td><td><span class="down">clamped down → squashed ↓</span></td></tr>
+      <tr><td>Origin Effects Cali76</td><td>Compressor</td><td>9</td><td>8</td><td><span class="down">clamped down → squashed ↓</span></td></tr>
+      <tr><td>TC Electronic Sentry</td><td>Gate</td><td>10</td><td>4</td><td><span class="down">clamped down → gluey ↓</span></td></tr>
+      <tr><td>Universal Audio LA-2A</td><td>Compressor</td><td>9</td><td>8</td><td><span class="down">clamped down → squashed ↓</span></td></tr>
+      <tr><td>Wampler Ego</td><td>Compressor</td><td>10</td><td>6</td><td><span class="down">clamped down → smooth operator ↓</span></td></tr>
+      <tr><td>Xotic SP</td><td>Compressor</td><td>9</td><td>6</td><td><span class="down">clamped down → smooth operator ↓</span></td></tr>
+      <tr><td colspan="5" style="color:#666; font-style:italic;">... and 39 more dynamics pedals (see full TSV file)</td></tr>
+    </table>
+  </div>
+
+  <div class="category-section page-break">
+    <h3 style="color: #9b59b6;">Modulation (83 changes)</h3>
+    <table>
+      <tr><th>Pedal</th><th>Type</th><th>Old</th><th>New</th><th>Tag Change</th></tr>
+      <tr><td>Analog Man Bi-Chorus</td><td>Chorus</td><td>10</td><td>8</td><td><span class="down">twister → spin cycle ↓</span></td></tr>
+      <tr><td>Boss CE-2W Waza</td><td>Chorus</td><td>8</td><td>6</td><td><span class="down">spin cycle → swirly ↓</span></td></tr>
+      <tr><td>Boss DC-2W Dimension C</td><td>Chorus</td><td>9</td><td>6</td><td><span class="down">twister → swirly ↓</span></td></tr>
+      <tr><td>Boss TR-2</td><td>Tremolo</td><td>6</td><td>4</td><td><span class="down">swirly → a little motion ↓</span></td></tr>
+      <tr><td>EHX Small Clone</td><td>Chorus</td><td>7</td><td>6</td><td><span class="down">spin cycle → swirly ↓</span></td></tr>
+      <tr><td>JHS Unicorn V2</td><td>Vibrato</td><td>10</td><td>6</td><td><span class="down">twister → swirly ↓</span></td></tr>
+      <tr><td>MXR Phase 90</td><td>Phaser</td><td>6</td><td>6</td><td>swirly (no change)</td></tr>
+      <tr><td>Strymon Mobius</td><td>Multi</td><td>9</td><td>10</td><td><span class="up">twister → twister ↑</span></td></tr>
+      <tr><td>Walrus Julia V2</td><td>Chorus</td><td>9</td><td>6</td><td><span class="down">twister → swirly ↓</span></td></tr>
+      <tr><td colspan="5" style="color:#666; font-style:italic;">... and 74 more modulation pedals (see full TSV file)</td></tr>
+    </table>
+  </div>
+
+  <div class="category-section">
+    <h3 style="color: #1abc9c;">Reverb (78 changes)</h3>
+    <table>
+      <tr><th>Pedal</th><th>Type</th><th>Old</th><th>New</th><th>Tag Change</th></tr>
+      <tr><td>Boss RV-200</td><td>Ambient</td><td>9</td><td>10</td><td><span class="up">floating → floating ↑</span></td></tr>
+      <tr><td>Boss RV-500</td><td>Shimmer</td><td>9</td><td>10</td><td><span class="up">floating → floating ↑</span></td></tr>
+      <tr><td>Boss RV-6</td><td>Shimmer</td><td>10</td><td>6</td><td><span class="down">floating → drippy ↓</span></td></tr>
+      <tr><td>Chase Bliss CXM 1978</td><td>Ambient</td><td>10</td><td>10</td><td>floating (no change)</td></tr>
+      <tr><td>Empress Reverb</td><td>Ambient</td><td>10</td><td>10</td><td>floating (no change)</td></tr>
+      <tr><td>Eventide Blackhole</td><td>Ambient</td><td>9</td><td>10</td><td><span class="up">floating → floating ↑</span></td></tr>
+      <tr><td>Eventide Space</td><td>Ambient</td><td>10</td><td>10</td><td>floating (no change)</td></tr>
+      <tr><td>Strymon BigSky</td><td>Shimmer</td><td>10</td><td>10</td><td>floating (no change)</td></tr>
+      <tr><td>Strymon blueSky</td><td>Plate</td><td>8</td><td>10</td><td><span class="up">dreamy → floating ↑</span></td></tr>
+      <tr><td>Strymon NightSky</td><td>Ambient</td><td>10</td><td>10</td><td>floating (no change)</td></tr>
+      <tr><td colspan="5" style="color:#666; font-style:italic;">... and 68 more reverb pedals (see full TSV file)</td></tr>
+    </table>
+  </div>
+
+  <div class="category-section">
+    <h3 style="color: #e91e63;">Pitch (34 changes)</h3>
+    <table>
+      <tr><th>Pedal</th><th>Type</th><th>Old</th><th>New</th><th>Tag Change</th></tr>
+      <tr><td>Boss OC-2/3/5</td><td>Octave</td><td>6-8</td><td>2</td><td><span class="down">warped → pitchy ↓</span></td></tr>
+      <tr><td>DigiTech Drop</td><td>Shifter</td><td>8</td><td>4</td><td><span class="down">warped → pitchier ↓</span></td></tr>
+      <tr><td>DigiTech Whammy 5</td><td>Shifter</td><td>9</td><td>8</td><td><span class="down">unrecognizable → warped ↓</span></td></tr>
+      <tr><td>EHX Micro/Nano POG</td><td>Octave</td><td>6-7</td><td>2</td><td><span class="down">warped → pitchy ↓</span></td></tr>
+      <tr><td>EHX POG2</td><td>Octave</td><td>10</td><td>10</td><td>unrecognizable (no change)</td></tr>
+      <tr><td>Eventide MicroShift</td><td>Detune</td><td>8</td><td>10</td><td><span class="up">warped → unrecognizable ↑</span></td></tr>
+      <tr><td>Eventide PitchFactor</td><td>Harmonizer</td><td>10</td><td>10</td><td>unrecognizable (no change)</td></tr>
+      <tr><td>Hologram Microcosm</td><td>Granular</td><td>10</td><td>10</td><td>unrecognizable (no change)</td></tr>
+      <tr><td colspan="5" style="color:#666; font-style:italic;">... and 26 more pitch pedals (see full TSV file)</td></tr>
+    </table>
+  </div>
+
+  <div class="category-section">
+    <h3 style="color: #9e9e9e;">Utility & Volume (36 changes)</h3>
+    <table>
+      <tr><th>Pedal</th><th>Type</th><th>Old</th><th>New</th><th>Tag Change</th></tr>
+      <tr><td>Boss ES-5</td><td>Switcher</td><td>8</td><td>10</td><td><span class="up">geeked out → board scholar ↑</span></td></tr>
+      <tr><td>Boss ES-8</td><td>Switcher</td><td>9</td><td>10</td><td><span class="up">board scholar → board scholar ↑</span></td></tr>
+      <tr><td>Boss TU-3</td><td>Tuner</td><td>5</td><td>2</td><td><span class="down">pedal nerd → work smarter ↓</span></td></tr>
+      <tr><td>TC Electronic PolyTune 3</td><td>Tuner</td><td>7</td><td>2</td><td><span class="down">geeked out → work smarter ↓</span></td></tr>
+      <tr><td>TheGigRig G2</td><td>Switcher</td><td>10</td><td>10</td><td>board scholar (no change)</td></tr>
+      <tr><td>All Volume Pedals</td><td>Volume/Expr</td><td>5-9</td><td>3</td><td><span class="down">manager → in control ↓</span></td></tr>
+      <tr><td colspan="5" style="color:#666; font-style:italic;">... see full TSV for complete list</td></tr>
+    </table>
+  </div>
+
+  <div style="margin-top: 40px; padding: 20px; background: #252525; border-radius: 10px; text-align: center;">
+    <p style="color: #888; margin: 0;">Full detailed list available in: <strong>rating-changes-review.tsv</strong></p>
+    <p style="color: #666; font-size: 10px; margin-top: 10px;">To save as PDF: Press ⌘+P → Save as PDF</p>
+  </div>
+
+</body>
+</html>
+

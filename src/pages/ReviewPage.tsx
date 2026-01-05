@@ -7,6 +7,7 @@ import { formatInches, formatArea } from '../utils/measurements';
 import { BoardRecommendations } from '../components/BoardRecommendations';
 import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
 import { BoardVisualizer } from '../components/BoardVisualizer';
+import { GenreIcon } from '../components/GenreIcon';
 
 // Genre Matches Component - shown when user didn't pre-select genres
 function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
@@ -49,7 +50,7 @@ function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
       >
         <div className="flex items-start justify-between mb-2">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">{topMatch.genre.icon}</span>
+            <GenreIcon genre={topMatch.genre} size="lg" />
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span 
@@ -119,7 +120,7 @@ function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xl">{match.genre.icon}</span>
+                      <GenreIcon genre={match.genre} size="md" />
                       <span className="font-medium text-white">{match.genre.name}</span>
                       <span className="text-xs text-board-muted">#{index + 2}</span>
                     </div>
@@ -380,7 +381,7 @@ export function ReviewPage() {
                   borderColor: `${genre!.color}50`,
                 }}
               >
-                <span className="text-xl">{genre!.icon}</span>
+                <GenreIcon genre={genre!} size="md" />
                 <span 
                   className="font-semibold text-lg"
                   style={{ color: genre!.color }}
@@ -404,7 +405,7 @@ export function ReviewPage() {
                   borderColor: `${match.genre.color}40`,
                 }}
               >
-                <span className="text-2xl">{match.genre.icon}</span>
+                <GenreIcon genre={match.genre} size="lg" />
                 <div>
                   <div className="flex items-center gap-2">
                     <span 

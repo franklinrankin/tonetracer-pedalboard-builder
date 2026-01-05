@@ -6,6 +6,7 @@ import { BOARD_TEMPLATES } from '../data/boardTemplates';
 import { formatInches } from '../utils/measurements';
 import { AboutModal } from './AboutModal';
 import { PedalCatalog } from './PedalCatalog';
+import { GenreIcon } from './GenreIcon';
 
 export type WizardStep = 'genre' | 'constraints' | 'build' | 'review';
 
@@ -221,7 +222,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
                     <div className="flex items-center gap-1">
                       {genres.map((g, i) => g && (
                         <span key={g.id} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-board-surface text-white text-xs">
-                          {g.icon} {g.name}
+                          <GenreIcon genre={g} size="sm" /> {g.name}
                         </span>
                       ))}
                     </div>

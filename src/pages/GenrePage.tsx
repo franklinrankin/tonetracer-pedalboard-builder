@@ -1,6 +1,7 @@
 import { Music2, Users, ChevronRight, Check, X, Wand2 } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { GENRES, GenreProfile, getGenreById } from '../data/genres';
+import { GenreIcon } from '../components/GenreIcon';
 
 interface GenrePageProps {
   onContinue: () => void;
@@ -50,7 +51,7 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all hover:opacity-80"
                 style={{ backgroundColor: `${genre.color}30`, color: genre.color }}
               >
-                <span>{genre.icon}</span>
+                <GenreIcon genre={genre} size="sm" />
                 <span>{genre.name}</span>
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -76,25 +77,52 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
           {/* Create Your Own Card */}
           <button
             onClick={onCreateOwn}
-            className="relative p-6 rounded-xl border-2 border-dashed border-board-accent/50 text-left transition-all hover:scale-[1.02] hover:border-board-accent bg-gradient-to-br from-board-accent/10 to-board-highlight/10 group"
+            className="relative p-6 rounded-xl border-2 border-dashed border-board-accent/50 text-left transition-all hover:scale-[1.02] hover:border-board-accent overflow-hidden group"
           >
-            <div className="w-12 h-12 mb-3 rounded-xl bg-board-accent/20 flex items-center justify-center group-hover:bg-board-accent/30 transition-colors">
-              <Wand2 className="w-6 h-6 text-board-accent" />
-            </div>
-            <h3 className="font-semibold text-white text-lg mb-1">Create Your Own</h3>
-            <p className="text-sm text-zinc-400">
-              No limits — build freely and we'll show you what genres it fits
-            </p>
+            {/* Background image */}
+            <div 
+              className="absolute inset-0"
+              style={{ 
+                backgroundImage: 'url(/images/genres/create-your-own.jpg)',
+                backgroundPosition: '50% 25%',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
             
-            {/* Features */}
-            <div className="mt-4 pt-4 border-t border-board-border/50 space-y-1">
-              <div className="flex items-center gap-2 text-xs text-board-muted">
-                <Check className="w-3 h-3 text-board-accent" />
-                <span>Skip to building</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-board-muted">
-                <Check className="w-3 h-3 text-board-accent" />
-                <span>Top 3 genre matches</span>
+            {/* Content */}
+            <div className="relative z-10">
+              <div className="mb-8" /> {/* Spacer */}
+              <h3 
+                className="font-semibold text-white text-lg mb-1"
+                style={{ textShadow: '0 2px 8px rgba(0,0,0,1), 0 4px 20px rgba(0,0,0,1), 0 0 40px rgba(0,0,0,0.8)' }}
+              >
+                Create Your Own
+              </h3>
+              <p 
+                className="text-sm text-white"
+                style={{ textShadow: '0 2px 8px rgba(0,0,0,1), 0 4px 16px rgba(0,0,0,1)' }}
+              >
+                No limits — build freely and we'll show you what genres it fits
+              </p>
+              
+              {/* Features */}
+              <div className="mt-4 pt-4 border-t border-white/20 space-y-1">
+                <div 
+                  className="flex items-center gap-2 text-xs text-white"
+                  style={{ textShadow: '0 2px 6px rgba(0,0,0,1)' }}
+                >
+                  <Check className="w-3 h-3 text-board-accent" />
+                  <span>Skip to building</span>
+                </div>
+                <div 
+                  className="flex items-center gap-2 text-xs text-white"
+                  style={{ textShadow: '0 2px 6px rgba(0,0,0,1)' }}
+                >
+                  <Check className="w-3 h-3 text-board-accent" />
+                  <span>Top 3 genre matches</span>
+                </div>
               </div>
             </div>
           </button>
@@ -103,13 +131,14 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
             const isSelected = selectedGenres.includes(genre.id);
             const selectionIndex = selectedGenres.indexOf(genre.id);
             const isDisabled = !isSelected && isAtMax;
+            const hasImage = !!genre.iconImage;
             
             return (
               <button
                 key={genre.id}
                 onClick={() => !isDisabled && handleToggleGenre(genre.id)}
                 disabled={isDisabled}
-                className={`relative p-6 rounded-xl border-2 text-left transition-all ${
+                className={`relative p-6 rounded-xl border-2 text-left transition-all overflow-hidden ${
                   isDisabled 
                     ? 'opacity-40 cursor-not-allowed'
                     : 'hover:scale-[1.02]'
@@ -120,31 +149,83 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                 }`}
                 style={{
                   borderColor: isSelected ? genre.color : undefined,
-                  backgroundColor: isSelected ? `${genre.color}15` : undefined,
+                  backgroundColor: isSelected && !hasImage ? `${genre.color}15` : undefined,
                 }}
               >
+                {/* Background image for genres with iconImage */}
+                {hasImage && (
+                  <>
+                    <div 
+                      className="absolute inset-0"
+                      style={{ 
+                        backgroundImage: `url(${genre.iconImage})`,
+                        backgroundPosition: genre.iconImagePosition || 'center',
+                        backgroundSize: genre.iconImageSize || 'cover',
+                        backgroundRepeat: 'no-repeat',
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
+                  </>
+                )}
+                
                 {isSelected && (
                   <div 
-                    className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                    className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold z-10"
                     style={{ backgroundColor: genre.color }}
                   >
                     {selectionIndex + 1}
                   </div>
                 )}
                 
-                <div className="text-4xl mb-3">{genre.icon}</div>
-                <h3 className="font-semibold text-white text-lg mb-1">{genre.name}</h3>
-                <p className="text-sm text-zinc-400 line-clamp-2">{genre.description}</p>
-                
-                {/* Characteristics */}
-                <div className="mt-4 pt-4 border-t border-board-border/50 grid grid-cols-2 gap-2">
-                  <div>
-                    <span className="text-[10px] text-board-muted uppercase">Gain</span>
-                    <div className="text-xs text-white capitalize">{genre.characteristics.gainLevel}</div>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-board-muted uppercase">Ambience</span>
-                    <div className="text-xs text-white capitalize">{genre.characteristics.ambience}</div>
+                {/* Content - positioned above the background */}
+                <div className="relative z-10">
+                  {!hasImage && (
+                    <div className="mb-3"><GenreIcon genre={genre} size="xl" /></div>
+                  )}
+                  {hasImage && <div className="mb-8" />} {/* Spacer for image backgrounds */}
+                  <h3 
+                    className="font-semibold text-white text-lg mb-1"
+                    style={hasImage ? { textShadow: '0 2px 8px rgba(0,0,0,1), 0 4px 20px rgba(0,0,0,1), 0 0 40px rgba(0,0,0,0.8)' } : undefined}
+                  >
+                    {genre.name}
+                  </h3>
+                  <p 
+                    className={`text-sm line-clamp-2 ${hasImage ? 'text-white' : 'text-zinc-400'}`}
+                    style={hasImage ? { textShadow: '0 2px 8px rgba(0,0,0,1), 0 4px 16px rgba(0,0,0,1)' } : undefined}
+                  >
+                    {genre.description}
+                  </p>
+                  
+                  {/* Characteristics */}
+                  <div className={`mt-4 pt-4 border-t grid grid-cols-2 gap-2 ${hasImage ? 'border-white/20' : 'border-board-border/50'}`}>
+                    <div>
+                      <span 
+                        className={`text-[10px] uppercase ${hasImage ? 'text-white' : 'text-board-muted'}`}
+                        style={hasImage ? { textShadow: '0 2px 6px rgba(0,0,0,1)' } : undefined}
+                      >
+                        Gain
+                      </span>
+                      <div 
+                        className="text-xs text-white capitalize"
+                        style={hasImage ? { textShadow: '0 2px 6px rgba(0,0,0,1)' } : undefined}
+                      >
+                        {genre.characteristics.gainLevel}
+                      </div>
+                    </div>
+                    <div>
+                      <span 
+                        className={`text-[10px] uppercase ${hasImage ? 'text-white' : 'text-board-muted'}`}
+                        style={hasImage ? { textShadow: '0 2px 6px rgba(0,0,0,1)' } : undefined}
+                      >
+                        Ambience
+                      </span>
+                      <div 
+                        className="text-xs text-white capitalize"
+                        style={hasImage ? { textShadow: '0 2px 6px rgba(0,0,0,1)' } : undefined}
+                      >
+                        {genre.characteristics.ambience}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </button>
@@ -173,7 +254,7 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                 }}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="text-3xl">{genre.icon}</span>
+                  <GenreIcon genre={genre} size="lg" />
                   <div>
                     <div className="flex items-center gap-2">
                       <span 

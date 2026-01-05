@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trash2, Share2, Download, GripVertical, X, ArrowLeft, Info, DollarSign, Zap, Box, Sliders, Guitar } from 'lucide-react';
+import { Trash2, Share2, Download, GripVertical, X, ArrowLeft, Info, DollarSign, Zap, Box } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches } from '../utils/measurements';
@@ -147,7 +147,7 @@ export function BoardBuilder() {
     return (
       <div className="bg-board-surface border border-board-border rounded-xl p-8 text-center">
         <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-board-accent/20 to-board-highlight/20 flex items-center justify-center">
-          <Sliders className="w-10 h-10 text-board-accent" />
+          <span className="text-4xl">🎛️</span>
         </div>
         <h2 className="text-xl font-semibold text-white mb-2">Your Board is Empty</h2>
         <p className="text-board-muted max-w-md mx-auto mb-6">
@@ -324,7 +324,7 @@ export function BoardBuilder() {
             {/* Guitar input (right side) */}
             <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 flex items-center z-10">
               <span className="text-[7px] text-zinc-500 mr-0.5">IN</span>
-              <Guitar className="w-4 h-4 text-zinc-400" />
+              <span className="text-sm">🎸</span>
             </div>
             
             {/* Pedals arranged to fit - right to left (guitar to amp) */}

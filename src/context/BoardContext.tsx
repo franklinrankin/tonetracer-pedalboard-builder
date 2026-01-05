@@ -129,16 +129,24 @@ function calculatePedalStatus(
 function calculateSectionScores(slots: BoardSlot[]): SectionScore[] {
   const categories = Object.keys(CATEGORY_INFO) as Category[];
   
+  // Categories that should always show, even with 0 pedals
+  // Having NO gain = "mr. clean", NO modulation = "still water", etc.
+  const alwaysShowCategories: Category[] = ['gain', 'modulation', 'reverb', 'dynamics'];
+  
   return categories.map(category => {
     const categoryPedals = slots.filter(s => s.pedal.category === category).map(s => s.pedal);
     const totalScore = categoryPedals.reduce((sum, p) => sum + p.categoryRating, 0);
     const info = CATEGORY_INFO[category];
     
     // Dynamic max score: base max (10) * number of pedals in category
-    const dynamicMaxScore = info.maxScore * categoryPedals.length;
+    // For empty categories, use base max score of 10
+    const dynamicMaxScore = categoryPedals.length > 0 
+      ? info.maxScore * categoryPedals.length 
+      : info.maxScore;
     
     // For tag calculation, normalize score to a 1-10 scale based on percentage
     // This way tags are consistent regardless of how many pedals
+    // Score of 0 (no pedals) will get the lowest tag (e.g., "mr. clean" for gain)
     const normalizedScore = categoryPedals.length > 0 
       ? Math.round((totalScore / dynamicMaxScore) * info.maxScore)
       : 0;
@@ -150,7 +158,7 @@ function calculateSectionScores(slots: BoardSlot[]): SectionScore[] {
       tag: getCategoryTag(category, normalizedScore),
       pedals: categoryPedals,
     };
-  }).filter(s => s.pedals.length > 0);
+  }).filter(s => s.pedals.length > 0 || alwaysShowCategories.includes(s.category));
 }
 
 function guessGenres(slots: BoardSlot[], sectionScores: SectionScore[]): string[] {

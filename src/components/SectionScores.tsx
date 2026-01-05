@@ -3,22 +3,21 @@ import { CATEGORY_INFO, CATEGORY_ORDER } from '../data/categories';
 import { Category } from '../types';
 
 const CategoryIcon = ({ category }: { category: Category }) => {
-  const abbrevs: Record<Category, string> = {
-    gain: 'G',
-    modulation: 'M',
-    delay: 'D',
-    reverb: 'R',
-    dynamics: 'C',
-    filter: 'F',
-    pitch: 'P',
-    eq: 'EQ',
-    volume: 'V',
-    amp: 'A',
-    utility: 'U',
-    synth: 'S',
+  const icons: Record<Category, string> = {
+    gain: '🔥',
+    modulation: '🌊',
+    delay: '⏱️',
+    reverb: '✨',
+    dynamics: '💪',
+    filter: '🎭',
+    pitch: '🎵',
+    eq: '📊',
+    volume: '🎚️',
+    amp: '🔊',
+    utility: '🔧',
+    synth: '🎹',
   };
-  const categoryInfo = CATEGORY_INFO[category];
-  return <span className="text-xs font-bold" style={{ color: categoryInfo.color }}>{abbrevs[category]}</span>;
+  return <span className="text-lg">{icons[category]}</span>;
 };
 
 export function SectionScores() {
@@ -28,7 +27,7 @@ export function SectionScores() {
   if (board.slots.length === 0) {
     return (
       <div className="bg-board-surface border border-board-border rounded-xl p-6 text-center">
-        <div className="text-4xl mb-3 text-board-muted">—</div>
+        <div className="text-4xl mb-3">🎸</div>
         <h3 className="font-semibold text-white mb-1">No pedals yet</h3>
         <p className="text-sm text-board-muted">
           Add pedals to see your section scores and tags
@@ -51,7 +50,8 @@ export function SectionScores() {
           
           if (!score) return null;
           
-          const percentage = (score.totalScore / score.maxScore) * 100;
+          const percentage = score.maxScore > 0 ? (score.totalScore / score.maxScore) * 100 : 0;
+          const isEmpty = score.pedals.length === 0;
           
           return (
             <div key={category} className="p-4 hover:bg-board-elevated/30 transition-colors">
@@ -61,7 +61,7 @@ export function SectionScores() {
                   <div>
                     <h3 className="font-medium text-white">{info.displayName}</h3>
                     <p className="text-xs text-board-muted">
-                      {score.pedals.length} pedal{score.pedals.length !== 1 ? 's' : ''}
+                      {isEmpty ? 'None on board' : `${score.pedals.length} pedal${score.pedals.length !== 1 ? 's' : ''}`}
                     </p>
                   </div>
                 </div>
@@ -97,17 +97,23 @@ export function SectionScores() {
                 {score.tag}
               </div>
               
-              {/* Pedal list */}
-              <div className="mt-3 flex flex-wrap gap-1">
-                {score.pedals.map(pedal => (
-                  <span 
-                    key={pedal.id}
-                    className="px-2 py-0.5 text-xs rounded bg-board-elevated text-zinc-400"
-                  >
-                    {pedal.model.split(' ')[0]}
-                  </span>
-                ))}
-              </div>
+              {/* Pedal list or empty message */}
+              {isEmpty ? (
+                <div className="mt-3 text-xs text-board-muted italic">
+                  No {info.displayName.toLowerCase()} pedals — keeping it {score.tag}!
+                </div>
+              ) : (
+                <div className="mt-3 flex flex-wrap gap-1">
+                  {score.pedals.map(pedal => (
+                    <span 
+                      key={pedal.id}
+                      className="px-2 py-0.5 text-xs rounded bg-board-elevated text-zinc-400"
+                    >
+                      {pedal.model.split(' ')[0]}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}

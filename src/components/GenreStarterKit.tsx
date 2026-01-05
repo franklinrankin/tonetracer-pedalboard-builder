@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from 'react';
-import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, ArrowUpDown } from 'lucide-react';
+import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, ArrowUpDown, RefreshCw } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, GenreProfile } from '../data/genres';
 import { getPedalEducation } from '../data/pedalEducation';
@@ -8,6 +8,35 @@ import { PedalWithStatus, Category } from '../types';
 import { formatInches } from '../utils/measurements';
 import { PedalImage } from './PedalImage';
 import { estimatePedalCapacity, getRecommendedEssentialCount, getRecommendedBonusCount } from '../data/boardTemplates';
+import { getYouTubeReviewUrl } from '../utils/youtube';
+
+// Fisher-Yates shuffle for variety in recommendations
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+// Shuffle among "good enough" pedals - groups by score tier then shuffles within tiers
+function shuffleByTier<T extends { score: number }>(items: T[]): T[] {
+  if (items.length <= 1) return items;
+  
+  // Group by score (rounded to create tiers)
+  const tiers = new Map<number, T[]>();
+  items.forEach(item => {
+    // Create tiers of 2 points each (scores 9-10, 7-8, 5-6, etc.)
+    const tier = Math.floor(item.score / 2);
+    if (!tiers.has(tier)) tiers.set(tier, []);
+    tiers.get(tier)!.push(item);
+  });
+  
+  // Shuffle within each tier, then flatten in tier order (highest first)
+  const sortedTiers = [...tiers.entries()].sort((a, b) => b[0] - a[0]);
+  return sortedTiers.flatMap(([, tierItems]) => shuffleArray(tierItems));
+}
 
 type SortOption = 'default' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'rating-asc' | 'rating-desc' | 'size-asc' | 'size-desc';
 
@@ -54,50 +83,49 @@ function getGenreBonusAdditions(
   onBoardIds: Set<string>,
   onBoardSubtypes: Set<string | undefined>,
   budget: number = 500,
-  priceRangeFilter: PriceRange = 'all'
+  priceRangeFilter: PriceRange = 'all',
+  explorationLevel: number = 0
 ): BonusAddition[] {
   const additions: BonusAddition[] = [];
   
   // Get price range config
   const priceRangeConfig = PRICE_RANGES[priceRangeFilter];
   
-  // Genre-aware sorting helper with category-based budget allocation
+  // Exploration config - higher levels = more lenient scoring
+  const exploration = EXPLORATION_LEVELS[explorationLevel] || EXPLORATION_LEVELS[0];
+  
+  // Genre-aware sorting helper with variety - shuffles among similar-scoring pedals
+  // Exploration level affects how strictly we score for genre fit
   const sortByGenreFit = (pedals: PedalWithStatus[], category?: Category) => {
     const categoryTarget = category ? genre.sectionTargets[category] : null;
     const idealRating = categoryTarget ? Math.min(categoryTarget.ideal, 10) : 5;
     
-    // Calculate ideal price based on category importance for this genre
-    // Higher sectionTargets.ideal = more important to the genre
-    const targetIdeal = categoryTarget?.ideal || 5;
-    const importanceScore = targetIdeal / 10;
-    
-    const categoryIndex = category ? genre.essentialCategories.indexOf(category) : -1;
-    const positionBonus = categoryIndex >= 0 && categoryIndex <= 1 ? 0.3 : 
-                          categoryIndex >= 0 && categoryIndex <= 3 ? 0.15 : 0;
-    
-    const budgetMultiplier = Math.min(importanceScore + positionBonus + 0.5, 2.5);
-    const avgBudgetPerPedal = budget / 8;
-    const categoryBudget = avgBudgetPerPedal * budgetMultiplier;
-    const idealPrice = Math.min(Math.max(categoryBudget, 80), 450);
-    
-    return [...pedals].sort((a, b) => {
-      // Score based on how close the pedal's rating is to genre's ideal
-      const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
-      const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
+    // Score each pedal - exploration level makes scoring more lenient
+    const scored = pedals.map(pedal => {
+      // Base rating score - with exploration tolerance
+      const ratingDiff = Math.abs(pedal.categoryRating - idealRating);
+      // Higher exploration = less penalty for being far from ideal
+      const ratingScore = 10 - Math.max(0, ratingDiff - exploration.ratingTolerance);
       
-      // Bonus for preferred subtypes
-      const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 3 : 0;
-      const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 3 : 0;
+      // Bonus for preferred subtypes (less important at higher exploration)
+      const subtypeBonus = genre.preferredSubtypes.includes(pedal.subtype || '') 
+        ? (3 - explorationLevel) // Reduces from 3 to 0 as we explore
+        : (explorationLevel > 1 ? 1 : 0); // Non-preferred get bonus at high exploration
       
-      const aScore = aRatingScore + aSubtypeBonus;
-      const bScore = bRatingScore + bSubtypeBonus;
+      // Small price bonus for affordability
+      const priceBonus = pedal.reverbPrice < 100 ? 2 : pedal.reverbPrice < 200 ? 1 : 0;
       
-      if (bScore !== aScore) return bScore - aScore;
+      // Random bonus at high exploration to mix things up
+      const explorationBonus = explorationLevel >= 2 ? Math.random() * 3 : 0;
       
-      // For bonus additions, prefer more affordable options (icing, not the cake)
-      // These are extras after the essentials, so favor value picks
-      return a.reverbPrice - b.reverbPrice; // Cheaper wins for bonus picks
+      return {
+        pedal,
+        score: ratingScore + subtypeBonus + priceBonus + explorationBonus,
+      };
     });
+    
+    // Shuffle within score tiers for variety, then extract pedals
+    return shuffleByTier(scored).map(s => s.pedal);
   };
   
   const findPedals = (category: Category, subtypes?: string[], excludeSubtypes?: string[]) => {
@@ -120,7 +148,7 @@ function getGenreBonusAdditions(
       }
     }
     
-    return sortByGenreFit(filtered, category).slice(0, 11);
+    return sortByGenreFit(filtered, category).slice(0, 40);
   };
   
   const findBySubtype = (subtypes: string[]) => {
@@ -139,7 +167,7 @@ function getGenreBonusAdditions(
       }
     }
     
-    return sortByGenreFit(filtered, filtered[0]?.category).slice(0, 11);
+    return sortByGenreFit(filtered, filtered[0]?.category).slice(0, 40);
   };
 
   // Genre-specific bonus additions
@@ -963,6 +991,14 @@ function getGenreBonusAdditions(
   return additions.slice(0, 4); // Max 4 bonus additions
 }
 
+// Exploration levels for progressive widening of suggestions
+const EXPLORATION_LEVELS = [
+  { name: 'Genre Fit', description: 'Best matches for your genre', ratingTolerance: 2, includeAllSubtypes: false },
+  { name: 'Nearby', description: 'Similar options, slightly different', ratingTolerance: 4, includeAllSubtypes: false },
+  { name: 'Exploring', description: 'Branching out a bit', ratingTolerance: 6, includeAllSubtypes: true },
+  { name: 'Wild Card', description: 'Unexpected choices', ratingTolerance: 10, includeAllSubtypes: true },
+];
+
 export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
   const { state, dispatch } = useBoard();
   const { selectedGenres, allPedals, board } = state;
@@ -975,7 +1011,12 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
   const [priceRange, setPriceRange] = useState<PriceRange>('all');
   const [skipTuner, setSkipTuner] = useState(false); // Option to skip tuner pedal
   const [skipSecondGain, setSkipSecondGain] = useState(false); // Option to skip second gain pedal
+  const [explorationLevel, setExplorationLevel] = useState(0); // 0-3, cycles through exploration levels
+  const [refreshCycle, setRefreshCycle] = useState(0); // Increments each full cycle for new random pedals
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Current exploration config
+  const currentExploration = EXPLORATION_LEVELS[explorationLevel];
   
   // Filter pedals by price range
   const filterByPriceRange = (pedals: PedalWithStatus[]): PedalWithStatus[] => {
@@ -1108,11 +1149,13 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
   // Helper functions for step generation
   const getDisplayName = (subtype: string, category: Category): string => {
     const categoryInfo = CATEGORY_INFO[category];
+    // These subtypes need the category name added for clarity (beginner-friendly)
     const needsCategorySuffix: Record<string, string[]> = {
       delay: ['Analog', 'Digital', 'Tape', 'Multi'],
       reverb: ['Spring', 'Hall', 'Plate', 'Room', 'Shimmer', 'Ambient'],
       modulation: ['Multi'],
       gain: ['Multi'],
+      eq: ['Parametric', 'Graphic'], // "Parametric EQ" is clearer than just "Parametric"
     };
     if (needsCategorySuffix[category]?.includes(subtype)) {
       return `${subtype} ${categoryInfo.displayName}`;
@@ -1136,6 +1179,71 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
       synth: isSecond ? 'More synth textures' : 'Synth and special effects',
     };
     return descriptions[cat] || `${CATEGORY_INFO[cat].displayName} pedal`;
+  };
+
+  // Short purpose phrases for the "Choose a X" heading
+  const getShortPurpose = (subtype?: string, category?: Category): string => {
+    // Subtype-specific purposes
+    const subtypePurposes: Record<string, string> = {
+      'Tuner': 'to stay in tune',
+      'Compressor': 'to control dynamics',
+      'Limiter': 'to tame peaks',
+      'Gate': 'to cut noise',
+      'Overdrive': 'to add warmth and grit',
+      'Distortion': 'to add crunch and saturation',
+      'Fuzz': 'for thick, fuzzy tones',
+      'Boost': 'to push your amp harder',
+      'Chorus': 'for shimmering movement',
+      'Flanger': 'for jet-like swoosh',
+      'Phaser': 'for swirling motion',
+      'Tremolo': 'for rhythmic pulsing',
+      'Vibrato': 'for pitch wobble',
+      'Rotary': 'for spinning speaker effect',
+      'Analog': 'for warm repeats',
+      'Digital': 'for precise echoes',
+      'Tape': 'for vintage echo character',
+      'Multi': 'for versatile options',
+      'Spring': 'for classic amp reverb',
+      'Hall': 'for spacious ambience',
+      'Plate': 'for smooth decay',
+      'Room': 'for natural space',
+      'Shimmer': 'for ethereal textures',
+      'Ambient': 'for lush soundscapes',
+      'Wah': 'for expressive sweeps',
+      'Envelope': 'for auto-wah funk',
+      'Graphic': 'to sculpt your tone',
+      'Parametric': 'for precise EQ control',
+      'Volume': 'for swells and dynamics',
+      'Expression': 'to control effects live',
+      'Octave': 'for pitch shifting',
+      'Harmonizer': 'to add harmonies',
+      'Whammy': 'for dramatic pitch bends',
+    };
+    
+    if (subtype && subtypePurposes[subtype]) {
+      return subtypePurposes[subtype];
+    }
+    
+    // Category fallback purposes
+    if (category) {
+      const categoryPurposes: Record<Category, string> = {
+        gain: 'for drive and distortion',
+        dynamics: 'to control dynamics',
+        filter: 'to shape your tone',
+        eq: 'to fine-tune frequencies',
+        modulation: 'for movement and texture',
+        delay: 'for echoes and repeats',
+        reverb: 'for space and ambience',
+        pitch: 'for pitch effects',
+        volume: 'for volume control',
+        utility: 'for your signal chain',
+        amp: 'for amp simulation',
+        synth: 'for synth sounds',
+      };
+      return categoryPurposes[category] || '';
+    }
+    
+    return '';
   };
 
   // Calculate average budget per pedal to ensure we can fill the board
@@ -1180,7 +1288,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
           name: 'Tuner',
           description: 'Every guitarist needs a tuner! It keeps you in tune and can mute your signal.',
           subtype: 'Tuner',
-          pedals: sortedTuners.slice(0, 11),
+          pedals: sortedTuners.slice(0, 40),
           education: education ? { whatItDoes: education.whatItDoes, beginnerTip: education.beginnerTip } : undefined,
         });
       }
@@ -1295,32 +1403,33 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
         }
       }
       
-      const sortedPedals = [...pedalsInRange].sort((a, b) => {
-        // PRIMARY: Genre fit score (rating match + preferred subtype bonus)
-        // This ensures the BEST pedal for the genre is recommended, regardless of price
-        const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
-        const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
-        const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 2 : 0;
-        const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 2 : 0;
-        const aScore = aRatingScore + aSubtypeBonus;
-        const bScore = bRatingScore + bSubtypeBonus;
+      // Score each pedal for genre fit, then shuffle within tiers for variety
+      // Exploration level makes scoring more lenient
+      const exploration = EXPLORATION_LEVELS[explorationLevel] || EXPLORATION_LEVELS[0];
+      const scoredPedals = pedalsInRange.map(pedal => {
+        // Genre fit score - exploration makes it more lenient
+        const ratingDiff = Math.abs(pedal.categoryRating - idealRating);
+        const ratingScore = 10 - Math.max(0, ratingDiff - exploration.ratingTolerance);
         
-        // If genre fit scores differ significantly, prioritize better fit
-        if (Math.abs(bScore - aScore) >= 1) return bScore - aScore;
+        // Subtype bonus reduces as we explore more
+        const subtypeBonus = genre.preferredSubtypes.includes(pedal.subtype || '') 
+          ? (2 - explorationLevel * 0.5)
+          : (explorationLevel > 1 ? 1 : 0);
         
-        // SECONDARY: For similar genre fit, prefer affordable options within budget
-        const aAffordable = a.reverbPrice <= maxForCategory;
-        const bAffordable = b.reverbPrice <= maxForCategory;
-        if (aAffordable && !bAffordable) return -1;
-        if (!aAffordable && bAffordable) return 1;
+        // Small affordability bonus (within budget = +1)
+        const affordableBonus = pedal.reverbPrice <= maxForCategory ? 1 : 0;
         
-        // TERTIARY: Among similar pedals, prefer mid-range value (not cheapest, not most expensive)
-        // This balances quality with value
-        const targetPrice = maxForCategory * 0.6; // Sweet spot around 60% of budget
-        const aPriceDiff = Math.abs(a.reverbPrice - targetPrice);
-        const bPriceDiff = Math.abs(b.reverbPrice - targetPrice);
-        return aPriceDiff - bPriceDiff;
+        // Random exploration bonus at higher levels
+        const explorationBonus = explorationLevel >= 2 ? Math.random() * 3 : 0;
+        
+        return {
+          pedal,
+          score: ratingScore + subtypeBonus + affordableBonus + explorationBonus,
+        };
       });
+      
+      // Shuffle within score tiers for variety - users should rarely see the same recommendations twice!
+      const sortedPedals = shuffleByTier(scoredPedals).map(s => s.pedal);
       
       // Use the top pedal's actual subtype
       const topPedal = sortedPedals[0];
@@ -1337,7 +1446,8 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
         stepName = 'Gain 1 (Main Drive)';
         stepDescription = 'Your primary drive sound - overdrive or distortion for your main tone.';
       } else {
-        stepName = categoryInfo.displayName;
+        // Use actual subtype name (e.g., "Compressor") not category name (e.g., "Dynamics")
+        stepName = getDisplayName(actualSubtype, category);
         stepDescription = getCategoryDescription(category, false);
       }
       
@@ -1347,7 +1457,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
         description: stepDescription,
         category: category,
         subtype: actualSubtype,
-        pedals: sortedPedals.slice(0, 11),
+        pedals: sortedPedals.slice(0, 40),
         education: education ? { whatItDoes: education.whatItDoes, beginnerTip: education.beginnerTip } : undefined,
       });
         
@@ -1444,30 +1554,25 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
         }
       }
       
-      const sortedPedals = [...pedalsInRange].sort((a, b) => {
-        // PRIMARY: Genre fit score (rating match + preferred subtype bonus)
-        const aRatingScore = 10 - Math.abs(a.categoryRating - idealRating);
-        const bRatingScore = 10 - Math.abs(b.categoryRating - idealRating);
-        const aSubtypeBonus = genre.preferredSubtypes.includes(a.subtype || '') ? 2 : 0;
-        const bSubtypeBonus = genre.preferredSubtypes.includes(b.subtype || '') ? 2 : 0;
-        const aScore = aRatingScore + aSubtypeBonus;
-        const bScore = bRatingScore + bSubtypeBonus;
-        
-        // If genre fit scores differ, prioritize better fit
-        if (Math.abs(bScore - aScore) >= 1) return bScore - aScore;
-        
-        // SECONDARY: For similar genre fit, prefer affordable options
-        const aAffordable = a.reverbPrice <= maxForCategory;
-        const bAffordable = b.reverbPrice <= maxForCategory;
-        if (aAffordable && !bAffordable) return -1;
-        if (!aAffordable && bAffordable) return 1;
-        
-        // TERTIARY: Prefer mid-range value for extras
-        const targetPrice = maxForCategory * 0.5; // Lower target for extras
-        const aPriceDiff = Math.abs(a.reverbPrice - targetPrice);
-        const bPriceDiff = Math.abs(b.reverbPrice - targetPrice);
-        return aPriceDiff - bPriceDiff;
+      // Score each pedal for genre fit, then shuffle within tiers for variety
+      // Exploration level makes scoring more lenient
+      const explorationExtras = EXPLORATION_LEVELS[explorationLevel] || EXPLORATION_LEVELS[0];
+      const scoredPedals = pedalsInRange.map(pedal => {
+        const ratingDiff = Math.abs(pedal.categoryRating - idealRating);
+        const ratingScore = 10 - Math.max(0, ratingDiff - explorationExtras.ratingTolerance);
+        const subtypeBonus = genre.preferredSubtypes.includes(pedal.subtype || '') 
+          ? (2 - explorationLevel * 0.5)
+          : (explorationLevel > 1 ? 1 : 0);
+        const affordableBonus = pedal.reverbPrice <= maxForCategory ? 1 : 0;
+        const explorationBonus = explorationLevel >= 2 ? Math.random() * 3 : 0;
+        return {
+          pedal,
+          score: ratingScore + subtypeBonus + affordableBonus + explorationBonus,
+        };
       });
+      
+      // Shuffle within score tiers for variety
+      const sortedPedals = shuffleByTier(scoredPedals).map(s => s.pedal);
       
       const topPedal = sortedPedals[0];
       const actualSubtype = topPedal?.subtype || bestSubtype;
@@ -1493,7 +1598,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
         description: stepDescription,
         category: category,
         subtype: actualSubtype,
-        pedals: sortedPedals.slice(0, 11),
+        pedals: sortedPedals.slice(0, 40),
         education: education ? { whatItDoes: education.whatItDoes, beginnerTip: education.beginnerTip } : undefined,
       });
       
@@ -1506,11 +1611,31 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
     return steps;
   };
   
-  const steps = generateSteps();
+  // Memoize steps with exploration level and refresh cycle
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const steps = useMemo(() => generateSteps(), [
+    genre, allPedals, onBoardIds, skipTuner, skipSecondGain, priceRange, explorationLevel, refreshCycle
+  ]);
   
   // Get bonus additions and limit based on board size
-  const allBonusAdditions = getGenreBonusAdditions(genre, allPedals, onBoardIds, onBoardSubtypes, board.constraints.maxBudget, priceRange);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const allBonusAdditions = useMemo(() => 
+    getGenreBonusAdditions(genre, allPedals, onBoardIds, onBoardSubtypes, board.constraints.maxBudget, priceRange, explorationLevel),
+    [genre, allPedals, onBoardIds, onBoardSubtypes, board.constraints.maxBudget, priceRange, explorationLevel, refreshCycle]
+  );
   const bonusAdditions = allBonusAdditions.slice(0, recommendedBonus);
+  
+  // Refresh handler - progressively widens exploration, then cycles with new pedals
+  const handleRefresh = () => {
+    if (explorationLevel < EXPLORATION_LEVELS.length - 1) {
+      // Widen the exploration
+      setExplorationLevel(l => l + 1);
+    } else {
+      // At max exploration, restart cycle with new random pedals
+      setExplorationLevel(0);
+      setRefreshCycle(c => c + 1);
+    }
+  };
   
   // Clamp currentStepIndex to valid range (steps can shrink as pedals are added)
   // Use steps.length - 1 as max to avoid out-of-bounds access, but allow steps.length for essentialsComplete check
@@ -1681,7 +1806,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
           </div>
           
           <h2 className="text-xl font-bold text-white mb-2">
-            Essentials Complete!
+            Essentials Complete! 🎸
           </h2>
           <p className="text-sm text-zinc-400 mb-4">
             Your {genre.name} board has all the core pedals
@@ -1873,7 +1998,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style={{ backgroundColor: `${genre.color}20` }}>
               <Check className="w-8 h-8" style={{ color: genre.color }} />
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">Essentials Complete!</h2>
+            <h2 className="text-xl font-bold text-white mb-2">Essentials Complete! 🎸</h2>
             <p className="text-sm text-zinc-400 mb-4">{addedCount} pedals • ${totalCost} total</p>
             <div className="space-y-3">
               <button
@@ -2073,7 +2198,9 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
           
           <div className="flex items-center gap-3 mb-1">
             <h3 className="text-xl font-bold text-white">
-              {isAdditionsPhase ? `Add a ${currentAddition?.name}?` : `Choose a ${currentStep?.name || 'Pedal'}`}
+              {isAdditionsPhase 
+                ? `Add a ${currentAddition?.name}?` 
+                : `Choose a ${currentStep?.name || 'Pedal'} ${getShortPurpose(currentStep?.subtype, currentStep?.category)}`}
             </h3>
             {/* Skip Tuner option - only show on tuner step */}
             {!isAdditionsPhase && currentStep?.subtype === 'Tuner' && (
@@ -2217,121 +2344,201 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
               );
             }
             
-            return filteredPedals.map((pedal, index) => {
-            const isOnBoard = onBoardIds.has(pedal.id);
-            const isExpanded = expandedPedal === pedal.id;
-            
-            // Only show tiers when using default (recommended) sort and showing all prices
+            // Split pedals into tiers: first 16 = Highly Recommended, next 24 = Could Be Cool
             const usesTiers = sortBy === 'default' && priceRange === 'all';
+            const recommendedPedals = usesTiers ? filteredPedals.slice(0, 16) : [];
+            const coolPedals = usesTiers ? filteredPedals.slice(16) : filteredPedals;
             
-            // Determine tier: 0-5 = Highly Recommended, 6+ = Could Be Cool
-            const tier = usesTiers ? (index <= 5 ? 'recommended' : 'cool') : 'cool';
-            const tierColors = {
-              recommended: { border: isAdditionsPhase ? 'border-amber-500/30' : 'border-blue-500/30', bg: isAdditionsPhase ? 'bg-amber-500/5' : 'bg-blue-500/5', badge: isAdditionsPhase ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400' },
-              cool: { border: 'border-board-border', bg: 'bg-board-elevated/30', badge: 'bg-zinc-500/20 text-zinc-400' },
-            };
-            
-            // Show tier headers only when using default sort and showing all prices
-            const showTierHeader = usesTiers && (index === 0 || index === 6);
-            const tierHeaderText = index === 0 ? 'Highly Recommended' : index === 6 ? 'Could Be Cool' : null;
-            
-            // When filtering by price range, show "Best in Range" for top pick
-            const showPriceRangeBadge = priceRange !== 'all' && index === 0;
-            
-            return (
-              <div key={`${pedal.id}-${index}-${sortBy}`}>
-                {/* Tier Header */}
-                {showTierHeader && tierHeaderText && (
-                  <div className={`text-xs font-medium mb-2 mt-4 first:mt-0 ${
-                    index === 0 ? (isAdditionsPhase ? 'text-amber-400' : 'text-blue-400') : 'text-zinc-500'
-                  }`}>
-                    {tierHeaderText}
-                  </div>
-                )}
-                
+            const renderPedalThumbnail = (pedal: PedalWithStatus, tier: 'recommended' | 'cool', index: number) => {
+              const isOnBoard = onBoardIds.has(pedal.id);
+              const tierColors = {
+                recommended: { 
+                  border: isAdditionsPhase ? 'border-amber-500/40' : 'border-blue-500/40', 
+                  bg: isAdditionsPhase ? 'bg-amber-500/10' : 'bg-blue-500/10',
+                  hover: isAdditionsPhase ? 'hover:border-amber-400' : 'hover:border-blue-400',
+                },
+                cool: { 
+                  border: 'border-board-border', 
+                  bg: 'bg-board-elevated/30',
+                  hover: 'hover:border-zinc-500',
+                },
+              };
+              
+              // Determine tooltip position based on column (8 columns)
+              const col = index % 8;
+              const isLeftEdge = col <= 1;
+              const isRightEdge = col >= 6;
+              
+              // Position classes for tooltip
+              const tooltipPosition = isLeftEdge 
+                ? 'left-0' 
+                : isRightEdge 
+                  ? 'right-0' 
+                  : 'left-1/2 -translate-x-1/2';
+              
+              // Arrow position
+              const arrowPosition = isLeftEdge
+                ? 'left-4'
+                : isRightEdge
+                  ? 'right-4'
+                  : 'left-1/2 -translate-x-1/2';
+              
+              return (
                 <div 
-                  className={`p-3 rounded-xl border transition-all ${
-                    isOnBoard
-                      ? 'border-green-500/50 bg-green-500/10'
-                      : `${tierColors[tier].border} ${tierColors[tier].bg}`
-                  }`}
+                  key={pedal.id}
+                  className="group relative"
                 >
-                  <div className="flex items-start gap-3">
-                    {/* Pedal Image */}
-                    <div className="relative">
-                      <PedalImage category={pedal.category} size="md" />
-                      {/* Status badge overlay */}
+                  {/* Thumbnail Card - Compact */}
+                  <button
+                    onClick={() => !isOnBoard && handleAddPedal(pedal)}
+                    disabled={isOnBoard}
+                    className={`w-full p-1.5 rounded-lg border transition-all ${
+                      isOnBoard
+                        ? 'border-green-500/50 bg-green-500/10 cursor-default'
+                        : `${tierColors[tier].border} ${tierColors[tier].bg} ${tierColors[tier].hover} cursor-pointer hover:scale-[1.03]`
+                    }`}
+                  >
+                    {/* Pedal Image Placeholder - Smaller */}
+                    <div className="relative aspect-square mb-1 rounded bg-board-dark/50 flex items-center justify-center overflow-hidden">
+                      <PedalImage category={pedal.category} size="sm" />
                       {isOnBoard && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                          <Check className="w-3 h-3 text-white" />
+                        <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
+                          <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+                            <Check className="w-3 h-3 text-white" />
+                          </div>
                         </div>
                       )}
                     </div>
                     
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <h4 className="font-medium text-white text-sm">{pedal.model}</h4>
-                        {showPriceRangeBadge && !isOnBoard && (
-                          <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-green-500/20 text-green-400">
-                            BEST IN RANGE
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-board-muted mb-1">{pedal.brand}</p>
-                      
-                      <div className="flex items-center gap-3 text-xs">
+                    {/* Name - Compact */}
+                    <h4 className="font-medium text-white text-[9px] leading-tight line-clamp-2 text-center">
+                      {pedal.model}
+                    </h4>
+                    
+                    {/* Quick Price */}
+                    <p className="text-[8px] text-board-muted text-center">
+                      ${pedal.reverbPrice}
+                    </p>
+                  </button>
+                  
+                  {/* Hover Tooltip - Position-aware */}
+                  <div className={`absolute ${tooltipPosition} bottom-full mb-1 w-56 p-2.5 rounded-lg bg-board-elevated border border-board-border shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none`}>
+                    <div className="text-xs font-semibold text-white mb-1">{pedal.brand} {pedal.model}</div>
+                    
+                    <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[10px] mb-1.5">
+                      <div className="flex justify-between">
+                        <span className="text-board-muted">Price:</span>
                         <span className="text-white font-medium">${pedal.reverbPrice}</span>
-                        <span className="text-board-muted">{pedal.categoryRating}/10</span>
-                        <span className="text-board-muted">{formatInches(pedal.widthMm)}" × {formatInches(pedal.depthMm)}"</span>
-                        <span className="text-board-muted">{pedal.currentMa}mA</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-board-muted">Rating:</span>
+                        <span className="text-white">{pedal.categoryRating}/10</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-board-muted">Size:</span>
+                        <span className="text-white">{formatInches(pedal.widthMm)}" × {formatInches(pedal.depthMm)}"</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-board-muted">Power:</span>
+                        <span className="text-white">{pedal.currentMa}mA</span>
                       </div>
                     </div>
                     
-                    {/* Action */}
-                    {isOnBoard ? (
-                      <span className="px-2 py-1 text-xs font-medium text-green-400 bg-green-500/20 rounded-lg">
-                        Added
-                      </span>
-                    ) : (
-                      <button
-                        onClick={() => handleAddPedal(pedal)}
-                        className="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center gap-1"
-                        style={{ 
-                          backgroundColor: tier === 'recommended'
-                            ? '#3b82f620'
-                            : '#52525b20',
-                          color: tier === 'recommended' ? '#3b82f6' : '#a1a1aa',
-                        }}
-                      >
-                        <Plus className="w-3 h-3" />
-                        Add
-                      </button>
+                    {pedal.description && (
+                      <p className="text-[9px] text-zinc-400 leading-relaxed border-t border-board-border pt-1.5">
+                        {pedal.description}
+                      </p>
                     )}
+                    
+                    {/* Watch Review Link */}
+                    <a
+                      href={getYouTubeReviewUrl(pedal.brand, pedal.model)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="mt-2 flex items-center gap-1 text-[10px] text-red-400 hover:text-red-300 transition-colors pointer-events-auto"
+                    >
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                      </svg>
+                      Watch review
+                    </a>
+                    
+                    {/* Tooltip arrow - Position-aware */}
+                    <div className={`absolute ${arrowPosition} top-full w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-board-elevated`} />
                   </div>
-                  
-                  {/* Expandable Details */}
-                  {pedal.description && (
-                    <>
-                      <button
-                        onClick={() => setExpandedPedal(isExpanded ? null : pedal.id)}
-                        className="mt-2 text-xs text-board-muted hover:text-white transition-colors flex items-center gap-1"
-                      >
-                        <Info className="w-3 h-3" />
-                        {isExpanded ? 'Less info' : 'More info'}
-                      </button>
-                      
-                      {isExpanded && (
-                        <p className="mt-2 text-xs text-zinc-400 animate-fadeIn">
-                          {pedal.description}
-                        </p>
-                      )}
-                    </>
-                  )}
                 </div>
-              </div>
+              );
+            };
+            
+            return (
+              <>
+                {/* Refresh Button with Exploration Level */}
+                {usesTiers && (
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[10px] font-medium ${
+                        explorationLevel === 0 ? 'text-blue-400' :
+                        explorationLevel === 1 ? 'text-green-400' :
+                        explorationLevel === 2 ? 'text-amber-400' :
+                        'text-purple-400'
+                      }`}>
+                        {currentExploration.name}
+                      </span>
+                      <span className="text-[9px] text-board-muted">
+                        {currentExploration.description}
+                      </span>
+                    </div>
+                    <button
+                      onClick={handleRefresh}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all transform hover:scale-105 ${
+                        explorationLevel === EXPLORATION_LEVELS.length - 1
+                          ? 'text-purple-200 bg-purple-500/30 hover:bg-purple-500/40 animate-glow-pulse-purple border border-purple-400/30'
+                          : 'text-cyan-200 bg-cyan-500/20 hover:bg-cyan-500/30 animate-glow-pulse border border-cyan-400/30'
+                      }`}
+                      title={explorationLevel === EXPLORATION_LEVELS.length - 1 
+                        ? "Start fresh cycle with new pedals" 
+                        : "Widen suggestions"}
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${explorationLevel < EXPLORATION_LEVELS.length - 1 ? 'animate-spin-slow' : ''}`} />
+                      <span>{explorationLevel === EXPLORATION_LEVELS.length - 1 ? 'New cycle' : 'Explore more'}</span>
+                    </button>
+                  </div>
+                )}
+                
+                {/* Highly Recommended Section */}
+                {usesTiers && recommendedPedals.length > 0 && (
+                  <div className="mb-4">
+                    <div className={`text-[10px] font-semibold mb-2 flex items-center gap-1.5 ${
+                      isAdditionsPhase ? 'text-amber-400' : 'text-blue-400'
+                    }`}>
+                      <span>👍</span>
+                      <span>Highly Recommended</span>
+                      <span className="text-board-muted font-normal">({recommendedPedals.length})</span>
+                    </div>
+                    <div className="grid grid-cols-8 gap-1.5">
+                      {recommendedPedals.map((pedal, idx) => renderPedalThumbnail(pedal, 'recommended', idx))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Could Be Cool Section */}
+                {coolPedals.length > 0 && (
+                  <div>
+                    {usesTiers && (
+                      <div className="text-[10px] font-semibold mb-2 flex items-center gap-1.5 text-zinc-400">
+                        <span>✨</span>
+                        <span>Could Be Cool</span>
+                        <span className="text-board-muted font-normal">({coolPedals.length})</span>
+                      </div>
+                    )}
+                    <div className="grid grid-cols-8 gap-1.5">
+                      {coolPedals.map((pedal, idx) => renderPedalThumbnail(pedal, 'cool', idx))}
+                    </div>
+                  </div>
+                )}
+              </>
             );
-          });
           })()}
         </div>
       </div>
