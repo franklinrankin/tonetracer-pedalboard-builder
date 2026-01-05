@@ -202,7 +202,7 @@ export function BoardVisualizer() {
     };
   };
 
-  // Handle pedal drag
+  // Handle pedal drag - Mouse events
   const handleMouseDown = (e: React.MouseEvent, pedalId: string) => {
     e.preventDefault();
     setSelectedPedal(pedalId);
@@ -218,6 +218,29 @@ export function BoardVisualizer() {
         setDragOffset({
           x: e.clientX - rect.left - (pos.x / 100) * boardW,
           y: e.clientY - rect.top - (pos.y / 100) * boardH,
+        });
+      }
+    }
+  };
+
+  // Handle pedal drag - Touch events for mobile
+  const handleTouchStart = (e: React.TouchEvent, pedalId: string) => {
+    if (e.touches.length !== 1) return; // Only single touch
+    
+    const touch = e.touches[0];
+    setSelectedPedal(pedalId);
+    setIsDragging(true);
+    setHasMoved(false);
+    
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (rect) {
+      const pos = positions.get(pedalId);
+      if (pos) {
+        const boardW = boardWidthMm * displayScale * scale;
+        const boardH = boardDepthMm * displayScale * scale;
+        setDragOffset({
+          x: touch.clientX - rect.left - (pos.x / 100) * boardW,
+          y: touch.clientY - rect.top - (pos.y / 100) * boardH,
         });
       }
     }
@@ -250,6 +273,37 @@ export function BoardVisualizer() {
     });
   }, [isDragging, selectedPedal, dragOffset, boardWidthMm, boardDepthMm, displayScale, scale]);
 
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!isDragging || !selectedPedal || !containerRef.current) return;
+    if (e.touches.length !== 1) return;
+    
+    e.preventDefault(); // Prevent scrolling while dragging
+    const touch = e.touches[0];
+    
+    setHasMoved(true);
+    setShowPedalCard(null); // Close card when dragging
+    
+    const rect = containerRef.current.getBoundingClientRect();
+    const boardW = boardWidthMm * displayScale * scale;
+    const boardH = boardDepthMm * displayScale * scale;
+    
+    const newX = ((touch.clientX - rect.left - dragOffset.x) / boardW) * 100;
+    const newY = ((touch.clientY - rect.top - dragOffset.y) / boardH) * 100;
+    
+    // Clamp to board bounds
+    const clampedX = Math.max(5, Math.min(95, newX));
+    const clampedY = Math.max(5, Math.min(95, newY));
+    
+    setPositions(prev => {
+      const newMap = new Map(prev);
+      const pos = newMap.get(selectedPedal);
+      if (pos) {
+        newMap.set(selectedPedal, { ...pos, x: clampedX, y: clampedY });
+      }
+      return newMap;
+    });
+  }, [isDragging, selectedPedal, dragOffset, boardWidthMm, boardDepthMm, displayScale, scale]);
+
   const handleMouseUp = useCallback(() => {
     if (!hasMoved && selectedPedal) {
       // It was a click, not a drag - show the pedal card
@@ -259,16 +313,33 @@ export function BoardVisualizer() {
     setHasMoved(false);
   }, [hasMoved, selectedPedal]);
 
+  const handleTouchEnd = useCallback(() => {
+    if (!hasMoved && selectedPedal) {
+      // It was a tap, not a drag - show the pedal card
+      setShowPedalCard(prev => prev === selectedPedal ? null : selectedPedal);
+    }
+    setIsDragging(false);
+    setHasMoved(false);
+  }, [hasMoved, selectedPedal]);
+
   useEffect(() => {
     if (isDragging) {
+      // Mouse events
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
+      // Touch events
+      window.addEventListener('touchmove', handleTouchMove, { passive: false });
+      window.addEventListener('touchend', handleTouchEnd);
+      window.addEventListener('touchcancel', handleTouchEnd);
       return () => {
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener('touchmove', handleTouchMove);
+        window.removeEventListener('touchend', handleTouchEnd);
+        window.removeEventListener('touchcancel', handleTouchEnd);
       };
     }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   // Rotate selected pedal
   const rotatePedal = (direction: 'cw' | 'ccw') => {
@@ -656,12 +727,14 @@ export function BoardVisualizer() {
                 style={{
                   left,
                   top,
+                  touchAction: 'none', // Prevent scrolling while dragging on mobile
                   width: pedalW,
                   height: pedalH,
                   transform: `rotate(${pos.rotation}deg)`,
                   transformOrigin: 'center center',
                 }}
                 onMouseDown={(e) => handleMouseDown(e, slot.pedal.id)}
+                onTouchStart={(e) => handleTouchStart(e, slot.pedal.id)}
                 onClick={() => setSelectedPedal(slot.pedal.id)}
               >
                 {/* Function label above pedal */}

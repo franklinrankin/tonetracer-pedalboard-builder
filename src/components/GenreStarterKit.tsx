@@ -1013,6 +1013,7 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
   const [skipSecondGain, setSkipSecondGain] = useState(false); // Option to skip second gain pedal
   const [explorationLevel, setExplorationLevel] = useState(0); // 0-3, cycles through exploration levels
   const [refreshCycle, setRefreshCycle] = useState(0); // Increments each full cycle for new random pedals
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null); // For mobile info tooltips
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Current exploration config
@@ -2383,6 +2384,8 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                   ? 'right-4'
                   : 'left-1/2 -translate-x-1/2';
               
+              const isTooltipOpen = activeTooltip === pedal.id;
+              
               return (
                 <div 
                   key={pedal.id}
@@ -2421,8 +2424,23 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                     </p>
                   </button>
                   
-                  {/* Hover Tooltip - Position-aware */}
-                  <div className={`absolute ${tooltipPosition} bottom-full mb-1 w-56 p-2.5 rounded-lg bg-board-elevated border border-board-border shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none`}>
+                  {/* Mobile Info Icon - Only shows on touch devices */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveTooltip(isTooltipOpen ? null : pedal.id);
+                    }}
+                    className={`touch-only absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center transition-all z-10 ${
+                      isTooltipOpen 
+                        ? 'bg-board-accent text-white' 
+                        : 'bg-board-dark/90 text-board-muted active:bg-board-accent active:text-white'
+                    }`}
+                  >
+                    <Info className="w-3 h-3" />
+                  </button>
+                  
+                  {/* Desktop Hover Tooltip - Only shows on hover-capable devices */}
+                  <div className={`hover-tooltip absolute ${tooltipPosition} bottom-full mb-1 w-56 p-2.5 rounded-lg bg-board-elevated border border-board-border shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none`}>
                     <div className="text-xs font-semibold text-white mb-1">{pedal.brand} {pedal.model}</div>
                     
                     <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[10px] mb-1.5">
@@ -2467,6 +2485,85 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                     {/* Tooltip arrow - Position-aware */}
                     <div className={`absolute ${arrowPosition} top-full w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-board-elevated`} />
                   </div>
+                  
+                  {/* Mobile Click Tooltip - Only shows on touch devices when info icon is tapped */}
+                  {isTooltipOpen && (
+                    <div className="touch-only">
+                      {/* Backdrop to close on outside tap */}
+                      <div 
+                        className="fixed inset-0 z-40"
+                        onClick={() => setActiveTooltip(null)}
+                      />
+                      <div className={`absolute ${tooltipPosition} bottom-full mb-1 w-56 p-2.5 rounded-lg bg-board-elevated border border-board-border shadow-xl z-50`}>
+                        {/* Close button */}
+                        <button
+                          onClick={() => setActiveTooltip(null)}
+                          className="absolute top-1 right-1 w-5 h-5 rounded-full bg-board-dark hover:bg-board-border flex items-center justify-center text-board-muted hover:text-white transition-colors"
+                        >
+                          ×
+                        </button>
+                        
+                        <div className="text-xs font-semibold text-white mb-1 pr-5">{pedal.brand} {pedal.model}</div>
+                        
+                        <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[10px] mb-1.5">
+                          <div className="flex justify-between">
+                            <span className="text-board-muted">Price:</span>
+                            <span className="text-white font-medium">${pedal.reverbPrice}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-board-muted">Rating:</span>
+                            <span className="text-white">{pedal.categoryRating}/10</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-board-muted">Size:</span>
+                            <span className="text-white">{formatInches(pedal.widthMm)}" × {formatInches(pedal.depthMm)}"</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-board-muted">Power:</span>
+                            <span className="text-white">{pedal.currentMa}mA</span>
+                          </div>
+                        </div>
+                        
+                        {pedal.description && (
+                          <p className="text-[9px] text-zinc-400 leading-relaxed border-t border-board-border pt-1.5">
+                            {pedal.description}
+                          </p>
+                        )}
+                        
+                        {/* Watch Review Link */}
+                        <a
+                          href={getYouTubeReviewUrl(pedal.brand, pedal.model)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="mt-2 flex items-center gap-1 text-[10px] text-red-400 hover:text-red-300 transition-colors"
+                        >
+                          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                          </svg>
+                          Watch review
+                        </a>
+                        
+                        {/* Add to Board button */}
+                        {!isOnBoard && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddPedal(pedal);
+                              setActiveTooltip(null);
+                            }}
+                            className="mt-2 w-full py-1.5 rounded bg-board-accent hover:bg-board-accent-dim text-white text-[10px] font-semibold flex items-center justify-center gap-1 transition-colors"
+                          >
+                            <Plus className="w-3 h-3" />
+                            Add to Board
+                          </button>
+                        )}
+                        
+                        {/* Tooltip arrow */}
+                        <div className={`absolute ${arrowPosition} top-full w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-board-elevated`} />
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             };

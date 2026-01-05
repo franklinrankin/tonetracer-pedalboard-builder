@@ -203,3 +203,36 @@ body {
   animation: glow-pulse-purple 2s ease-in-out infinite;
 }
 
+/* Touch device detection - show info icon only on touch devices */
+.touch-only {
+  display: none;
+}
+
+.hover-only {
+  display: block;
+}
+
+/* On touch devices (no hover support) */
+@media (hover: none) {
+  .touch-only {
+    display: block;
+  }
+  .hover-only {
+    display: none;
+  }
+  /* Disable hover tooltip on touch devices */
+  .hover-tooltip {
+    display: none !important;
+  }
+}
+
+/* On devices with hover support */
+@media (hover: hover) {
+  .touch-only {
+    display: none;
+  }
+  .hover-only {
+    display: block;
+  }
+}
+
