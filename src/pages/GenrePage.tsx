@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronRight, Check, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { GENRES, GENRE_CATEGORIES, GenreProfile, GenreCategoryId, getGenreById } from '../data/genres';
 import { GenreIcon } from '../components/GenreIcon';
@@ -41,10 +41,10 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
   }));
   
   return (
-    <div className="min-h-full p-8 lg:p-12">
+    <div className="h-full p-3 lg:p-4 overflow-hidden">
       {/* Header - No music note */}
-      <div className="max-w-4xl mx-auto mb-8 text-center">
-        <h1 className="text-4xl font-bold text-white mb-4">
+      <div className="max-w-4xl mx-auto mb-4 text-center">
+        <h1 className="text-3xl font-bold text-white mb-2">
           What style are you going for?
         </h1>
         <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
@@ -57,7 +57,7 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
       
       {/* Selected Genres Display */}
       {selectedGenres.length > 0 && (
-        <div className="max-w-4xl mx-auto mb-8">
+        <div className="max-w-4xl mx-auto mb-4">
           <div className="flex items-center justify-center gap-2 flex-wrap">
             <span className="text-sm text-board-muted">Selected:</span>
             {selectedGenreObjects.map(genre => (
@@ -88,12 +88,12 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
       )}
       
       {/* Category Grid - Uniform Size Cards with Background Images */}
-      <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Create Your Own Card */}
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {/* Create Your Own Card - Image with sliding glass hover */}
           <button
             onClick={onCreateOwn}
-            className="relative h-72 p-5 rounded-xl border-2 border-dashed border-board-accent/50 text-left transition-all hover:scale-[1.02] hover:border-board-accent overflow-hidden group"
+            className="relative h-64 p-4 rounded-xl border-2 border-dashed border-board-accent/50 text-left transition-all hover:scale-[1.02] hover:border-transparent overflow-hidden group"
           >
             {/* Background image */}
             <div 
@@ -105,30 +105,37 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                 backgroundRepeat: 'no-repeat',
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
+            {/* Default dark gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30 transition-opacity duration-300 group-hover:opacity-0" />
+            
+            {/* Hover: Sliding glass overlay - slides from left */}
+            <div 
+              className="absolute inset-0 bg-gradient-to-br from-board-accent via-cyan-600 to-purple-700 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"
+              style={{ opacity: 0.4 }}
+            />
             
             {/* Content */}
             <div className="relative z-10 h-full flex flex-col justify-end">
               <h3 
                 className="font-semibold text-white text-lg mb-1"
-                style={{ textShadow: '0 2px 8px rgba(0,0,0,1), 0 4px 20px rgba(0,0,0,1)' }}
+                style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
               >
                 Create Your Own
               </h3>
               <p 
-                className="text-sm text-white mb-3"
-                style={{ textShadow: '0 2px 8px rgba(0,0,0,1)' }}
+                className="text-sm text-white/90 mb-3"
+                style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
               >
                 No limits — build freely
               </p>
               
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-xs text-white" style={{ textShadow: '0 2px 6px rgba(0,0,0,1)' }}>
-                  <Check className="w-3 h-3 text-board-accent" />
+                <div className="flex items-center gap-2 text-xs text-white">
+                  <Check className="w-3 h-3 text-board-accent group-hover:text-white transition-colors" />
                   <span>Skip to building</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-white" style={{ textShadow: '0 2px 6px rgba(0,0,0,1)' }}>
-                  <Check className="w-3 h-3 text-board-accent" />
+                <div className="flex items-center gap-2 text-xs text-white">
+                  <Check className="w-3 h-3 text-board-accent group-hover:text-white transition-colors" />
                   <span>Top 3 genre matches</span>
                 </div>
               </div>
@@ -144,7 +151,7 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
             return (
               <div
                 key={category.id}
-                className={`relative h-72 rounded-xl border-2 text-left transition-all overflow-hidden ${
+                className={`relative h-64 rounded-xl border-2 text-left transition-all overflow-hidden ${
                   selectedInCategory > 0 ? 'border-opacity-100' : 'border-board-border/50'
                 }`}
                 style={{
@@ -259,15 +266,6 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
       </div>
       
       {/* Floating Continue Button */}
-      <div className="fixed bottom-6 left-6 z-50">
-        <button
-          onClick={onContinue}
-          className="px-6 py-3 bg-board-accent text-white font-medium rounded-xl flex items-center gap-2 shadow-lg shadow-board-accent/30 hover:bg-board-accent-dim transition-colors"
-        >
-          {selectedGenres.length > 0 ? 'Continue' : 'Skip & Browse All'}
-          <ChevronRight className="w-5 h-5" />
-        </button>
-      </div>
     </div>
   );
 }

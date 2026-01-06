@@ -88,37 +88,43 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
               </div>
             </div>
             
-            {/* Step Navigation - Center */}
+            {/* Breadcrumb Step Navigation - Center */}
             <nav className="flex-1 flex items-center justify-center">
-              <div className="flex items-center gap-1 sm:gap-2 bg-board-elevated/50 rounded-full p-1">
+              <div className="flex items-center gap-2">
                 {STEPS.map((step, index) => {
                   const isActive = step.id === currentStep;
                   const isCompleted = index < currentStepIndex;
                   const isClickable = index <= currentStepIndex || (index === currentStepIndex + 1 && canGoNext());
                   
                   return (
-                    <button
-                      key={step.id}
-                      onClick={() => isClickable && onStepChange(step.id)}
-                      disabled={!isClickable}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all text-sm ${
-                        isActive
-                          ? 'bg-board-accent text-white shadow-md'
-                          : isCompleted
-                            ? 'text-board-success hover:bg-board-elevated'
-                            : isClickable
-                              ? 'text-board-muted hover:bg-board-elevated hover:text-white'
-                              : 'text-board-muted/40 cursor-not-allowed'
-                      }`}
-                    >
-                      <span className={`flex items-center justify-center w-5 h-5 rounded-full text-xs ${
-                        isActive ? 'bg-white/20' : isCompleted ? 'bg-board-success/20' : ''
-                      }`}>
-                        {isCompleted ? <Check className="w-3 h-3" /> : step.icon}
-                      </span>
-                      <span className="hidden md:inline font-medium">{step.label}</span>
-                      <span className="md:hidden font-medium">{step.shortLabel}</span>
-                    </button>
+                    <div key={step.id} className="flex items-center gap-2">
+                      <button
+                        onClick={() => isClickable && onStepChange(step.id)}
+                        disabled={!isClickable}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all text-sm font-medium ${
+                          isActive
+                            ? 'bg-board-accent text-white shadow-lg shadow-board-accent/30'
+                            : isCompleted
+                              ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+                              : isClickable
+                                ? 'bg-board-elevated text-board-muted hover:bg-board-border hover:text-white'
+                                : 'bg-board-elevated/50 text-board-muted/40 cursor-not-allowed'
+                        }`}
+                      >
+                        <span className={`flex items-center justify-center w-5 h-5 rounded-full text-xs ${
+                          isActive ? 'bg-white/20' : isCompleted ? 'bg-emerald-500/30' : 'bg-board-dark/30'
+                        }`}>
+                          {isCompleted ? <Check className="w-3 h-3" /> : step.icon}
+                        </span>
+                        <span className="hidden md:inline">{step.label}</span>
+                        <span className="md:hidden">{step.shortLabel}</span>
+                      </button>
+                      {index < STEPS.length - 1 && (
+                        <ChevronRight className={`w-4 h-4 ${
+                          isCompleted ? 'text-emerald-500' : 'text-board-muted/30'
+                        }`} />
+                      )}
+                    </div>
                   );
                 })}
               </div>
