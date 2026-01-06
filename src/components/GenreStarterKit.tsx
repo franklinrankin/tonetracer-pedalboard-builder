@@ -9,6 +9,7 @@ import { formatInches } from '../utils/measurements';
 import { PedalImage } from './PedalImage';
 import { estimatePedalCapacity, getRecommendedEssentialCount, getRecommendedBonusCount } from '../data/boardTemplates';
 import { getYouTubeReviewUrl } from '../utils/youtube';
+import { getPedalImageUrl } from '../data/pedalImageMap';
 
 // Fisher-Yates shuffle for variety in recommendations
 function shuffleArray<T>(array: T[]): T[] {
@@ -2445,9 +2446,17 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                         : `${tierColors[tier].border} ${tierColors[tier].bg} ${tierColors[tier].hover} cursor-pointer hover:scale-[1.03]`
                     }`}
                   >
-                    {/* Pedal Image Placeholder - Smaller */}
+                    {/* Pedal Image - Fills the box */}
                     <div className="relative aspect-square mb-1 rounded bg-board-dark/50 flex items-center justify-center overflow-hidden">
-                      <PedalImage pedalId={pedal.id} category={pedal.category} size="sm" />
+                      {getPedalImageUrl(pedal.id) ? (
+                        <img 
+                          src={getPedalImageUrl(pedal.id) || ''} 
+                          alt={pedal.model}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <PedalImage pedalId={pedal.id} category={pedal.category} size="sm" />
+                      )}
                       {isOnBoard && (
                         <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
                           <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
@@ -2545,11 +2554,10 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                         {/* Close button */}
                         <button
                           onClick={() => setActiveTooltip(null)}
-                          className="absolute top-1 right-1 w-5 h-5 rounded-full bg-board-dark hover:bg-board-border flex items-center justify-center text-board-muted hover:text-white transition-colors"
+                          className="absolute top-1 right-1 w-5 h-5 rounded-full bg-board-dark hover:bg-board-border flex items-center justify-center text-board-muted hover:text-white transition-colors z-10"
                         >
                           ×
                         </button>
-                        
                         <div className="text-xs font-semibold text-white mb-1 pr-5">{pedal.brand} {pedal.model}</div>
                         
                         <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[10px] mb-1.5">

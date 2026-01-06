@@ -71,3 +71,4 @@ fs.writeFileSync(CSV_OUTPUT, csvLines.join('\n'));
 console.log(`✅ Generated: ${CSV_OUTPUT}`);
 console.log(`   Open in Google Sheets or Excel to get image links`);
 
+

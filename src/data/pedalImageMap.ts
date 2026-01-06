@@ -1,12 +1,8 @@
 /**
- * Pedal Image Map
+ * Pedal Image Map - ALL IMAGES
  * 
- * Auto-generated from Reverb API data.
- * Run `node scripts/fetch-reverb-images.js` to update.
- * 
- * Generated: 2026-01-05T23:33:09.973Z
- * Total pedals: 727
- * With images: 701
+ * Generated: 2026-01-06T02:09:45.417Z
+ * Total pedals with images: 701
  */
 
 // Image data type
@@ -16,7 +12,7 @@ interface PedalImageData {
   full?: string;
 }
 
-// Pedal images fetched from Reverb
+// All pedal images
 const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
   "boss-mt2-metal-zone": {
     "large": "/images/pedals/boss-mt2-metal-zone.jpg",
@@ -161,10 +157,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/walrus-fathom.jpg",
     "small": "/images/pedals/walrus-fathom.jpg"
   },
-  "ehx-cathedral": {
-    "large": "/images/pedals/ehx-cathedral.jpg",
-    "small": "/images/pedals/ehx-cathedral.jpg"
-  },
   "neunaber-immerse": {
     "large": "/images/pedals/neunaber-immerse.jpg",
     "small": "/images/pedals/neunaber-immerse.jpg"
@@ -205,14 +197,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/boss-cs3-compressor.jpg",
     "small": "/images/pedals/boss-cs3-compressor.jpg"
   },
-  "tc-polytune-3-noir": {
-    "large": "/images/pedals/tc-polytune-3-noir.jpg",
-    "small": "/images/pedals/tc-polytune-3-noir.jpg"
-  },
-  "tc-polytune-3-mini-noir": {
-    "large": "/images/pedals/tc-polytune-3-mini-noir.jpg",
-    "small": "/images/pedals/tc-polytune-3-mini-noir.jpg"
-  },
+  "tc-polytune-3-noir": null,
+  "tc-polytune-3-mini-noir": null,
   "korg-pitchblack-advance": {
     "large": "/images/pedals/korg-pitchblack-advance.jpg",
     "small": "/images/pedals/korg-pitchblack-advance.jpg"
@@ -689,10 +675,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
   "caline-snake-bite": {
     "large": "/images/pedals/caline-snake-bite.jpg",
     "small": "/images/pedals/caline-snake-bite.jpg"
-  },
-  "joyo-dyna-compressor": {
-    "large": "/images/pedals/joyo-dyna-compressor.jpg",
-    "small": "/images/pedals/joyo-dyna-compressor.jpg"
   },
   "source-audio-atlas": {
     "large": "/images/pedals/source-audio-atlas.jpg",
@@ -1654,10 +1636,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/keeley-oxblood.jpg",
     "small": "/images/pedals/keeley-oxblood.jpg"
   },
-  "blackstar-lt-drive": {
-    "large": "/images/pedals/blackstar-lt-drive.jpg",
-    "small": "/images/pedals/blackstar-lt-drive.jpg"
-  },
   "orange-two-stroke": {
     "large": "/images/pedals/orange-two-stroke.jpg",
     "small": "/images/pedals/orange-two-stroke.jpg"
@@ -2227,10 +2205,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/jhs-3-series-reverb.jpg",
     "small": "/images/pedals/jhs-3-series-reverb.jpg"
   },
-  "electro-harmonix-cathedral": {
-    "large": "/images/pedals/electro-harmonix-cathedral.jpg",
-    "small": "/images/pedals/electro-harmonix-cathedral.jpg"
-  },
   "nativeaudio-ghost-ridge": {
     "large": "/images/pedals/nativeaudio-ghost-ridge.jpg",
     "small": "/images/pedals/nativeaudio-ghost-ridge.jpg"
@@ -2311,10 +2285,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/boss-rv2.jpg",
     "small": "/images/pedals/boss-rv2.jpg"
   },
-  "hardwire-rv7": {
-    "large": "/images/pedals/hardwire-rv7.jpg",
-    "small": "/images/pedals/hardwire-rv7.jpg"
-  },
   "jhs-spring-tank": {
     "large": "/images/pedals/jhs-spring-tank.jpg",
     "small": "/images/pedals/jhs-spring-tank.jpg"
@@ -2352,14 +2322,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
   "xvive-golden-brownie": {
     "large": "/images/pedals/xvive-golden-brownie.jpg",
     "small": "/images/pedals/xvive-golden-brownie.jpg"
-  },
-  "akai-analogcustom-reverb": {
-    "large": "/images/pedals/akai-analogcustom-reverb.jpg",
-    "small": "/images/pedals/akai-analogcustom-reverb.jpg"
-  },
-  "hotone-verb": {
-    "large": "/images/pedals/hotone-verb.jpg",
-    "small": "/images/pedals/hotone-verb.jpg"
   },
   "one-control-purple-humper": {
     "large": "/images/pedals/one-control-purple-humper.jpg",
@@ -2536,10 +2498,7 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/tc-polytune3.jpg",
     "small": "/images/pedals/tc-polytune3.jpg"
   },
-  "tc-polytune3-mini": {
-    "large": "/images/pedals/tc-polytune3-mini.jpg",
-    "small": "/images/pedals/tc-polytune3-mini.jpg"
-  },
+  "tc-polytune3-mini": null,
   "peterson-strobostomp-hd": {
     "large": "/images/pedals/peterson-strobostomp-hd.jpg",
     "small": "/images/pedals/peterson-strobostomp-hd.jpg"
@@ -2850,12 +2809,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
   }
 };
 
-/**
- * Get the image URL for a pedal
- * @param pedalId - The pedal's unique ID
- * @param size - 'small', 'large', or 'full'
- * @returns The image URL or null if not found
- */
 export function getPedalImageUrl(
   pedalId: string, 
   size: 'small' | 'large' | 'full' = 'large'
@@ -2866,16 +2819,10 @@ export function getPedalImageUrl(
   return imageData[size] || imageData.large || imageData.small || null;
 }
 
-/**
- * Check if a pedal has an image
- */
 export function hasPedalImage(pedalId: string): boolean {
   return PEDAL_IMAGES[pedalId] !== undefined && PEDAL_IMAGES[pedalId] !== null;
 }
 
-/**
- * Get count of available images
- */
 export function getImageCount(): number {
   return 701;
 }

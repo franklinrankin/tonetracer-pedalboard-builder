@@ -1,9 +1,64 @@
 import { Category } from '../types';
 
+// Genre categories for grouping by musical tradition
+export type GenreCategoryId = 'rock-roots' | 'heavy' | 'atmospheric' | 'groove' | 'contemporary';
+
+export interface GenreCategory {
+  id: GenreCategoryId;
+  name: string;
+  icon: string;
+  color: string;
+  description: string;
+}
+
+export const GENRE_CATEGORIES: GenreCategory[] = [
+  {
+    id: 'rock-roots',
+    name: 'Rock & Roll Roots',
+    icon: '🎸',
+    color: '#ef4444',
+    description: 'Classic guitar-driven sounds from blues to indie',
+  },
+  {
+    id: 'heavy',
+    name: 'Heavy & Aggressive',
+    icon: '🔥',
+    color: '#7c3aed',
+    description: 'High-gain intensity and sonic exploration',
+  },
+  {
+    id: 'atmospheric',
+    name: 'Atmospheric & Textural',
+    icon: '🌊',
+    color: '#06b6d4',
+    description: 'Ambient soundscapes and ethereal textures',
+  },
+  {
+    id: 'groove',
+    name: 'Groove & Feel',
+    icon: '🎷',
+    color: '#10b981',
+    description: 'Dynamic expression and rhythmic playing',
+  },
+  {
+    id: 'contemporary',
+    name: 'Contemporary & Production',
+    icon: '🎤',
+    color: '#f472b6',
+    description: 'Modern polished tones for recording and performance',
+  },
+];
+
 export interface GenreProfile {
   id: string;
   name: string;
   description: string;
+  descriptionBullets: string[]; // 3 bullet points
+  category: GenreCategoryId; // Which broader category this genre belongs to
+  gainRating: number; // 1-10 numeric rating
+  ambienceRating: number; // 1-10 numeric rating
+  modulationRating: number; // 1-10 numeric rating
+  dynamicsRating: number; // 1-10 numeric rating (compression/gating needs)
   icon: string;
   iconImage?: string; // Optional image URL to use instead of emoji
   iconImagePosition?: string; // Optional CSS background-position (e.g., 'top', 'center', '50% 30%')
@@ -36,6 +91,16 @@ export const GENRES: GenreProfile[] = [
     id: 'blues',
     name: 'Blues',
     description: 'Warm, expressive tones with smooth overdrive and vocal-like sustain',
+    descriptionBullets: [
+      'Smooth overdrive that cleans up with guitar volume',
+      'Touch-sensitive dynamics for expressive playing',
+      'Subtle reverb and delay for depth without wash',
+    ],
+    category: 'rock-roots',
+    gainRating: 4,
+    ambienceRating: 4,
+    modulationRating: 2,
+    dynamicsRating: 6,
     icon: '🎸',
     iconImage: '/images/genres/blues.jpg',
     color: '#3b82f6',
@@ -64,6 +129,16 @@ export const GENRES: GenreProfile[] = [
     id: 'rock',
     name: 'Classic Rock',
     description: 'Punchy overdrive and distortion with classic tone shaping',
+    descriptionBullets: [
+      'Crunchy overdrive that pushes into saturation',
+      'Classic modulation like phaser and chorus',
+      'Room-filling reverb and slapback delay',
+    ],
+    category: 'rock-roots',
+    gainRating: 6,
+    ambienceRating: 5,
+    modulationRating: 5,
+    dynamicsRating: 3,
     icon: '🤘',
     iconImage: '/images/genres/classic-rock.jpg',
     color: '#ef4444',
@@ -91,6 +166,16 @@ export const GENRES: GenreProfile[] = [
     id: 'metal',
     name: 'Metal',
     description: 'High-gain aggression with tight low end and cutting mids',
+    descriptionBullets: [
+      'High-gain distortion with tight, focused low end',
+      'Noise gate essential for clean stops',
+      'EQ sculpting for cutting through the mix',
+    ],
+    category: 'heavy',
+    gainRating: 10,
+    ambienceRating: 2,
+    modulationRating: 1,
+    dynamicsRating: 8,
     icon: '🔥',
     iconImage: '/images/genres/metal.jpg',
     color: '#1f2937',
@@ -117,6 +202,16 @@ export const GENRES: GenreProfile[] = [
     id: 'indie',
     name: 'Alternative',
     description: 'Textured tones with creative modulation and spatial effects',
+    descriptionBullets: [
+      'Creative use of fuzz and overdrive stacking',
+      'Modulation for texture and movement',
+      'Lush reverbs and delays for atmosphere',
+    ],
+    category: 'rock-roots',
+    gainRating: 5,
+    ambienceRating: 7,
+    modulationRating: 6,
+    dynamicsRating: 3,
     icon: '🌙',
     iconImage: '/images/genres/alternative.jpg',
     color: '#8b5cf6',
@@ -145,6 +240,16 @@ export const GENRES: GenreProfile[] = [
     id: 'shoegaze',
     name: 'Shoegaze',
     description: 'Walls of sound with heavy reverb, modulation, and dreamy textures',
+    descriptionBullets: [
+      'Layers of fuzz and distortion for wall-of-sound',
+      'Heavy modulation (chorus, vibrato, flanger)',
+      'Massive reverb and delay wash',
+    ],
+    category: 'atmospheric',
+    gainRating: 6,
+    ambienceRating: 10,
+    modulationRating: 9,
+    dynamicsRating: 2,
     icon: '🌊',
     iconImage: '/images/genres/shoegaze.jpg',
     color: '#ec4899',
@@ -173,6 +278,16 @@ export const GENRES: GenreProfile[] = [
     id: 'ambient',
     name: 'Ambient / Post-Rock',
     description: 'Expansive soundscapes with pristine delays and ethereal reverbs',
+    descriptionBullets: [
+      'Clean or light gain to preserve note clarity',
+      'Multi-tap delays and ambient reverbs',
+      'Volume swells and shimmer effects',
+    ],
+    category: 'atmospheric',
+    gainRating: 2,
+    ambienceRating: 10,
+    modulationRating: 6,
+    dynamicsRating: 4,
     icon: '✨',
     iconImage: '/images/genres/ambient.jpg',
     color: '#06b6d4',
@@ -202,6 +317,16 @@ export const GENRES: GenreProfile[] = [
     id: 'country',
     name: 'Country',
     description: 'Clean, compressed tones with twangy character and subtle effects',
+    descriptionBullets: [
+      'Compression for consistent picking dynamics',
+      'Slapback delay for classic twang',
+      'Light spring reverb for room ambience',
+    ],
+    category: 'groove',
+    gainRating: 3,
+    ambienceRating: 4,
+    modulationRating: 2,
+    dynamicsRating: 8,
     icon: '🤠',
     iconImage: '/images/genres/country.jpg',
     color: '#f59e0b',
@@ -230,6 +355,16 @@ export const GENRES: GenreProfile[] = [
     id: 'jazz',
     name: 'Jazz',
     description: 'Clean, warm tones with minimal effects and maximum expression',
+    descriptionBullets: [
+      'Clean amp tone with warm EQ settings',
+      'Subtle compression for even response',
+      'Light chorus or reverb for dimension',
+    ],
+    category: 'groove',
+    gainRating: 1,
+    ambienceRating: 3,
+    modulationRating: 3,
+    dynamicsRating: 5,
     icon: '🎷',
     iconImage: '/images/genres/jazz.jpg',
     color: '#6366f1',
@@ -259,6 +394,16 @@ export const GENRES: GenreProfile[] = [
     id: 'funk',
     name: 'Funk / R&B',
     description: 'Dynamic, expressive tones with envelope filters and funky wahs',
+    descriptionBullets: [
+      'Compression for snappy, percussive attack',
+      'Envelope filter or wah for quacky funk',
+      'Phaser for subtle rhythmic movement',
+    ],
+    category: 'groove',
+    gainRating: 3,
+    ambienceRating: 2,
+    modulationRating: 5,
+    dynamicsRating: 8,
     icon: '🕺',
     iconImage: '/images/genres/funk.jpg',
     color: '#10b981',
@@ -288,6 +433,16 @@ export const GENRES: GenreProfile[] = [
     id: 'prog',
     name: 'Progressive',
     description: 'Versatile rig for complex compositions with diverse tonal palette',
+    descriptionBullets: [
+      'Multiple gain stages for tonal variety',
+      'Pitch shifters and harmonizers',
+      'Complex delays and modulation routing',
+    ],
+    category: 'heavy',
+    gainRating: 8,
+    ambienceRating: 5,
+    modulationRating: 7,
+    dynamicsRating: 4,
     icon: '🎹',
     iconImage: '/images/genres/progressive.jpg',
     iconImagePosition: '50% 25%', // Move crop up
@@ -317,6 +472,16 @@ export const GENRES: GenreProfile[] = [
     id: 'worship',
     name: 'Worship / CCM',
     description: 'Lush ambient tones with shimmer, swells, and textured delays',
+    descriptionBullets: [
+      'Transparent overdrive that stacks well',
+      'Dotted-eighth delays and ambient reverb',
+      'Volume pedal for swells and dynamics',
+    ],
+    category: 'atmospheric',
+    gainRating: 4,
+    ambienceRating: 9,
+    modulationRating: 5,
+    dynamicsRating: 5,
     icon: '🙏',
     iconImage: '/images/genres/worship.jpg',
     color: '#0ea5e9',
@@ -345,6 +510,16 @@ export const GENRES: GenreProfile[] = [
     id: 'experimental',
     name: 'Experimental / Noise',
     description: 'Unconventional sounds with synthesis, glitch, and sonic exploration',
+    descriptionBullets: [
+      'Wild fuzz and unconventional distortion',
+      'Pitch shifters and synth pedals',
+      'Glitch, sample, and noise generators',
+    ],
+    category: 'heavy',
+    gainRating: 8,
+    ambienceRating: 5,
+    modulationRating: 8,
+    dynamicsRating: 3,
     icon: '🔮',
     iconImage: '/images/genres/noise.jpg',
     color: '#f43f5e',
@@ -373,6 +548,16 @@ export const GENRES: GenreProfile[] = [
     id: 'pop',
     name: 'Pop',
     description: 'Polished, radio-ready tones with clean clarity and subtle enhancement',
+    descriptionBullets: [
+      'Clean tone with subtle compression',
+      'Light chorus or modulation for shine',
+      'Polished reverb that sits in the mix',
+    ],
+    category: 'contemporary',
+    gainRating: 2,
+    ambienceRating: 5,
+    modulationRating: 4,
+    dynamicsRating: 6,
     icon: '🎤',
     iconImage: '/images/genres/pop.jpg',
     iconImagePosition: '50% 75%',
@@ -403,6 +588,16 @@ export const GENRES: GenreProfile[] = [
     id: 'lofi',
     name: 'Lo-Fi',
     description: 'Warm, degraded tones with tape character and vintage imperfections',
+    descriptionBullets: [
+      'Warm overdrive with rolled-off highs',
+      'Vibrato and chorus for tape warble',
+      'Tape-style delay and warm reverb',
+    ],
+    category: 'contemporary',
+    gainRating: 3,
+    ambienceRating: 6,
+    modulationRating: 7,
+    dynamicsRating: 4,
     icon: '📼',
     iconImage: '/images/genres/lo-fi.jpg',
     color: '#a78bfa',
@@ -431,6 +626,16 @@ export const GENRES: GenreProfile[] = [
     id: 'singer-songwriter',
     name: 'Singer-Songwriter',
     description: 'Intimate, acoustic-friendly tones that support vocals without overpowering',
+    descriptionBullets: [
+      'Clean compression for acoustic balance',
+      'Subtle reverb for intimate space',
+      'DI or preamp for acoustic guitar',
+    ],
+    category: 'contemporary',
+    gainRating: 1,
+    ambienceRating: 4,
+    modulationRating: 2,
+    dynamicsRating: 6,
     icon: '🎵',
     iconImage: '/images/genres/singer-songwriter.jpg',
     iconImagePosition: '30% 25%', // Show faces higher up and to the left
@@ -459,6 +664,16 @@ export const GENRES: GenreProfile[] = [
     id: 'indie-rock',
     name: 'Indie Rock',
     description: 'Raw, character-driven tones with creative effects and multiple gain stages',
+    descriptionBullets: [
+      'Character-driven overdrive and fuzz',
+      'Creative modulation choices',
+      'Tape or analog-style delays',
+    ],
+    category: 'rock-roots',
+    gainRating: 5,
+    ambienceRating: 5,
+    modulationRating: 5,
+    dynamicsRating: 4,
     icon: '🎸',
     iconImage: '/images/genres/indie-rock.jpg',
     color: '#fb923c',

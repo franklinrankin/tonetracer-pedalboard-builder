@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Review New Images (222)</title>
+  <style>
+    body {
+      background: #1a1a1a;
+      color: white;
+      font-family: system-ui, sans-serif;
+      padding: 20px;
+    }
+    h1 { text-align: center; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+    }
+    .card {
+      background: #2a2a2a;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .card img {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+      background: #333;
+      border-radius: 4px;
+    }
+    .card p {
+      margin: 8px 0 0;
+      font-size: 11px;
+      color: #aaa;
+      word-break: break-all;
+    }
+    .card.top-down {
+      border: 3px solid #22c55e;
+    }
+    .card.angled {
+      border: 3px solid #ef4444;
+    }
+    .controls {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #333;
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 100;
+    }
+    .controls button {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-topdown { background: #22c55e; color: white; }
+    .btn-angled { background: #ef4444; color: white; }
+    .btn-export { background: #3b82f6; color: white; }
+    .stats {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎸 Review NEW Images (222 refetched)</h1>
+  <p style="text-align: center; color: #888;">Click image → Press T (good) or A (bad). Export when done.</p>
+  
+  <div class="controls">
+    <strong>Selected:</strong> <span id="selected">None</span>
+    <button class="btn-topdown" onclick="markTopDown()">✅ Good (T)</button>
+    <button class="btn-angled" onclick="markAngled()">❌ Bad (A)</button>
+    <button class="btn-export" onclick="exportList()">📋 Export Good List</button>
+    <button class="btn-export" onclick="exportBadList()" style="background:#ef4444;margin-top:10px">📋 Export Bad List</button>
+    <div class="stats">
+      Good: <span id="topdown-count">0</span><br>
+      Bad: <span id="angled-count">0</span>
+    </div>
+  </div>
+  
+  <div class="grid" id="grid"></div>
+
+  <script>
+    // Only the 222 images that were refetched
+    const images = ["akai-analogcustom-reverb","ampeg-scrambler","analog-man-beano-boost","behringer-vd400","blackstar-lt-drive","boss-bf2-flanger","boss-dd3","boss-dd6","boss-dm2-delay","boss-ev30","boss-fv30h","boss-fv500h","boss-fv500l","boss-hm2-heavy-metal","boss-ph3","boss-rt20","boss-rv5","boss-slicer","boss-vb2-vibrato","boss-whammy-ricochet-clone","cali76-compressor","caline-10-band","caline-snake-bite","caroline-megabyte","catalinbread-naga-viper","chase-bliss-blooper","chase-bliss-condor","chase-bliss-mood","cmatmods-brownie","colorsound-power-boost","crowther-hotcake","dallas-arbiter-fuzz-face-germanium","dba-reverberation-machine","death-by-audio-echo-master","death-by-audio-fuzz-war","digitech-supernatural","digitech-timebender","digitech-whammy-5","dod-fx13-gonkulator","dr-scientist-reverberator","dsm-simplifier-dlx","dsm-simplifier","dunlop-535q","dunlop-cbm95","dunlop-crybaby-95q","dunlop-crybaby-gcb95","dunlop-crybaby-mini","dunlop-dvp3","dunlop-dvp4","dunlop-jh1d","earthquaker-cloven-hoof","earthquaker-hoof-reaper","earthquaker-rainbow-machine-synth","earthquaker-rainbow-machine","earthquaker-westwood","ehx-big-muff-triangle","ehx-big-muff","ehx-c9","ehx-deluxe-big-muff","ehx-electric-mistress-v1","ehx-enigma","ehx-good-vibes","ehx-green-russian-big-muff","ehx-knockout","ehx-memory-boy","ehx-memory-man-550tt","ehx-memory-toy","ehx-mole","ehx-nano-big-muff","ehx-nano-holy-grail","ehx-neo-clone","ehx-neo-mistress","ehx-pitchfork-plus","ehx-screaming-bird","ehx-silencer","ehx-small-clone","ehx-small-stone-v1","ehx-small-stone","ehx-soul-food","ehx-soul-preacher","ehx-triangle-big-muff","electro-harmonix-cathedral","electro-harmonix-memory-man-v1","emerson-paramount","empress-phaser","ernie-ball-mvp","ernie-ball-vp-jr-25k","ernie-ball-vp-jr","eventide-h9-max","fairfield-meet-maude","fender-63-reverb-pedal","fender-reverb-tank-6g15","fulltone-deja-vibe","fulltone-octafuzz","fulltone-plimsoul","fulltone-supa-trem","fulltone-tt2","gamechanger-plus","gfi-specular-tempus-delay","greer-southland","hotone-harmony","hotone-verb","hotone-volume-exp","ibanez-ad9-analog-delay","ibanez-ad9","irs-plasma-pedal","jhs-bender","jhs-little-black-buffer","jhs-panther-cub-v2","jhs-summing-amp","jhs-supreme","joyo-atmosphere","joyo-dyna-compressor","joyo-jeq-band","joyo-noise-gate","jrockett-archer-ikon","jrockett-archer","jrockett-boing","keeley-delay-workstation","keeley-omni-reverb","keeley-realizer","keeley-seafoam-plus","keeley-synth-1-synth","keeley-synth-1","keeley-tremolo","klon-centaur-gold","klon-ktr","kma-wurm","korg-pitchblack-advance","korg-pitchblack","lehle-d-loop","lehle-mono-volume","line6-verbzilla","lovepedal-eternity","mad-professor-snow-white","maxon-ad999","meris-hedra","mesa-flux-drive","mesa-throttle-box","mission-exp","mooer-d7","mooer-leveline","mooer-pitchbox","mooer-r7","mooer-radar","mooer-tender-octaver","moog-ep3","morley-2020-wah","morley-mini-wah","morley-pvo","mutron-bi-phase","mxr-carbon-copy-mini","mxr-distortion-plus-vintage","mxr-m193-gt-od","mxr-m78-badass-distortion","mxr-mc404-wah","neunaber-iconoclast","neunaber-wet","old-blood-black-fountain","old-blood-procession","orange-squeezer","origin-cali76-compact-deluxe","origin-cali76-stacked","pigtronix-disnortion","pigtronix-envelope-phaser","pigtronix-philosophers-tone","proco-fat-rat","red-panda-context-v2","roland-space-echo-re201","saturnworks-ab","seymour-duncan-vise-grip","shin-ei-fuzz-wah","snouse-blackbox2","sola-sound-tonebender-mk1","source-audio-dual-exp","source-audio-eq2","source-audio-lunar","source-audio-spectrum","source-audio-vertigo","strymon-nightsky","subdecay-prometheus-dlx","suhr-riot-mini","supro-drive","tc-alter-ego-2","tc-bodyrez","tc-corona-chorus","tc-echobrain","tc-hof-mini","tc-hof2","tc-hypergravity-mini","tc-mojomojo","tc-polytune-3-mini-noir","tc-polytune-3-noir","tc-polytune3-mini","tc-polytune3","tc-sentry","tc-skysurfer","tc-zeus-drive","tech21-fly-rig-5","tech21-sansamp-classic","two-notes-cab-m-plus","univox-super-fuzz","univox-univibe","valeton-coral-verb","vox-v845","vox-v847","walrus-arp87","walrus-contraband","walrus-d1-delay","walrus-d1","walrus-jupiter","walrus-luminary-v2","wampler-decibel","wampler-sovereign","wampler-triple-wreck","wilson-ten-spot-ii","xotic-ep-booster","xotic-sp-comp","xotic-xvp-250k","xvive-golden-brownie","zvex-woolly-mammoth"];
+    
+    const classifications = {};
+    let selectedId = null;
+    
+    const grid = document.getElementById('grid');
+    
+    images.forEach(id => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.id = 'card-' + id;
+      card.innerHTML = '<img src="/images/pedals/' + id + '.jpg" onerror="this.src=\'/images/pedals/' + id + '.png\'" onclick="selectImage(\'' + id + '\')"><p>' + id + '</p>';
+      grid.appendChild(card);
+    });
+    
+    function selectImage(id) {
+      document.querySelectorAll('.card').forEach(c => c.style.outline = 'none');
+      document.getElementById('card-' + id).style.outline = '3px solid #fff';
+      selectedId = id;
+      document.getElementById('selected').textContent = id;
+    }
+    
+    function markTopDown() {
+      if (!selectedId) return;
+      classifications[selectedId] = 'top-down';
+      document.getElementById('card-' + selectedId).className = 'card top-down';
+      updateStats();
+      selectNext();
+    }
+    
+    function markAngled() {
+      if (!selectedId) return;
+      classifications[selectedId] = 'angled';
+      document.getElementById('card-' + selectedId).className = 'card angled';
+      updateStats();
+      selectNext();
+    }
+    
+    function selectNext() {
+      const idx = images.indexOf(selectedId);
+      if (idx < images.length - 1) {
+        selectImage(images[idx + 1]);
+        document.getElementById('card-' + images[idx + 1]).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    
+    function updateStats() {
+      const topdown = Object.values(classifications).filter(v => v === 'top-down').length;
+      const angled = Object.values(classifications).filter(v => v === 'angled').length;
+      document.getElementById('topdown-count').textContent = topdown;
+      document.getElementById('angled-count').textContent = angled;
+    }
+    
+    function exportList() {
+      const ids = Object.entries(classifications)
+        .filter(([k, v]) => v === 'top-down')
+        .map(([k, v]) => k);
+      navigator.clipboard.writeText(ids.join('\n'));
+      alert('Copied ' + ids.length + ' GOOD pedal IDs to clipboard!');
+    }
+    
+    function exportBadList() {
+      const ids = Object.entries(classifications)
+        .filter(([k, v]) => v === 'angled')
+        .map(([k, v]) => k);
+      navigator.clipboard.writeText(ids.join('\n'));
+      alert('Copied ' + ids.length + ' BAD pedal IDs to clipboard!');
+    }
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '1' || e.key === 't' || e.key === 'T') markTopDown();
+      if (e.key === '2' || e.key === 'a' || e.key === 'A') markAngled();
+    });
+  </script>
+</body>
+</html>
+
+

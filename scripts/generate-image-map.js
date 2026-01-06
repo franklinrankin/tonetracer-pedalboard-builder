@@ -90,3 +90,4 @@ fs.writeFileSync(OUTPUT_FILE, tsContent);
 console.log(`✅ Generated ${OUTPUT_FILE}`);
 console.log(`   ${withImages} pedal images available`);
 
+
