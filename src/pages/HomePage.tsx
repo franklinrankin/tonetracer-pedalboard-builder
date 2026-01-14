@@ -9,9 +9,10 @@ interface HomePageProps {
   onSignIn: () => void;
   onSavedBoards?: () => void;
   onProfile?: () => void;
+  onPedalRequest?: () => void;
 }
 
-export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbout, onSignIn, onSavedBoards, onProfile }: HomePageProps) {
+export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbout, onSignIn, onSavedBoards, onProfile, onPedalRequest }: HomePageProps) {
   const options = [
     {
       id: 'build',
@@ -168,13 +169,13 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
           <Lightbulb className="w-4 h-4 group-hover:scale-110 transition-transform" />
           <span className="text-sm font-medium">Help Make Boardsie Better</span>
         </a>
-        <a
-          href="mailto:feedback@boardsie.com?subject=Pedal Request&body=Hi Boardsie team,%0A%0AI'd like to request the following pedal be added:%0A%0ABrand: %0AModel: %0A%0AThanks!"
+        <button
+          onClick={onPedalRequest}
           className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600/20 to-teal-600/20 border border-emerald-500/30 text-emerald-300 hover:border-emerald-400/50 hover:from-emerald-600/30 hover:to-teal-600/30 hover:text-emerald-200 transition-all duration-300"
         >
           <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
           <span className="text-sm font-medium">Request a Pedal</span>
-        </a>
+        </button>
       </div>
       </div>
     </div>

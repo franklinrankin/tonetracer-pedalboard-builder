@@ -8,6 +8,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { PedalCatalog } from './components/PedalCatalog';
 import { AuthModal } from './components/AuthModal';
 import { UserMenu } from './components/UserMenu';
+import { PedalRequestModal } from './components/PedalRequestModal';
 import { getProBoardById, ProBoard } from './data/proBoards';
 import { PEDALS } from './data/pedals';
 import { sortBySignalChain } from './utils/signalChain';
@@ -79,6 +80,7 @@ function AppContent() {
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
   const [selectedProBoard, setSelectedProBoard] = useState<ProBoard | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showPedalRequestModal, setShowPedalRequestModal] = useState(false);
   const [savedBoards, setSavedBoards] = useState<SavedBoard[]>(() => loadSavedBoards());
   const [currentSavedBoardId, setCurrentSavedBoardId] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<FavoritesMap>(() => loadFavorites());
@@ -366,11 +368,16 @@ function AppContent() {
             onSignIn={() => setShowAuthModal(true)}
             onSavedBoards={handleSavedBoards}
             onProfile={handleProfile}
+            onPedalRequest={() => setShowPedalRequestModal(true)}
           />
         </div>
         <AuthModal 
           isOpen={showAuthModal} 
           onClose={() => setShowAuthModal(false)} 
+        />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
         />
       </div>
     );
@@ -386,6 +393,7 @@ function AppContent() {
             onSignInClick={() => setShowAuthModal(true)} 
             onSavedBoards={handleSavedBoards}
             onProfile={handleProfile}
+            onPedalRequest={() => setShowPedalRequestModal(true)}
           />
         </div>
         <ProfilePage
@@ -396,6 +404,10 @@ function AppContent() {
         <AuthModal 
           isOpen={showAuthModal} 
           onClose={() => setShowAuthModal(false)} 
+        />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
         />
       </div>
     );
@@ -413,6 +425,7 @@ function AppContent() {
             onSignInClick={() => setShowAuthModal(true)} 
             onSavedBoards={handleSavedBoards}
             onProfile={handleProfile}
+            onPedalRequest={() => setShowPedalRequestModal(true)}
           />
         </div>
         <div className="relative">
@@ -427,6 +440,10 @@ function AppContent() {
         <AuthModal 
           isOpen={showAuthModal} 
           onClose={() => setShowAuthModal(false)} 
+        />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
         />
       </div>
     );
@@ -444,6 +461,7 @@ function AppContent() {
             onSignInClick={() => setShowAuthModal(true)} 
             onSavedBoards={handleSavedBoards}
             onProfile={handleProfile}
+            onPedalRequest={() => setShowPedalRequestModal(true)}
           />
         </div>
         <div className="relative">
@@ -455,6 +473,10 @@ function AppContent() {
         <AuthModal 
           isOpen={showAuthModal} 
           onClose={() => setShowAuthModal(false)} 
+        />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
         />
       </div>
     );
@@ -491,6 +513,7 @@ function AppContent() {
                   onSignInClick={() => setShowAuthModal(true)} 
                   onSavedBoards={handleSavedBoards}
                   onProfile={handleProfile}
+                  onPedalRequest={() => setShowPedalRequestModal(true)}
                 />
               </div>
             </div>
@@ -503,6 +526,10 @@ function AppContent() {
         <AuthModal 
           isOpen={showAuthModal} 
           onClose={() => setShowAuthModal(false)} 
+        />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
         />
       </div>
     );
@@ -542,6 +569,7 @@ function AppContent() {
                   onSignInClick={() => setShowAuthModal(true)} 
                   onSavedBoards={handleSavedBoards}
                   onProfile={handleProfile}
+                  onPedalRequest={() => setShowPedalRequestModal(true)}
                 />
               </div>
             </div>
@@ -557,6 +585,10 @@ function AppContent() {
           isOpen={showAuthModal} 
           onClose={() => setShowAuthModal(false)} 
         />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
+        />
       </div>
     );
   }
@@ -571,6 +603,7 @@ function AppContent() {
       onSignInClick={() => setShowAuthModal(true)}
       onSavedBoards={handleSavedBoards}
       onProfile={handleProfile}
+      onPedalRequest={() => setShowPedalRequestModal(true)}
     >
       <div className="noise-overlay" />
       <div className="fixed inset-0 bg-gradient-to-br from-board-accent/5 via-transparent to-board-highlight/5 pointer-events-none" />
@@ -580,6 +613,10 @@ function AppContent() {
       <AuthModal 
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)} 
+      />
+      <PedalRequestModal
+        isOpen={showPedalRequestModal}
+        onClose={() => setShowPedalRequestModal(false)}
       />
     </WizardLayout>
   );

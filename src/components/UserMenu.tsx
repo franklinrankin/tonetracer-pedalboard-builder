@@ -6,9 +6,10 @@ interface UserMenuProps {
   onSignInClick: () => void;
   onSavedBoards?: () => void;
   onProfile?: () => void;
+  onPedalRequest?: () => void;
 }
 
-export function UserMenu({ onSignInClick, onSavedBoards, onProfile }: UserMenuProps) {
+export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalRequest }: UserMenuProps) {
   const { user, signOut, loading, isConfigured } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -67,14 +68,16 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile }: UserMenuPr
                 <Lightbulb className="w-4 h-4" />
                 Help Make Boardsie Better
               </a>
-              <a
-                href="mailto:feedback@boardsie.com?subject=Pedal Request&body=Hi Boardsie team,%0A%0AI'd like to request the following pedal be added:%0A%0ABrand: %0AModel: %0A%0AThanks!"
-                onClick={() => setIsOpen(false)}
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  onPedalRequest?.();
+                }}
                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 Request a Pedal
-              </a>
+              </button>
             </div>
           </div>
         )}
@@ -161,14 +164,16 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile }: UserMenuPr
               <Lightbulb className="w-4 h-4" />
               Help Make Boardsie Better
             </a>
-            <a
-              href="mailto:feedback@boardsie.com?subject=Pedal Request&body=Hi Boardsie team,%0A%0AI'd like to request the following pedal be added:%0A%0ABrand: %0AModel: %0A%0AThanks!"
-              onClick={() => setIsOpen(false)}
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                onPedalRequest?.();
+              }}
               className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
             >
               <Plus className="w-4 h-4" />
               Request a Pedal
-            </a>
+            </button>
           </div>
 
           {/* Sign Out */}

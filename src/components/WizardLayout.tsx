@@ -19,6 +19,7 @@ interface WizardLayoutProps {
   onSignInClick?: () => void;
   onSavedBoards?: () => void;
   onProfile?: () => void;
+  onPedalRequest?: () => void;
   children: ReactNode;
 }
 
@@ -29,7 +30,7 @@ const STEPS: { id: WizardStep; label: string; shortLabel: string; icon: ReactNod
   { id: 'review', label: 'Review', shortLabel: 'Review', icon: <ListChecks className="w-4 h-4" /> },
 ];
 
-export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, onSignInClick, onSavedBoards, onProfile, children }: WizardLayoutProps) {
+export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, onSignInClick, onSavedBoards, onProfile, onPedalRequest, children }: WizardLayoutProps) {
   const { state } = useBoard();
   const { selectedGenres, board, totalCost, sectionScores } = state;
   const [showAbout, setShowAbout] = useState(false);
@@ -197,6 +198,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                   onSignInClick={onSignInClick || (() => {})} 
                   onSavedBoards={onSavedBoards}
                   onProfile={onProfile}
+                  onPedalRequest={onPedalRequest}
                 />
               </div>
               
