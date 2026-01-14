@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { BoardProvider, useBoard } from './context/BoardContext';
+import { AuthProvider } from './context/AuthContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
 import { GenrePage, ConstraintsPage, BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
 import { PedalCatalog } from './components/PedalCatalog';
+import { AuthModal } from './components/AuthModal';
 import { getProBoardById, ProBoard } from './data/proBoards';
 import { PEDALS } from './data/pedals';
 import { sortBySignalChain } from './utils/signalChain';
@@ -13,6 +15,7 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState<AppPage>('home');
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
   const [selectedProBoard, setSelectedProBoard] = useState<ProBoard | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { dispatch, state } = useBoard();
   
   const handleStepChange = (step: WizardStep) => {
@@ -210,8 +213,13 @@ function AppContent() {
             onBrowseProBoards={handleBrowseProBoards}
             onPedalIndex={handlePedalIndex}
             onAbout={handleAbout}
+            onSignIn={() => setShowAuthModal(true)}
           />
         </div>
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
       </div>
     );
   }
@@ -325,9 +333,11 @@ function AppContent() {
 
 function App() {
   return (
-    <BoardProvider>
-      <AppContent />
-    </BoardProvider>
+    <AuthProvider>
+      <BoardProvider>
+        <AppContent />
+      </BoardProvider>
+    </AuthProvider>
   );
 }
 

@@ -1,13 +1,15 @@
 import { Sliders, Users, BookOpen, HelpCircle } from 'lucide-react';
+import { UserMenu } from '../components/UserMenu';
 
 interface HomePageProps {
   onBuildBoard: () => void;
   onBrowseProBoards: () => void;
   onPedalIndex: () => void;
   onAbout: () => void;
+  onSignIn: () => void;
 }
 
-export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbout }: HomePageProps) {
+export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbout, onSignIn }: HomePageProps) {
   const options = [
     {
       id: 'build',
@@ -65,6 +67,11 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
       />
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/50" />
+      
+      {/* User Menu - Top Right */}
+      <div className="absolute top-4 right-4 z-20">
+        <UserMenu onSignInClick={onSignIn} />
+      </div>
       
       {/* Content wrapper */}
       <div className="relative z-10 flex flex-col items-center justify-center w-full">
