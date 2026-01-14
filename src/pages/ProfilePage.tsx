@@ -13,29 +13,14 @@ interface ProfilePageProps {
   onUpdateFavorites: (favorites: Record<string, string | null>) => void;
 }
 
-// All pedal types organized by category
+// Types with expandable subtypes (Gain, Modulation, Dynamics, Filter, Utility)
 const TYPE_OPTIONS: { type: string; category: Category; icon: string }[] = [
-  // Utility
-  { type: 'Tuner', category: 'utility', icon: '🎯' },
-  { type: 'Looper', category: 'utility', icon: '🔄' },
-  // Filter
-  { type: 'Wah', category: 'filter', icon: '👄' },
-  { type: 'Envelope Filter', category: 'filter', icon: '🎺' },
-  // Dynamics
-  { type: 'Compressor', category: 'dynamics', icon: '🗜️' },
-  { type: 'Noise Gate', category: 'dynamics', icon: '🚪' },
-  // Pitch
-  { type: 'Octave', category: 'pitch', icon: '🎹' },
-  { type: 'Pitch Shifter', category: 'pitch', icon: '↕️' },
-  { type: 'Harmonizer', category: 'pitch', icon: '🎶' },
-  // Gain
+  // Gain types
   { type: 'Boost', category: 'gain', icon: '📈' },
   { type: 'Overdrive', category: 'gain', icon: '🔥' },
   { type: 'Distortion', category: 'gain', icon: '⚡' },
   { type: 'Fuzz', category: 'gain', icon: '🐝' },
-  // EQ
-  { type: 'EQ', category: 'eq', icon: '📊' },
-  // Modulation
+  // Modulation types
   { type: 'Chorus', category: 'modulation', icon: '🌊' },
   { type: 'Phaser', category: 'modulation', icon: '🌀' },
   { type: 'Flanger', category: 'modulation', icon: '✈️' },
@@ -43,17 +28,24 @@ const TYPE_OPTIONS: { type: string; category: Category; icon: string }[] = [
   { type: 'Vibrato', category: 'modulation', icon: '📳' },
   { type: 'Rotary', category: 'modulation', icon: '🎡' },
   { type: 'Uni-Vibe', category: 'modulation', icon: '☀️' },
-  // Volume
-  { type: 'Volume', category: 'volume', icon: '🎚️' },
-  // Delay
-  { type: 'Analog Delay', category: 'delay', icon: '📼' },
-  { type: 'Digital Delay', category: 'delay', icon: '💾' },
-  { type: 'Tape Delay', category: 'delay', icon: '🎞️' },
-  // Reverb
-  { type: 'Spring Reverb', category: 'reverb', icon: '🌿' },
-  { type: 'Hall Reverb', category: 'reverb', icon: '🏛️' },
-  { type: 'Plate Reverb', category: 'reverb', icon: '🍽️' },
-  { type: 'Ambient Reverb', category: 'reverb', icon: '🌌' },
+  // Dynamics types
+  { type: 'Compressor', category: 'dynamics', icon: '🗜️' },
+  { type: 'Noise Gate', category: 'dynamics', icon: '🚪' },
+  // Filter types
+  { type: 'Wah', category: 'filter', icon: '👄' },
+  { type: 'Envelope Filter', category: 'filter', icon: '🎺' },
+  // Utility types
+  { type: 'Tuner', category: 'utility', icon: '🎯' },
+  { type: 'Looper', category: 'utility', icon: '🔄' },
+];
+
+// Single-selection categories (no subtypes - pick one from whole category)
+const SINGLE_CATEGORIES: { category: Category; name: string; icon: string }[] = [
+  { category: 'delay', name: 'Delay', icon: '📼' },
+  { category: 'reverb', name: 'Reverb', icon: '🏛️' },
+  { category: 'pitch', name: 'Pitch', icon: '🎹' },
+  { category: 'eq', name: 'EQ', icon: '📊' },
+  { category: 'volume', name: 'Volume', icon: '🎚️' },
 ];
 
 // Map type names to actual pedal subtypes in database
@@ -63,14 +55,10 @@ const TYPE_TO_SUBTYPES: Record<string, string[]> = {
   'Envelope Filter': ['Envelope', 'Auto-Wah'],
   'Compressor': ['Compressor'],
   'Noise Gate': ['Gate', 'Noise Gate'],
-  'Octave': ['Octave'],
-  'Pitch Shifter': ['Pitch', 'Shifter', 'Whammy'],
-  'Harmonizer': ['Harmonizer'],
   'Boost': ['Boost'],
   'Overdrive': ['Overdrive'],
   'Distortion': ['Distortion'],
   'Fuzz': ['Fuzz'],
-  'EQ': ['EQ', 'Graphic', 'Parametric'],
   'Chorus': ['Chorus'],
   'Phaser': ['Phaser'],
   'Flanger': ['Flanger'],
@@ -78,30 +66,20 @@ const TYPE_TO_SUBTYPES: Record<string, string[]> = {
   'Vibrato': ['Vibrato'],
   'Rotary': ['Rotary'],
   'Uni-Vibe': ['Uni-Vibe', 'Vibe'],
-  'Analog Delay': ['Analog', 'Analog Delay'],
-  'Digital Delay': ['Digital', 'Digital Delay', 'Multi'],
-  'Tape Delay': ['Tape', 'Tape Delay'],
-  'Spring Reverb': ['Spring'],
-  'Hall Reverb': ['Hall'],
-  'Plate Reverb': ['Plate'],
-  'Ambient Reverb': ['Ambient', 'Shimmer'],
-  'Volume': ['Volume', 'Expression'],
   'Looper': ['Looper'],
 };
 
-// Group types by category for display
+// Categories with expandable types
 const CATEGORIES_WITH_TYPES: { category: Category; name: string; icon: string; types: typeof TYPE_OPTIONS }[] = [
   { category: 'gain', name: 'Gain', icon: '🔥', types: TYPE_OPTIONS.filter(t => t.category === 'gain') },
   { category: 'modulation', name: 'Modulation', icon: '🌀', types: TYPE_OPTIONS.filter(t => t.category === 'modulation') },
-  { category: 'delay', name: 'Delay', icon: '📼', types: TYPE_OPTIONS.filter(t => t.category === 'delay') },
-  { category: 'reverb', name: 'Reverb', icon: '🏛️', types: TYPE_OPTIONS.filter(t => t.category === 'reverb') },
   { category: 'dynamics', name: 'Dynamics', icon: '🗜️', types: TYPE_OPTIONS.filter(t => t.category === 'dynamics') },
   { category: 'filter', name: 'Filter', icon: '👄', types: TYPE_OPTIONS.filter(t => t.category === 'filter') },
-  { category: 'pitch', name: 'Pitch', icon: '🎹', types: TYPE_OPTIONS.filter(t => t.category === 'pitch') },
-  { category: 'eq', name: 'EQ', icon: '📊', types: TYPE_OPTIONS.filter(t => t.category === 'eq') },
-  { category: 'volume', name: 'Volume', icon: '🎚️', types: TYPE_OPTIONS.filter(t => t.category === 'volume') },
   { category: 'utility', name: 'Utility', icon: '🔧', types: TYPE_OPTIONS.filter(t => t.category === 'utility') },
 ];
+
+// Total number of selections possible
+const TOTAL_SELECTIONS = TYPE_OPTIONS.length + SINGLE_CATEGORIES.length;
 
 type SortOption = 'rating' | 'price-low' | 'price-high' | 'name';
 
@@ -110,7 +88,9 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
   const { state } = useBoard();
   const { allPedals } = state;
   
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  // Selection can be either a type (like "Overdrive") or a category (like "delay")
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [selectionMode, setSelectionMode] = useState<'type' | 'category' | null>(null);
   const [expandedCategories, setExpandedCategories] = useState<Set<Category>>(new Set(['gain', 'modulation']));
   const [sortOption, setSortOption] = useState<SortOption>('rating');
   const [searchQuery, setSearchQuery] = useState('');
@@ -119,32 +99,52 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
   
   const username = user?.user_metadata?.username || user?.email?.split('@')[0] || 'User';
   
-  const selectedTypeInfo = TYPE_OPTIONS.find(t => t.type === selectedType);
+  const selectedTypeInfo = selectionMode === 'type' ? TYPE_OPTIONS.find(t => t.type === selectedKey) : null;
+  const selectedCategoryInfo = selectionMode === 'category' ? SINGLE_CATEGORIES.find(c => c.category === selectedKey) : null;
   
-  // Get pedals for selected type
-  const pedalsForType = useMemo(() => {
-    if (!selectedType || !selectedTypeInfo) return [];
+  // Get pedals for selected type or category
+  const pedalsForSelection = useMemo(() => {
+    if (!selectedKey) return [];
     
-    const subtypes = TYPE_TO_SUBTYPES[selectedType] || [selectedType];
     const searchLower = searchQuery.toLowerCase().trim();
     
-    let filtered = allPedals.filter(p => {
-      // Match by subtype or category
-      const matchesType = subtypes.includes(p.subtype || '') || 
-        (p.category === selectedTypeInfo.category && !TYPE_TO_SUBTYPES[selectedType]);
-      
-      if (!matchesType) return false;
-      
-      if (searchLower) {
-        const matchesSearch = 
-          p.brand.toLowerCase().includes(searchLower) ||
-          p.model.toLowerCase().includes(searchLower) ||
-          (p.description && p.description.toLowerCase().includes(searchLower));
-        if (!matchesSearch) return false;
-      }
-      
-      return true;
-    });
+    let filtered: PedalWithStatus[] = [];
+    
+    if (selectionMode === 'type' && selectedTypeInfo) {
+      // Filter by type subtypes
+      const subtypes = TYPE_TO_SUBTYPES[selectedKey] || [selectedKey];
+      filtered = allPedals.filter(p => {
+        const matchesType = subtypes.includes(p.subtype || '') || 
+          (p.category === selectedTypeInfo.category && !TYPE_TO_SUBTYPES[selectedKey]);
+        
+        if (!matchesType) return false;
+        
+        if (searchLower) {
+          const matchesSearch = 
+            p.brand.toLowerCase().includes(searchLower) ||
+            p.model.toLowerCase().includes(searchLower) ||
+            (p.description && p.description.toLowerCase().includes(searchLower));
+          if (!matchesSearch) return false;
+        }
+        
+        return true;
+      });
+    } else if (selectionMode === 'category' && selectedCategoryInfo) {
+      // Filter by entire category
+      filtered = allPedals.filter(p => {
+        if (p.category !== selectedCategoryInfo.category) return false;
+        
+        if (searchLower) {
+          const matchesSearch = 
+            p.brand.toLowerCase().includes(searchLower) ||
+            p.model.toLowerCase().includes(searchLower) ||
+            (p.description && p.description.toLowerCase().includes(searchLower));
+          if (!matchesSearch) return false;
+        }
+        
+        return true;
+      });
+    }
     
     // Sort
     switch (sortOption) {
@@ -163,7 +163,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
     }
     
     // Pin selected favorite to top
-    const favoriteId = localFavorites[selectedType];
+    const favoriteId = localFavorites[selectedKey];
     if (favoriteId) {
       const favIndex = filtered.findIndex(p => p.id === favoriteId);
       if (favIndex > 0) {
@@ -173,21 +173,45 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
     }
     
     return filtered;
-  }, [selectedType, selectedTypeInfo, allPedals, sortOption, searchQuery, localFavorites]);
+  }, [selectedKey, selectionMode, selectedTypeInfo, selectedCategoryInfo, allPedals, sortOption, searchQuery, localFavorites]);
   
   const handleSelectPedal = (pedal: PedalWithStatus) => {
-    if (!selectedType) return;
+    if (!selectedKey) return;
     
     setLocalFavorites(prev => {
       const newFavs = { ...prev };
       // Toggle: if clicking same pedal, deselect
-      if (newFavs[selectedType] === pedal.id) {
-        newFavs[selectedType] = null;
+      if (newFavs[selectedKey] === pedal.id) {
+        newFavs[selectedKey] = null;
       } else {
-        newFavs[selectedType] = pedal.id;
+        newFavs[selectedKey] = pedal.id;
       }
       return newFavs;
     });
+  };
+  
+  const handleSelectType = (type: string) => {
+    if (selectedKey === type && selectionMode === 'type') {
+      setSelectedKey(null);
+      setSelectionMode(null);
+    } else {
+      setSelectedKey(type);
+      setSelectionMode('type');
+    }
+    setSearchQuery('');
+    setHoveredPedal(null);
+  };
+  
+  const handleSelectCategory = (category: Category) => {
+    if (selectedKey === category && selectionMode === 'category') {
+      setSelectedKey(null);
+      setSelectionMode(null);
+    } else {
+      setSelectedKey(category);
+      setSelectionMode('category');
+    }
+    setSearchQuery('');
+    setHoveredPedal(null);
   };
   
   const handleSave = () => {
@@ -238,7 +262,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                     {username}'s Favorites
                   </h1>
                   <p className="text-xs text-zinc-500">
-                    {favoritesCount} of {TYPE_OPTIONS.length} types selected
+                    {favoritesCount} of {TOTAL_SELECTIONS} selected
                   </p>
                 </div>
               </div>
@@ -260,7 +284,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
             {/* LEFT COLUMN - Category Slots */}
             <div className="space-y-2">
             <h2 className="text-sm font-medium text-zinc-400 mb-3">
-              Choose Your Favorite From Each Type ({favoritesCount}/{TYPE_OPTIONS.length})
+              Choose Your Favorites ({favoritesCount}/{TOTAL_SELECTIONS})
             </h2>
             
             <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
@@ -299,18 +323,14 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                     {isExpanded && (
                       <div className="border-t border-board-border">
                         {cat.types.map((typeOpt) => {
-                          const isSelected = selectedType === typeOpt.type;
+                          const isSelected = selectedKey === typeOpt.type && selectionMode === 'type';
                           const favoritePedal = getSelectedPedalForType(typeOpt.type);
                           const hasFavorite = !!favoritePedal;
                           
                           return (
                             <button
                               key={typeOpt.type}
-                              onClick={() => {
-                                setSelectedType(typeOpt.type === selectedType ? null : typeOpt.type);
-                                setSearchQuery('');
-                                setHoveredPedal(null);
-                              }}
+                              onClick={() => handleSelectType(typeOpt.type)}
                               className={`w-full p-2.5 pl-6 flex items-center gap-3 text-left transition-colors ${
                                 isSelected 
                                   ? 'bg-board-accent/20 border-l-2 border-board-accent' 
@@ -339,18 +359,67 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                   </div>
                 );
               })}
+              
+              {/* Single Categories (no subtypes) */}
+              <div className="mt-4 pt-4 border-t border-board-border">
+                <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2 px-1">Pick One From Each</p>
+                {SINGLE_CATEGORIES.map((cat) => {
+                  const categoryInfo = CATEGORY_INFO[cat.category];
+                  const isSelected = selectedKey === cat.category && selectionMode === 'category';
+                  const favoritePedal = getSelectedPedalForType(cat.category);
+                  const hasFavorite = !!favoritePedal;
+                  
+                  return (
+                    <button
+                      key={cat.category}
+                      onClick={() => handleSelectCategory(cat.category)}
+                      className={`w-full rounded-xl border transition-all p-3 flex items-center gap-3 text-left mb-2 ${
+                        isSelected 
+                          ? 'border-board-accent bg-board-accent/10' 
+                          : hasFavorite
+                            ? 'border-green-600/50 bg-board-surface'
+                            : 'border-board-border bg-board-surface hover:border-zinc-600'
+                      }`}
+                    >
+                      <div 
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${
+                          hasFavorite ? 'bg-green-600/20' : ''
+                        }`}
+                        style={hasFavorite ? {} : { backgroundColor: `${categoryInfo?.color}20` }}
+                      >
+                        {cat.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-white">{cat.name}</div>
+                        {hasFavorite ? (
+                          <div className="text-xs text-green-400 truncate">
+                            ⭐ {favoritePedal.brand} {favoritePedal.model}
+                          </div>
+                        ) : (
+                          <div className="text-xs text-zinc-500">Tap to select your favorite</div>
+                        )}
+                      </div>
+                      {hasFavorite && (
+                        <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
             
           {/* RIGHT COLUMN - Pedal Selection */}
           <div className="bg-board-surface border border-board-border rounded-xl p-4 min-h-[400px] flex flex-col">
-            {selectedType && selectedTypeInfo ? (
+            {selectedKey && (selectedTypeInfo || selectedCategoryInfo) ? (
               <>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">{selectedTypeInfo.icon}</span>
+                    <span className="text-xl">
+                      {selectedTypeInfo?.icon || selectedCategoryInfo?.icon}
+                    </span>
                     <h2 className="text-lg font-medium text-white">
-                      Favorite {selectedType}
+                      Favorite {selectionMode === 'type' ? selectedKey : selectedCategoryInfo?.name}
                     </h2>
                   </div>
                   
@@ -390,10 +459,10 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                   )}
                 </div>
                 
-                {pedalsForType.length > 0 ? (
+                {pedalsForSelection.length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 flex-1 overflow-y-auto max-h-[calc(100vh-300px)]">
-                    {pedalsForType.slice(0, 50).map(pedal => {
-                      const isSelected = localFavorites[selectedType] === pedal.id;
+                    {pedalsForSelection.slice(0, 50).map(pedal => {
+                      const isSelected = localFavorites[selectedKey] === pedal.id;
                       const categoryInfo = CATEGORY_INFO[pedal.category];
                       const ratingLabel = getRatingLabel(pedal.category, pedal.categoryRating);
                         
@@ -492,7 +561,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                     </div>
                 ) : (
                   <div className="flex items-center justify-center h-48 text-zinc-500">
-                    No {selectedType} pedals found
+                    No {selectionMode === 'type' ? selectedKey : selectedCategoryInfo?.name} pedals found
                   </div>
                 )}
               </>
@@ -500,7 +569,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
               <div className="flex flex-col items-center justify-center h-full text-zinc-500">
                 <div className="text-4xl mb-3">👈</div>
                 <p className="text-center">
-                  Select a type on the left<br />
+                  Select a type or category<br />
                   to choose your favorite pedal
                 </p>
               </div>
