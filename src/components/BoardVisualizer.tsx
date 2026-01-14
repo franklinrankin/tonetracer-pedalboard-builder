@@ -53,13 +53,33 @@ export function BoardVisualizer() {
     }
   }, [boardWidthMm]);
 
+  // Check if board has custom layout positions (e.g., pro boards)
+  const hasCustomLayout = board.slots.some(s => s.positionX !== undefined && s.positionY !== undefined);
+
   // Initialize pedal positions in signal chain order (right to left, packed toward bottom)
   // Uses actual pedal dimensions to prevent overlaps
+  // OR uses custom positions if provided (for pro boards)
   useEffect(() => {
     const newPositions = new Map<string, PedalPosition>();
     const pedalCount = board.slots.length;
     
     if (pedalCount === 0) {
+      setPositions(newPositions);
+      return;
+    }
+    
+    // If we have custom layout positions (pro boards), use those
+    if (hasCustomLayout) {
+      board.slots.forEach((slot) => {
+        if (slot.positionX !== undefined && slot.positionY !== undefined) {
+          newPositions.set(slot.pedal.id, {
+            id: slot.pedal.id,
+            x: slot.positionX,
+            y: slot.positionY,
+            rotation: (slot.rotation as 0 | 90 | 180 | 270) || 0,
+          });
+        }
+      });
       setPositions(newPositions);
       return;
     }
@@ -143,7 +163,7 @@ export function BoardVisualizer() {
     });
     
     setPositions(newPositions);
-  }, [board.slots.length, boardWidthMm, boardDepthMm]);
+  }, [board.slots.length, boardWidthMm, boardDepthMm, hasCustomLayout]);
 
   // Get jack positions based on rotation (right-to-left flow: input on right, output on left)
   // All jacks are on the sides for simplicity
@@ -901,6 +921,14 @@ export function BoardVisualizer() {
                           </span>
                           <h3 className="text-white font-bold text-sm">{slot.pedal.brand}</h3>
                           <h4 className="text-white/90 font-semibold text-base">{slot.pedal.model}</h4>
+                        </div>
+                        
+                        {/* Rating */}
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-board-muted text-xs">Rating:</span>
+                          <span className="text-sm font-semibold" style={{ color: categoryColor }}>
+                            {slot.pedal.categoryRating}/10
+                          </span>
                         </div>
                         
                         {/* Description */}

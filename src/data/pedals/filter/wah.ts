@@ -4,6 +4,31 @@ const inToMm = (inches: number) => Math.round(inches * 25.4);
 
 // WAH & EXPRESSION FILTER PEDALS (~30 pedals)
 export const WAH_PEDALS: Pedal[] = [
+  // ==================== FIXED WAH / Q FILTER ====================
+  {
+    id: 'dunlop-qzone',
+    brand: 'Dunlop',
+    model: 'Cry Baby Q Zone',
+    category: 'filter',
+    subtype: 'Wah',
+    categoryRating: 5,
+    widthMm: inToMm(2.4),
+    depthMm: inToMm(4.4),
+    heightMm: inToMm(2.1),
+    enclosure: '1590B',
+    topJacks: false,
+    signal: 'mono',
+    buffered: false,
+    bypassType: 'true',
+    circuitType: 'analog',
+    powerType: '9V DC',
+    voltage: 9,
+    currentMa: 1,
+    centerNegative: true,
+    msrp: 89,
+    reverbPrice: 60,
+    description: 'Fixed wah/cocked wah pedal. Slash signature sound.',
+  },
   // ==================== CLASSIC WAH ====================
   {
     id: 'dunlop-crybaby-gcb95',

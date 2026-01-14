@@ -42,7 +42,7 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
   
   return (
     <div className="h-full p-3 lg:p-4 overflow-hidden">
-      {/* Header - No music note */}
+      {/* Header */}
       <div className="max-w-4xl mx-auto mb-4 text-center">
         <h1 className="text-3xl font-bold text-white mb-2">
           What style are you going for?
@@ -90,7 +90,7 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
       {/* Category Grid - Uniform Size Cards with Background Images */}
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {/* Create Your Own Card - Image with sliding glass hover */}
+          {/* Create Your Own Card */}
           <button
             onClick={onCreateOwn}
             className="relative h-64 p-4 rounded-xl border-2 border-dashed border-board-accent/50 text-left transition-all hover:scale-[1.02] hover:border-transparent overflow-hidden group"

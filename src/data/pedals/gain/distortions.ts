@@ -59,7 +59,7 @@ export const DISTORTION_PEDALS: Pedal[] = [
     model: 'DS-2 Turbo Distortion',
     category: 'gain',
     subtype: 'Distortion',
-    categoryRating: 7,
+    categoryRating: 9,
     widthMm: inToMm(2.9),
     depthMm: inToMm(5.1),
     heightMm: inToMm(2.4),

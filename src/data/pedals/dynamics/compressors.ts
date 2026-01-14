@@ -679,6 +679,31 @@ export const COMPRESSOR_PEDALS: Pedal[] = [
     reverbPrice: 165,
     description: 'Deep editor compressor.',
   },
+  // ==================== PRS COMPRESSORS ====================
+  {
+    id: 'prs-mary-cries',
+    brand: 'PRS',
+    model: 'Mary Cries',
+    category: 'dynamics',
+    subtype: 'Compressor',
+    categoryRating: 6,
+    widthMm: inToMm(2.6),
+    depthMm: inToMm(4.8),
+    heightMm: inToMm(2.2),
+    enclosure: '1590B',
+    topJacks: false,
+    signal: 'mono',
+    buffered: false,
+    bypassType: 'true',
+    circuitType: 'analog',
+    powerType: '9V DC',
+    voltage: 9,
+    currentMa: 5,
+    centerNegative: true,
+    msrp: 199,
+    reverbPrice: 170,
+    description: 'Optical compressor. John Mayer signature tone.',
+  },
 ];
 
 export default COMPRESSOR_PEDALS;

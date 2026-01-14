@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid, GripVertical, ArrowUp, ArrowDown } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, getTopGenreMatches, GenreMatch } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
@@ -283,7 +283,7 @@ function PowerSupplyRecommendations({
 }
 
 export function ReviewPage() {
-  const { state } = useBoard();
+  const { state, dispatch } = useBoard();
   const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres } = state;
   const [showRecommendations, setShowRecommendations] = useState(false);
   
@@ -541,27 +541,86 @@ export function ReviewPage() {
         </div>
         
         {/* Section Scores & Tags - Full width section */}
+        {/* Achievement Badges */}
         {sectionScores.length > 0 && (
-          <div className="mb-8 bg-board-surface border border-board-border rounded-xl overflow-hidden">
-            <div className="p-3 border-b border-board-border flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-board-accent" />
-              <h3 className="text-sm font-semibold text-white">Section Scores & Tags</h3>
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center">
+                🏆
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">Your Achievements</h3>
+                <p className="text-xs text-zinc-500">Badges earned based on your pedal choices</p>
+              </div>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 divide-x divide-y divide-board-border">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
               {sectionScores.map(score => {
                 const catInfo = CATEGORY_INFO[score.category];
                 const percentage = (score.totalScore / score.maxScore) * 100;
+                const isHighScore = percentage >= 70;
                 return (
-                  <div key={score.category} className="p-3">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs font-medium text-white">{catInfo.displayName}</span>
-                      <span className="font-mono text-sm text-white">
-                        {score.totalScore}<span className="text-board-muted text-xs">/{score.maxScore}</span>
-                      </span>
+                  <div 
+                    key={score.category} 
+                    className={`relative p-4 rounded-xl border text-center transition-all hover:scale-105 ${
+                      isHighScore 
+                        ? 'bg-gradient-to-br from-board-surface to-board-elevated border-yellow-500/30' 
+                        : 'bg-board-surface border-board-border'
+                    }`}
+                    style={{
+                      boxShadow: isHighScore ? `0 0 20px ${catInfo.color}20` : undefined,
+                    }}
+                  >
+                    {isHighScore && (
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-xs shadow-lg">
+                        ⭐
+                      </div>
+                    )}
+                    
+                    {/* Category Icon */}
+                    <div 
+                      className="w-12 h-12 mx-auto mb-2 rounded-xl flex items-center justify-center text-2xl"
+                      style={{ backgroundColor: `${catInfo.color}20` }}
+                    >
+                      {score.category === 'gain' && '🔥'}
+                      {score.category === 'modulation' && '🌀'}
+                      {score.category === 'delay' && '📼'}
+                      {score.category === 'reverb' && '🌌'}
+                      {score.category === 'dynamics' && '🗜️'}
+                      {score.category === 'filter' && '👄'}
+                      {score.category === 'pitch' && '🎹'}
+                      {score.category === 'eq' && '📊'}
+                      {score.category === 'volume' && '🎚️'}
+                      {score.category === 'utility' && '🔧'}
+                      {score.category === 'amp' && '🎸'}
+                      {score.category === 'synth' && '🎛️'}
                     </div>
                     
-                    {/* Progress bar */}
-                    <div className="h-1.5 bg-board-dark rounded-full overflow-hidden mb-2">
+                    {/* Tag/Title */}
+                    <div 
+                      className="font-bold text-sm mb-1 capitalize"
+                      style={{ color: catInfo.color }}
+                    >
+                      "{score.tag}"
+                    </div>
+                    
+                    {/* Category */}
+                    <div className="text-xs text-zinc-500 mb-2">
+                      {catInfo.displayName}
+                    </div>
+                    
+                    {/* Score */}
+                    <div className="flex items-center justify-center gap-1">
+                      <div 
+                        className="text-lg font-bold"
+                        style={{ color: catInfo.color }}
+                      >
+                        {score.totalScore}
+                      </div>
+                      <div className="text-xs text-zinc-600">/{score.maxScore}</div>
+                    </div>
+                    
+                    {/* Mini progress bar */}
+                    <div className="h-1 bg-board-dark rounded-full overflow-hidden mt-2">
                       <div 
                         className="h-full rounded-full transition-all"
                         style={{ 
@@ -569,18 +628,6 @@ export function ReviewPage() {
                           backgroundColor: catInfo.color,
                         }}
                       />
-                    </div>
-                    
-                    {/* Tag */}
-                    <div 
-                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium"
-                      style={{ 
-                        backgroundColor: `${catInfo.color}20`,
-                        color: catInfo.color,
-                      }}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: catInfo.color }} />
-                      {score.tag}
                     </div>
                   </div>
                 );
@@ -593,14 +640,43 @@ export function ReviewPage() {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Pedal List */}
           <div className="lg:col-span-2 bg-board-surface border border-board-border rounded-xl overflow-hidden">
-            <div className="p-4 border-b border-board-border">
+            <div className="p-4 border-b border-board-border flex items-center justify-between">
               <h2 className="text-lg font-semibold text-white">Your Pedals</h2>
+              <span className="text-xs text-zinc-500">Drag to reorder signal chain</span>
             </div>
             <div className="divide-y divide-board-border">
               {board.slots.map((slot, index) => {
                 const catInfo = CATEGORY_INFO[slot.pedal.category];
                 return (
-                  <div key={slot.pedal.id} className="p-4 flex items-center gap-4">
+                  <div key={slot.pedal.id} className="p-4 flex items-center gap-3 group hover:bg-board-elevated/50 transition-colors">
+                    {/* Reorder buttons */}
+                    <div className="flex flex-col gap-0.5">
+                      <button
+                        onClick={() => dispatch({ type: 'MOVE_PEDAL', fromIndex: index, toIndex: index - 1 })}
+                        disabled={index === 0}
+                        className={`p-1 rounded transition-colors ${
+                          index === 0 
+                            ? 'text-zinc-700 cursor-not-allowed' 
+                            : 'text-zinc-500 hover:text-white hover:bg-board-accent/20'
+                        }`}
+                        title="Move up"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => dispatch({ type: 'MOVE_PEDAL', fromIndex: index, toIndex: index + 1 })}
+                        disabled={index === board.slots.length - 1}
+                        className={`p-1 rounded transition-colors ${
+                          index === board.slots.length - 1 
+                            ? 'text-zinc-700 cursor-not-allowed' 
+                            : 'text-zinc-500 hover:text-white hover:bg-board-accent/20'
+                        }`}
+                        title="Move down"
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    
                     <div className="w-8 h-8 rounded-lg bg-board-elevated flex items-center justify-center text-sm font-bold text-board-muted">
                       {index + 1}
                     </div>

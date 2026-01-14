@@ -111,8 +111,9 @@ export interface BoardConstraints {
 
 export interface BoardSlot {
   pedal: Pedal;
-  positionX?: number;
-  positionY?: number;
+  positionX?: number;  // percentage from left (0-100)
+  positionY?: number;  // percentage from top (0-100)
+  rotation?: number;   // degrees
 }
 
 export interface SectionScore {
@@ -123,11 +124,29 @@ export interface SectionScore {
   pedals: Pedal[];
 }
 
+// Type slot represents a pedal TYPE (not a specific pedal) for the build flow
+export interface TypeSlot {
+  type: string; // e.g., "Tuner", "Overdrive", "Delay"
+  category: Category;
+  subtypes: string[]; // Actual subtypes to search for in pedal database
+}
+
+// Build slot for the build page - stores type + selected pedal
+export interface BuildSlot {
+  id: string;
+  type: string;
+  category: Category;
+  signalOrder: number;
+  selectedPedalId?: string;
+}
+
 export interface Board {
   id: string;
   name: string;
   constraints: BoardConstraints;
   slots: BoardSlot[];
+  typeSlots?: TypeSlot[]; // Selected pedal types from build page
+  buildSlots?: BuildSlot[]; // Build page state - persisted between navigation
   createdAt: Date;
   updatedAt: Date;
 }

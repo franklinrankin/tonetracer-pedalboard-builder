@@ -1,36 +1,188 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BoardProvider, useBoard } from './context/BoardContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
-import { GenrePage, ConstraintsPage, BuildPage, ReviewPage } from './pages';
+import { GenrePage, ConstraintsPage, BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
+import { PedalCatalog } from './components/PedalCatalog';
+import { getProBoardById, ProBoard } from './data/proBoards';
+import { PEDALS } from './data/pedals';
+import { sortBySignalChain } from './utils/signalChain';
+
+type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review';
 
 function AppContent() {
+  const [currentPage, setCurrentPage] = useState<AppPage>('home');
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
-  const { dispatch } = useBoard();
+  const [selectedProBoard, setSelectedProBoard] = useState<ProBoard | null>(null);
+  const { dispatch, state } = useBoard();
   
   const handleStepChange = (step: WizardStep) => {
+    // Sync buildSlots to board when going to review
+    if (step === 'review') {
+      dispatch({ type: 'SYNC_BUILD_TO_BOARD', allPedals: state.allPedals });
+    }
     setCurrentStep(step);
-    // Scroll to top when changing steps
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
   const handleStartOver = () => {
     if (window.confirm('Start over? This will clear your board and selections.')) {
-      // Clear board
       dispatch({ type: 'CLEAR_BOARD' });
-      // Clear genres
+      dispatch({ type: 'CLEAR_BUILD_SLOTS' });
       dispatch({ type: 'CLEAR_GENRES' });
-      // Go back to first step
       setCurrentStep('genre');
+      setCurrentPage('home');
+      setSelectedProBoard(null);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
   
   const handleCreateOwn = () => {
-    // Clear any selected genres and go to Set Limits page
     dispatch({ type: 'CLEAR_GENRES' });
-    handleStepChange('constraints'); // Go to constraints page to set limits
+    handleStepChange('constraints');
   };
   
+  const handleGoHome = () => {
+    // Check if there's anything to lose (pedals on board or genres selected)
+    const hasContent = state.board.slots.length > 0 || state.selectedGenres.length > 0 || (state.board.buildSlots?.length ?? 0) > 0;
+    
+    if (hasContent) {
+      if (!window.confirm('Go back to home? This will clear your current board and selections.')) {
+        return;
+      }
+    }
+    
+    // Clear everything
+    dispatch({ type: 'CLEAR_BOARD' });
+    dispatch({ type: 'CLEAR_BUILD_SLOTS' });
+    dispatch({ type: 'CLEAR_GENRES' });
+    setCurrentPage('home');
+    setSelectedProBoard(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBuildBoard = () => {
+    setCurrentPage('wizard');
+    setCurrentStep('genre');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBrowseProBoards = () => {
+    setCurrentPage('proboards');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePedalIndex = () => {
+    setCurrentPage('index');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleAbout = () => {
+    // TODO: Add about page later
+  };
+
+  const handleSelectProBoard = (proBoard: ProBoard) => {
+    setSelectedProBoard(proBoard);
+    
+    // Clear existing board
+    dispatch({ type: 'CLEAR_BOARD' });
+    dispatch({ type: 'CLEAR_GENRES' });
+    
+    // Get all pedals for this pro board
+    const boardPedals = proBoard.pedalIds
+      .map(pedalId => PEDALS.find(p => p.id === pedalId))
+      .filter((p): p is typeof PEDALS[number] => p !== undefined);
+    
+    const totalPower = boardPedals.reduce((sum, p) => sum + p.currentMa, 0);
+    const totalCost = boardPedals.reduce((sum, p) => sum + p.reverbPrice, 0);
+    
+    // Use custom board dimensions if provided, otherwise calculate
+    let boardWidth = proBoard.boardWidthMm;
+    let boardDepth = proBoard.boardDepthMm;
+    
+    if (!boardWidth || !boardDepth) {
+      // Calculate custom board size to fit all pedals
+      const totalArea = boardPedals.reduce((sum, p) => sum + (p.widthMm * p.depthMm), 0);
+      const maxPedalWidth = Math.max(...boardPedals.map(p => p.widthMm));
+      const maxPedalDepth = Math.max(...boardPedals.map(p => p.depthMm));
+      
+      const usableAreaRatio = 0.85;
+      const requiredArea = totalArea / usableAreaRatio;
+      const aspectRatio = 2;
+      boardWidth = Math.sqrt(requiredArea * aspectRatio);
+      boardDepth = requiredArea / boardWidth;
+      boardWidth = Math.max(boardWidth, maxPedalWidth * 1.1);
+      boardDepth = Math.max(boardDepth, maxPedalDepth * 2.2);
+      boardWidth = Math.ceil(boardWidth / 10) * 10;
+      boardDepth = Math.ceil(boardDepth / 10) * 10;
+    }
+    
+    // Set custom constraints for this pro board
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        maxWidthMm: boardWidth,
+        maxDepthMm: boardDepth,
+        maxBudget: Math.ceil(totalCost * 1.1),
+        maxCurrentMa: Math.ceil(totalPower * 1.2),
+        applyAfterSize: true,
+        applyAfterBudget: true,
+        applyAfterPower: true,
+      },
+    });
+    
+    // Build slots with positions if layout is provided
+    if (proBoard.layout && proBoard.layout.length > 0) {
+      // Load board with exact positions
+      const unsortedSlots = proBoard.layout.map(pos => {
+        const pedal = boardPedals.find(p => p.id === pos.pedalId);
+        if (!pedal) return null;
+        return {
+          pedal,
+          positionX: pos.x,
+          positionY: pos.y,
+          rotation: pos.rotation,
+        };
+      }).filter((s): s is NonNullable<typeof s> => s !== null);
+      
+      // Use exact order from layout (don't sort - pro boards have intentional order)
+      const slots = unsortedSlots;
+      
+      dispatch({
+        type: 'LOAD_BOARD',
+        board: {
+          id: crypto.randomUUID(),
+          name: `${proBoard.artist} - ${proBoard.name}`,
+          constraints: {
+            maxWidthMm: boardWidth,
+            maxDepthMm: boardDepth,
+            maxBudget: Math.ceil(totalCost * 1.1),
+            maxCurrentMa: Math.ceil(totalPower * 1.2),
+            applyAfterSize: true,
+            applyAfterBudget: true,
+            applyAfterPower: true,
+          },
+          slots,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+    } else {
+      // Sort pedals by signal chain order before adding
+      const sortedPedals = sortBySignalChain(
+        boardPedals.map(pedal => ({ pedal }))
+      ).map(slot => slot.pedal);
+      
+      // Add pedals in signal chain order
+      sortedPedals.forEach(pedal => {
+        dispatch({ type: 'ADD_PEDAL', pedal });
+      });
+    }
+    
+    // Go to review page
+    setCurrentPage('pro-review');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const renderPage = () => {
     switch (currentStep) {
       case 'genre':
@@ -46,14 +198,124 @@ function AppContent() {
     }
   };
 
+  // Home page - no wizard layout
+  if (currentPage === 'home') {
+    return (
+      <div className="min-h-screen bg-board-dark">
+        <div className="noise-overlay" />
+        <div className="fixed inset-0 bg-gradient-to-br from-board-accent/5 via-transparent to-board-highlight/5 pointer-events-none" />
+        <div className="relative">
+          <HomePage 
+            onBuildBoard={handleBuildBoard}
+            onBrowseProBoards={handleBrowseProBoards}
+            onPedalIndex={handlePedalIndex}
+            onAbout={handleAbout}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Pro Boards page
+  if (currentPage === 'proboards') {
+    return (
+      <div className="min-h-screen bg-board-dark">
+        <div className="noise-overlay" />
+        <div className="fixed inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 pointer-events-none" />
+        <div className="relative">
+          <ProBoardsPage 
+            onBack={handleGoHome}
+            onSelectBoard={handleSelectProBoard}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Pedal Index page
+  if (currentPage === 'index') {
+    return (
+      <div className="min-h-screen bg-board-dark">
+        <div className="noise-overlay" />
+        <div className="fixed inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-emerald-500/5 pointer-events-none" />
+        <div className="relative">
+          {/* Header */}
+          <div className="sticky top-0 z-50 bg-board-dark/95 backdrop-blur-sm border-b border-board-border">
+            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+              <button
+                onClick={handleGoHome}
+                className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Home
+              </button>
+              <h1 className="text-lg font-bold text-white">Pedal Index</h1>
+              <button
+                onClick={handleBuildBoard}
+                className="px-4 py-2 bg-board-accent text-white text-sm font-medium rounded-lg hover:bg-board-accent-dim transition-colors"
+              >
+                Build a Board
+              </button>
+            </div>
+          </div>
+          {/* Pedal Catalog */}
+          <div className="max-w-7xl mx-auto p-4">
+            <PedalCatalog />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Pro Board Review page
+  if (currentPage === 'pro-review' && selectedProBoard) {
+    return (
+      <div className="min-h-screen bg-board-dark">
+        <div className="noise-overlay" />
+        <div className="fixed inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 pointer-events-none" />
+        <div className="relative">
+          {/* Custom header for pro board review */}
+          <div className="sticky top-0 z-50 bg-board-dark/95 backdrop-blur-sm border-b border-board-border">
+            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+              <button
+                onClick={handleBrowseProBoards}
+                className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Pro Boards
+              </button>
+              <div className="text-center">
+                <span className="text-sm text-cyan-400 font-medium">PRO BOARD</span>
+                <h1 className="text-lg font-bold text-white">{selectedProBoard.artist} — {selectedProBoard.name}</h1>
+              </div>
+              <button
+                onClick={handleBuildBoard}
+                className="px-4 py-2 bg-board-accent text-white text-sm font-medium rounded-lg hover:bg-board-accent-dim transition-colors"
+              >
+                Build Your Own
+              </button>
+            </div>
+          </div>
+          <ReviewPage />
+        </div>
+      </div>
+    );
+  }
+
+  // Wizard pages (build flow)
   return (
-    <WizardLayout currentStep={currentStep} onStepChange={handleStepChange} onStartOver={handleStartOver}>
-      {/* Noise overlay for texture */}
+    <WizardLayout 
+      currentStep={currentStep} 
+      onStepChange={handleStepChange} 
+      onStartOver={handleStartOver}
+      onGoHome={handleGoHome}
+    >
       <div className="noise-overlay" />
-      
-      {/* Background gradient */}
       <div className="fixed inset-0 bg-gradient-to-br from-board-accent/5 via-transparent to-board-highlight/5 pointer-events-none" />
-      
       <div className="relative">
         {renderPage()}
       </div>

@@ -198,7 +198,10 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "/images/pedals/boss-cs3-compressor.jpg"
   },
   "tc-polytune-3-noir": null,
-  "tc-polytune-3-mini-noir": null,
+  "tc-polytune-3-mini-noir": {
+    "large": "/images/pedals/tc-polytune-3-mini-noir.jpg",
+    "small": "/images/pedals/tc-polytune-3-mini-noir.jpg"
+  },
   "korg-pitchblack-advance": {
     "large": "/images/pedals/korg-pitchblack-advance.jpg",
     "small": "/images/pedals/korg-pitchblack-advance.jpg"
@@ -2498,7 +2501,10 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/tc-polytune3.jpg",
     "small": "/images/pedals/tc-polytune3.jpg"
   },
-  "tc-polytune3-mini": null,
+  "tc-polytune3-mini": {
+    "large": "/images/pedals/tc-polytune3-mini.jpg",
+    "small": "/images/pedals/tc-polytune3-mini.jpg"
+  },
   "peterson-strobostomp-hd": {
     "large": "/images/pedals/peterson-strobostomp-hd.jpg",
     "small": "/images/pedals/peterson-strobostomp-hd.jpg"

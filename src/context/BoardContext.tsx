@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { Board, BoardConstraints, BoardSlot, Pedal, PedalWithStatus, DisqualificationReason, Category, SectionScore } from '../types';
+import { Board, BoardConstraints, BoardSlot, Pedal, PedalWithStatus, DisqualificationReason, Category, SectionScore, TypeSlot, BuildSlot } from '../types';
 import { CATEGORY_INFO, getCategoryTag } from '../data/categories';
 import { PEDALS } from '../data/pedals';
 import { formatInches } from '../utils/measurements';
@@ -21,16 +21,23 @@ type BoardAction =
   | { type: 'ADD_PEDAL'; pedal: Pedal }
   | { type: 'REMOVE_PEDAL'; pedalId: string }
   | { type: 'CLEAR_BOARD' }
+  | { type: 'CLEAR_BUILD_SLOTS' }
+  | { type: 'SYNC_BUILD_TO_BOARD'; allPedals: Pedal[] }
+  | { type: 'MOVE_PEDAL'; fromIndex: number; toIndex: number }
   | { type: 'SET_BOARD_NAME'; name: string }
   | { type: 'LOAD_BOARD'; board: Board }
   | { type: 'TOGGLE_GENRE'; genreId: string }
-  | { type: 'CLEAR_GENRES' };
+  | { type: 'CLEAR_GENRES' }
+  | { type: 'SET_TYPE_SLOTS'; slots: TypeSlot[] }
+  | { type: 'SET_BUILD_SLOTS'; buildSlots: BuildSlot[] };
 
 const defaultConstraints: BoardConstraints = {
   maxWidthMm: 610,
   maxDepthMm: 318,
   maxBudget: 1000,
   maxCurrentMa: 2000,
+  maxPedalCount: 8, // Default to "Medium" size
+  applyAfterSize: true, // Use pedal count mode by default
 };
 
 const createDefaultBoard = (): Board => ({
@@ -38,6 +45,7 @@ const createDefaultBoard = (): Board => ({
   name: 'My Pedalboard',
   constraints: defaultConstraints,
   slots: [],
+  buildSlots: [],
   createdAt: new Date(),
   updatedAt: new Date(),
 });
@@ -273,9 +281,51 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
       return { ...state, board: newBoard, ...calculateState(newBoard) };
       
     case 'CLEAR_BOARD':
+      // Only clear slots (review board), preserve buildSlots (build page state)
       newBoard = {
         ...state.board,
         slots: [],
+        updatedAt: new Date(),
+      };
+      return { ...state, board: newBoard, ...calculateState(newBoard) };
+    
+    case 'CLEAR_BUILD_SLOTS':
+      // Clear buildSlots (used when going home or starting over)
+      newBoard = {
+        ...state.board,
+        buildSlots: [],
+        updatedAt: new Date(),
+      };
+      return { ...state, board: newBoard };
+    
+    case 'SYNC_BUILD_TO_BOARD':
+      // Sync buildSlots to board.slots for review
+      const syncedSlots: BoardSlot[] = [];
+      if (state.board.buildSlots) {
+        state.board.buildSlots.forEach(slot => {
+          if (slot.selectedPedalId) {
+            const pedal = action.allPedals.find(p => p.id === slot.selectedPedalId);
+            if (pedal) {
+              syncedSlots.push({ pedal });
+            }
+          }
+        });
+      }
+      newBoard = {
+        ...state.board,
+        slots: syncedSlots,
+        updatedAt: new Date(),
+      };
+      return { ...state, board: newBoard, ...calculateState(newBoard) };
+    
+    case 'MOVE_PEDAL':
+      // Move pedal from one position to another
+      const movedSlots = [...state.board.slots];
+      const [movedItem] = movedSlots.splice(action.fromIndex, 1);
+      movedSlots.splice(action.toIndex, 0, movedItem);
+      newBoard = {
+        ...state.board,
+        slots: movedSlots,
         updatedAt: new Date(),
       };
       return { ...state, board: newBoard, ...calculateState(newBoard) };
@@ -313,6 +363,26 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
       
     case 'CLEAR_GENRES':
       return { ...state, selectedGenres: [] };
+    
+    case 'SET_TYPE_SLOTS':
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          typeSlots: action.slots,
+          updatedAt: new Date(),
+        },
+      };
+    
+    case 'SET_BUILD_SLOTS':
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          buildSlots: action.buildSlots,
+          updatedAt: new Date(),
+        },
+      };
       
     default:
       return state;

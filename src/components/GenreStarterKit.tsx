@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from 'react';
-import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, ArrowUpDown, RefreshCw, Pencil } from 'lucide-react';
+import { GraduationCap, Plus, ChevronLeft, ChevronRight, Lightbulb, Info, Check, SkipForward, PartyPopper, Sparkles, ArrowUpDown, RefreshCw, Pencil, X, Zap } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById, GenreProfile } from '../data/genres';
 import { getPedalEducation } from '../data/pedalEducation';
@@ -1702,6 +1702,43 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
     }
   };
   
+  // Quick Fill - automatically add top recommendations for all remaining steps
+  const handleQuickFill = (includeBonus: boolean = false) => {
+    // Get the IDs of pedals already on the board
+    const currentBoardIds = new Set(board.slots.map(s => s.pedal.id));
+    
+    // For each remaining essential step, add the top pedal
+    for (let i = safeStepIndex; i < steps.length; i++) {
+      const step = steps[i];
+      if (!step || skippedSteps.has(step.id)) continue;
+      
+      // Find the first pedal that fits and isn't already on board
+      const topPedal = step.pedals.find(p => p.fits && !currentBoardIds.has(p.id));
+      if (topPedal) {
+        dispatch({ type: 'ADD_PEDAL', pedal: topPedal });
+        currentBoardIds.add(topPedal.id);
+      }
+    }
+    
+    // Optionally fill bonus additions too
+    if (includeBonus && bonusAdditions.length > 0) {
+      for (const addition of bonusAdditions) {
+        const topPedal = addition.pedals.find(p => p.fits && !currentBoardIds.has(p.id));
+        if (topPedal) {
+          dispatch({ type: 'ADD_PEDAL', pedal: topPedal });
+          currentBoardIds.add(topPedal.id);
+        }
+      }
+      // Go to final completion
+      setPhase('additions');
+      setCurrentAdditionIndex(bonusAdditions.length);
+    } else {
+      // Go to essentials complete (shows option to add more or finish)
+      setPhase('essentials');
+      setCurrentStepIndex(steps.length);
+    }
+  };
+  
   // Final completion screen
   if (phase === 'additions' && additionsComplete) {
     const addedCount = board.slots.length;
@@ -2089,14 +2126,27 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
             </div>
           </div>
           
-          {/* Skip to additions (during essentials) */}
-          {!isAdditionsPhase && bonusAdditions.length > 0 && (
-            <button
-              onClick={handleSkipToAdditions}
-              className="text-xs text-board-muted hover:text-white transition-colors"
-            >
-              Skip to extras →
-            </button>
+          {/* Quick Fill & Skip buttons */}
+          {!isAdditionsPhase && (
+            <div className="flex items-center gap-2">
+              {/* Quick Fill Button - The Star Feature */}
+              <button
+                onClick={() => handleQuickFill(false)}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 transition-all shadow-lg shadow-orange-500/25"
+              >
+                <Zap className="w-3.5 h-3.5" />
+                Quick Fill
+              </button>
+              
+              {bonusAdditions.length > 0 && (
+                <button
+                  onClick={handleSkipToAdditions}
+                  className="text-xs text-board-muted hover:text-white transition-colors"
+                >
+                  Skip to extras →
+                </button>
+              )}
+            </div>
           )}
         </div>
         
@@ -2438,12 +2488,18 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                 >
                   {/* Thumbnail Card - Compact */}
                   <button
-                    onClick={() => !isOnBoard && handleAddPedal(pedal)}
-                    disabled={isOnBoard}
-                    className={`w-full p-1.5 rounded-lg border transition-all ${
+                    onClick={() => {
+                      if (isOnBoard) {
+                        // Deselect: remove pedal from board
+                        dispatch({ type: 'REMOVE_PEDAL', pedalId: pedal.id });
+                      } else {
+                        handleAddPedal(pedal);
+                      }
+                    }}
+                    className={`group w-full p-1.5 rounded-lg border transition-all cursor-pointer ${
                       isOnBoard
-                        ? 'border-green-500/50 bg-green-500/10 cursor-default'
-                        : `${tierColors[tier].border} ${tierColors[tier].bg} ${tierColors[tier].hover} cursor-pointer hover:scale-[1.03]`
+                        ? 'border-green-500/50 bg-green-500/10 hover:border-red-500/50 hover:bg-red-500/10'
+                        : `${tierColors[tier].border} ${tierColors[tier].bg} ${tierColors[tier].hover} hover:scale-[1.03]`
                     }`}
                   >
                     {/* Pedal Image - Fills the box */}
@@ -2458,9 +2514,10 @@ export function GenreStarterKit({ onFinishUp }: GenreStarterKitProps) {
                         <PedalImage pedalId={pedal.id} category={pedal.category} size="sm" />
                       )}
                       {isOnBoard && (
-                        <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
-                          <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" />
+                        <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
+                          <div className="w-5 h-5 rounded-full bg-green-500 group-hover:bg-red-500 flex items-center justify-center transition-colors">
+                            <Check className="w-3 h-3 text-white group-hover:hidden" />
+                            <X className="w-3 h-3 text-white hidden group-hover:block" />
                           </div>
                         </div>
                       )}

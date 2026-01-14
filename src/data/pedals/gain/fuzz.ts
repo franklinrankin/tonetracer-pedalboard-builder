@@ -4,6 +4,31 @@ const inToMm = (inches: number) => Math.round(inches * 25.4);
 
 // FUZZ PEDALS (~50 pedals)
 export const FUZZ_PEDALS: Pedal[] = [
+  // ==================== OCTAVE FUZZ ====================
+  {
+    id: 'mxr-blue-box',
+    brand: 'MXR',
+    model: 'M103 Blue Box',
+    category: 'gain',
+    subtype: 'Fuzz',
+    categoryRating: 8,
+    widthMm: inToMm(2.4),
+    depthMm: inToMm(4.4),
+    heightMm: inToMm(2.1),
+    enclosure: '1590A',
+    topJacks: false,
+    signal: 'mono',
+    buffered: false,
+    bypassType: 'true',
+    circuitType: 'analog',
+    powerType: '9V DC',
+    voltage: 9,
+    currentMa: 2,
+    centerNegative: true,
+    msrp: 99,
+    reverbPrice: 70,
+    description: 'Octave fuzz. Two octaves down + fuzz. Slash signature.',
+  },
   // ==================== BIG MUFF STYLE ====================
   {
     id: 'ehx-big-muff',

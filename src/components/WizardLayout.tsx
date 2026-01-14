@@ -14,6 +14,7 @@ interface WizardLayoutProps {
   currentStep: WizardStep;
   onStepChange: (step: WizardStep) => void;
   onStartOver: () => void;
+  onGoHome?: () => void;
   children: ReactNode;
 }
 
@@ -24,7 +25,7 @@ const STEPS: { id: WizardStep; label: string; shortLabel: string; icon: ReactNod
   { id: 'review', label: 'Review', shortLabel: 'Review', icon: <ListChecks className="w-4 h-4" /> },
 ];
 
-export function WizardLayout({ currentStep, onStepChange, onStartOver, children }: WizardLayoutProps) {
+export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, children }: WizardLayoutProps) {
   const { state } = useBoard();
   const { selectedGenres, board, totalCost, sectionScores } = state;
   const [showAbout, setShowAbout] = useState(false);
@@ -39,11 +40,12 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
   const canGoNext = () => {
     switch (currentStep) {
       case 'genre':
-        return true;
+        return selectedGenres.length > 0; // At least one genre required
       case 'constraints':
         return true;
       case 'build':
-        return board.slots.length > 0;
+        // Check if any pedals are selected in buildSlots
+        return (board.buildSlots?.some(slot => slot.selectedPedalId) ?? false);
       case 'review':
         return false;
       default:
@@ -76,8 +78,11 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
       <header className="fixed top-0 left-0 right-0 z-50 bg-board-surface/95 backdrop-blur-md border-b border-board-border shadow-lg">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center h-16 gap-4">
-            {/* Logo */}
-            <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Logo - clickable to go home */}
+            <button 
+              onClick={onGoHome}
+              className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity"
+            >
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-board-accent to-board-highlight flex items-center justify-center">
                 <Sliders className="w-4 h-4 text-board-dark" />
               </div>
@@ -86,7 +91,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
                   BOARDSIE
                 </h1>
               </div>
-            </div>
+            </button>
             
             {/* Breadcrumb Step Navigation - Center */}
             <nav className="flex-1 flex items-center justify-center">
@@ -205,9 +210,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, children 
                         : 'bg-board-border text-zinc-500 cursor-not-allowed'
                     }`}
                   >
-                    <span className="hidden sm:inline">
-                      {currentStep === 'genre' && selectedGenres.length === 0 ? 'Skip' : 'Next'}
-                    </span>
+                    <span className="hidden sm:inline">Next</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 )}

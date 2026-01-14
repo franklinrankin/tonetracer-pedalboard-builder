@@ -470,7 +470,7 @@ export const GENRES: GenreProfile[] = [
   },
   {
     id: 'worship',
-    name: 'Worship / CCM',
+    name: 'Soft Rock / Worship',
     description: 'Lush ambient tones with shimmer, swells, and textured delays',
     descriptionBullets: [
       'Transparent overdrive that stacks well',
