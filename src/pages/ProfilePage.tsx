@@ -96,6 +96,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
   const [searchQuery, setSearchQuery] = useState('');
   const [hoveredPedal, setHoveredPedal] = useState<PedalWithStatus | null>(null);
   const [localFavorites, setLocalFavorites] = useState<Record<string, string | null>>(favorites);
+  const [showSaved, setShowSaved] = useState(false);
   
   const username = user?.user_metadata?.username || user?.email?.split('@')[0] || 'User';
   
@@ -216,7 +217,8 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
   
   const handleSave = () => {
     onUpdateFavorites(localFavorites);
-    onBack();
+    setShowSaved(true);
+    setTimeout(() => setShowSaved(false), 2000);
   };
   
   const getSelectedPedalForType = (type: string) => {
@@ -269,10 +271,14 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
               
               <button
                 onClick={handleSave}
-                className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg bg-board-accent text-white hover:bg-board-accent-dim transition-colors"
+                className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  showSaved 
+                    ? 'bg-green-600 text-white' 
+                    : 'bg-board-accent text-white hover:bg-board-accent-dim'
+                }`}
               >
                 <Check className="w-4 h-4" />
-                Save Profile
+                {showSaved ? 'Saved!' : 'Save Profile'}
               </button>
             </div>
           </div>
