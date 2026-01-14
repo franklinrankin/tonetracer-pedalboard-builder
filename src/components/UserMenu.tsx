@@ -5,9 +5,10 @@ import { useAuth } from '../context/AuthContext';
 interface UserMenuProps {
   onSignInClick: () => void;
   onSavedBoards?: () => void;
+  onProfile?: () => void;
 }
 
-export function UserMenu({ onSignInClick, onSavedBoards }: UserMenuProps) {
+export function UserMenu({ onSignInClick, onSavedBoards, onProfile }: UserMenuProps) {
   const { user, signOut, loading, isConfigured } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -91,12 +92,14 @@ export function UserMenu({ onSignInClick, onSavedBoards }: UserMenuProps) {
           {/* Menu Items */}
           <div className="p-2">
             <button
-              disabled
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-600 cursor-not-allowed rounded-lg"
+              onClick={() => {
+                setIsOpen(false);
+                onProfile?.();
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
             >
               <UserCircle className="w-4 h-4" />
               My Profile
-              <span className="ml-auto text-xs text-zinc-600">Coming soon</span>
             </button>
             <button
               onClick={() => {

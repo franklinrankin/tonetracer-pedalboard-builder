@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
 import { GenrePage, ConstraintsPage, BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
 import { SavedBoardsPage } from './pages/SavedBoardsPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { PedalCatalog } from './components/PedalCatalog';
 import { AuthModal } from './components/AuthModal';
 import { getProBoardById, ProBoard } from './data/proBoards';
@@ -11,10 +12,35 @@ import { PEDALS } from './data/pedals';
 import { sortBySignalChain } from './utils/signalChain';
 import { SavedBoard } from './types';
 
-type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review' | 'saved-boards';
+type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review' | 'saved-boards' | 'profile';
 
 // Local storage helpers
 const SAVED_BOARDS_KEY = 'boardsie_saved_boards';
+const FAVORITES_KEY = 'boardsie_favorites';
+
+type FavoritesMap = Record<string, string | null>;
+
+const DEFAULT_FAVORITES: FavoritesMap = {};
+
+function loadFavorites(): FavoritesMap {
+  try {
+    const stored = localStorage.getItem(FAVORITES_KEY);
+    if (stored) {
+      return { ...DEFAULT_FAVORITES, ...JSON.parse(stored) };
+    }
+  } catch (e) {
+    console.error('Failed to load favorites:', e);
+  }
+  return DEFAULT_FAVORITES;
+}
+
+function saveFavoritesToStorage(favorites: FavoritesMap) {
+  try {
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+  } catch (e) {
+    console.error('Failed to save favorites:', e);
+  }
+}
 
 function loadSavedBoards(): SavedBoard[] {
   try {
@@ -54,6 +80,7 @@ function AppContent() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [savedBoards, setSavedBoards] = useState<SavedBoard[]>(() => loadSavedBoards());
   const [currentSavedBoardId, setCurrentSavedBoardId] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<FavoritesMap>(() => loadFavorites());
   const { dispatch, state } = useBoard();
   const { user } = useAuth();
   
@@ -61,6 +88,11 @@ function AppContent() {
   useEffect(() => {
     saveBoardsToStorage(savedBoards);
   }, [savedBoards]);
+  
+  // Persist favorites to localStorage when they change
+  useEffect(() => {
+    saveFavoritesToStorage(favorites);
+  }, [favorites]);
   
   const handleStepChange = (step: WizardStep) => {
     // Sync buildSlots to board when going to review
@@ -133,6 +165,15 @@ function AppContent() {
   const handleSavedBoards = () => {
     setCurrentPage('saved-boards');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handleProfile = () => {
+    setCurrentPage('profile');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handleUpdateFavorites = (newFavorites: FavoritesMap) => {
+    setFavorites(newFavorites);
   };
   
   const handleSaveBoard = (savedBoard: SavedBoard) => {
@@ -323,8 +364,26 @@ function AppContent() {
             onAbout={handleAbout}
             onSignIn={() => setShowAuthModal(true)}
             onSavedBoards={handleSavedBoards}
+            onProfile={handleProfile}
           />
         </div>
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
+      </div>
+    );
+  }
+  
+  // Profile page
+  if (currentPage === 'profile') {
+    return (
+      <div className="min-h-screen bg-board-dark">
+        <ProfilePage
+          onBack={handleGoHome}
+          favorites={favorites}
+          onUpdateFavorites={handleUpdateFavorites}
+        />
         <AuthModal 
           isOpen={showAuthModal} 
           onClose={() => setShowAuthModal(false)} 
