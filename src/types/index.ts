@@ -186,3 +186,12 @@ export interface BoardTemplate {
   suggestedBudget?: number;
 }
 
+// Saved board for user's saved boards list
+export interface SavedBoard {
+  id: string;
+  name: string;
+  board: Board;
+  genres: string[]; // Genre names or empty for "Created Board"
+  createdAt: Date;
+  updatedAt: Date;
+}

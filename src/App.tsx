@@ -1,22 +1,66 @@
 import { useState, useEffect } from 'react';
 import { BoardProvider, useBoard } from './context/BoardContext';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
 import { GenrePage, ConstraintsPage, BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
+import { SavedBoardsPage } from './pages/SavedBoardsPage';
 import { PedalCatalog } from './components/PedalCatalog';
 import { AuthModal } from './components/AuthModal';
 import { getProBoardById, ProBoard } from './data/proBoards';
 import { PEDALS } from './data/pedals';
 import { sortBySignalChain } from './utils/signalChain';
+import { SavedBoard } from './types';
 
-type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review';
+type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review' | 'saved-boards';
+
+// Local storage helpers
+const SAVED_BOARDS_KEY = 'boardsie_saved_boards';
+
+function loadSavedBoards(): SavedBoard[] {
+  try {
+    const stored = localStorage.getItem(SAVED_BOARDS_KEY);
+    if (stored) {
+      const boards = JSON.parse(stored);
+      // Convert date strings back to Date objects
+      return boards.map((b: SavedBoard) => ({
+        ...b,
+        createdAt: new Date(b.createdAt),
+        updatedAt: new Date(b.updatedAt),
+        board: {
+          ...b.board,
+          createdAt: new Date(b.board.createdAt),
+          updatedAt: new Date(b.board.updatedAt),
+        }
+      }));
+    }
+  } catch (e) {
+    console.error('Failed to load saved boards:', e);
+  }
+  return [];
+}
+
+function saveBoardsToStorage(boards: SavedBoard[]) {
+  try {
+    localStorage.setItem(SAVED_BOARDS_KEY, JSON.stringify(boards));
+  } catch (e) {
+    console.error('Failed to save boards:', e);
+  }
+}
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState<AppPage>('home');
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
   const [selectedProBoard, setSelectedProBoard] = useState<ProBoard | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [savedBoards, setSavedBoards] = useState<SavedBoard[]>(() => loadSavedBoards());
+  const [currentSavedBoardId, setCurrentSavedBoardId] = useState<string | null>(null);
   const { dispatch, state } = useBoard();
+  const { user } = useAuth();
+  
+  // Persist saved boards to localStorage when they change
+  useEffect(() => {
+    saveBoardsToStorage(savedBoards);
+  }, [savedBoards]);
   
   const handleStepChange = (step: WizardStep) => {
     // Sync buildSlots to board when going to review
@@ -35,6 +79,7 @@ function AppContent() {
       setCurrentStep('genre');
       setCurrentPage('home');
       setSelectedProBoard(null);
+      setCurrentSavedBoardId(null);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -60,10 +105,12 @@ function AppContent() {
     dispatch({ type: 'CLEAR_GENRES' });
     setCurrentPage('home');
     setSelectedProBoard(null);
+    setCurrentSavedBoardId(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleBuildBoard = () => {
+    setCurrentSavedBoardId(null); // Clear saved board ID for new builds
     setCurrentPage('wizard');
     setCurrentStep('genre');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -81,6 +128,60 @@ function AppContent() {
 
   const handleAbout = () => {
     // TODO: Add about page later
+  };
+  
+  const handleSavedBoards = () => {
+    setCurrentPage('saved-boards');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handleSaveBoard = (savedBoard: SavedBoard) => {
+    setSavedBoards(prev => {
+      const existing = prev.findIndex(b => b.id === savedBoard.id);
+      if (existing >= 0) {
+        // Update existing board
+        const updated = [...prev];
+        updated[existing] = savedBoard;
+        return updated;
+      } else {
+        // Add new board
+        return [...prev, savedBoard];
+      }
+    });
+    setCurrentSavedBoardId(savedBoard.id);
+  };
+  
+  const handleRenameBoard = (boardId: string, newName: string) => {
+    setSavedBoards(prev => prev.map(b => 
+      b.id === boardId 
+        ? { ...b, name: newName, updatedAt: new Date() }
+        : b
+    ));
+  };
+  
+  const handleDeleteBoard = (boardId: string) => {
+    setSavedBoards(prev => prev.filter(b => b.id !== boardId));
+    if (currentSavedBoardId === boardId) {
+      setCurrentSavedBoardId(null);
+    }
+  };
+  
+  const handleOpenSavedBoard = (savedBoard: SavedBoard) => {
+    // Load the board into context
+    dispatch({ type: 'LOAD_BOARD', board: savedBoard.board });
+    
+    // Set selected genres if available
+    dispatch({ type: 'CLEAR_GENRES' });
+    // Note: We store genre names, but the context uses IDs
+    // For now, we'll leave genres as-is and rely on the board data
+    
+    // Set current saved board ID for updating
+    setCurrentSavedBoardId(savedBoard.id);
+    
+    // Go to wizard review page
+    setCurrentPage('wizard');
+    setCurrentStep('review');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSelectProBoard = (proBoard: ProBoard) => {
@@ -195,7 +296,14 @@ function AppContent() {
       case 'build':
         return <BuildPage onContinue={() => handleStepChange('review')} />;
       case 'review':
-        return <ReviewPage />;
+        return (
+          <ReviewPage 
+            onSaveBoard={handleSaveBoard}
+            savedBoards={savedBoards}
+            currentSavedBoardId={currentSavedBoardId}
+            onSignInClick={() => setShowAuthModal(true)}
+          />
+        );
       default:
         return <GenrePage onContinue={() => handleStepChange('constraints')} onCreateOwn={handleCreateOwn} />;
     }
@@ -214,6 +322,30 @@ function AppContent() {
             onPedalIndex={handlePedalIndex}
             onAbout={handleAbout}
             onSignIn={() => setShowAuthModal(true)}
+            onSavedBoards={handleSavedBoards}
+          />
+        </div>
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
+      </div>
+    );
+  }
+  
+  // Saved Boards page
+  if (currentPage === 'saved-boards') {
+    return (
+      <div className="min-h-screen bg-board-dark">
+        <div className="noise-overlay" />
+        <div className="fixed inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-emerald-500/5 pointer-events-none" />
+        <div className="relative">
+          <SavedBoardsPage
+            onBack={handleGoHome}
+            onOpenBoard={handleOpenSavedBoard}
+            savedBoards={savedBoards}
+            onRenameBoard={handleRenameBoard}
+            onDeleteBoard={handleDeleteBoard}
           />
         </div>
         <AuthModal 
@@ -308,7 +440,12 @@ function AppContent() {
               </button>
             </div>
           </div>
-          <ReviewPage />
+          <ReviewPage 
+            onSaveBoard={handleSaveBoard}
+            savedBoards={savedBoards}
+            currentSavedBoardId={currentSavedBoardId}
+            onSignInClick={() => setShowAuthModal(true)}
+          />
         </div>
       </div>
     );

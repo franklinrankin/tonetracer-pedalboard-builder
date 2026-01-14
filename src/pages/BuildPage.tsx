@@ -487,12 +487,23 @@ export function BuildPage({ onContinue }: BuildPageProps) {
         sorted = [...filtered];
     }
     
-    // Return with metadata about availability
-    return sorted.map(p => ({
+    // Add metadata about availability
+    const withMetadata = sorted.map(p => ({
       ...p,
       usedByOtherSlot: selectedByOtherSlots.has(p.id),
       overBudget: !board.constraints.applyAfterBudget && p.reverbPrice > budgetForThisSlot,
     }));
+    
+    // Pin currently selected pedal to the top for easy deselection
+    if (selectedSlot?.selectedPedalId) {
+      const selectedIndex = withMetadata.findIndex(p => p.id === selectedSlot.selectedPedalId);
+      if (selectedIndex > 0) {
+        const [selected] = withMetadata.splice(selectedIndex, 1);
+        withMetadata.unshift(selected);
+      }
+    }
+    
+    return withMetadata;
   }, [selectedSlot, allPedals, typeSlots, sortOption, budgetRemaining, board.constraints.applyAfterBudget, searchQuery]);
   
   // Get selected pedal object from ID

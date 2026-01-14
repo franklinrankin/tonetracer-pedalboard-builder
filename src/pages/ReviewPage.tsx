@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid, GripVertical, ArrowUp, ArrowDown } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid, GripVertical, ArrowUp, ArrowDown, Save } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
+import { useAuth } from '../context/AuthContext';
 import { getGenreById, getTopGenreMatches, GenreMatch } from '../data/genres';
 import { CATEGORY_INFO } from '../data/categories';
 import { formatInches, formatArea } from '../utils/measurements';
@@ -8,6 +9,7 @@ import { BoardRecommendations } from '../components/BoardRecommendations';
 import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
 import { BoardVisualizer } from '../components/BoardVisualizer';
 import { GenreIcon } from '../components/GenreIcon';
+import { SavedBoard } from '../types';
 
 // Genre Matches Component - shown when user didn't pre-select genres
 function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
@@ -282,10 +284,20 @@ function PowerSupplyRecommendations({
   );
 }
 
-export function ReviewPage() {
+interface ReviewPageProps {
+  onSaveBoard?: (board: SavedBoard) => void;
+  savedBoards?: SavedBoard[];
+  currentSavedBoardId?: string | null;
+  onSignInClick?: () => void;
+}
+
+export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId, onSignInClick }: ReviewPageProps) {
   const { state, dispatch } = useBoard();
+  const { user } = useAuth();
   const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres } = state;
   const [showRecommendations, setShowRecommendations] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [saveName, setSaveName] = useState(board.name || 'My Pedalboard');
   
   const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
   const maxArea = board.constraints.maxWidthMm * board.constraints.maxDepthMm * 0.85;
@@ -738,6 +750,43 @@ export function ReviewPage() {
             
             {/* Actions */}
             <div className="space-y-3">
+              {/* Save Board Button */}
+              {user ? (
+                <button
+                  onClick={() => {
+                    if (currentSavedBoardId && onSaveBoard) {
+                      // Direct update without modal
+                      const existingBoard = savedBoards.find(b => b.id === currentSavedBoardId);
+                      const savedBoard: SavedBoard = {
+                        id: currentSavedBoardId,
+                        name: existingBoard?.name || board.name || 'My Pedalboard',
+                        board: { ...board },
+                        genres: selectedGenres.length > 0 
+                          ? selectedGenreObjects.map(g => g!.name)
+                          : [],
+                        createdAt: existingBoard?.createdAt || new Date(),
+                        updatedAt: new Date(),
+                      };
+                      onSaveBoard(savedBoard);
+                    } else {
+                      setShowSaveModal(true);
+                    }
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors"
+                >
+                  <Save className="w-5 h-5" />
+                  {currentSavedBoardId ? 'Update Saved Board' : 'Save Board'}
+                </button>
+              ) : (
+                <button
+                  onClick={onSignInClick}
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-green-600/50 text-white font-medium rounded-xl hover:bg-green-600/70 transition-colors"
+                >
+                  <Save className="w-5 h-5" />
+                  Sign in to Save
+                </button>
+              )}
+              
               <button
                 onClick={handleExport}
                 className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors"
@@ -756,6 +805,79 @@ export function ReviewPage() {
           </div>
         </div>
       </div>
+      
+      {/* Save Board Modal */}
+      {showSaveModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-board-surface border border-board-border rounded-2xl max-w-md w-full p-6">
+            <h2 className="text-xl font-bold text-white mb-4">
+              {currentSavedBoardId ? 'Update Board' : 'Save Board'}
+            </h2>
+            
+            {currentSavedBoardId && (
+              <div className="mb-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+                <p className="text-sm text-yellow-400">
+                  This will overwrite your existing saved board.
+                </p>
+              </div>
+            )}
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-zinc-400 mb-2">Board Name</label>
+              <input
+                type="text"
+                value={saveName}
+                onChange={(e) => setSaveName(e.target.value)}
+                placeholder="My Pedalboard"
+                className="w-full px-4 py-3 bg-board-elevated border border-board-border rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-board-accent transition-colors"
+              />
+            </div>
+            
+            <div className="mb-6 text-sm text-zinc-500">
+              <div className="flex items-center gap-2 mb-1">
+                <Music className="w-4 h-4" />
+                {selectedGenres.length > 0 
+                  ? selectedGenreObjects.map(g => g!.name).join(' / ')
+                  : 'Created Board'}
+              </div>
+              <div>{board.slots.length} pedals • ${totalCost}</div>
+            </div>
+            
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowSaveModal(false)}
+                className="flex-1 py-3 border border-board-border text-white font-medium rounded-lg hover:bg-board-elevated transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (onSaveBoard && saveName.trim()) {
+                    const savedBoard: SavedBoard = {
+                      id: currentSavedBoardId || crypto.randomUUID(),
+                      name: saveName.trim(),
+                      board: { ...board },
+                      genres: selectedGenres.length > 0 
+                        ? selectedGenreObjects.map(g => g!.name)
+                        : [],
+                      createdAt: currentSavedBoardId 
+                        ? (savedBoards.find(b => b.id === currentSavedBoardId)?.createdAt || new Date())
+                        : new Date(),
+                      updatedAt: new Date(),
+                    };
+                    onSaveBoard(savedBoard);
+                    setShowSaveModal(false);
+                  }
+                }}
+                disabled={!saveName.trim()}
+                className="flex-1 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {currentSavedBoardId ? 'Update' : 'Save'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

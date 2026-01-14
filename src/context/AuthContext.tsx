@@ -11,9 +11,8 @@ interface AuthState {
 
 interface AuthContextType extends AuthState {
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
-  signUp: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signUp: (email: string, password: string, username: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
-  signInWithGoogle: () => Promise<{ error: AuthError | null }>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
 }
 
@@ -62,28 +61,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error };
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, username: string) => {
     if (!supabase) return { error: new Error('Supabase not configured') as unknown as AuthError };
     
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { error } = await supabase.auth.signUp({ 
+      email, 
+      password,
+      options: {
+        data: {
+          username: username,
+          display_name: username,
+        }
+      }
+    });
     return { error };
   };
 
   const signOut = async () => {
     if (!supabase) return;
     await supabase.auth.signOut();
-  };
-
-  const signInWithGoogle = async () => {
-    if (!supabase) return { error: new Error('Supabase not configured') as unknown as AuthError };
-    
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin,
-      },
-    });
-    return { error };
   };
 
   const resetPassword = async (email: string) => {
@@ -101,7 +97,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signIn,
       signUp,
       signOut,
-      signInWithGoogle,
       resetPassword,
     }}>
       {children}

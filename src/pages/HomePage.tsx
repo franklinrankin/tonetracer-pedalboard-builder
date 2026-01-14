@@ -7,9 +7,10 @@ interface HomePageProps {
   onPedalIndex: () => void;
   onAbout: () => void;
   onSignIn: () => void;
+  onSavedBoards?: () => void;
 }
 
-export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbout, onSignIn }: HomePageProps) {
+export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbout, onSignIn, onSavedBoards }: HomePageProps) {
   const options = [
     {
       id: 'build',
@@ -70,7 +71,7 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
       
       {/* User Menu - Top Right */}
       <div className="absolute top-4 right-4 z-20">
-        <UserMenu onSignInClick={onSignIn} />
+        <UserMenu onSignInClick={onSignIn} onSavedBoards={onSavedBoards} />
       </div>
       
       {/* Content wrapper */}
