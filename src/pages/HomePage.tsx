@@ -1,4 +1,4 @@
-import { Sliders, Users, BookOpen, HelpCircle } from 'lucide-react';
+import { Sliders, Users, BookOpen, HelpCircle, Lightbulb, Plus } from 'lucide-react';
 import { UserMenu } from '../components/UserMenu';
 
 interface HomePageProps {
@@ -158,6 +158,24 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
       <p className="mt-12 text-sm text-zinc-400">
         700+ pedals • Smart recommendations • Size & budget aware
       </p>
+      
+      {/* Feedback Buttons */}
+      <div className="mt-8 flex flex-col sm:flex-row gap-3 items-center">
+        <a
+          href="mailto:feedback@boardsie.com?subject=Boardsie Feedback&body=Hi Boardsie team,%0A%0A[Please describe your bug or suggestion here]%0A%0AThanks!"
+          className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-600/20 to-purple-600/20 border border-violet-500/30 text-violet-300 hover:border-violet-400/50 hover:from-violet-600/30 hover:to-purple-600/30 hover:text-violet-200 transition-all duration-300"
+        >
+          <Lightbulb className="w-4 h-4 group-hover:scale-110 transition-transform" />
+          <span className="text-sm font-medium">Help Make Boardsie Better</span>
+        </a>
+        <a
+          href="mailto:feedback@boardsie.com?subject=Pedal Request&body=Hi Boardsie team,%0A%0AI'd like to request the following pedal be added:%0A%0ABrand: %0AModel: %0A%0AThanks!"
+          className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600/20 to-teal-600/20 border border-emerald-500/30 text-emerald-300 hover:border-emerald-400/50 hover:from-emerald-600/30 hover:to-teal-600/30 hover:text-emerald-200 transition-all duration-300"
+        >
+          <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
+          <span className="text-sm font-medium">Request a Pedal</span>
+        </a>
+      </div>
       </div>
     </div>
   );

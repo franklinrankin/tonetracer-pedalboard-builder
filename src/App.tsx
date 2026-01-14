@@ -7,6 +7,7 @@ import { SavedBoardsPage } from './pages/SavedBoardsPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { PedalCatalog } from './components/PedalCatalog';
 import { AuthModal } from './components/AuthModal';
+import { UserMenu } from './components/UserMenu';
 import { getProBoardById, ProBoard } from './data/proBoards';
 import { PEDALS } from './data/pedals';
 import { sortBySignalChain } from './utils/signalChain';
@@ -379,6 +380,14 @@ function AppContent() {
   if (currentPage === 'profile') {
     return (
       <div className="min-h-screen bg-board-dark">
+        {/* User Menu - Top Right */}
+        <div className="fixed top-4 right-4 z-50">
+          <UserMenu 
+            onSignInClick={() => setShowAuthModal(true)} 
+            onSavedBoards={handleSavedBoards}
+            onProfile={handleProfile}
+          />
+        </div>
         <ProfilePage
           onBack={handleGoHome}
           favorites={favorites}
@@ -398,6 +407,14 @@ function AppContent() {
       <div className="min-h-screen bg-board-dark">
         <div className="noise-overlay" />
         <div className="fixed inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-emerald-500/5 pointer-events-none" />
+        {/* User Menu - Top Right */}
+        <div className="fixed top-4 right-4 z-50">
+          <UserMenu 
+            onSignInClick={() => setShowAuthModal(true)} 
+            onSavedBoards={handleSavedBoards}
+            onProfile={handleProfile}
+          />
+        </div>
         <div className="relative">
           <SavedBoardsPage
             onBack={handleGoHome}
@@ -421,12 +438,24 @@ function AppContent() {
       <div className="min-h-screen bg-board-dark">
         <div className="noise-overlay" />
         <div className="fixed inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 pointer-events-none" />
+        {/* User Menu - Top Right */}
+        <div className="fixed top-4 right-4 z-50">
+          <UserMenu 
+            onSignInClick={() => setShowAuthModal(true)} 
+            onSavedBoards={handleSavedBoards}
+            onProfile={handleProfile}
+          />
+        </div>
         <div className="relative">
           <ProBoardsPage 
             onBack={handleGoHome}
             onSelectBoard={handleSelectProBoard}
           />
         </div>
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
       </div>
     );
   }
@@ -451,12 +480,19 @@ function AppContent() {
                 Back to Home
               </button>
               <h1 className="text-lg font-bold text-white">Pedal Index</h1>
-              <button
-                onClick={handleBuildBoard}
-                className="px-4 py-2 bg-board-accent text-white text-sm font-medium rounded-lg hover:bg-board-accent-dim transition-colors"
-              >
-                Build a Board
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleBuildBoard}
+                  className="px-4 py-2 bg-board-accent text-white text-sm font-medium rounded-lg hover:bg-board-accent-dim transition-colors"
+                >
+                  Build a Board
+                </button>
+                <UserMenu 
+                  onSignInClick={() => setShowAuthModal(true)} 
+                  onSavedBoards={handleSavedBoards}
+                  onProfile={handleProfile}
+                />
+              </div>
             </div>
           </div>
           {/* Pedal Catalog */}
@@ -464,6 +500,10 @@ function AppContent() {
             <PedalCatalog />
           </div>
         </div>
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
       </div>
     );
   }
@@ -491,12 +531,19 @@ function AppContent() {
                 <span className="text-sm text-cyan-400 font-medium">PRO BOARD</span>
                 <h1 className="text-lg font-bold text-white">{selectedProBoard.artist} — {selectedProBoard.name}</h1>
               </div>
-              <button
-                onClick={handleBuildBoard}
-                className="px-4 py-2 bg-board-accent text-white text-sm font-medium rounded-lg hover:bg-board-accent-dim transition-colors"
-              >
-                Build Your Own
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleBuildBoard}
+                  className="px-4 py-2 bg-board-accent text-white text-sm font-medium rounded-lg hover:bg-board-accent-dim transition-colors"
+                >
+                  Build Your Own
+                </button>
+                <UserMenu 
+                  onSignInClick={() => setShowAuthModal(true)} 
+                  onSavedBoards={handleSavedBoards}
+                  onProfile={handleProfile}
+                />
+              </div>
             </div>
           </div>
           <ReviewPage 
@@ -506,6 +553,10 @@ function AppContent() {
             onSignInClick={() => setShowAuthModal(true)}
           />
         </div>
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
       </div>
     );
   }
@@ -517,12 +568,19 @@ function AppContent() {
       onStepChange={handleStepChange} 
       onStartOver={handleStartOver}
       onGoHome={handleGoHome}
+      onSignInClick={() => setShowAuthModal(true)}
+      onSavedBoards={handleSavedBoards}
+      onProfile={handleProfile}
     >
       <div className="noise-overlay" />
       <div className="fixed inset-0 bg-gradient-to-br from-board-accent/5 via-transparent to-board-highlight/5 pointer-events-none" />
       <div className="relative">
         {renderPage()}
       </div>
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+      />
     </WizardLayout>
   );
 }

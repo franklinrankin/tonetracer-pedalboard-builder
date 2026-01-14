@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X, User } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
 import { BOARD_TEMPLATES } from '../data/boardTemplates';
@@ -7,6 +7,7 @@ import { formatInches } from '../utils/measurements';
 import { AboutModal } from './AboutModal';
 import { PedalCatalog } from './PedalCatalog';
 import { GenreIcon } from './GenreIcon';
+import { UserMenu } from './UserMenu';
 
 export type WizardStep = 'genre' | 'constraints' | 'build' | 'review';
 
@@ -15,6 +16,9 @@ interface WizardLayoutProps {
   onStepChange: (step: WizardStep) => void;
   onStartOver: () => void;
   onGoHome?: () => void;
+  onSignInClick?: () => void;
+  onSavedBoards?: () => void;
+  onProfile?: () => void;
   children: ReactNode;
 }
 
@@ -25,7 +29,7 @@ const STEPS: { id: WizardStep; label: string; shortLabel: string; icon: ReactNod
   { id: 'review', label: 'Review', shortLabel: 'Review', icon: <ListChecks className="w-4 h-4" /> },
 ];
 
-export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, children }: WizardLayoutProps) {
+export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, onSignInClick, onSavedBoards, onProfile, children }: WizardLayoutProps) {
   const { state } = useBoard();
   const { selectedGenres, board, totalCost, sectionScores } = state;
   const [showAbout, setShowAbout] = useState(false);
@@ -187,6 +191,13 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                     <span className="text-[10px]">Reset</span>
                   </button>
                 )}
+                
+                {/* User Menu */}
+                <UserMenu 
+                  onSignInClick={onSignInClick || (() => {})} 
+                  onSavedBoards={onSavedBoards}
+                  onProfile={onProfile}
+                />
               </div>
               
               {/* Nav Buttons */}
