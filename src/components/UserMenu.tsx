@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { User, LogOut, FolderOpen, ChevronDown, UserCircle } from 'lucide-react';
+import { User, LogOut, FolderOpen, ChevronDown, UserCircle, Lightbulb, Plus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface UserMenuProps {
@@ -34,13 +34,51 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile }: UserMenuPr
   // Show sign in button if not configured or not signed in
   if (!isConfigured || !user) {
     return (
-      <button
-        onClick={onSignInClick}
-        className="flex items-center gap-2 px-3 py-1.5 bg-board-elevated border border-board-border rounded-lg text-sm text-white hover:bg-board-border transition-colors"
-      >
-        <User className="w-4 h-4" />
-        <span className="hidden sm:inline">Sign In</span>
-      </button>
+      <div className="relative" ref={menuRef}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-2 px-3 py-1.5 bg-board-elevated border border-board-border rounded-lg text-sm text-white hover:bg-board-border transition-colors"
+        >
+          <User className="w-4 h-4" />
+          <span className="hidden sm:inline">Menu</span>
+          <ChevronDown className={`w-3 h-3 text-zinc-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
+
+        {isOpen && (
+          <div className="absolute right-0 top-full mt-2 w-56 bg-board-elevated border border-board-border rounded-xl shadow-xl overflow-hidden z-50">
+            <div className="p-2">
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  onSignInClick();
+                }}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-white hover:bg-board-border rounded-lg transition-colors"
+              >
+                <User className="w-4 h-4" />
+                Sign In
+              </button>
+            </div>
+            <div className="p-2 border-t border-board-border">
+              <a
+                href="mailto:feedback@boardsie.com?subject=Boardsie Feedback&body=Hi Boardsie team,%0A%0A[Please describe your bug or suggestion here]%0A%0AThanks!"
+                onClick={() => setIsOpen(false)}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+              >
+                <Lightbulb className="w-4 h-4" />
+                Help Make Boardsie Better
+              </a>
+              <a
+                href="mailto:feedback@boardsie.com?subject=Pedal Request&body=Hi Boardsie team,%0A%0AI'd like to request the following pedal be added:%0A%0ABrand: %0AModel: %0A%0AThanks!"
+                onClick={() => setIsOpen(false)}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Request a Pedal
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
     );
   }
 
@@ -111,6 +149,26 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile }: UserMenuPr
               <FolderOpen className="w-4 h-4" />
               Saved Boards
             </button>
+          </div>
+
+          {/* Feedback */}
+          <div className="p-2 border-t border-board-border">
+            <a
+              href="mailto:feedback@boardsie.com?subject=Boardsie Feedback&body=Hi Boardsie team,%0A%0A[Please describe your bug or suggestion here]%0A%0AThanks!"
+              onClick={() => setIsOpen(false)}
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+            >
+              <Lightbulb className="w-4 h-4" />
+              Help Make Boardsie Better
+            </a>
+            <a
+              href="mailto:feedback@boardsie.com?subject=Pedal Request&body=Hi Boardsie team,%0A%0AI'd like to request the following pedal be added:%0A%0ABrand: %0AModel: %0A%0AThanks!"
+              onClick={() => setIsOpen(false)}
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Request a Pedal
+            </a>
           </div>
 
           {/* Sign Out */}
