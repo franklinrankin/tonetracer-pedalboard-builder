@@ -238,7 +238,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                     {username}'s Favorites
                   </h1>
                   <p className="text-xs text-zinc-500">
-                    {favoritesCount} of {PROFILE_CATEGORIES.length} categories selected
+                    {favoritesCount} of {TYPE_OPTIONS.length} types selected
                   </p>
                 </div>
               </div>
