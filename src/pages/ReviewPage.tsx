@@ -570,7 +570,7 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
               {sectionScores.map(score => {
                 const catInfo = CATEGORY_INFO[score.category];
                 const percentage = (score.totalScore / score.maxScore) * 100;
-                const isHighScore = percentage >= 70;
+                const isHighScore = percentage >= 100;
                 return (
                   <div 
                     key={score.category} 
