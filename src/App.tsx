@@ -9,10 +9,12 @@ import { PedalCatalog } from './components/PedalCatalog';
 import { AuthModal } from './components/AuthModal';
 import { UserMenu } from './components/UserMenu';
 import { PedalRequestModal } from './components/PedalRequestModal';
+import { FeedbackModal } from './components/FeedbackModal';
 import { getProBoardById, ProBoard } from './data/proBoards';
 import { PEDALS } from './data/pedals';
 import { sortBySignalChain } from './utils/signalChain';
 import { SavedBoard } from './types';
+import { generateUUID } from './utils/uuid';
 
 type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review' | 'saved-boards' | 'profile';
 
@@ -81,6 +83,7 @@ function AppContent() {
   const [selectedProBoard, setSelectedProBoard] = useState<ProBoard | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showPedalRequestModal, setShowPedalRequestModal] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [savedBoards, setSavedBoards] = useState<SavedBoard[]>(() => loadSavedBoards());
   const [currentSavedBoardId, setCurrentSavedBoardId] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<FavoritesMap>(() => loadFavorites());
@@ -298,7 +301,7 @@ function AppContent() {
       dispatch({
         type: 'LOAD_BOARD',
         board: {
-          id: crypto.randomUUID(),
+          id: generateUUID(),
           name: `${proBoard.artist} - ${proBoard.name}`,
           constraints: {
             maxWidthMm: boardWidth,
@@ -369,6 +372,7 @@ function AppContent() {
             onSavedBoards={handleSavedBoards}
             onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
+            onFeedback={() => setShowFeedbackModal(true)}
           />
         </div>
         <AuthModal 
@@ -378,6 +382,10 @@ function AppContent() {
         <PedalRequestModal
           isOpen={showPedalRequestModal}
           onClose={() => setShowPedalRequestModal(false)}
+        />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
         />
       </div>
     );
@@ -394,6 +402,7 @@ function AppContent() {
             onSavedBoards={handleSavedBoards}
             onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
+            onFeedback={() => setShowFeedbackModal(true)}
           />
         </div>
         <ProfilePage
@@ -408,6 +417,10 @@ function AppContent() {
         <PedalRequestModal
           isOpen={showPedalRequestModal}
           onClose={() => setShowPedalRequestModal(false)}
+        />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
         />
       </div>
     );
@@ -426,6 +439,7 @@ function AppContent() {
             onSavedBoards={handleSavedBoards}
             onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
+            onFeedback={() => setShowFeedbackModal(true)}
           />
         </div>
         <div className="relative">
@@ -445,6 +459,10 @@ function AppContent() {
           isOpen={showPedalRequestModal}
           onClose={() => setShowPedalRequestModal(false)}
         />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
+        />
       </div>
     );
   }
@@ -462,6 +480,7 @@ function AppContent() {
             onSavedBoards={handleSavedBoards}
             onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
+            onFeedback={() => setShowFeedbackModal(true)}
           />
         </div>
         <div className="relative">
@@ -477,6 +496,10 @@ function AppContent() {
         <PedalRequestModal
           isOpen={showPedalRequestModal}
           onClose={() => setShowPedalRequestModal(false)}
+        />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
         />
       </div>
     );
@@ -514,6 +537,7 @@ function AppContent() {
                   onSavedBoards={handleSavedBoards}
                   onProfile={handleProfile}
                   onPedalRequest={() => setShowPedalRequestModal(true)}
+                  onFeedback={() => setShowFeedbackModal(true)}
                 />
               </div>
             </div>
@@ -530,6 +554,10 @@ function AppContent() {
         <PedalRequestModal
           isOpen={showPedalRequestModal}
           onClose={() => setShowPedalRequestModal(false)}
+        />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
         />
       </div>
     );
@@ -570,6 +598,7 @@ function AppContent() {
                   onSavedBoards={handleSavedBoards}
                   onProfile={handleProfile}
                   onPedalRequest={() => setShowPedalRequestModal(true)}
+                  onFeedback={() => setShowFeedbackModal(true)}
                 />
               </div>
             </div>
@@ -589,6 +618,10 @@ function AppContent() {
           isOpen={showPedalRequestModal}
           onClose={() => setShowPedalRequestModal(false)}
         />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
+        />
       </div>
     );
   }
@@ -604,6 +637,7 @@ function AppContent() {
       onSavedBoards={handleSavedBoards}
       onProfile={handleProfile}
       onPedalRequest={() => setShowPedalRequestModal(true)}
+      onFeedback={() => setShowFeedbackModal(true)}
     >
       <div className="noise-overlay" />
       <div className="fixed inset-0 bg-gradient-to-br from-board-accent/5 via-transparent to-board-highlight/5 pointer-events-none" />
@@ -617,6 +651,10 @@ function AppContent() {
       <PedalRequestModal
         isOpen={showPedalRequestModal}
         onClose={() => setShowPedalRequestModal(false)}
+      />
+      <FeedbackModal
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
       />
     </WizardLayout>
   );

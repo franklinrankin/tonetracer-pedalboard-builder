@@ -4,6 +4,7 @@ import { CATEGORY_INFO, getCategoryTag } from '../data/categories';
 import { PEDALS } from '../data/pedals';
 import { formatInches } from '../utils/measurements';
 import { findInsertIndex } from '../utils/signalChain';
+import { generateUUID } from '../utils/uuid';
 
 interface BoardState {
   board: Board;
@@ -41,7 +42,7 @@ const defaultConstraints: BoardConstraints = {
 };
 
 const createDefaultBoard = (): Board => ({
-  id: crypto.randomUUID(),
+  id: generateUUID(),
   name: 'My Pedalboard',
   constraints: defaultConstraints,
   slots: [],

@@ -96,26 +96,26 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
   const budgetEnabled = !board.constraints.applyAfterBudget;
   
   return (
-    <div className="h-full p-6 lg:p-8 overflow-hidden">
+    <div className="min-h-full p-4 sm:p-6 lg:p-8 overflow-auto">
       {/* Header */}
-      <div className="max-w-3xl mx-auto mb-8 text-center">
-        <h1 className="text-3xl font-bold text-white mb-2">
+      <div className="max-w-3xl mx-auto mb-6 sm:mb-8 text-center">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
           Set Your Limits
         </h1>
-        <p className="text-base text-zinc-400">
+        <p className="text-sm sm:text-base text-zinc-400">
           How big? How much?
         </p>
       </div>
       
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
         {/* Board Size */}
-        <div className={`border rounded-xl p-5 transition-all ${
+        <div className={`border rounded-xl p-4 sm:p-5 transition-all ${
           sizeEnabled
             ? 'bg-board-surface border-board-accent shadow-lg shadow-board-accent/20' 
             : 'bg-board-surface/50 border-board-border opacity-60'
         }`}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className={`text-lg font-semibold flex items-center gap-2 ${
+            <h2 className={`text-base sm:text-lg font-semibold flex items-center gap-2 ${
               sizeEnabled ? 'text-white' : 'text-zinc-400'
             }`}>
               <Ruler className={`w-5 h-5 ${sizeEnabled ? 'text-board-accent' : 'text-zinc-500'}`} />
@@ -132,42 +132,42 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
             </div>
           </div>
           
-          {/* Size Options - Simple Grid */}
-          <div className="grid grid-cols-5 gap-2">
+          {/* Size Options - Responsive Grid */}
+          <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
             {SIZE_OPTIONS.map(size => (
               <button
                 key={size.id}
                 onClick={() => handleSizeSelect(size.id)}
-                className={`p-3 rounded-xl border text-center transition-all ${
+                className={`p-2 sm:p-3 rounded-lg sm:rounded-xl border text-center transition-all ${
                   selectedSize === size.id
                     ? 'border-board-accent bg-board-accent/20 ring-2 ring-board-accent/30'
                     : 'border-board-border hover:border-board-accent/50 bg-board-elevated/50'
                 }`}
               >
-                <div className="text-2xl font-bold text-white mb-1">{size.pedals}</div>
-                <div className={`text-xs font-medium ${selectedSize === size.id ? 'text-board-accent' : 'text-zinc-400'}`}>
+                <div className="text-xl sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">{size.pedals}</div>
+                <div className={`text-[10px] sm:text-xs font-medium ${selectedSize === size.id ? 'text-board-accent' : 'text-zinc-400'}`}>
                   {size.name}
                 </div>
                 {selectedSize === size.id && (
-                  <Check className="w-4 h-4 text-board-accent mx-auto mt-1" />
+                  <Check className="w-3 h-3 sm:w-4 sm:h-4 text-board-accent mx-auto mt-0.5 sm:mt-1" />
                 )}
               </button>
             ))}
           </div>
           
-          <p className="text-xs text-zinc-500 mt-3 text-center">
+          <p className="text-[10px] sm:text-xs text-zinc-500 mt-3 text-center">
             We'll suggest a board that fits on the review page.
           </p>
         </div>
         
         {/* Budget */}
-        <div className={`border rounded-xl p-5 transition-all ${
+        <div className={`border rounded-xl p-4 sm:p-5 transition-all ${
           budgetEnabled 
             ? 'bg-board-surface border-green-500 shadow-lg shadow-green-500/20' 
             : 'bg-board-surface/50 border-board-border opacity-60'
         }`}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className={`text-lg font-semibold flex items-center gap-2 ${
+            <h2 className={`text-base sm:text-lg font-semibold flex items-center gap-2 ${
               budgetEnabled ? 'text-white' : 'text-zinc-400'
             }`}>
               <DollarSign className={`w-5 h-5 ${budgetEnabled ? 'text-green-500' : 'text-zinc-500'}`} />
@@ -186,7 +186,7 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
           
           {/* Budget Display */}
           <div className="text-center mb-4">
-            <span className="text-4xl font-bold text-white">${board.constraints.maxBudget}</span>
+            <span className="text-3xl sm:text-4xl font-bold text-white">${board.constraints.maxBudget}</span>
           </div>
           
           {/* Slider */}
@@ -201,12 +201,12 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
           />
           
           {/* Quick Presets */}
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
             {[300, 500, 1000, 1500, 2000].map(amount => (
               <button
                 key={amount}
                 onClick={() => handleBudgetChange(amount)}
-                className={`py-2 text-sm rounded-lg border transition-colors ${
+                className={`py-2 text-xs sm:text-sm rounded-lg border transition-colors ${
                   board.constraints.maxBudget === amount
                     ? 'border-green-500 bg-green-500/20 text-green-400'
                     : 'border-board-border text-board-muted hover:border-green-500/50'

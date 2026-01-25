@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X, User } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X, Menu, Home } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
 import { BOARD_TEMPLATES } from '../data/boardTemplates';
@@ -20,6 +20,7 @@ interface WizardLayoutProps {
   onSavedBoards?: () => void;
   onProfile?: () => void;
   onPedalRequest?: () => void;
+  onFeedback?: () => void;
   children: ReactNode;
 }
 
@@ -30,12 +31,13 @@ const STEPS: { id: WizardStep; label: string; shortLabel: string; icon: ReactNod
   { id: 'review', label: 'Review', shortLabel: 'Review', icon: <ListChecks className="w-4 h-4" /> },
 ];
 
-export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, onSignInClick, onSavedBoards, onProfile, onPedalRequest, children }: WizardLayoutProps) {
+export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, onSignInClick, onSavedBoards, onProfile, onPedalRequest, onFeedback, children }: WizardLayoutProps) {
   const { state } = useBoard();
   const { selectedGenres, board, totalCost, sectionScores } = state;
   const [showAbout, setShowAbout] = useState(false);
   const [showPedalIndex, setShowPedalIndex] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   
   const hasProgress = selectedGenres.length > 0 || board.slots.length > 0;
   
@@ -81,8 +83,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
     <div className="min-h-screen bg-board-dark flex flex-col">
       {/* Floating Top Bar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-board-surface/95 backdrop-blur-md border-b border-board-border shadow-lg">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center h-16 gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4">
+          <div className="flex items-center h-14 sm:h-16 gap-2 sm:gap-4">
             {/* Logo - clickable to go home */}
             <button 
               onClick={onGoHome}
@@ -98,20 +100,30 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
               </div>
             </button>
             
-            {/* Breadcrumb Step Navigation - Center */}
-            <nav className="flex-1 flex items-center justify-center">
-              <div className="flex items-center gap-2">
+            {/* Mobile: Simple Step Counter */}
+            <div className="flex-1 flex items-center justify-center sm:hidden">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-board-elevated">
+                <span className="text-board-accent font-bold text-sm">{currentStepIndex + 1}</span>
+                <span className="text-board-muted text-xs">/</span>
+                <span className="text-board-muted text-xs">4</span>
+                <span className="text-white text-sm font-medium ml-1">{STEPS[currentStepIndex].shortLabel}</span>
+              </div>
+            </div>
+            
+            {/* Desktop: Breadcrumb Step Navigation - Center */}
+            <nav className="hidden sm:flex flex-1 items-center justify-center">
+              <div className="flex items-center gap-1 md:gap-2">
                 {STEPS.map((step, index) => {
                   const isActive = step.id === currentStep;
                   const isCompleted = index < currentStepIndex;
                   const isClickable = index <= currentStepIndex || (index === currentStepIndex + 1 && canGoNext());
                   
                   return (
-                    <div key={step.id} className="flex items-center gap-2">
+                    <div key={step.id} className="flex items-center gap-1 md:gap-2">
                       <button
                         onClick={() => isClickable && onStepChange(step.id)}
                         disabled={!isClickable}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-all text-sm font-medium ${
+                        className={`flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 rounded-full transition-all text-xs md:text-sm font-medium ${
                           isActive
                             ? 'bg-board-accent text-white shadow-lg shadow-board-accent/30'
                             : isCompleted
@@ -126,11 +138,11 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                         }`}>
                           {isCompleted ? <Check className="w-3 h-3" /> : step.icon}
                         </span>
-                        <span className="hidden md:inline">{step.label}</span>
-                        <span className="md:hidden">{step.shortLabel}</span>
+                        <span className="hidden lg:inline">{step.label}</span>
+                        <span className="lg:hidden">{step.shortLabel}</span>
                       </button>
                       {index < STEPS.length - 1 && (
-                        <ChevronRight className={`w-4 h-4 ${
+                        <ChevronRight className={`w-3 h-3 md:w-4 md:h-4 ${
                           isCompleted ? 'text-emerald-500' : 'text-board-muted/30'
                         }`} />
                       )}
@@ -141,12 +153,12 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
             </nav>
             
             {/* Right Side - Quick Info & Actions */}
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {/* Quick Summary Button */}
+            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+              {/* Quick Summary Button - Desktop only */}
               {hasProgress && (
                 <button
                   onClick={() => setShowDetails(!showDetails)}
-                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-board-elevated text-xs text-white hover:bg-board-border transition-colors"
+                  className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-board-elevated text-xs text-white hover:bg-board-border transition-colors"
                 >
                   {genres.length > 0 && (
                     <span className="flex items-center gap-1">
@@ -162,8 +174,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                 </button>
               )}
               
-              {/* Quick Actions */}
-              <div className="flex items-center gap-2">
+              {/* Desktop Quick Actions */}
+              <div className="hidden sm:flex items-center gap-1">
                 <button
                   onClick={() => setShowPedalIndex(true)}
                   className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
@@ -193,21 +205,30 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                   </button>
                 )}
                 
-                {/* User Menu */}
+                {/* User Menu - Desktop */}
                 <UserMenu 
                   onSignInClick={onSignInClick || (() => {})} 
                   onSavedBoards={onSavedBoards}
                   onProfile={onProfile}
                   onPedalRequest={onPedalRequest}
+                  onFeedback={onFeedback}
                 />
               </div>
               
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                className="sm:hidden p-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              
               {/* Nav Buttons */}
-              <div className="flex items-center gap-1 ml-2">
+              <div className="flex items-center gap-1">
                 {currentStepIndex > 0 && (
                   <button
                     onClick={goPrev}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-board-border text-white hover:bg-board-elevated transition-colors text-sm"
+                    className="flex items-center gap-1 p-2 sm:px-3 sm:py-1.5 rounded-lg border border-board-border text-white hover:bg-board-elevated transition-colors text-sm"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     <span className="hidden sm:inline">Back</span>
@@ -217,7 +238,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                   <button
                     onClick={goNext}
                     disabled={!canGoNext()}
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-medium transition-colors text-sm ${
+                    className={`flex items-center gap-1 p-2 sm:px-3 sm:py-1.5 rounded-lg font-medium transition-colors text-sm ${
                       canGoNext()
                         ? 'bg-board-accent text-white hover:bg-board-accent-dim'
                         : 'bg-board-border text-zinc-500 cursor-not-allowed'
@@ -231,6 +252,104 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
             </div>
           </div>
         </div>
+        
+        {/* Mobile Menu Dropdown */}
+        {showMobileMenu && (
+          <div className="sm:hidden border-t border-board-border bg-board-surface">
+            <div className="px-3 py-2 space-y-1">
+              {/* Step Navigation */}
+              <div className="flex items-center gap-1 py-2 overflow-x-auto">
+                {STEPS.map((step, index) => {
+                  const isActive = step.id === currentStep;
+                  const isCompleted = index < currentStepIndex;
+                  const isClickable = index <= currentStepIndex || (index === currentStepIndex + 1 && canGoNext());
+                  
+                  return (
+                    <button
+                      key={step.id}
+                      onClick={() => {
+                        if (isClickable) {
+                          onStepChange(step.id);
+                          setShowMobileMenu(false);
+                        }
+                      }}
+                      disabled={!isClickable}
+                      className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium ${
+                        isActive
+                          ? 'bg-board-accent text-white'
+                          : isCompleted
+                            ? 'bg-emerald-500/20 text-emerald-400'
+                            : isClickable
+                              ? 'bg-board-elevated text-board-muted'
+                              : 'bg-board-elevated/50 text-board-muted/40'
+                      }`}
+                    >
+                      {isCompleted ? <Check className="w-3 h-3" /> : step.icon}
+                      <span>{step.shortLabel}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              
+              <div className="border-t border-board-border pt-2 grid grid-cols-4 gap-2">
+                <button
+                  onClick={() => {
+                    onGoHome?.();
+                    setShowMobileMenu(false);
+                  }}
+                  className="flex flex-col items-center gap-1 p-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+                >
+                  <Home className="w-5 h-5" />
+                  <span className="text-[10px]">Home</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setShowPedalIndex(true);
+                    setShowMobileMenu(false);
+                  }}
+                  className="flex flex-col items-center gap-1 p-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+                >
+                  <Database className="w-5 h-5" />
+                  <span className="text-[10px]">Index</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setShowAbout(true);
+                    setShowMobileMenu(false);
+                  }}
+                  className="flex flex-col items-center gap-1 p-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+                >
+                  <HelpCircle className="w-5 h-5" />
+                  <span className="text-[10px]">About</span>
+                </button>
+                {hasProgress && (
+                  <button
+                    onClick={() => {
+                      onStartOver();
+                      setShowMobileMenu(false);
+                    }}
+                    className="flex flex-col items-center gap-1 p-2 rounded-lg text-board-danger hover:bg-board-danger/10 transition-colors"
+                  >
+                    <RotateCcw className="w-5 h-5" />
+                    <span className="text-[10px]">Reset</span>
+                  </button>
+                )}
+              </div>
+              
+              {/* User Menu Section */}
+              <div className="border-t border-board-border pt-2">
+                <UserMenu 
+                  onSignInClick={onSignInClick || (() => {})} 
+                  onSavedBoards={onSavedBoards}
+                  onProfile={onProfile}
+                  onPedalRequest={onPedalRequest}
+                  onFeedback={onFeedback}
+                  mobile
+                />
+              </div>
+            </div>
+          </div>
+        )}
         
         {/* Expandable Details Panel */}
         {showDetails && hasProgress && (
@@ -315,7 +434,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
       </header>
       
       {/* Main Content - with top padding for fixed header */}
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-16 sm:pt-20">
         {children}
       </main>
       

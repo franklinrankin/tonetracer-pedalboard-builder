@@ -250,50 +250,51 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
       <div className="relative">
         {/* Header */}
         <div className="bg-board-surface/50 border-b border-board-border">
-          <div className="max-w-6xl mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+          <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                 <button
                   onClick={onBack}
-                  className="p-2 text-zinc-400 hover:text-white hover:bg-board-elevated rounded-lg transition-colors"
+                  className="p-2 text-zinc-400 hover:text-white hover:bg-board-elevated rounded-lg transition-colors flex-shrink-0"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
-                <div>
-                  <h1 className="text-lg font-bold text-white">
+                <div className="min-w-0">
+                  <h1 className="text-sm sm:text-lg font-bold text-white truncate">
                     {username}'s Favorites
                   </h1>
-                  <p className="text-xs text-zinc-500">
-                    {favoritesCount} of {TOTAL_SELECTIONS} selected
+                  <p className="text-[10px] sm:text-xs text-zinc-500">
+                    {favoritesCount}/{TOTAL_SELECTIONS} selected
                   </p>
                 </div>
               </div>
               
               <button
                 onClick={handleSave}
-                className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors flex-shrink-0 ${
                   showSaved 
                     ? 'bg-green-600 text-white' 
                     : 'bg-board-accent text-white hover:bg-board-accent-dim'
                 }`}
               >
                 <Check className="w-4 h-4" />
-                {showSaved ? 'Saved!' : 'Save Profile'}
+                <span className="hidden sm:inline">{showSaved ? 'Saved!' : 'Save Profile'}</span>
+                <span className="sm:hidden">{showSaved ? 'Saved!' : 'Save'}</span>
               </button>
             </div>
           </div>
         </div>
         
         {/* Two Column Layout */}
-        <div className="max-w-6xl mx-auto p-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="max-w-6xl mx-auto p-3 sm:p-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* LEFT COLUMN - Category Slots */}
             <div className="space-y-2">
             <h2 className="text-sm font-medium text-zinc-400 mb-3">
               Choose Your Favorites ({favoritesCount}/{TOTAL_SELECTIONS})
             </h2>
             
-            <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
+            <div className="space-y-2 max-h-[40vh] lg:max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
               {CATEGORIES_WITH_TYPES.map((cat) => {
                 const categoryInfo = CATEGORY_INFO[cat.category];
                 const isExpanded = expandedCategories.has(cat.category);
@@ -466,7 +467,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                 </div>
                 
                 {pedalsForSelection.length > 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 flex-1 overflow-y-auto max-h-[calc(100vh-300px)]">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 flex-1 overflow-y-auto max-h-[50vh] lg:max-h-[calc(100vh-300px)] pb-4">
                     {pedalsForSelection.slice(0, 50).map(pedal => {
                       const isSelected = localFavorites[selectedKey] === pedal.id;
                       const categoryInfo = CATEGORY_INFO[pedal.category];
@@ -512,9 +513,9 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                               )}
                             </button>
                             
-                            {/* Hover Card */}
+                            {/* Hover Card - Desktop only */}
                             {hoveredPedal?.id === pedal.id && (
-                              <div className="absolute inset-0 bg-board-dark/95 backdrop-blur-sm border border-board-accent rounded-xl p-2 shadow-2xl z-30 flex flex-col justify-between pointer-events-none">
+                              <div className="hover-only absolute inset-0 bg-board-dark/95 backdrop-blur-sm border border-board-accent rounded-xl p-2 shadow-2xl z-30 flex flex-col justify-between pointer-events-none">
                                 <div>
                                   <p className="text-[10px] text-zinc-500 truncate">{pedal.brand}</p>
                                   <p className="text-xs font-semibold text-white truncate">{pedal.model}</p>
@@ -572,11 +573,11 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-zinc-500">
-                <div className="text-4xl mb-3">👈</div>
-                <p className="text-center">
-                  Select a type or category<br />
-                  to choose your favorite pedal
+              <div className="flex flex-col items-center justify-center h-full text-zinc-500 py-8">
+                <div className="text-4xl mb-3">👆</div>
+                <p className="text-center text-sm">
+                  <span className="lg:hidden">Select a type or category above<br />to choose your favorite pedal</span>
+                  <span className="hidden lg:inline">Select a type or category on the left<br />to choose your favorite pedal</span>
                 </p>
               </div>
             )}

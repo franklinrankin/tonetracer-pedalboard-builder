@@ -10,6 +10,7 @@ import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
 import { BoardVisualizer } from '../components/BoardVisualizer';
 import { GenreIcon } from '../components/GenreIcon';
 import { SavedBoard } from '../types';
+import { generateUUID } from '../utils/uuid';
 
 // Genre Matches Component - shown when user didn't pre-select genres
 function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
@@ -854,7 +855,7 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                 onClick={() => {
                   if (onSaveBoard && saveName.trim()) {
                     const savedBoard: SavedBoard = {
-                      id: currentSavedBoardId || crypto.randomUUID(),
+                      id: currentSavedBoardId || generateUUID(),
                       name: saveName.trim(),
                       board: { ...board },
                       genres: selectedGenres.length > 0 

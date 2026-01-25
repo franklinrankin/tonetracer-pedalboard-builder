@@ -394,20 +394,20 @@ export function BoardVisualizer() {
 
   return (
     <div className="space-y-4">
-      {/* Controls */}
-      <div className="flex items-center justify-between bg-board-surface rounded-xl p-4 border border-board-border">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
+      {/* Controls - Compact on mobile */}
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-board-surface rounded-xl p-2 sm:p-4 border border-board-border">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="hidden sm:flex items-center gap-2">
             <Move className="w-4 h-4 text-board-muted" />
             <span className="text-sm text-board-muted">Drag to move</span>
           </div>
           
-          {/* Rotate buttons - always visible, enabled when pedal selected */}
-          <div className="flex items-center gap-2">
+          {/* Rotate buttons */}
+          <div className="flex items-center gap-1 sm:gap-2">
             <button
               onClick={() => rotatePedal('ccw')}
               disabled={!selectedPedal}
-              className={`p-2 rounded-lg transition-colors ${
+              className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
                 selectedPedal 
                   ? 'bg-board-accent hover:bg-board-accent-dim text-white' 
                   : 'bg-board-elevated text-board-muted cursor-not-allowed'
@@ -419,7 +419,7 @@ export function BoardVisualizer() {
             <button
               onClick={() => rotatePedal('cw')}
               disabled={!selectedPedal}
-              className={`p-2 rounded-lg transition-colors ${
+              className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
                 selectedPedal 
                   ? 'bg-board-accent hover:bg-board-accent-dim text-white' 
                   : 'bg-board-elevated text-board-muted cursor-not-allowed'
@@ -428,60 +428,65 @@ export function BoardVisualizer() {
             >
               <RotateCw className="w-4 h-4" />
             </button>
-            <span className="text-sm text-board-muted">
+            <span className="text-xs sm:text-sm text-board-muted max-w-[120px] sm:max-w-none truncate">
               {selectedPedal 
-                ? <span className="text-board-accent">{board.slots.find(s => s.pedal.id === selectedPedal)?.pedal.model} selected</span>
-                : 'Click pedal to rotate'
+                ? <span className="text-board-accent">{board.slots.find(s => s.pedal.id === selectedPedal)?.pedal.model}</span>
+                : <span className="hidden sm:inline">Click pedal to rotate</span>
               }
             </span>
           </div>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={() => setScale(s => Math.max(0.5, s - 0.1))}
-            className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
+            className="p-1.5 sm:p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
-          <span className="text-sm text-white w-16 text-center">{Math.round(scale * 100)}%</span>
+          <span className="text-xs sm:text-sm text-white w-10 sm:w-16 text-center">{Math.round(scale * 100)}%</span>
           <button
             onClick={() => setScale(s => Math.min(2, s + 0.1))}
-            className="p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
+            className="p-1.5 sm:p-2 rounded-lg bg-board-elevated hover:bg-board-border text-white transition-colors"
           >
             <ZoomIn className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Signal Flow Legend (Right to Left) */}
-      <div className="bg-board-surface rounded-xl p-4 border border-board-border">
-        <h3 className="text-sm font-medium text-white mb-3">Signal Flow (Right → Left)</h3>
-        <div className="flex flex-wrap gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-green-500 border-2 border-green-300" />
-            <span className="text-xs text-board-muted">Input (Guitar)</span>
-          </div>
-          <span className="text-xs text-board-muted">→</span>
-          {board.slots.map((slot, index) => (
-            <div key={slot.pedal.id} className="flex items-center gap-2">
-              <div 
-                className="w-3 h-1 rounded-full"
-                style={{ backgroundColor: SIGNAL_COLORS[index % SIGNAL_COLORS.length] }}
-              />
-              <span className="text-xs text-board-muted">
-                {index + 1}. {slot.pedal.model}
-              </span>
-              {index < board.slots.length - 1 && <span className="text-xs text-board-muted">→</span>}
+      {/* Signal Flow Legend (Right to Left) - Collapsible on mobile */}
+      <details className="bg-board-surface rounded-xl border border-board-border group">
+        <summary className="p-3 sm:p-4 cursor-pointer list-none flex items-center justify-between">
+          <h3 className="text-xs sm:text-sm font-medium text-white">Signal Flow (Right → Left)</h3>
+          <span className="text-board-muted text-xs group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <div className="px-3 pb-3 sm:px-4 sm:pb-4">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <div className="flex items-center gap-1">
+              <div className="w-3 h-3 rounded-full bg-green-500 border border-green-300" />
+              <span className="text-[10px] sm:text-xs text-board-muted">Input</span>
             </div>
-          ))}
-          <span className="text-xs text-board-muted">→</span>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-red-500 border-2 border-red-300" />
-            <span className="text-xs text-board-muted">Output (Amp)</span>
+            <span className="text-[10px] text-board-muted">→</span>
+            {board.slots.map((slot, index) => (
+              <div key={slot.pedal.id} className="flex items-center gap-1">
+                <div 
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: SIGNAL_COLORS[index % SIGNAL_COLORS.length] }}
+                />
+                <span className="text-[10px] sm:text-xs text-board-muted">
+                  {index + 1}. {slot.pedal.model.length > 10 ? slot.pedal.model.slice(0, 10) + '…' : slot.pedal.model}
+                </span>
+                {index < board.slots.length - 1 && <span className="text-[10px] text-board-muted">→</span>}
+              </div>
+            ))}
+            <span className="text-[10px] text-board-muted">→</span>
+            <div className="flex items-center gap-1">
+              <div className="w-3 h-3 rounded-full bg-red-500 border border-red-300" />
+              <span className="text-[10px] sm:text-xs text-board-muted">Output</span>
+            </div>
           </div>
         </div>
-      </div>
+      </details>
 
       {/* Board Visualization */}
       <div 
@@ -757,24 +762,26 @@ export function BoardVisualizer() {
                 onTouchStart={(e) => handleTouchStart(e, slot.pedal.id)}
                 onClick={() => setSelectedPedal(slot.pedal.id)}
               >
-                {/* Function label above pedal */}
+                {/* Function label above pedal - hidden on mobile unless selected */}
                 <div 
-                  className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none"
+                  className={`absolute left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none transition-opacity ${
+                    isSelected ? 'opacity-100' : 'opacity-0 sm:opacity-100'
+                  }`}
                   style={{ 
-                    top: -18,
+                    top: -16,
                     transform: `translateX(-50%) rotate(-${pos.rotation}deg)`,
                   }}
                 >
                   <span 
-                    className="px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wide"
+                    className="px-1.5 py-0.5 rounded text-[7px] sm:text-[8px] font-semibold uppercase tracking-wide"
                     style={{
-                      backgroundColor: `${categoryColor}cc`,
+                      backgroundColor: `${categoryColor}dd`,
                       color: 'white',
                       textShadow: '0 1px 2px rgba(0,0,0,0.5)',
                       boxShadow: `0 2px 4px rgba(0,0,0,0.3)`,
                     }}
                   >
-                    {pedalFunction}
+                    {slot.pedal.subtype || slot.pedal.category}
                   </span>
                 </div>
                 
@@ -1020,8 +1027,8 @@ export function BoardVisualizer() {
         </div>
       </div>
 
-      {/* Instructions */}
-      <div className="bg-board-surface/50 rounded-xl p-4 border border-board-border">
+      {/* Instructions - Hidden on mobile */}
+      <div className="hidden sm:block bg-board-surface/50 rounded-xl p-4 border border-board-border">
         <h3 className="text-sm font-medium text-white mb-2">Tips</h3>
         <ul className="text-xs text-board-muted space-y-1">
           <li>• <strong>Click</strong> a pedal to select it and view details</li>

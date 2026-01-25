@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Check, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Check, X, ChevronDown } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { GENRES, GENRE_CATEGORIES, GenreProfile, GenreCategoryId, getGenreById } from '../data/genres';
 import { GenreIcon } from '../components/GenreIcon';
@@ -18,10 +18,32 @@ const CATEGORY_IMAGES: Record<GenreCategoryId, { url: string; position?: string 
   'contemporary': { url: '/images/genres/pop.jpg', position: 'center bottom' },
 };
 
+// Hook to detect touch/mobile device
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      // Check for touch capability OR small viewport (mobile breakpoint)
+      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth < 640; // sm breakpoint
+      setIsMobile(hasTouch || isSmallScreen);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  return isMobile;
+}
+
 export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
   const { state, dispatch } = useBoard();
   const { selectedGenres } = state;
   const [hoveredCategory, setHoveredCategory] = useState<GenreCategoryId | null>(null);
+  const [expandedCategory, setExpandedCategory] = useState<GenreCategoryId | null>(null);
+  const isMobile = useIsMobile();
   
   const handleToggleGenre = (genreId: string) => {
     dispatch({ type: 'TOGGLE_GENRE', genreId });
@@ -29,6 +51,10 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
   
   const handleClearGenres = () => {
     dispatch({ type: 'CLEAR_GENRES' });
+  };
+  
+  const handleCategoryClick = (categoryId: GenreCategoryId) => {
+    setExpandedCategory(prev => prev === categoryId ? null : categoryId);
   };
   
   const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean) as GenreProfile[];
@@ -40,14 +66,20 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
     genres: GENRES.filter(g => g.category === category.id),
   }));
   
+  // Determine if a category is "open" (showing genres)
+  const isCategoryOpen = (categoryId: GenreCategoryId) => {
+    if (isMobile) return expandedCategory === categoryId;
+    return hoveredCategory === categoryId || expandedCategory === categoryId;
+  };
+  
   return (
-    <div className="h-full p-3 lg:p-4 overflow-hidden">
+    <div className="h-full p-3 lg:p-4 overflow-auto">
       {/* Header */}
       <div className="max-w-4xl mx-auto mb-4 text-center">
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
           What style are you going for?
         </h1>
-        <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+        <p className="text-sm sm:text-lg text-zinc-400 max-w-2xl mx-auto">
           Select up to <span className="text-board-accent font-semibold">3 genres</span> OR{' '}
           <button onClick={onCreateOwn} className="text-board-accent font-semibold hover:underline">
             create your own pedalboard
@@ -144,21 +176,21 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
           
           {/* Genre Category Cards */}
           {genresByCategory.map(({ category, genres }) => {
-            const isHovered = hoveredCategory === category.id;
+            const isOpen = isCategoryOpen(category.id);
             const selectedInCategory = genres.filter(g => selectedGenres.includes(g.id)).length;
             const bgImage = CATEGORY_IMAGES[category.id];
             
             return (
               <div
                 key={category.id}
-                className={`relative h-64 rounded-xl border-2 text-left transition-all overflow-hidden ${
+                className={`relative h-auto min-h-[200px] sm:h-64 rounded-xl border-2 text-left transition-all overflow-hidden ${
                   selectedInCategory > 0 ? 'border-opacity-100' : 'border-board-border/50'
                 }`}
                 style={{
                   borderColor: selectedInCategory > 0 ? category.color : undefined,
                 }}
-                onMouseEnter={() => setHoveredCategory(category.id)}
-                onMouseLeave={() => setHoveredCategory(null)}
+                onMouseEnter={() => !isMobile && setHoveredCategory(category.id)}
+                onMouseLeave={() => !isMobile && setHoveredCategory(null)}
               >
                 {/* Background Image */}
                 <div 
@@ -181,37 +213,45 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                   </div>
                 )}
                 
-                {/* Default State - Category Info */}
-                <div className={`absolute inset-0 p-5 flex flex-col justify-end transition-opacity duration-200 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">{category.icon}</span>
-                    <h3 
-                      className="font-semibold text-white text-lg leading-tight"
-                      style={{ textShadow: '0 2px 8px rgba(0,0,0,1)' }}
-                    >
-                      {category.name}
-                    </h3>
+                {/* Category Header - Always Visible, Clickable on mobile */}
+                <button
+                  onClick={() => handleCategoryClick(category.id)}
+                  className={`absolute inset-x-0 top-0 p-4 sm:p-5 flex flex-col justify-end transition-all z-10 text-left ${
+                    isOpen ? 'bottom-auto' : 'bottom-0'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">{category.icon}</span>
+                      <h3 
+                        className="font-semibold text-white text-base sm:text-lg leading-tight"
+                        style={{ textShadow: '0 2px 8px rgba(0,0,0,1)' }}
+                      >
+                        {category.name}
+                      </h3>
+                    </div>
+                    <ChevronDown 
+                      className={`w-5 h-5 text-white/60 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                    />
                   </div>
-                  <p 
-                    className="text-sm text-white/80 mb-3"
-                    style={{ textShadow: '0 2px 6px rgba(0,0,0,1)' }}
-                  >
-                    {category.description}
-                  </p>
-                  <p className="text-xs text-white/60" style={{ textShadow: '0 2px 4px rgba(0,0,0,1)' }}>
-                    {genres.length} genres • Hover to explore
-                  </p>
-                </div>
+                  {!isOpen && (
+                    <>
+                      <p 
+                        className="text-xs sm:text-sm text-white/80 mt-2 line-clamp-2"
+                        style={{ textShadow: '0 2px 6px rgba(0,0,0,1)' }}
+                      >
+                        {category.description}
+                      </p>
+                      <p className="text-xs text-white/60 mt-2" style={{ textShadow: '0 2px 4px rgba(0,0,0,1)' }}>
+                        {genres.length} genres • {isMobile ? 'Tap' : 'Hover'} to explore
+                      </p>
+                    </>
+                  )}
+                </button>
                 
-                {/* Hovered State - Genre List (No Scroll) */}
-                <div className={`absolute inset-0 p-3 flex flex-col transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                  <div 
-                    className="text-[10px] uppercase text-white/70 mb-1.5 px-1"
-                    style={{ textShadow: '0 1px 4px rgba(0,0,0,1)' }}
-                  >
-                    {category.name}
-                  </div>
-                  <div className="flex-1 flex flex-col justify-center gap-1">
+                {/* Expanded State - Genre List */}
+                <div className={`relative mt-16 p-3 flex flex-col transition-all ${isOpen ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden pointer-events-none'}`}>
+                  <div className="flex flex-col gap-1">
                     {genres.map(genre => {
                       const isSelected = selectedGenres.includes(genre.id);
                       const isDisabled = !isSelected && isAtMax;
@@ -219,12 +259,15 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                       return (
                         <button
                           key={genre.id}
-                          onClick={() => !isDisabled && handleToggleGenre(genre.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!isDisabled) handleToggleGenre(genre.id);
+                          }}
                           disabled={isDisabled}
-                          className={`w-full px-2 py-1.5 rounded-lg text-left transition-all ${
+                          className={`w-full px-3 py-2.5 sm:px-2 sm:py-1.5 rounded-lg text-left transition-all ${
                             isDisabled 
                               ? 'opacity-40 cursor-not-allowed'
-                              : 'hover:bg-white/10'
+                              : 'active:bg-white/20 hover:bg-white/10'
                           } ${
                             isSelected ? 'bg-white/20 ring-1' : ''
                           }`}
@@ -242,11 +285,11 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                                   {genre.name}
                                 </span>
                                 {isSelected && (
-                                  <Check className="w-3 h-3 flex-shrink-0" style={{ color: genre.color }} />
+                                  <Check className="w-4 h-4 flex-shrink-0" style={{ color: genre.color }} />
                                 )}
                               </div>
                               {/* Ratings Row - x/10 format */}
-                              <div className="flex items-center gap-2 mt-0.5 text-[8px] text-white/70" style={{ textShadow: '0 1px 3px rgba(0,0,0,1)' }}>
+                              <div className="flex items-center gap-2 mt-0.5 text-[9px] sm:text-[8px] text-white/70" style={{ textShadow: '0 1px 3px rgba(0,0,0,1)' }}>
                                 <span>Gain:{genre.gainRating}/10</span>
                                 <span>Amb:{genre.ambienceRating}/10</span>
                                 <span>Mod:{genre.modulationRating}/10</span>

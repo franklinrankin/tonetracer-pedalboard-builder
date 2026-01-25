@@ -249,3 +249,53 @@ body {
   }
 }
 
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  /* Larger tap targets on mobile */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Exception for inline/icon buttons */
+  button.inline-button,
+  a.inline-link {
+    min-height: auto;
+    min-width: auto;
+  }
+  
+  /* Safe area padding for notched devices */
+  .safe-area-padding {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Better scroll behavior on iOS */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Active states for touch feedback */
+@media (hover: none) {
+  button:active:not(:disabled),
+  .clickable:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+/* Prevent text selection on interactive elements on mobile */
+button, .clickable {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth scrolling with momentum on mobile */
+.overflow-y-auto,
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}

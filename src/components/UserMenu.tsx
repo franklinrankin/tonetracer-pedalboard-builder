@@ -7,9 +7,11 @@ interface UserMenuProps {
   onSavedBoards?: () => void;
   onProfile?: () => void;
   onPedalRequest?: () => void;
+  onFeedback?: () => void;
+  mobile?: boolean;
 }
 
-export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalRequest }: UserMenuProps) {
+export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalRequest, onFeedback, mobile = false }: UserMenuProps) {
   const { user, signOut, loading, isConfigured } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -29,6 +31,87 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
   if (loading) {
     return (
       <div className="w-8 h-8 rounded-full bg-board-elevated animate-pulse" />
+    );
+  }
+
+  // Mobile version - inline buttons instead of dropdown
+  if (mobile) {
+    if (!isConfigured || !user) {
+      return (
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={onSignInClick}
+            className="flex items-center gap-2 px-4 py-2 bg-board-accent text-white rounded-lg text-sm font-medium"
+          >
+            <User className="w-4 h-4" />
+            Sign In
+          </button>
+          <button
+            onClick={onFeedback}
+            className="flex items-center gap-2 px-3 py-2 bg-board-elevated text-zinc-300 rounded-lg text-sm"
+          >
+            <Lightbulb className="w-4 h-4" />
+            Feedback
+          </button>
+          <button
+            onClick={onPedalRequest}
+            className="flex items-center gap-2 px-3 py-2 bg-board-elevated text-zinc-300 rounded-lg text-sm"
+          >
+            <Plus className="w-4 h-4" />
+            Request Pedal
+          </button>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center gap-3 px-2 py-1">
+          {user.user_metadata?.avatar_url ? (
+            <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-8 h-8 rounded-full" />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-board-accent flex items-center justify-center text-sm font-bold text-white">
+              {(user.user_metadata?.username || user.email?.split('@')[0] || 'U').charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <p className="font-medium text-white text-sm truncate">
+              {user.user_metadata?.username || user.email?.split('@')[0] || 'User'}
+            </p>
+            <p className="text-xs text-zinc-500 truncate">{user.email}</p>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={onProfile}
+            className="flex items-center gap-2 px-3 py-2 bg-board-elevated text-zinc-300 rounded-lg text-sm"
+          >
+            <UserCircle className="w-4 h-4" />
+            Profile
+          </button>
+          <button
+            onClick={onSavedBoards}
+            className="flex items-center gap-2 px-3 py-2 bg-board-elevated text-zinc-300 rounded-lg text-sm"
+          >
+            <FolderOpen className="w-4 h-4" />
+            Saved
+          </button>
+          <button
+            onClick={onFeedback}
+            className="flex items-center gap-2 px-3 py-2 bg-board-elevated text-zinc-300 rounded-lg text-sm"
+          >
+            <Lightbulb className="w-4 h-4" />
+            Feedback
+          </button>
+          <button
+            onClick={() => signOut()}
+            className="flex items-center gap-2 px-3 py-2 bg-red-500/10 text-red-400 rounded-lg text-sm"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </button>
+        </div>
+      </div>
     );
   }
 
@@ -60,14 +143,16 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
               </button>
             </div>
             <div className="p-2 border-t border-board-border">
-              <a
-                href="mailto:feedback@boardsie.com?subject=Boardsie Feedback&body=Hi Boardsie team,%0A%0A[Please describe your bug or suggestion here]%0A%0AThanks!"
-                onClick={() => setIsOpen(false)}
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  onFeedback?.();
+                }}
                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
               >
                 <Lightbulb className="w-4 h-4" />
                 Help Make Boardsie Better
-              </a>
+              </button>
               <button
                 onClick={() => {
                   setIsOpen(false);
@@ -156,14 +241,16 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
 
           {/* Feedback */}
           <div className="p-2 border-t border-board-border">
-            <a
-              href="mailto:feedback@boardsie.com?subject=Boardsie Feedback&body=Hi Boardsie team,%0A%0A[Please describe your bug or suggestion here]%0A%0AThanks!"
-              onClick={() => setIsOpen(false)}
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                onFeedback?.();
+              }}
               className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
             >
               <Lightbulb className="w-4 h-4" />
               Help Make Boardsie Better
-            </a>
+            </button>
             <button
               onClick={() => {
                 setIsOpen(false);

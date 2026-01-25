@@ -6,6 +6,7 @@ import { Category, PedalWithStatus } from '../types';
 import { PedalImage } from '../components/PedalImage';
 import { CATEGORY_INFO, getRatingLabel } from '../data/categories';
 import { getYouTubeReviewUrl } from '../utils/youtube';
+import { generateUUID } from '../utils/uuid';
 
 interface BuildPageProps {
   onContinue: () => void;
@@ -195,7 +196,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
       const info = getTypeInfo(typeName);
       if (info) {
         slots.push({
-          id: crypto.randomUUID(),
+          id: generateUUID(),
           type: typeName,
           category: info.category,
           signalOrder: info.signalOrder,
@@ -570,7 +571,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
     if (!info) return;
     
     const newSlot: TypeSlot = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       type: typeName,
       category: info.category,
       signalOrder: info.signalOrder,
@@ -627,43 +628,52 @@ export function BuildPage({ onContinue }: BuildPageProps) {
     <div className="min-h-full flex flex-col">
       {/* Header */}
       <div className="bg-board-surface/50 border-b border-board-border">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
               {genre && (
                 <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg flex-shrink-0"
                   style={{ backgroundColor: `${genre.color}20` }}
                 >
                   {genre.icon}
                 </div>
               )}
-              <div>
-                <h1 className="text-lg font-bold text-white">
+              <div className="min-w-0">
+                <h1 className="text-sm sm:text-lg font-bold text-white truncate">
                   Build Your {genre?.name || ''} Board
                 </h1>
-                <p className="text-xs text-zinc-500">
-                  {selectedCount} of {typeSlots.length} pedals selected
+                <p className="text-[10px] sm:text-xs text-zinc-500">
+                  {selectedCount}/{typeSlots.length} selected
                   {totalCost > 0 && ` · $${totalCost}`}
                 </p>
               </div>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
               {selectedCount > 0 && (
                 <button
                   onClick={handleClearBoard}
-                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-zinc-400 hover:text-white border border-board-border rounded-lg hover:bg-board-elevated transition-colors"
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm text-zinc-400 hover:text-white border border-board-border rounded-lg hover:bg-board-elevated transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Clear
+                </button>
+              )}
+              {selectedCount > 0 && (
+                <button
+                  onClick={handleClearBoard}
+                  className="sm:hidden p-2 text-zinc-400 hover:text-white border border-board-border rounded-lg hover:bg-board-elevated transition-colors"
+                  title="Clear"
+                >
+                  <RotateCcw className="w-4 h-4" />
                 </button>
               )}
               
               <button
                 onClick={handleContinue}
                 disabled={!canContinue}
-                className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`hidden sm:flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                   canContinue
                     ? 'bg-green-600 text-white hover:bg-green-500'
                     : 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
@@ -913,7 +923,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                 </div>
                 
                 {pedalsForSelectedType.length > 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 flex-1 overflow-y-auto max-h-[calc(100vh-300px)]">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 flex-1 overflow-y-auto max-h-[50vh] lg:max-h-[calc(100vh-300px)] pb-4">
                     {pedalsForSelectedType.slice(0, 50).map(pedal => {
                       const isSelected = selectedSlot.selectedPedalId === pedal.id;
                       const isUsedByOther = pedal.usedByOtherSlot;
@@ -932,7 +942,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                           <button
                             onClick={() => handleSelectPedal(pedal, isDisabled)}
                             disabled={isDisabled}
-                            className={`w-full group p-3 rounded-xl border text-left transition-all ${
+                            className={`w-full group p-2 sm:p-3 rounded-xl border text-left transition-all active:scale-[0.98] ${
                               isSelected
                                 ? 'border-green-500 bg-green-500/10 ring-2 ring-green-500/30'
                                 : isDisabled
@@ -943,12 +953,12 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                             <div className={`aspect-square mb-2 rounded-lg overflow-hidden bg-black/20 ${isDisabled ? 'grayscale' : ''}`}>
                               <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
                             </div>
-                            <p className={`text-xs truncate ${isDisabled ? 'text-zinc-600' : 'text-zinc-400'}`}>{pedal.brand}</p>
-                            <p className={`text-sm font-medium truncate ${isDisabled ? 'text-zinc-500' : 'text-white'}`}>{pedal.model}</p>
+                            <p className={`text-[10px] sm:text-xs truncate ${isDisabled ? 'text-zinc-600' : 'text-zinc-400'}`}>{pedal.brand}</p>
+                            <p className={`text-xs sm:text-sm font-medium truncate ${isDisabled ? 'text-zinc-500' : 'text-white'}`}>{pedal.model}</p>
                             <div className="flex items-center justify-between mt-1">
-                              <p className={`text-xs ${isOverBudget ? 'text-red-400' : isDisabled ? 'text-zinc-600' : 'text-green-400'}`}>${pedal.reverbPrice}</p>
+                              <p className={`text-[10px] sm:text-xs ${isOverBudget ? 'text-red-400' : isDisabled ? 'text-zinc-600' : 'text-green-400'}`}>${pedal.reverbPrice}</p>
                               <span 
-                                className="text-xs font-bold px-1.5 py-0.5 rounded"
+                                className="text-[10px] sm:text-xs font-bold px-1 sm:px-1.5 py-0.5 rounded"
                                 style={{ 
                                   backgroundColor: isDisabled ? '#27272a' : `${categoryInfo?.color}20`, 
                                   color: isDisabled ? '#52525b' : categoryInfo?.color 
@@ -958,26 +968,27 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                               </span>
                             </div>
                             {isSelected && (
-                              <div className="mt-2 flex items-center gap-1 text-green-400 text-xs">
+                              <div className="mt-2 flex items-center gap-1 text-green-400 text-[10px] sm:text-xs">
                                 <Check className="w-3 h-3" />
-                                Selected · tap to deselect
+                                <span className="hidden sm:inline">Selected · tap to deselect</span>
+                                <span className="sm:hidden">✓ Selected</span>
                               </div>
                             )}
                             {isUsedByOther && (
-                              <div className="mt-2 text-xs text-zinc-600">
+                              <div className="mt-2 text-[10px] sm:text-xs text-zinc-600">
                                 Used in another slot
                               </div>
                             )}
                             {isOverBudget && !isUsedByOther && (
-                              <div className="mt-2 text-xs text-red-400">
+                              <div className="mt-2 text-[10px] sm:text-xs text-red-400">
                                 Over budget
                               </div>
                             )}
                           </button>
                           
-                          {/* Hover Card - appears over the pedal card */}
+                          {/* Hover Card - Desktop only (hidden on touch devices via CSS) */}
                           {hoveredPedal?.id === pedal.id && (
-                            <div className="absolute inset-0 bg-board-dark/95 backdrop-blur-sm border border-board-accent rounded-xl p-2 shadow-2xl z-30 flex flex-col justify-between pointer-events-none">
+                            <div className="hover-only absolute inset-0 bg-board-dark/95 backdrop-blur-sm border border-board-accent rounded-xl p-2 shadow-2xl z-30 flex flex-col justify-between pointer-events-none">
                               {/* Header with rating */}
                               <div>
                                 <p className="text-[10px] text-zinc-500 truncate">{pedal.brand}</p>
@@ -1038,11 +1049,11 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-zinc-500">
-                <div className="text-4xl mb-3">👈</div>
-                <p className="text-center">
-                  Select a type on the left<br />
-                  to see available pedals
+              <div className="flex flex-col items-center justify-center h-full text-zinc-500 py-8">
+                <div className="text-4xl mb-3">👆</div>
+                <p className="text-center text-sm">
+                  <span className="lg:hidden">Select a type above<br />to see available pedals</span>
+                  <span className="hidden lg:inline">Select a type on the left<br />to see available pedals</span>
                 </p>
               </div>
             )}
