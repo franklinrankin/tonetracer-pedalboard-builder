@@ -1,4 +1,5 @@
-import { Sliders, Users, BookOpen, HelpCircle, Lightbulb, Plus } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Sliders, Users, BookOpen, HelpCircle, Lightbulb, Plus, ArrowRight } from 'lucide-react';
 import { UserMenu } from '../components/UserMenu';
 
 interface HomePageProps {
@@ -14,172 +15,291 @@ interface HomePageProps {
 }
 
 export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbout, onSignIn, onSavedBoards, onProfile, onPedalRequest, onFeedback }: HomePageProps) {
+  const [mounted, setMounted] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const options = [
     {
       id: 'build',
-      title: 'Build a Board',
-      description: 'Create your perfect pedalboard from scratch with guided recommendations',
+      title: 'BUILD',
+      subtitle: 'A BOARD',
+      description: 'Create your perfect pedalboard from scratch',
       icon: Sliders,
-      color: 'from-orange-500 to-amber-600',
-      shadowColor: 'shadow-orange-500/30',
+      bgColor: '#FF5722',
       onClick: onBuildBoard,
-      image: '/images/home/build.jpg',
+      featured: true,
     },
     {
       id: 'pro',
-      title: 'Browse Pro Boards',
-      description: 'Explore pedalboards used by professional guitarists',
+      title: 'PRO',
+      subtitle: 'BOARDS',
+      description: 'See what professionals use',
       icon: Users,
-      color: 'from-cyan-500 to-blue-600',
-      shadowColor: 'shadow-cyan-500/30',
+      bgColor: '#2196F3',
       onClick: onBrowseProBoards,
-      image: '/images/home/pro-boards.jpg',
     },
     {
       id: 'index',
-      title: 'Pedal Index',
-      description: 'Browse our complete database of guitar pedals',
+      title: 'PEDAL',
+      subtitle: 'INDEX',
+      description: '700+ pedals in database',
       icon: BookOpen,
-      color: 'from-emerald-500 to-teal-600',
-      shadowColor: 'shadow-emerald-500/30',
+      bgColor: '#4CAF50',
       onClick: onPedalIndex,
-      image: '/images/home/pedal-index.jpg',
     },
     {
       id: 'about',
-      title: 'What is Boardsie?',
+      title: 'ABOUT',
+      subtitle: '',
       description: 'Coming soon',
       icon: HelpCircle,
-      color: 'from-zinc-600 to-zinc-700',
-      shadowColor: 'shadow-zinc-500/10',
+      bgColor: '#9E9E9E',
       onClick: onAbout,
       disabled: true,
-      image: '/images/home/about.jpg',
     },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Blurred Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ 
-          backgroundImage: 'url(/images/home/stage-bg.jpg)',
-          filter: 'blur(8px)',
-          transform: 'scale(1.1)',
-        }}
-      />
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/50" />
-      
+    <div 
+      className="min-h-screen p-4 sm:p-8"
+      style={{
+        backgroundColor: '#FFFEF0',
+        fontFamily: '"Space Mono", "IBM Plex Mono", monospace',
+      }}
+    >
       {/* User Menu - Top Right */}
       <div className="absolute top-4 right-4 z-20">
-        <UserMenu onSignInClick={onSignIn} onSavedBoards={onSavedBoards} onProfile={onProfile} />
+        <UserMenu 
+          onSignInClick={onSignIn} 
+          onSavedBoards={onSavedBoards} 
+          onProfile={onProfile}
+          onPedalRequest={onPedalRequest}
+          onFeedback={onFeedback}
+        />
       </div>
       
-      {/* Content wrapper */}
-      <div className="relative z-10 flex flex-col items-center justify-center w-full">
-      {/* Logo and Title */}
-      <div className="text-center mb-12">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-board-accent to-orange-600 flex items-center justify-center shadow-lg shadow-board-accent/30">
-            <span className="text-2xl font-black text-white tracking-tighter">B</span>
-          </div>
-          <h1 className="text-5xl font-black text-white tracking-tight">
-            BOARDSIE
-          </h1>
-        </div>
-        <p className="text-xl text-zinc-400 max-w-md mx-auto">
-          Your pedalboard buddy
-        </p>
-      </div>
-
-      {/* Options Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl w-full">
-        {options.map((option) => {
-          const Icon = option.icon;
-          const isDisabled = 'disabled' in option && option.disabled;
-          return (
-            <button
-              key={option.id}
-              onClick={isDisabled ? undefined : option.onClick}
-              disabled={isDisabled}
-              className={`group relative p-6 rounded-2xl bg-board-surface border border-board-border text-left transition-all duration-300 overflow-hidden min-h-[180px] ${
-                isDisabled 
-                  ? 'opacity-50 cursor-not-allowed' 
-                  : `hover:scale-[1.02] hover:border-transparent ${option.shadowColor} hover:shadow-xl`
-              }`}
+      {/* Main content */}
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <header 
+          className={`mb-8 sm:mb-12 transition-all duration-500 ${
+            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+          }`}
+        >
+          <div 
+            className="inline-block px-6 py-4 bg-black text-white"
+            style={{ 
+              border: '4px solid black',
+              boxShadow: '8px 8px 0px black',
+            }}
+          >
+            <h1 
+              className="text-4xl sm:text-6xl font-black tracking-tighter"
+              style={{ fontFamily: '"Space Grotesk", "Inter", sans-serif' }}
             >
-              {/* Background Image */}
-              {option.image && (
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${option.image})` }}
-                />
-              )}
-              
-              {/* Dark overlay for readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
-              
-              {/* Gradient overlay on hover */}
-              {!isDisabled && (
-                <div 
-                  className={`absolute inset-0 bg-gradient-to-br ${option.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`} 
-                />
-              )}
-              
-              {/* Content */}
-              <div className="relative z-10 h-full flex flex-col justify-end">
-                <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${option.color} flex items-center justify-center mb-3 shadow-lg ${option.shadowColor}`}>
-                  <Icon className="w-5 h-5 text-white" />
-                </div>
-                <h2 className="text-xl font-bold text-white mb-1">
-                  {option.title}
-                </h2>
-                <p className="text-sm text-zinc-300">
-                  {option.description}
-                </p>
-              </div>
-              
-              {/* Arrow indicator */}
-              {!isDisabled && (
-                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${option.color} flex items-center justify-center`}>
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              )}
-            </button>
-          );
-        })}
-      </div>
+              BOARDSIE
+            </h1>
+          </div>
+          <p 
+            className="mt-4 text-lg sm:text-xl font-bold uppercase tracking-wider"
+            style={{ color: 'black' }}
+          >
+            Pedalboard Builder Tool
+          </p>
+        </header>
 
-      {/* Footer */}
-      <p className="mt-12 text-sm text-zinc-400">
-        700+ pedals • Smart recommendations • Size & budget aware
-      </p>
-      
-      {/* Feedback Buttons */}
-      <div className="mt-8 flex flex-col sm:flex-row gap-3 items-center">
-        <button
-          onClick={onFeedback}
-          className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-600/20 to-purple-600/20 border border-violet-500/30 text-violet-300 hover:border-violet-400/50 hover:from-violet-600/30 hover:to-purple-600/30 hover:text-violet-200 transition-all duration-300"
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
+          {options.map((option, index) => {
+            const Icon = option.icon;
+            const isDisabled = 'disabled' in option && option.disabled;
+            const isFeatured = 'featured' in option && option.featured;
+            const isHovered = hoveredCard === option.id;
+            
+            return (
+              <button
+                key={option.id}
+                onClick={isDisabled ? undefined : option.onClick}
+                disabled={isDisabled}
+                onMouseEnter={() => !isDisabled && setHoveredCard(option.id)}
+                onMouseLeave={() => setHoveredCard(null)}
+                className={`relative text-left transition-all duration-150 ${
+                  isFeatured ? 'sm:col-span-2' : ''
+                } ${
+                  isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                }`}
+                style={{
+                  transitionDelay: `${index * 50}ms`,
+                  opacity: mounted ? 1 : 0,
+                  transform: mounted 
+                    ? isHovered && !isDisabled
+                      ? 'translate(-4px, -4px)' 
+                      : 'translate(0, 0)'
+                    : 'translateY(20px)',
+                }}
+              >
+                {/* Card */}
+                <div 
+                  className="relative p-6 sm:p-8"
+                  style={{
+                    backgroundColor: option.bgColor,
+                    border: '4px solid black',
+                    boxShadow: isHovered && !isDisabled 
+                      ? '12px 12px 0px black' 
+                      : '8px 8px 0px black',
+                    transition: 'box-shadow 150ms ease',
+                  }}
+                >
+                  {/* Icon */}
+                  <div 
+                    className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 mb-4 bg-white"
+                    style={{ border: '3px solid black' }}
+                  >
+                    <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-black" strokeWidth={2.5} />
+                  </div>
+                  
+                  {/* Title */}
+                  <div className="mb-2">
+                    <h2 
+                      className="text-3xl sm:text-5xl font-black text-white leading-none"
+                      style={{ 
+                        fontFamily: '"Space Grotesk", "Inter", sans-serif',
+                        textShadow: '3px 3px 0px black',
+                      }}
+                    >
+                      {option.title}
+                    </h2>
+                    {option.subtitle && (
+                      <h2 
+                        className="text-3xl sm:text-5xl font-black text-white leading-none"
+                        style={{ 
+                          fontFamily: '"Space Grotesk", "Inter", sans-serif',
+                          textShadow: '3px 3px 0px black',
+                        }}
+                      >
+                        {option.subtitle}
+                      </h2>
+                    )}
+                  </div>
+                  
+                  {/* Description */}
+                  <p 
+                    className="text-sm sm:text-base font-bold text-white uppercase tracking-wide"
+                    style={{ textShadow: '1px 1px 0px black' }}
+                  >
+                    {option.description}
+                  </p>
+                  
+                  {/* Arrow */}
+                  {!isDisabled && (
+                    <div 
+                      className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 bg-white flex items-center justify-center"
+                      style={{ 
+                        border: '3px solid black',
+                        transform: isHovered ? 'rotate(0deg)' : 'rotate(-45deg)',
+                        transition: 'transform 150ms ease',
+                      }}
+                    >
+                      <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-black" strokeWidth={3} />
+                    </div>
+                  )}
+                  
+                  {/* Featured tag */}
+                  {isFeatured && (
+                    <div 
+                      className="absolute -top-3 -right-3 px-3 py-1 bg-yellow-400 text-black text-xs sm:text-sm font-black uppercase"
+                      style={{ 
+                        border: '3px solid black',
+                        transform: 'rotate(3deg)',
+                      }}
+                    >
+                      START HERE →
+                    </div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Stats Row */}
+        <div 
+          className={`flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 sm:mb-12 transition-all duration-500 delay-300 ${
+            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
         >
-          <Lightbulb className="w-4 h-4 group-hover:scale-110 transition-transform" />
-          <span className="text-sm font-medium">Help Make Boardsie Better</span>
-        </button>
-        <button
-          onClick={onPedalRequest}
-          className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600/20 to-teal-600/20 border border-emerald-500/30 text-emerald-300 hover:border-emerald-400/50 hover:from-emerald-600/30 hover:to-teal-600/30 hover:text-emerald-200 transition-all duration-300"
+          {[
+            { value: '700+', label: 'PEDALS' },
+            { value: 'SMART', label: 'MATCHING' },
+            { value: 'BUDGET', label: 'AWARE' },
+          ].map((stat, i) => (
+            <div 
+              key={i} 
+              className="px-4 py-3 sm:px-6 sm:py-4 bg-black text-white text-center"
+              style={{ border: '3px solid black' }}
+            >
+              <div className="text-xl sm:text-2xl font-black">{stat.value}</div>
+              <div className="text-xs sm:text-sm font-bold tracking-wider opacity-70">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Feedback Section */}
+        <div 
+          className={`flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center transition-all duration-500 delay-500 ${
+            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
         >
-          <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
-          <span className="text-sm font-medium">Request a Pedal</span>
-        </button>
-      </div>
+          <button
+            onClick={onFeedback}
+            className="group flex items-center justify-center gap-2 px-6 py-3 bg-white text-black font-bold uppercase tracking-wide transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1"
+            style={{ 
+              border: '3px solid black',
+              boxShadow: '4px 4px 0px black',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px black';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px black';
+            }}
+          >
+            <Lightbulb className="w-5 h-5" strokeWidth={2.5} />
+            <span>FEEDBACK</span>
+          </button>
+          <button
+            onClick={onPedalRequest}
+            className="group flex items-center justify-center gap-2 px-6 py-3 bg-white text-black font-bold uppercase tracking-wide transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1"
+            style={{ 
+              border: '3px solid black',
+              boxShadow: '4px 4px 0px black',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px black';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px black';
+            }}
+          >
+            <Plus className="w-5 h-5" strokeWidth={2.5} />
+            <span>REQUEST PEDAL</span>
+          </button>
+        </div>
+        
+        {/* Footer */}
+        <footer 
+          className="mt-12 sm:mt-16 pt-6 text-center"
+          style={{ borderTop: '3px solid black' }}
+        >
+          <p className="text-sm font-bold uppercase tracking-wider text-black/60">
+            Built for guitar nerds, by guitar nerds
+          </p>
+        </footer>
       </div>
     </div>
   );
 }
-
