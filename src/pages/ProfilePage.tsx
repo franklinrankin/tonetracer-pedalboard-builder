@@ -243,27 +243,24 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
   const favoritesCount = Object.values(localFavorites).filter(Boolean).length;
   
   return (
-    <div className="min-h-screen bg-board-dark">
-      <div className="noise-overlay" />
-      <div className="fixed inset-0 bg-gradient-to-br from-board-accent/5 via-transparent to-board-highlight/5 pointer-events-none" />
-      
+    <div className="min-h-screen bg-[#FFFEF0]">
       <div className="relative">
         {/* Header */}
-        <div className="bg-board-surface/50 border-b border-board-border">
+        <div className="bg-white border-b-4 border-black">
           <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                 <button
                   onClick={onBack}
-                  className="p-2 text-zinc-400 hover:text-white hover:bg-board-elevated rounded-lg transition-colors flex-shrink-0"
+                  className="p-2 text-black hover:bg-yellow-200 border-2 border-black transition-colors flex-shrink-0"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
                 <div className="min-w-0">
-                  <h1 className="text-sm sm:text-lg font-bold text-white truncate">
+                  <h1 className="text-sm sm:text-lg font-extrabold text-black uppercase tracking-tight truncate">
                     {username}'s Favorites
                   </h1>
-                  <p className="text-[10px] sm:text-xs text-zinc-500">
+                  <p className="text-[10px] sm:text-xs text-gray-700 font-bold">
                     {favoritesCount}/{TOTAL_SELECTIONS} selected
                   </p>
                 </div>
@@ -271,10 +268,10 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
               
               <button
                 onClick={handleSave}
-                className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors flex-shrink-0 ${
+                className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold uppercase border-3 border-black transition-all flex-shrink-0 shadow-[4px_4px_0_0_#000] hover:shadow-[6px_6px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 ${
                   showSaved 
-                    ? 'bg-green-600 text-white' 
-                    : 'bg-board-accent text-white hover:bg-board-accent-dim'
+                    ? 'bg-green-400 text-black' 
+                    : 'bg-orange-400 text-black'
                 }`}
               >
                 <Check className="w-4 h-4" />
@@ -290,7 +287,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* LEFT COLUMN - Category Slots */}
             <div className="space-y-2">
-            <h2 className="text-sm font-medium text-zinc-400 mb-3">
+            <h2 className="text-sm font-bold text-black uppercase tracking-wide mb-3">
               Choose Your Favorites ({favoritesCount}/{TOTAL_SELECTIONS})
             </h2>
             
@@ -301,34 +298,34 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                 const typesWithFavorites = cat.types.filter(t => localFavorites[t.type]);
                 
                 return (
-                  <div key={cat.category} className="rounded-xl border border-board-border bg-board-surface overflow-hidden">
+                  <div key={cat.category} className="border-3 border-black bg-white overflow-hidden shadow-[4px_4px_0_0_#000]">
                     {/* Category Header */}
                     <button
                       onClick={() => toggleCategory(cat.category)}
-                      className="w-full p-3 flex items-center gap-3 text-left hover:bg-board-elevated/50 transition-colors"
+                      className="w-full p-3 flex items-center gap-3 text-left hover:bg-yellow-100 transition-colors"
                     >
                       <div 
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-lg"
-                        style={{ backgroundColor: `${categoryInfo?.color}20` }}
+                        className="w-8 h-8 border-2 border-black flex items-center justify-center text-lg"
+                        style={{ backgroundColor: categoryInfo?.color || '#FFD93D' }}
                       >
                         {cat.icon}
                       </div>
                       <div className="flex-1">
-                        <span className="font-medium text-white">{cat.name}</span>
-                        <span className="ml-2 text-xs text-zinc-500">
+                        <span className="font-bold text-black uppercase">{cat.name}</span>
+                        <span className="ml-2 text-xs text-gray-600 font-medium">
                           {typesWithFavorites.length}/{cat.types.length} selected
                         </span>
                       </div>
                       {isExpanded ? (
-                        <ChevronDown className="w-4 h-4 text-zinc-500" />
+                        <ChevronDown className="w-4 h-4 text-black" />
                       ) : (
-                        <ChevronRight className="w-4 h-4 text-zinc-500" />
+                        <ChevronRight className="w-4 h-4 text-black" />
                       )}
                     </button>
                     
                     {/* Types List */}
                     {isExpanded && (
-                      <div className="border-t border-board-border">
+                      <div className="border-t-2 border-black">
                         {cat.types.map((typeOpt) => {
                           const isSelected = selectedKey === typeOpt.type && selectionMode === 'type';
                           const favoritePedal = getSelectedPedalForType(typeOpt.type);
@@ -340,23 +337,23 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                               onClick={() => handleSelectType(typeOpt.type)}
                               className={`w-full p-2.5 pl-6 flex items-center gap-3 text-left transition-colors ${
                                 isSelected 
-                                  ? 'bg-board-accent/20 border-l-2 border-board-accent' 
+                                  ? 'bg-orange-200 border-l-4 border-orange-500' 
                                   : hasFavorite
-                                    ? 'bg-green-600/10 border-l-2 border-green-600'
-                                    : 'hover:bg-board-elevated/50 border-l-2 border-transparent'
+                                    ? 'bg-green-100 border-l-4 border-green-600'
+                                    : 'hover:bg-yellow-50 border-l-4 border-transparent'
                               }`}
                             >
                               <span className="text-lg">{typeOpt.icon}</span>
                               <div className="flex-1 min-w-0">
-                                <div className="text-sm text-white">{typeOpt.type}</div>
+                                <div className="text-sm text-black font-medium">{typeOpt.type}</div>
                                 {hasFavorite && (
-                                  <div className="text-xs text-green-400 truncate">
+                                  <div className="text-xs text-green-700 font-medium truncate">
                                     ⭐ {favoritePedal.brand} {favoritePedal.model}
                                   </div>
                                 )}
                               </div>
                               {hasFavorite && (
-                                <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                                <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
                               )}
                             </button>
                           );
@@ -368,8 +365,8 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
               })}
               
               {/* Single Categories (no subtypes) */}
-              <div className="mt-4 pt-4 border-t border-board-border">
-                <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2 px-1">Pick One From Each</p>
+              <div className="mt-4 pt-4 border-t-2 border-black">
+                <p className="text-xs text-black font-bold uppercase tracking-wider mb-2 px-1">Pick One From Each</p>
                 {SINGLE_CATEGORIES.map((cat) => {
                   const categoryInfo = CATEGORY_INFO[cat.category];
                   const isSelected = selectedKey === cat.category && selectionMode === 'category';
@@ -380,30 +377,28 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                     <button
                       key={cat.category}
                       onClick={() => handleSelectCategory(cat.category)}
-                      className={`w-full rounded-xl border transition-all p-3 flex items-center gap-3 text-left mb-2 ${
+                      className={`w-full border-3 border-black transition-all p-3 flex items-center gap-3 text-left mb-2 shadow-[4px_4px_0_0_#000] hover:shadow-[5px_5px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 ${
                         isSelected 
-                          ? 'border-board-accent bg-board-accent/10' 
+                          ? 'bg-orange-200' 
                           : hasFavorite
-                            ? 'border-green-600/50 bg-board-surface'
-                            : 'border-board-border bg-board-surface hover:border-zinc-600'
+                            ? 'bg-green-100'
+                            : 'bg-white hover:bg-yellow-50'
                       }`}
                     >
                       <div 
-                        className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${
-                          hasFavorite ? 'bg-green-600/20' : ''
-                        }`}
-                        style={hasFavorite ? {} : { backgroundColor: `${categoryInfo?.color}20` }}
+                        className={`w-10 h-10 border-2 border-black flex items-center justify-center text-xl`}
+                        style={{ backgroundColor: hasFavorite ? '#86efac' : (categoryInfo?.color || '#FFD93D') }}
                       >
                         {cat.icon}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-white">{cat.name}</div>
+                        <div className="font-bold text-black uppercase">{cat.name}</div>
                         {hasFavorite ? (
-                          <div className="text-xs text-green-400 truncate">
+                          <div className="text-xs text-green-700 font-medium truncate">
                             ⭐ {favoritePedal.brand} {favoritePedal.model}
                           </div>
                         ) : (
-                          <div className="text-xs text-zinc-500">Tap to select your favorite</div>
+                          <div className="text-xs text-gray-600">Tap to select your favorite</div>
                         )}
                       </div>
                       {hasFavorite && (
@@ -417,7 +412,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
           </div>
             
           {/* RIGHT COLUMN - Pedal Selection */}
-          <div className="bg-board-surface border border-board-border rounded-xl p-4 min-h-[400px] flex flex-col">
+          <div className="bg-white border-4 border-black p-4 min-h-[400px] flex flex-col shadow-[8px_8px_0_0_#000]">
             {selectedKey && (selectedTypeInfo || selectedCategoryInfo) ? (
               <>
                 <div className="flex items-center justify-between mb-4">
@@ -425,18 +420,18 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                     <span className="text-xl">
                       {selectedTypeInfo?.icon || selectedCategoryInfo?.icon}
                     </span>
-                    <h2 className="text-lg font-medium text-white">
+                    <h2 className="text-lg font-bold text-black uppercase">
                       Favorite {selectionMode === 'type' ? selectedKey : selectedCategoryInfo?.name}
                     </h2>
                   </div>
                   
                   {/* Sorting Options */}
                   <div className="flex items-center gap-1">
-                    <ArrowUpDown className="w-3 h-3 text-zinc-500" />
+                    <ArrowUpDown className="w-3 h-3 text-gray-600" />
                     <select
                       value={sortOption}
                       onChange={(e) => setSortOption(e.target.value as SortOption)}
-                      className="text-xs bg-board-elevated border border-board-border rounded px-2 py-1 text-white focus:outline-none focus:border-board-accent"
+                      className="text-xs bg-yellow-100 border-2 border-black px-2 py-1 text-black font-medium focus:outline-none"
                     >
                       <option value="rating">Rating</option>
                       <option value="price-low">Price: Low</option>
@@ -448,18 +443,18 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                 
                 {/* Search Bar */}
                 <div className="relative mb-3">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
                   <input
                     type="text"
                     placeholder="Search pedals..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-8 py-2 bg-board-elevated border border-board-border rounded-lg text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-board-accent transition-colors"
+                    className="w-full pl-9 pr-8 py-2 bg-white border-2 border-black text-sm text-black placeholder-gray-500 focus:outline-none focus:bg-yellow-50 transition-colors"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -482,31 +477,31 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                           >
                             <button
                               onClick={() => handleSelectPedal(pedal)}
-                              className={`w-full group p-3 rounded-xl border text-left transition-all ${
+                              className={`w-full group p-3 border-2 border-black text-left transition-all shadow-[3px_3px_0_0_#000] hover:shadow-[4px_4px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 ${
                                 isSelected
-                                  ? 'border-green-500 bg-green-500/10 ring-2 ring-green-500/30'
-                                  : 'border-board-border bg-board-elevated hover:border-board-accent'
+                                  ? 'bg-green-200 ring-2 ring-green-600'
+                                  : 'bg-white hover:bg-yellow-50'
                               }`}
                             >
-                              <div className="aspect-square mb-2 rounded-lg overflow-hidden bg-black/20">
+                              <div className="aspect-square mb-2 overflow-hidden bg-gray-100 border border-black">
                                 <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
                               </div>
-                              <p className="text-xs text-zinc-400 truncate">{pedal.brand}</p>
-                              <p className="text-sm font-medium text-white truncate">{pedal.model}</p>
+                              <p className="text-xs text-gray-600 truncate font-medium">{pedal.brand}</p>
+                              <p className="text-sm font-bold text-black truncate">{pedal.model}</p>
                               <div className="flex items-center justify-between mt-1">
-                                <p className="text-xs text-green-400">${pedal.reverbPrice}</p>
+                                <p className="text-xs text-green-700 font-bold">${pedal.reverbPrice}</p>
                                 <span 
-                                  className="text-xs font-bold px-1.5 py-0.5 rounded"
+                                  className="text-xs font-bold px-1.5 py-0.5 border border-black"
                                   style={{ 
-                                    backgroundColor: `${categoryInfo?.color}20`, 
-                                    color: categoryInfo?.color 
+                                    backgroundColor: categoryInfo?.color || '#FFD93D',
+                                    color: '#000'
                                   }}
                                 >
                                   {pedal.categoryRating}/10
                                 </span>
                               </div>
                               {isSelected && (
-                                <div className="mt-2 flex items-center gap-1 text-green-400 text-xs">
+                                <div className="mt-2 flex items-center gap-1 text-green-700 text-xs font-bold">
                                   <Check className="w-3 h-3" />
                                   ⭐ Your Favorite
                                 </div>
@@ -515,10 +510,10 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                             
                             {/* Hover Card - Desktop only */}
                             {hoveredPedal?.id === pedal.id && (
-                              <div className="hover-only absolute inset-0 bg-board-dark/95 backdrop-blur-sm border border-board-accent rounded-xl p-2 shadow-2xl z-30 flex flex-col justify-between pointer-events-none">
+                              <div className="hover-only absolute inset-0 bg-black/95 border-2 border-black p-2 shadow-[4px_4px_0_0_#FFD93D] z-30 flex flex-col justify-between pointer-events-none">
                                 <div>
-                                  <p className="text-[10px] text-zinc-500 truncate">{pedal.brand}</p>
-                                  <p className="text-xs font-semibold text-white truncate">{pedal.model}</p>
+                                  <p className="text-[10px] text-gray-400 truncate">{pedal.brand}</p>
+                                  <p className="text-xs font-bold text-white truncate">{pedal.model}</p>
                                   <div className="flex items-center gap-1 mt-1">
                                     <span 
                                       className="text-sm font-bold"
@@ -526,11 +521,11 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                                     >
                                       {pedal.categoryRating}/10
                                     </span>
-                                    <span className="text-[9px] text-zinc-500">{ratingLabel}</span>
+                                    <span className="text-[9px] text-gray-400">{ratingLabel}</span>
                                   </div>
-                                  <div className="w-full h-1 bg-board-elevated rounded-full overflow-hidden mt-1">
+                                  <div className="w-full h-1 bg-gray-700 overflow-hidden mt-1">
                                     <div 
-                                      className="h-full rounded-full"
+                                      className="h-full"
                                       style={{ 
                                         width: `${(pedal.categoryRating / 10) * 100}%`,
                                         backgroundColor: categoryInfo?.color
@@ -540,12 +535,12 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                                 </div>
                                 
                                 <div className="flex gap-2 text-[10px] my-1">
-                                  <div className="flex-1 bg-board-elevated rounded px-1.5 py-1">
-                                    <span className="text-zinc-500">$</span>
+                                  <div className="flex-1 bg-gray-800 px-1.5 py-1">
+                                    <span className="text-gray-500">$</span>
                                     <span className="text-green-400 font-medium">{pedal.reverbPrice}</span>
                                   </div>
-                                  <div className="flex-1 bg-board-elevated rounded px-1.5 py-1">
-                                    <span className="text-zinc-500">⚡</span>
+                                  <div className="flex-1 bg-gray-800 px-1.5 py-1">
+                                    <span className="text-gray-500">⚡</span>
                                     <span className="text-white font-medium">{pedal.currentMa}mA</span>
                                   </div>
                                 </div>
@@ -554,7 +549,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                                   href={getYouTubeReviewUrl(pedal.brand, pedal.model)}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="flex items-center justify-center gap-1 w-full px-2 py-1.5 bg-red-600/20 text-red-400 rounded-lg hover:bg-red-600/30 transition-colors text-[10px] font-medium pointer-events-auto"
+                                  className="flex items-center justify-center gap-1 w-full px-2 py-1.5 bg-red-500 text-white hover:bg-red-600 transition-colors text-[10px] font-bold pointer-events-auto border border-black"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   <Youtube className="w-3 h-3" />
@@ -567,15 +562,15 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                       })}
                     </div>
                 ) : (
-                  <div className="flex items-center justify-center h-48 text-zinc-500">
+                  <div className="flex items-center justify-center h-48 text-gray-600 font-medium">
                     No {selectionMode === 'type' ? selectedKey : selectedCategoryInfo?.name} pedals found
                   </div>
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-zinc-500 py-8">
+              <div className="flex flex-col items-center justify-center h-full text-gray-600 py-8">
                 <div className="text-4xl mb-3">👆</div>
-                <p className="text-center text-sm">
+                <p className="text-center text-sm font-medium">
                   <span className="lg:hidden">Select a type or category above<br />to choose your favorite pedal</span>
                   <span className="hidden lg:inline">Select a type or category on the left<br />to choose your favorite pedal</span>
                 </p>

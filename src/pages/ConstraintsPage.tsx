@@ -2,31 +2,34 @@ import { useState } from 'react';
 import { Ruler, DollarSign, Check } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 
-// Simple On/Off toggle component
+// Neo-Brutalist Toggle
 function OnOffToggle({ 
   enabled, 
   onToggle,
+  color = 'board-accent',
 }: { 
   enabled: boolean; 
   onToggle: () => void;
+  color?: string;
 }) {
   return (
     <button
       onClick={onToggle}
-      className={`relative w-14 h-7 rounded-full transition-colors ${
-        enabled ? 'bg-board-accent' : 'bg-board-elevated border border-board-border'
+      className={`relative px-4 py-2 font-bold text-xs uppercase transition-all ${
+        enabled 
+          ? 'bg-black text-white' 
+          : 'bg-white text-black'
       }`}
+      style={{ 
+        border: '3px solid black',
+        boxShadow: enabled ? '3px 3px 0px black' : 'none',
+      }}
     >
-      <div 
-        className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow-md transition-transform ${
-          enabled ? 'translate-x-8' : 'translate-x-1'
-        }`}
-      />
+      {enabled ? 'ON' : 'OFF'}
     </button>
   );
 }
 
-// Simple size options - just names and pedal counts
 const SIZE_OPTIONS = [
   { id: 'mini', name: 'Mini', pedals: 4, description: 'Essentials only' },
   { id: 'small', name: 'Small', pedals: 6, description: 'Compact setup' },
@@ -43,7 +46,6 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
   const { state, dispatch } = useBoard();
   const { board } = state;
   
-  // Find current size based on pedal count
   const currentSize = SIZE_OPTIONS.find(s => s.pedals === board.constraints.maxPedalCount) || SIZE_OPTIONS[2];
   const [selectedSize, setSelectedSize] = useState(currentSize.id);
   
@@ -57,7 +59,7 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
       constraints: {
         ...board.constraints,
         maxPedalCount: size.pedals,
-        applyAfterSize: true, // Use pedal count mode
+        applyAfterSize: true,
       },
     });
   };
@@ -96,97 +98,112 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
   const budgetEnabled = !board.constraints.applyAfterBudget;
   
   return (
-    <div className="min-h-full p-4 sm:p-6 lg:p-8 overflow-auto">
+    <div className="min-h-full p-4 sm:p-6 lg:p-8 overflow-auto" style={{ backgroundColor: '#FFFEF0' }}>
       {/* Header */}
-      <div className="max-w-3xl mx-auto mb-6 sm:mb-8 text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+      <div className="max-w-3xl mx-auto mb-8 text-center">
+        <h1 
+          className="text-2xl sm:text-4xl font-black text-black mb-2 uppercase tracking-tight"
+          style={{ fontFamily: '"Space Grotesk", sans-serif' }}
+        >
           Set Your Limits
         </h1>
-        <p className="text-sm sm:text-base text-zinc-400">
+        <p className="text-sm sm:text-base text-black/70 font-bold">
           How big? How much?
         </p>
       </div>
       
-      <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
+      <div className="max-w-2xl mx-auto space-y-6">
         {/* Board Size */}
-        <div className={`border rounded-xl p-4 sm:p-5 transition-all ${
-          sizeEnabled
-            ? 'bg-board-surface border-board-accent shadow-lg shadow-board-accent/20' 
-            : 'bg-board-surface/50 border-board-border opacity-60'
-        }`}>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className={`text-base sm:text-lg font-semibold flex items-center gap-2 ${
-              sizeEnabled ? 'text-white' : 'text-zinc-400'
-            }`}>
-              <Ruler className={`w-5 h-5 ${sizeEnabled ? 'text-board-accent' : 'text-zinc-500'}`} />
+        <div 
+          className={`p-5 sm:p-6 transition-all ${sizeEnabled ? '' : 'opacity-50'}`}
+          style={{
+            backgroundColor: sizeEnabled ? '#FF5722' : '#E0E0E0',
+            border: '4px solid black',
+            boxShadow: sizeEnabled ? '6px 6px 0px black' : '4px 4px 0px black',
+          }}
+        >
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 text-white uppercase">
+              <div 
+                className="w-10 h-10 bg-white flex items-center justify-center"
+                style={{ border: '3px solid black' }}
+              >
+                <Ruler className="w-5 h-5 text-black" />
+              </div>
               Board Size
             </h2>
-            <div className="flex items-center gap-2">
-              <span className={`text-xs ${sizeEnabled ? 'text-board-accent font-medium' : 'text-board-muted'}`}>
-                {sizeEnabled ? 'On' : 'Off'}
-              </span>
-              <OnOffToggle 
-                enabled={sizeEnabled}
-                onToggle={toggleSizeEnabled}
-              />
-            </div>
+            <OnOffToggle 
+              enabled={sizeEnabled}
+              onToggle={toggleSizeEnabled}
+            />
           </div>
           
-          {/* Size Options - Responsive Grid */}
-          <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
+          {/* Size Options */}
+          <div className="grid grid-cols-5 gap-2">
             {SIZE_OPTIONS.map(size => (
               <button
                 key={size.id}
                 onClick={() => handleSizeSelect(size.id)}
-                className={`p-2 sm:p-3 rounded-lg sm:rounded-xl border text-center transition-all ${
+                className={`p-3 text-center transition-all font-bold ${
                   selectedSize === size.id
-                    ? 'border-board-accent bg-board-accent/20 ring-2 ring-board-accent/30'
-                    : 'border-board-border hover:border-board-accent/50 bg-board-elevated/50'
+                    ? 'bg-black text-white -translate-y-1'
+                    : 'bg-white text-black hover:-translate-y-0.5'
                 }`}
+                style={{ 
+                  border: '3px solid black',
+                  boxShadow: selectedSize === size.id ? '4px 4px 0px white' : '3px 3px 0px black',
+                }}
               >
-                <div className="text-xl sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">{size.pedals}</div>
-                <div className={`text-[10px] sm:text-xs font-medium ${selectedSize === size.id ? 'text-board-accent' : 'text-zinc-400'}`}>
-                  {size.name}
-                </div>
+                <div className="text-2xl sm:text-3xl mb-1">{size.pedals}</div>
+                <div className="text-[10px] sm:text-xs uppercase">{size.name}</div>
                 {selectedSize === size.id && (
-                  <Check className="w-3 h-3 sm:w-4 sm:h-4 text-board-accent mx-auto mt-0.5 sm:mt-1" />
+                  <Check className="w-4 h-4 mx-auto mt-1" />
                 )}
               </button>
             ))}
           </div>
           
-          <p className="text-[10px] sm:text-xs text-zinc-500 mt-3 text-center">
+          <p className="text-xs text-white/80 mt-4 text-center font-bold">
             We'll suggest a board that fits on the review page.
           </p>
         </div>
         
         {/* Budget */}
-        <div className={`border rounded-xl p-4 sm:p-5 transition-all ${
-          budgetEnabled 
-            ? 'bg-board-surface border-green-500 shadow-lg shadow-green-500/20' 
-            : 'bg-board-surface/50 border-board-border opacity-60'
-        }`}>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className={`text-base sm:text-lg font-semibold flex items-center gap-2 ${
-              budgetEnabled ? 'text-white' : 'text-zinc-400'
-            }`}>
-              <DollarSign className={`w-5 h-5 ${budgetEnabled ? 'text-green-500' : 'text-zinc-500'}`} />
+        <div 
+          className={`p-5 sm:p-6 transition-all ${budgetEnabled ? '' : 'opacity-50'}`}
+          style={{
+            backgroundColor: budgetEnabled ? '#4CAF50' : '#E0E0E0',
+            border: '4px solid black',
+            boxShadow: budgetEnabled ? '6px 6px 0px black' : '4px 4px 0px black',
+          }}
+        >
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 text-white uppercase">
+              <div 
+                className="w-10 h-10 bg-white flex items-center justify-center"
+                style={{ border: '3px solid black' }}
+              >
+                <DollarSign className="w-5 h-5 text-black" />
+              </div>
               Budget
             </h2>
-            <div className="flex items-center gap-2">
-              <span className={`text-xs ${budgetEnabled ? 'text-green-500 font-medium' : 'text-board-muted'}`}>
-                {budgetEnabled ? 'On' : 'Off'}
-              </span>
-              <OnOffToggle 
-                enabled={budgetEnabled}
-                onToggle={toggleBudgetEnabled}
-              />
-            </div>
+            <OnOffToggle 
+              enabled={budgetEnabled}
+              onToggle={toggleBudgetEnabled}
+            />
           </div>
           
           {/* Budget Display */}
-          <div className="text-center mb-4">
-            <span className="text-3xl sm:text-4xl font-bold text-white">${board.constraints.maxBudget}</span>
+          <div 
+            className="text-center mb-5 py-4 bg-white"
+            style={{ border: '3px solid black' }}
+          >
+            <span 
+              className="text-4xl sm:text-5xl font-black text-black"
+              style={{ fontFamily: '"Space Grotesk", sans-serif' }}
+            >
+              ${board.constraints.maxBudget}
+            </span>
           </div>
           
           {/* Slider */}
@@ -197,20 +214,28 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
             step="100"
             value={board.constraints.maxBudget}
             onChange={(e) => handleBudgetChange(parseInt(e.target.value))}
-            className="w-full accent-green-500 mb-4"
+            className="w-full mb-4 h-3 bg-white appearance-none cursor-pointer"
+            style={{ 
+              border: '2px solid black',
+              outline: 'none',
+            }}
           />
           
           {/* Quick Presets */}
-          <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
+          <div className="grid grid-cols-5 gap-2">
             {[300, 500, 1000, 1500, 2000].map(amount => (
               <button
                 key={amount}
                 onClick={() => handleBudgetChange(amount)}
-                className={`py-2 text-xs sm:text-sm rounded-lg border transition-colors ${
+                className={`py-2 text-xs sm:text-sm font-bold transition-all ${
                   board.constraints.maxBudget === amount
-                    ? 'border-green-500 bg-green-500/20 text-green-400'
-                    : 'border-board-border text-board-muted hover:border-green-500/50'
+                    ? 'bg-black text-white'
+                    : 'bg-white text-black hover:-translate-y-0.5'
                 }`}
+                style={{ 
+                  border: '2px solid black',
+                  boxShadow: board.constraints.maxBudget === amount ? '2px 2px 0px white' : '2px 2px 0px black',
+                }}
               >
                 ${amount >= 1000 ? `${amount/1000}k` : amount}
               </button>

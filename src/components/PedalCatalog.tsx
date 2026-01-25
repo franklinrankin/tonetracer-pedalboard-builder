@@ -66,13 +66,13 @@ export function PedalCatalog() {
   })();
   
   return (
-    <div className="bg-board-surface border border-board-border rounded-xl overflow-hidden">
+    <div className="bg-white overflow-hidden" style={{ border: '3px solid black' }}>
       {/* Header */}
-      <div className="p-4 border-b border-board-border">
+      <div className="p-4" style={{ borderBottom: '3px solid black' }}>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="font-semibold text-white">Pedal Catalog</h2>
-            <p className="text-xs text-board-muted">
+            <h2 className="font-black text-black uppercase">Pedal Catalog</h2>
+            <p className="text-xs text-black/50 font-bold">
               {filteredPedals.length} pedals
             </p>
           </div>
@@ -80,21 +80,23 @@ export function PedalCatalog() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-lg transition-colors ${
+              className={`p-2 transition-colors font-bold ${
                 viewMode === 'grid' 
-                  ? 'bg-board-accent text-white' 
-                  : 'bg-board-elevated text-board-muted hover:text-white'
+                  ? 'bg-black text-white' 
+                  : 'bg-white text-black hover:bg-gray-100'
               }`}
+              style={{ border: '2px solid black' }}
             >
               <Grid className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded-lg transition-colors ${
+              className={`p-2 transition-colors font-bold ${
                 viewMode === 'list' 
-                  ? 'bg-board-accent text-white' 
-                  : 'bg-board-elevated text-board-muted hover:text-white'
+                  ? 'bg-black text-white' 
+                  : 'bg-white text-black hover:bg-gray-100'
               }`}
+              style={{ border: '2px solid black' }}
             >
               <List className="w-4 h-4" />
             </button>

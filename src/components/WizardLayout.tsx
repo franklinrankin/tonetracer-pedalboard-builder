@@ -25,9 +25,9 @@ interface WizardLayoutProps {
 }
 
 const STEPS: { id: WizardStep; label: string; shortLabel: string; icon: ReactNode }[] = [
-  { id: 'genre', label: 'Choose Style', shortLabel: 'Style', icon: <Music2 className="w-4 h-4" /> },
-  { id: 'constraints', label: 'Set Limits', shortLabel: 'Limits', icon: <Settings2 className="w-4 h-4" /> },
-  { id: 'build', label: 'Build Board', shortLabel: 'Build', icon: <Sliders className="w-4 h-4" /> },
+  { id: 'genre', label: 'Style', shortLabel: 'Style', icon: <Music2 className="w-4 h-4" /> },
+  { id: 'constraints', label: 'Limits', shortLabel: 'Limits', icon: <Settings2 className="w-4 h-4" /> },
+  { id: 'build', label: 'Build', shortLabel: 'Build', icon: <Sliders className="w-4 h-4" /> },
   { id: 'review', label: 'Review', shortLabel: 'Review', icon: <ListChecks className="w-4 h-4" /> },
 ];
 
@@ -47,11 +47,10 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
   const canGoNext = () => {
     switch (currentStep) {
       case 'genre':
-        return selectedGenres.length > 0; // At least one genre required
+        return selectedGenres.length > 0;
       case 'constraints':
         return true;
       case 'build':
-        // Check if any pedals are selected in buildSlots
         return (board.buildSlots?.some(slot => slot.selectedPedalId) ?? false);
       case 'review':
         return false;
@@ -74,76 +73,86 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
     }
   };
   
-  // Get board size info
   const matchingTemplate = BOARD_TEMPLATES.find(
     t => t.widthMm === board.constraints.maxWidthMm && t.depthMm === board.constraints.maxDepthMm
   );
   
   return (
-    <div className="min-h-screen bg-board-dark flex flex-col">
-      {/* Floating Top Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-board-surface/95 backdrop-blur-md border-b border-board-border shadow-lg">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4">
-          <div className="flex items-center h-14 sm:h-16 gap-2 sm:gap-4">
-            {/* Logo - clickable to go home */}
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#FFFEF0' }}>
+      {/* Neo-Brutalist Header */}
+      <header 
+        className="fixed top-0 left-0 right-0 z-50 bg-white"
+        style={{ borderBottom: '4px solid black' }}
+      >
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
+          <div className="flex items-center h-16 sm:h-20 gap-3 sm:gap-6">
+            {/* Logo */}
             <button 
               onClick={onGoHome}
               className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity"
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-board-accent to-board-highlight flex items-center justify-center">
-                <Sliders className="w-4 h-4 text-board-dark" />
+              <div 
+                className="w-10 h-10 bg-black flex items-center justify-center"
+                style={{ border: '3px solid black' }}
+              >
+                <Sliders className="w-5 h-5 text-white" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-sm font-bold leading-tight text-white">
+                <h1 
+                  className="text-lg font-black tracking-tight text-black"
+                  style={{ fontFamily: '"Space Grotesk", sans-serif' }}
+                >
                   BOARDSIE
                 </h1>
               </div>
             </button>
             
-            {/* Mobile: Simple Step Counter */}
+            {/* Mobile: Step Counter */}
             <div className="flex-1 flex items-center justify-center sm:hidden">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-board-elevated">
-                <span className="text-board-accent font-bold text-sm">{currentStepIndex + 1}</span>
-                <span className="text-board-muted text-xs">/</span>
-                <span className="text-board-muted text-xs">4</span>
-                <span className="text-white text-sm font-medium ml-1">{STEPS[currentStepIndex].shortLabel}</span>
+              <div 
+                className="flex items-center gap-2 px-4 py-2 bg-black text-white font-bold text-sm"
+                style={{ border: '3px solid black' }}
+              >
+                <span>{currentStepIndex + 1}/4</span>
+                <span className="uppercase">{STEPS[currentStepIndex].shortLabel}</span>
               </div>
             </div>
             
-            {/* Desktop: Breadcrumb Step Navigation - Center */}
+            {/* Desktop: Step Navigation */}
             <nav className="hidden sm:flex flex-1 items-center justify-center">
-              <div className="flex items-center gap-1 md:gap-2">
+              <div className="flex items-center gap-2">
                 {STEPS.map((step, index) => {
                   const isActive = step.id === currentStep;
                   const isCompleted = index < currentStepIndex;
                   const isClickable = index <= currentStepIndex || (index === currentStepIndex + 1 && canGoNext());
                   
                   return (
-                    <div key={step.id} className="flex items-center gap-1 md:gap-2">
+                    <div key={step.id} className="flex items-center gap-2">
                       <button
                         onClick={() => isClickable && onStepChange(step.id)}
                         disabled={!isClickable}
-                        className={`flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 rounded-full transition-all text-xs md:text-sm font-medium ${
+                        className={`flex items-center gap-2 px-4 py-2 font-bold text-sm uppercase tracking-wide transition-all ${
                           isActive
-                            ? 'bg-board-accent text-white shadow-lg shadow-board-accent/30'
+                            ? 'bg-board-accent text-white'
                             : isCompleted
-                              ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+                              ? 'bg-board-success text-white'
                               : isClickable
-                                ? 'bg-board-elevated text-board-muted hover:bg-board-border hover:text-white'
-                                : 'bg-board-elevated/50 text-board-muted/40 cursor-not-allowed'
+                                ? 'bg-white text-black hover:-translate-y-0.5'
+                                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                         }`}
+                        style={{ 
+                          border: '3px solid black',
+                          boxShadow: isActive || isCompleted ? '4px 4px 0px black' : '2px 2px 0px black',
+                        }}
                       >
-                        <span className={`flex items-center justify-center w-5 h-5 rounded-full text-xs ${
-                          isActive ? 'bg-white/20' : isCompleted ? 'bg-emerald-500/30' : 'bg-board-dark/30'
-                        }`}>
-                          {isCompleted ? <Check className="w-3 h-3" /> : step.icon}
+                        <span className="w-5 h-5 flex items-center justify-center">
+                          {isCompleted ? <Check className="w-4 h-4" /> : step.icon}
                         </span>
-                        <span className="hidden lg:inline">{step.label}</span>
-                        <span className="lg:hidden">{step.shortLabel}</span>
+                        <span>{step.label}</span>
                       </button>
                       {index < STEPS.length - 1 && (
-                        <ChevronRight className={`w-3 h-3 md:w-4 md:h-4 ${
-                          isCompleted ? 'text-emerald-500' : 'text-board-muted/30'
+                        <ChevronRight className={`w-5 h-5 ${
+                          isCompleted ? 'text-board-success' : 'text-gray-300'
                         }`} />
                       )}
                     </div>
@@ -152,60 +161,39 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
               </div>
             </nav>
             
-            {/* Right Side - Quick Info & Actions */}
-            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-              {/* Quick Summary Button - Desktop only */}
-              {hasProgress && (
-                <button
-                  onClick={() => setShowDetails(!showDetails)}
-                  className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-board-elevated text-xs text-white hover:bg-board-border transition-colors"
-                >
-                  {genres.length > 0 && (
-                    <span className="flex items-center gap-1">
-                      {genres[0]?.icon}
-                      {genres.length > 1 && <span>+{genres.length - 1}</span>}
-                    </span>
-                  )}
-                  {board.slots.length > 0 && (
-                    <span className="text-board-accent font-medium">
-                      {board.slots.length} pedals · ${totalCost}
-                    </span>
-                  )}
-                </button>
-              )}
-              
-              {/* Desktop Quick Actions */}
-              <div className="hidden sm:flex items-center gap-1">
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {/* Desktop Actions */}
+              <div className="hidden sm:flex items-center gap-2">
                 <button
                   onClick={() => setShowPedalIndex(true)}
-                  className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+                  className="p-2 bg-white text-black font-bold transition-all hover:-translate-y-0.5"
+                  style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
                   title="Pedal Index"
                 >
-                  <Database className="w-4 h-4" />
-                  <span className="text-[10px]">Index</span>
+                  <Database className="w-5 h-5" />
                 </button>
                 
                 <button
                   onClick={() => setShowAbout(true)}
-                  className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+                  className="p-2 bg-white text-black font-bold transition-all hover:-translate-y-0.5"
+                  style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
                   title="About"
                 >
-                  <HelpCircle className="w-4 h-4" />
-                  <span className="text-[10px]">About</span>
+                  <HelpCircle className="w-5 h-5" />
                 </button>
                 
                 {hasProgress && (
                   <button
                     onClick={onStartOver}
-                    className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-board-muted hover:text-board-danger hover:bg-board-danger/10 transition-colors"
-                    title="Start Over"
+                    className="p-2 bg-white text-board-danger font-bold transition-all hover:-translate-y-0.5"
+                    style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
+                    title="Reset"
                   >
-                    <RotateCcw className="w-4 h-4" />
-                    <span className="text-[10px]">Reset</span>
+                    <RotateCcw className="w-5 h-5" />
                   </button>
                 )}
                 
-                {/* User Menu - Desktop */}
                 <UserMenu 
                   onSignInClick={onSignInClick || (() => {})} 
                   onSavedBoards={onSavedBoards}
@@ -215,20 +203,22 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                 />
               </div>
               
-              {/* Mobile Menu Button */}
+              {/* Mobile Menu */}
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="sm:hidden p-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+                className="sm:hidden p-2 bg-white text-black"
+                style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
               >
                 <Menu className="w-5 h-5" />
               </button>
               
               {/* Nav Buttons */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 {currentStepIndex > 0 && (
                   <button
                     onClick={goPrev}
-                    className="flex items-center gap-1 p-2 sm:px-3 sm:py-1.5 rounded-lg border border-board-border text-white hover:bg-board-elevated transition-colors text-sm"
+                    className="flex items-center gap-1 px-3 py-2 bg-white text-black font-bold uppercase text-sm transition-all hover:-translate-y-0.5"
+                    style={{ border: '3px solid black', boxShadow: '3px 3px 0px black' }}
                   >
                     <ChevronLeft className="w-4 h-4" />
                     <span className="hidden sm:inline">Back</span>
@@ -238,11 +228,15 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                   <button
                     onClick={goNext}
                     disabled={!canGoNext()}
-                    className={`flex items-center gap-1 p-2 sm:px-3 sm:py-1.5 rounded-lg font-medium transition-colors text-sm ${
+                    className={`flex items-center gap-1 px-3 py-2 font-bold uppercase text-sm transition-all ${
                       canGoNext()
-                        ? 'bg-board-accent text-white hover:bg-board-accent-dim'
-                        : 'bg-board-border text-zinc-500 cursor-not-allowed'
+                        ? 'bg-board-accent text-white hover:-translate-y-0.5'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }`}
+                    style={{ 
+                      border: '3px solid black', 
+                      boxShadow: canGoNext() ? '3px 3px 0px black' : 'none' 
+                    }}
                   >
                     <span className="hidden sm:inline">Next</span>
                     <ChevronRight className="w-4 h-4" />
@@ -255,10 +249,13 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
         
         {/* Mobile Menu Dropdown */}
         {showMobileMenu && (
-          <div className="sm:hidden border-t border-board-border bg-board-surface">
-            <div className="px-3 py-2 space-y-1">
+          <div 
+            className="sm:hidden bg-white"
+            style={{ borderTop: '3px solid black' }}
+          >
+            <div className="px-4 py-4 space-y-3">
               {/* Step Navigation */}
-              <div className="flex items-center gap-1 py-2 overflow-x-auto">
+              <div className="flex flex-wrap gap-2">
                 {STEPS.map((step, index) => {
                   const isActive = step.id === currentStep;
                   const isCompleted = index < currentStepIndex;
@@ -274,15 +271,16 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                         }
                       }}
                       disabled={!isClickable}
-                      className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium ${
+                      className={`flex items-center gap-2 px-3 py-2 font-bold text-xs uppercase ${
                         isActive
                           ? 'bg-board-accent text-white'
                           : isCompleted
-                            ? 'bg-emerald-500/20 text-emerald-400'
+                            ? 'bg-board-success text-white'
                             : isClickable
-                              ? 'bg-board-elevated text-board-muted'
-                              : 'bg-board-elevated/50 text-board-muted/40'
+                              ? 'bg-white text-black'
+                              : 'bg-gray-200 text-gray-400'
                       }`}
+                      style={{ border: '2px solid black' }}
                     >
                       {isCompleted ? <Check className="w-3 h-3" /> : step.icon}
                       <span>{step.shortLabel}</span>
@@ -291,53 +289,39 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                 })}
               </div>
               
-              <div className="border-t border-board-border pt-2 grid grid-cols-4 gap-2">
+              <div 
+                className="flex gap-2 pt-2"
+                style={{ borderTop: '2px solid black' }}
+              >
                 <button
-                  onClick={() => {
-                    onGoHome?.();
-                    setShowMobileMenu(false);
-                  }}
-                  className="flex flex-col items-center gap-1 p-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+                  onClick={() => { onGoHome?.(); setShowMobileMenu(false); }}
+                  className="flex-1 flex items-center justify-center gap-2 p-2 bg-white text-black font-bold text-xs uppercase"
+                  style={{ border: '2px solid black' }}
                 >
-                  <Home className="w-5 h-5" />
-                  <span className="text-[10px]">Home</span>
+                  <Home className="w-4 h-4" />
+                  Home
                 </button>
                 <button
-                  onClick={() => {
-                    setShowPedalIndex(true);
-                    setShowMobileMenu(false);
-                  }}
-                  className="flex flex-col items-center gap-1 p-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
+                  onClick={() => { setShowPedalIndex(true); setShowMobileMenu(false); }}
+                  className="flex-1 flex items-center justify-center gap-2 p-2 bg-white text-black font-bold text-xs uppercase"
+                  style={{ border: '2px solid black' }}
                 >
-                  <Database className="w-5 h-5" />
-                  <span className="text-[10px]">Index</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setShowAbout(true);
-                    setShowMobileMenu(false);
-                  }}
-                  className="flex flex-col items-center gap-1 p-2 rounded-lg text-board-muted hover:text-white hover:bg-board-elevated transition-colors"
-                >
-                  <HelpCircle className="w-5 h-5" />
-                  <span className="text-[10px]">About</span>
+                  <Database className="w-4 h-4" />
+                  Index
                 </button>
                 {hasProgress && (
                   <button
-                    onClick={() => {
-                      onStartOver();
-                      setShowMobileMenu(false);
-                    }}
-                    className="flex flex-col items-center gap-1 p-2 rounded-lg text-board-danger hover:bg-board-danger/10 transition-colors"
+                    onClick={() => { onStartOver(); setShowMobileMenu(false); }}
+                    className="flex-1 flex items-center justify-center gap-2 p-2 bg-white text-board-danger font-bold text-xs uppercase"
+                    style={{ border: '2px solid black' }}
                   >
-                    <RotateCcw className="w-5 h-5" />
-                    <span className="text-[10px]">Reset</span>
+                    <RotateCcw className="w-4 h-4" />
+                    Reset
                   </button>
                 )}
               </div>
               
-              {/* User Menu Section */}
-              <div className="border-t border-board-border pt-2">
+              <div style={{ borderTop: '2px solid black', paddingTop: '12px' }}>
                 <UserMenu 
                   onSignInClick={onSignInClick || (() => {})} 
                   onSavedBoards={onSavedBoards}
@@ -351,90 +335,50 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
           </div>
         )}
         
-        {/* Expandable Details Panel */}
-        {showDetails && hasProgress && (
-          <div className="border-t border-board-border bg-board-elevated/50 backdrop-blur-sm">
-            <div className="max-w-7xl mx-auto px-4 py-3">
-              <div className="flex items-center gap-6 text-sm">
-                {/* Genres */}
+        {/* Progress Bar */}
+        {hasProgress && (
+          <div 
+            className="hidden md:block bg-board-highlight"
+            style={{ borderTop: '3px solid black' }}
+          >
+            <div className="max-w-7xl mx-auto px-6 py-2">
+              <div className="flex items-center gap-6 text-sm font-bold text-black">
                 {genres.length > 0 && (
                   <div className="flex items-center gap-2">
-                    <span className="text-board-muted">Style:</span>
+                    <span className="opacity-60">Style:</span>
                     <div className="flex items-center gap-1">
-                      {genres.map((g, i) => g && (
-                        <span key={g.id} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-board-surface text-white text-xs">
-                          <GenreIcon genre={g} size="sm" /> {g.name}
+                      {genres.slice(0, 2).map((g) => g && (
+                        <span key={g.id} className="flex items-center gap-1">
+                          {g.icon} {g.name}
                         </span>
                       ))}
+                      {genres.length > 2 && <span>+{genres.length - 2}</span>}
                     </div>
-                    <button onClick={() => onStepChange('genre')} className="text-board-accent text-xs hover:underline">Edit</button>
                   </div>
                 )}
                 
-                {/* Board Size */}
-                {currentStepIndex > 1 && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-board-muted">Board:</span>
-                    <span className="text-white">
-                      {board.constraints.maxPedalCount 
-                        ? `${board.constraints.maxPedalCount} pedals`
-                        : matchingTemplate 
-                          ? matchingTemplate.name 
-                          : `${formatInches(board.constraints.maxWidthMm)}" × ${formatInches(board.constraints.maxDepthMm)}"`
-                      }
-                    </span>
-                    <span className="text-board-muted">·</span>
-                    <span className="text-white">${board.constraints.maxBudget} budget</span>
-                    <button onClick={() => onStepChange('constraints')} className="text-board-accent text-xs hover:underline">Edit</button>
-                  </div>
-                )}
-                
-                {/* Pedals */}
                 {board.slots.length > 0 && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-board-muted">Pedals:</span>
-                    <span className="text-white">{board.slots.length}</span>
-                    <span className="text-board-muted">·</span>
-                    <span className="text-board-accent font-medium">${totalCost}</span>
-                    <button onClick={() => onStepChange('build')} className="text-board-accent text-xs hover:underline">Edit</button>
-                  </div>
-                )}
-                
-                {/* Tone Tags */}
-                {sectionScores.length > 0 && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-board-muted">Tags:</span>
-                    <div className="flex gap-1">
-                      {sectionScores.slice(0, 3).map(score => (
-                        <span 
-                          key={score.category}
-                          className="px-2 py-0.5 text-xs rounded-full bg-board-accent/20 text-board-accent"
-                        >
-                          {score.tag}
-                        </span>
-                      ))}
-                      {sectionScores.length > 3 && (
-                        <span className="text-board-muted text-xs">+{sectionScores.length - 3}</span>
-                      )}
+                  <>
+                    <span className="opacity-30">|</span>
+                    <div className="flex items-center gap-2">
+                      <span className="opacity-60">Pedals:</span>
+                      <span>{board.slots.length}</span>
                     </div>
-                  </div>
+                    <span className="opacity-30">|</span>
+                    <div className="flex items-center gap-2">
+                      <span className="opacity-60">Cost:</span>
+                      <span className="text-board-accent">${totalCost}</span>
+                    </div>
+                  </>
                 )}
-                
-                {/* Close */}
-                <button 
-                  onClick={() => setShowDetails(false)}
-                  className="ml-auto p-1 rounded hover:bg-board-surface text-board-muted hover:text-white transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
               </div>
             </div>
           </div>
         )}
       </header>
       
-      {/* Main Content - with top padding for fixed header */}
-      <main className="flex-1 pt-16 sm:pt-20">
+      {/* Main Content */}
+      <main className="flex-1 pt-20 sm:pt-24">
         {children}
       </main>
       
@@ -444,35 +388,41 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
       {/* Pedal Index Modal */}
       {showPedalIndex && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          {/* Backdrop */}
           <div 
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/70"
             onClick={() => setShowPedalIndex(false)}
           />
           
-          {/* Modal */}
-          <div className="relative bg-board-dark border border-board-border rounded-2xl w-full max-w-5xl h-[85vh] overflow-hidden shadow-2xl flex flex-col">
-            {/* Header */}
-            <div className="p-4 border-b border-board-border bg-board-surface flex items-center justify-between flex-shrink-0">
+          <div 
+            className="relative bg-white w-full max-w-5xl h-[85vh] overflow-hidden flex flex-col"
+            style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
+          >
+            <div 
+              className="p-4 bg-board-blue text-white flex items-center justify-between flex-shrink-0"
+              style={{ borderBottom: '4px solid black' }}
+            >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-board-accent to-board-highlight flex items-center justify-center">
-                  <Database className="w-5 h-5 text-board-dark" />
+                <div 
+                  className="w-10 h-10 bg-white flex items-center justify-center"
+                  style={{ border: '3px solid black' }}
+                >
+                  <Database className="w-5 h-5 text-black" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-white">Pedal Index</h2>
-                  <p className="text-xs text-board-muted">Browse all pedals in the database</p>
+                  <h2 className="text-xl font-black uppercase">Pedal Index</h2>
+                  <p className="text-xs opacity-80">Browse all pedals</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowPedalIndex(false)}
-                className="px-4 py-2 rounded-lg bg-board-elevated text-white hover:bg-board-border transition-colors text-sm font-medium"
+                className="px-4 py-2 bg-white text-black font-bold uppercase text-sm transition-all hover:-translate-y-0.5"
+                style={{ border: '3px solid black', boxShadow: '3px 3px 0px black' }}
               >
                 Close
               </button>
             </div>
             
-            {/* Catalog */}
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-4" style={{ backgroundColor: '#FFFEF0' }}>
               <PedalCatalog />
             </div>
           </div>

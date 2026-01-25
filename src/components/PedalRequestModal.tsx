@@ -25,11 +25,9 @@ export function PedalRequestModal({ isOpen, onClose }: PedalRequestModalProps) {
     setError(null);
 
     try {
-      // Google Apps Script Web App URL
       const GOOGLE_SCRIPT_URL = import.meta.env.VITE_PEDAL_REQUEST_URL;
       
       if (!GOOGLE_SCRIPT_URL) {
-        // Fallback: just show success (for development)
         console.log('Pedal Request:', { brand: brand.trim(), model: model.trim() });
         setSuccess(true);
         setTimeout(() => {
@@ -42,9 +40,9 @@ export function PedalRequestModal({ isOpen, onClose }: PedalRequestModalProps) {
         return;
       }
 
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors', // Google Apps Script requires no-cors
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -55,7 +53,6 @@ export function PedalRequestModal({ isOpen, onClose }: PedalRequestModalProps) {
         }),
       });
 
-      // With no-cors, we can't read the response, so assume success
       setSuccess(true);
       setTimeout(() => {
         onClose();
@@ -85,28 +82,36 @@ export function PedalRequestModal({ isOpen, onClose }: PedalRequestModalProps) {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70"
         onClick={handleClose}
       />
       
-      {/* Modal */}
-      <div className="relative bg-board-surface border border-board-border rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+      <div 
+        className="relative bg-white w-full max-w-md overflow-hidden"
+        style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-board-border">
+        <div 
+          className="flex items-center justify-between p-4 bg-board-teal text-white"
+          style={{ borderBottom: '4px solid black' }}
+        >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+            <div 
+              className="w-10 h-10 bg-white flex items-center justify-center"
+              style={{ border: '3px solid black' }}
+            >
               <span className="text-xl">🎸</span>
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Request a Pedal</h2>
-              <p className="text-xs text-zinc-400">We'll add it to Boardsie!</p>
+              <h2 className="text-lg font-black uppercase">Request Pedal</h2>
+              <p className="text-xs text-white/80 font-bold">We'll add it!</p>
             </div>
           </div>
           <button
             onClick={handleClose}
-            className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-board-elevated transition-colors"
+            className="p-2 bg-white text-black hover:bg-gray-100"
+            style={{ border: '2px solid black' }}
           >
             <X className="w-5 h-5" />
           </button>
@@ -116,45 +121,53 @@ export function PedalRequestModal({ isOpen, onClose }: PedalRequestModalProps) {
         <div className="p-6">
           {success ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
-                <CheckCircle className="w-8 h-8 text-green-500" />
+              <div 
+                className="w-16 h-16 bg-board-success flex items-center justify-center mb-4"
+                style={{ border: '3px solid black' }}
+              >
+                <CheckCircle className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Request Submitted!</h3>
-              <p className="text-sm text-zinc-400">Thanks for helping make Boardsie better.</p>
+              <h3 className="text-lg font-black text-black mb-2 uppercase">Submitted!</h3>
+              <p className="text-sm text-black/60 font-bold">Thanks for the suggestion.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
-                  Brand / Manufacturer
+                <label className="block text-sm font-black text-black mb-2 uppercase">
+                  Brand
                 </label>
                 <input
                   type="text"
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
                   placeholder="e.g., Boss, Strymon, JHS..."
-                  className="w-full px-4 py-3 bg-board-elevated border border-board-border rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
+                  className="w-full px-4 py-3 bg-white text-black placeholder-black/40 focus:outline-none font-bold"
+                  style={{ border: '3px solid black' }}
                   disabled={loading}
                   autoFocus
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
-                  Model Name
+                <label className="block text-sm font-black text-black mb-2 uppercase">
+                  Model
                 </label>
                 <input
                   type="text"
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
                   placeholder="e.g., DD-8, Timeline, Morning Glory..."
-                  className="w-full px-4 py-3 bg-board-elevated border border-board-border rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
+                  className="w-full px-4 py-3 bg-white text-black placeholder-black/40 focus:outline-none font-bold"
+                  style={{ border: '3px solid black' }}
                   disabled={loading}
                 />
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+                <div 
+                  className="flex items-center gap-2 p-3 bg-red-100 text-red-700 text-sm font-bold"
+                  style={{ border: '2px solid black' }}
+                >
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   {error}
                 </div>
@@ -163,7 +176,8 @@ export function PedalRequestModal({ isOpen, onClose }: PedalRequestModalProps) {
               <button
                 type="submit"
                 disabled={loading || !brand.trim() || !model.trim()}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-board-teal text-white font-black uppercase disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5"
+                style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
               >
                 {loading ? (
                   <>
@@ -173,7 +187,7 @@ export function PedalRequestModal({ isOpen, onClose }: PedalRequestModalProps) {
                 ) : (
                   <>
                     <Send className="w-4 h-4" />
-                    Submit Request
+                    Submit
                   </>
                 )}
               </button>

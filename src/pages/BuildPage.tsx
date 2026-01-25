@@ -625,9 +625,9 @@ export function BuildPage({ onContinue }: BuildPageProps) {
   const canContinue = selectedCount > 0;
   
   return (
-    <div className="min-h-full flex flex-col">
+    <div className="min-h-full flex flex-col" style={{ backgroundColor: '#FFFEF0' }}>
       {/* Header */}
-      <div className="bg-board-surface/50 border-b border-board-border">
+      <div className="bg-white" style={{ borderBottom: '4px solid black' }}>
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
@@ -640,10 +640,10 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                 </div>
               )}
               <div className="min-w-0">
-                <h1 className="text-sm sm:text-lg font-bold text-white truncate">
+                <h1 className="text-sm sm:text-lg font-black text-black truncate uppercase">
                   Build Your {genre?.name || ''} Board
                 </h1>
-                <p className="text-[10px] sm:text-xs text-zinc-500">
+                <p className="text-[10px] sm:text-xs text-black/60 font-bold">
                   {selectedCount}/{typeSlots.length} selected
                   {totalCost > 0 && ` · $${totalCost}`}
                 </p>
@@ -688,37 +688,43 @@ export function BuildPage({ onContinue }: BuildPageProps) {
       </div>
       
       {/* Budget Bar */}
-      <div className="bg-board-surface/80 border-b border-board-border">
+      <div 
+        className="bg-board-highlight"
+        style={{ borderBottom: '4px solid black' }}
+      >
         <div className="max-w-6xl mx-auto px-4 py-3">
           <div className="flex items-center gap-4">
             <div className="flex-1">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium text-white flex items-center gap-2">
+                <span className="text-sm font-black text-black flex items-center gap-2 uppercase">
                   💰 Budget
                 </span>
-                <span className={`text-sm font-bold ${
-                  budgetRemaining < 0 ? 'text-red-400' : budgetRemaining < 100 ? 'text-yellow-400' : 'text-green-400'
+                <span className={`text-sm font-black ${
+                  budgetRemaining < 0 ? 'text-red-600' : budgetRemaining < 100 ? 'text-orange-600' : 'text-green-700'
                 }`}>
                   ${currentBuildCost} / ${board.constraints.maxBudget}
                 </span>
               </div>
-              <div className="h-3 bg-board-elevated rounded-full overflow-hidden">
+              <div 
+                className="h-4 bg-white overflow-hidden"
+                style={{ border: '3px solid black' }}
+              >
                 <div 
-                  className={`h-full rounded-full transition-all duration-300 ${
+                  className={`h-full transition-all duration-300 ${
                     budgetRemaining < 0 
-                      ? 'bg-gradient-to-r from-red-500 to-red-400' 
+                      ? 'bg-red-500' 
                       : budgetRemaining < 100 
-                        ? 'bg-gradient-to-r from-yellow-500 to-yellow-400'
-                        : 'bg-gradient-to-r from-green-500 to-emerald-400'
+                        ? 'bg-orange-400'
+                        : 'bg-green-500'
                   }`}
                   style={{ width: `${Math.min((currentBuildCost / board.constraints.maxBudget) * 100, 100)}%` }}
                 />
               </div>
               <div className="flex justify-between mt-1">
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-black/60 font-bold">
                   {selectedCount} pedals selected
                 </span>
-                <span className={`text-xs ${budgetRemaining < 0 ? 'text-red-400' : 'text-zinc-400'}`}>
+                <span className={`text-xs font-bold ${budgetRemaining < 0 ? 'text-red-600' : 'text-black/60'}`}>
                   {budgetRemaining >= 0 ? `$${budgetRemaining} remaining` : `$${Math.abs(budgetRemaining)} over budget`}
                 </span>
               </div>
@@ -731,8 +737,8 @@ export function BuildPage({ onContinue }: BuildPageProps) {
       <div className="flex-1 max-w-6xl mx-auto w-full p-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
           {/* LEFT COLUMN - Type Slots */}
-          <div className="space-y-2">
-            <h2 className="text-sm font-medium text-zinc-400 mb-3">
+          <div className="space-y-3">
+            <h2 className="text-sm font-black text-black uppercase mb-3">
               Pedal Types ({typeSlots.length}/{maxSlots})
             </h2>
             
@@ -744,13 +750,17 @@ export function BuildPage({ onContinue }: BuildPageProps) {
               return (
                 <div
                   key={slot.id}
-                  className={`rounded-xl border transition-all ${
+                  className={`transition-all ${
                     isSelected 
-                      ? 'border-board-accent bg-board-accent/10' 
+                      ? 'bg-board-accent' 
                       : hasPedal
-                        ? 'border-green-600/50 bg-board-surface'
-                        : 'border-board-border bg-board-surface hover:border-zinc-600'
+                        ? 'bg-board-success'
+                        : 'bg-white hover:-translate-y-0.5'
                   }`}
+                  style={{
+                    border: '3px solid black',
+                    boxShadow: isSelected ? '4px 4px 0px black' : '3px 3px 0px black',
+                  }}
                 >
                   {/* Type Header - Always clickable */}
                   <button
@@ -758,21 +768,24 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                     className="w-full p-3 flex items-center gap-3 text-left"
                   >
                     {/* Icon */}
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${
-                      hasPedal ? 'bg-green-600/20' : 'bg-board-elevated'
-                    }`}>
+                    <div 
+                      className={`w-10 h-10 flex items-center justify-center text-xl ${
+                        isSelected ? 'bg-white' : hasPedal ? 'bg-white' : 'bg-black/10'
+                      }`}
+                      style={{ border: '2px solid black' }}
+                    >
                       {getTypeIcon(slot.type)}
                     </div>
                     
                     {/* Type Info */}
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-white">{slot.type}</div>
+                      <div className={`font-bold ${isSelected || hasPedal ? 'text-white' : 'text-black'}`}>{slot.type}</div>
                       {hasPedal ? (
-                        <div className="text-xs text-green-400 truncate">
+                        <div className="text-xs text-white/80 truncate font-bold">
                           {selectedPedal.brand} {selectedPedal.model} · ${selectedPedal.reverbPrice}
                         </div>
                       ) : (
-                        <div className="text-xs text-zinc-500">Tap to select a pedal</div>
+                        <div className={`text-xs ${isSelected ? 'text-white/70' : 'text-black/50'} font-bold`}>Tap to select a pedal</div>
                       )}
                     </div>
                     
@@ -833,32 +846,34 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                     setShowAddMenu(!showAddMenu);
                     setSelectedSlotId(null);
                   }}
-                  className="w-full py-4 rounded-xl border-2 border-board-accent bg-gradient-to-r from-board-accent/20 via-board-accent/10 to-board-accent/20 text-board-accent hover:from-board-accent/30 hover:via-board-accent/20 hover:to-board-accent/30 transition-all flex items-center justify-center gap-2 font-semibold text-lg relative overflow-hidden group"
+                  className="w-full py-4 bg-board-blue text-white font-black text-lg uppercase flex items-center justify-center gap-2 transition-all hover:-translate-y-1"
                   style={{
-                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(59, 130, 246, 0.2), inset 0 0 20px rgba(59, 130, 246, 0.1)',
-                    animation: 'glow 2s ease-in-out infinite alternate',
+                    border: '4px solid black',
+                    boxShadow: '4px 4px 0px black',
                   }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                   <Plus className="w-6 h-6" />
                   Add Pedal Type
                 </button>
                 
                 {/* Add menu dropdown */}
                 {showAddMenu && (
-                  <div className="absolute left-0 right-0 top-full mt-2 bg-board-elevated border border-board-border rounded-xl shadow-xl z-20 max-h-64 overflow-y-auto">
+                  <div 
+                    className="absolute left-0 right-0 top-full mt-2 bg-white z-20 max-h-64 overflow-y-auto"
+                    style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+                  >
                     {(['gain', 'dynamics', 'modulation', 'delay', 'reverb', 'filter', 'pitch', 'eq', 'volume', 'utility'] as Category[]).map(category => {
                       const typesInCategory = availableToAdd.filter(t => t.category === category);
                       if (typesInCategory.length === 0) return null;
                       
                       return (
-                        <div key={category} className="p-2 border-b border-board-border last:border-0">
-                          <p className="text-[10px] text-zinc-500 uppercase tracking-wider px-2 mb-1">{category}</p>
+                        <div key={category} className="p-2" style={{ borderBottom: '2px solid black' }}>
+                          <p className="text-[10px] text-black/50 uppercase tracking-wider px-2 mb-1 font-bold">{category}</p>
                           {typesInCategory.map(t => (
                             <button
                               key={t.type}
                               onClick={() => handleAddType(t.type)}
-                              className="w-full px-2 py-1.5 text-left text-sm text-white hover:bg-board-border rounded flex items-center gap-2"
+                              className="w-full px-2 py-1.5 text-left text-sm text-black hover:bg-board-highlight font-bold flex items-center gap-2"
                             >
                               <span>{t.icon}</span>
                               <span>{t.type}</span>
@@ -874,24 +889,28 @@ export function BuildPage({ onContinue }: BuildPageProps) {
           </div>
           
           {/* RIGHT COLUMN - Pedal Selection */}
-          <div className="bg-board-surface border border-board-border rounded-xl p-4 min-h-[400px] flex flex-col">
+          <div 
+            className="bg-white p-4 min-h-[400px] flex flex-col"
+            style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
+          >
             {selectedSlot ? (
               <>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{getTypeIcon(selectedSlot.type)}</span>
-                    <h2 className="text-lg font-medium text-white">
+                    <h2 className="text-lg font-black text-black uppercase">
                       Choose a {selectedSlot.type}
                     </h2>
                   </div>
                   
                   {/* Sorting Options */}
                   <div className="flex items-center gap-1">
-                    <ArrowUpDown className="w-3 h-3 text-zinc-500" />
+                    <ArrowUpDown className="w-3 h-3 text-black/50" />
                     <select
                       value={sortOption}
                       onChange={(e) => setSortOption(e.target.value as SortOption)}
-                      className="text-xs bg-board-elevated border border-board-border rounded px-2 py-1 text-white focus:outline-none focus:border-board-accent"
+                      className="text-xs bg-white text-black font-bold px-2 py-1 focus:outline-none"
+                      style={{ border: '2px solid black' }}
                     >
                       <option value="recommended">Recommended</option>
                       <option value="rating">Rating</option>
@@ -904,18 +923,19 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                 
                 {/* Search Bar */}
                 <div className="relative mb-3">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50" />
                   <input
                     type="text"
                     placeholder="Search pedals..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-8 py-2 bg-board-elevated border border-board-border rounded-lg text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-board-accent transition-colors"
+                    className="w-full pl-9 pr-8 py-2 bg-white text-sm text-black placeholder-black/40 focus:outline-none font-bold"
+                    style={{ border: '3px solid black' }}
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-black/50 hover:text-black"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -942,18 +962,22 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                           <button
                             onClick={() => handleSelectPedal(pedal, isDisabled)}
                             disabled={isDisabled}
-                            className={`w-full group p-2 sm:p-3 rounded-xl border text-left transition-all active:scale-[0.98] ${
+                            className={`w-full group p-2 sm:p-3 text-left transition-all active:scale-[0.98] ${
                               isSelected
-                                ? 'border-green-500 bg-green-500/10 ring-2 ring-green-500/30'
+                                ? 'bg-board-success -translate-y-1'
                                 : isDisabled
-                                  ? 'border-board-border bg-board-elevated/50 opacity-50 cursor-not-allowed'
-                                  : 'border-board-border bg-board-elevated hover:border-board-accent'
+                                  ? 'bg-gray-200 opacity-50 cursor-not-allowed'
+                                  : 'bg-board-dark hover:-translate-y-1'
                             }`}
+                            style={{
+                              border: '3px solid black',
+                              boxShadow: isSelected ? '4px 4px 0px black' : '3px 3px 0px black',
+                            }}
                           >
-                            <div className={`aspect-square mb-2 rounded-lg overflow-hidden bg-black/20 ${isDisabled ? 'grayscale' : ''}`}>
+                            <div className={`aspect-square mb-2 overflow-hidden ${isDisabled ? 'grayscale' : ''}`} style={{ border: '2px solid black' }}>
                               <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
                             </div>
-                            <p className={`text-[10px] sm:text-xs truncate ${isDisabled ? 'text-zinc-600' : 'text-zinc-400'}`}>{pedal.brand}</p>
+                            <p className={`text-[10px] sm:text-xs truncate font-bold ${isSelected ? 'text-white/80' : isDisabled ? 'text-gray-500' : 'text-black/60'}`}>{pedal.brand}</p>
                             <p className={`text-xs sm:text-sm font-medium truncate ${isDisabled ? 'text-zinc-500' : 'text-white'}`}>{pedal.model}</p>
                             <div className="flex items-center justify-between mt-1">
                               <p className={`text-[10px] sm:text-xs ${isOverBudget ? 'text-red-400' : isDisabled ? 'text-zinc-600' : 'text-green-400'}`}>${pedal.reverbPrice}</p>

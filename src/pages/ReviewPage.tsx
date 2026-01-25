@@ -18,12 +18,12 @@ function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
   
   if (matches.length === 0) {
     return (
-      <div className="bg-board-surface border border-board-border rounded-xl p-5">
-        <h2 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
-          <Target className="w-5 h-5 text-purple-400" />
+      <div className="bg-white border-4 border-black p-5 shadow-[6px_6px_0_0_#000]">
+        <h2 className="text-lg font-extrabold text-black uppercase mb-2 flex items-center gap-2">
+          <Target className="w-5 h-5 text-purple-600" />
           Genre Match
         </h2>
-        <p className="text-sm text-board-muted">
+        <p className="text-sm text-gray-600 font-medium">
           Add more pedals to see genre matches!
         </p>
       </div>
@@ -33,13 +33,13 @@ function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
   const topMatch = matches[0];
   
   return (
-    <div className="bg-board-surface border border-board-border rounded-xl p-5">
-      <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-        <Target className="w-5 h-5 text-purple-400" />
+    <div className="bg-white border-4 border-black p-5 shadow-[6px_6px_0_0_#000]">
+      <h2 className="text-lg font-extrabold text-black uppercase mb-3 flex items-center gap-2">
+        <Target className="w-5 h-5 text-purple-600" />
         Your Board's Genre DNA
       </h2>
       
-      <p className="text-sm text-zinc-400 mb-4">
+      <p className="text-sm text-gray-600 font-medium mb-4">
         Based on your pedal choices, here's what genres your board fits best:
       </p>
       
@@ -63,21 +63,21 @@ function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
                   #1 MATCH
                 </span>
               </div>
-              <h3 className="font-semibold text-white text-lg">{topMatch.genre.name}</h3>
+              <h3 className="font-extrabold text-black text-lg">{topMatch.genre.name}</h3>
             </div>
           </div>
           <div className="text-right">
             <div 
-              className="text-2xl font-bold"
+              className="text-2xl font-extrabold"
               style={{ color: topMatch.genre.color }}
             >
               {Math.round(topMatch.fitPercent)}%
             </div>
-            <div className="text-xs text-board-muted">fit</div>
+            <div className="text-xs text-gray-600 font-medium">fit</div>
           </div>
         </div>
         
-        <p className="text-sm text-zinc-300 mb-3">{topMatch.summary}</p>
+        <p className="text-sm text-gray-700 mb-3">{topMatch.summary}</p>
         
         {/* Match reasons */}
         <div className="space-y-1">
@@ -93,7 +93,7 @@ function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
                       : `${topMatch.genre.color}50` 
                 }}
               />
-              <span className="text-zinc-400">{reason.reason}</span>
+              <span className="text-gray-600">{reason.reason}</span>
             </div>
           ))}
         </div>
@@ -104,7 +104,7 @@ function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
         <>
           <button
             onClick={() => setExpanded(!expanded)}
-            className="w-full flex items-center justify-center gap-2 py-2 text-sm text-board-muted hover:text-white transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-2 text-sm text-gray-600 hover:text-black font-medium transition-colors"
           >
             {expanded ? 'Hide other matches' : `Show ${matches.length - 1} more genre ${matches.length - 1 === 1 ? 'match' : 'matches'}`}
             {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -124,17 +124,17 @@ function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <GenreIcon genre={match.genre} size="md" />
-                      <span className="font-medium text-white">{match.genre.name}</span>
-                      <span className="text-xs text-board-muted">#{index + 2}</span>
+                      <span className="font-bold text-black">{match.genre.name}</span>
+                      <span className="text-xs text-gray-500 font-medium">#{index + 2}</span>
                     </div>
                     <span 
-                      className="text-sm font-medium"
+                      className="text-sm font-bold"
                       style={{ color: match.genre.color }}
                     >
                       {Math.round(match.fitPercent)}%
                     </span>
                   </div>
-                  <p className="text-xs text-zinc-400">{match.summary}</p>
+                  <p className="text-xs text-gray-600">{match.summary}</p>
                 </div>
               ))}
             </div>
@@ -158,12 +158,12 @@ function PowerSupplyRecommendations({
   
   if (recommendations.length === 0) {
     return (
-      <div className="bg-board-surface border border-board-border rounded-xl p-5">
-        <h2 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
-          <Battery className="w-5 h-5 text-board-warning" />
+      <div className="bg-white border-4 border-black p-5 shadow-[6px_6px_0_0_#000]">
+        <h2 className="text-lg font-extrabold text-black uppercase mb-2 flex items-center gap-2">
+          <Battery className="w-5 h-5 text-yellow-600" />
           Power Supply
         </h2>
-        <p className="text-sm text-board-muted">
+        <p className="text-sm text-gray-600 font-medium">
           No matching power supplies found. You may need a high-capacity or multi-unit setup.
         </p>
       </div>
@@ -174,66 +174,66 @@ function PowerSupplyRecommendations({
   const headroomMa = Math.ceil(totalCurrentMa * 1.2);
   
   return (
-    <div className="bg-board-surface border border-board-border rounded-xl p-5">
-      <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-        <Battery className="w-5 h-5 text-board-warning" />
+    <div className="bg-white border-4 border-black p-5 shadow-[6px_6px_0_0_#000]">
+      <h2 className="text-lg font-extrabold text-black uppercase mb-3 flex items-center gap-2">
+        <Battery className="w-5 h-5 text-yellow-600" />
         Recommended Power Supply
       </h2>
       
       {/* Requirements */}
-      <div className="flex gap-4 mb-4 text-xs text-board-muted">
+      <div className="flex gap-4 mb-4 text-xs text-gray-600">
         <div>
-          <span className="text-white font-medium">{pedalCount}</span> pedals
+          <span className="text-black font-bold">{pedalCount}</span> pedals
         </div>
         <div>
-          <span className="text-white font-medium">{totalCurrentMa}mA</span> draw
+          <span className="text-black font-bold">{totalCurrentMa}mA</span> draw
         </div>
         <div>
-          <span className="text-board-warning font-medium">{headroomMa}mA</span> w/ headroom
+          <span className="text-yellow-600 font-bold">{headroomMa}mA</span> w/ headroom
         </div>
       </div>
       
       {/* Top Pick */}
-      <div className="p-4 rounded-lg bg-board-warning/10 border border-board-warning/30 mb-3">
+      <div className="p-4 bg-yellow-100 border-2 border-yellow-500 mb-3">
         <div className="flex items-start justify-between mb-2">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-medium px-2 py-0.5 rounded bg-board-warning/20 text-board-warning">
+              <span className="text-xs font-bold px-2 py-0.5 bg-yellow-400 text-black border border-black">
                 TOP PICK
               </span>
               {topPick.isolated && (
-                <span className="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400">
+                <span className="text-xs px-2 py-0.5 bg-green-300 text-black border border-black font-medium">
                   Isolated
                 </span>
               )}
             </div>
-            <h3 className="font-semibold text-white">{topPick.brand} {topPick.model}</h3>
+            <h3 className="font-bold text-black">{topPick.brand} {topPick.model}</h3>
           </div>
           <div className="text-right">
-            <div className="text-lg font-bold text-white">${topPick.reverbPrice}</div>
-            <div className="text-xs text-board-muted">used avg</div>
+            <div className="text-lg font-extrabold text-black">${topPick.reverbPrice}</div>
+            <div className="text-xs text-gray-600">used avg</div>
           </div>
         </div>
         
         <div className="grid grid-cols-3 gap-3 text-sm">
           <div>
-            <div className="text-board-muted text-xs">Outputs</div>
-            <div className="text-white font-medium">{topPick.totalOutputs}</div>
+            <div className="text-gray-600 text-xs font-medium">Outputs</div>
+            <div className="text-black font-bold">{topPick.totalOutputs}</div>
           </div>
           <div>
-            <div className="text-board-muted text-xs">Total Power</div>
-            <div className="text-white font-medium">{topPick.totalMa}mA</div>
+            <div className="text-gray-600 text-xs font-medium">Total Power</div>
+            <div className="text-black font-bold">{topPick.totalMa}mA</div>
           </div>
           <div>
-            <div className="text-board-muted text-xs">Size</div>
-            <div className="text-white font-medium">{topPick.widthIn}" × {topPick.depthIn}"</div>
+            <div className="text-gray-600 text-xs font-medium">Size</div>
+            <div className="text-black font-bold">{topPick.widthIn}" × {topPick.depthIn}"</div>
           </div>
         </div>
         
         {topPick.features.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1">
             {topPick.features.slice(0, 3).map(feature => (
-              <span key={feature} className="text-xs px-2 py-0.5 rounded bg-board-elevated text-board-muted">
+              <span key={feature} className="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 border border-black font-medium">
                 {feature}
               </span>
             ))}
@@ -246,7 +246,7 @@ function PowerSupplyRecommendations({
         <>
           <button
             onClick={() => setExpanded(!expanded)}
-            className="w-full flex items-center justify-center gap-2 py-2 text-sm text-board-muted hover:text-white transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-2 text-sm text-gray-600 hover:text-black font-medium transition-colors"
           >
             {expanded ? 'Hide alternatives' : `Show ${recommendations.length - 1} more options`}
             {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -255,22 +255,22 @@ function PowerSupplyRecommendations({
           {expanded && (
             <div className="space-y-2 mt-2">
               {recommendations.slice(1).map((ps, index) => (
-                <div key={ps.id} className="p-3 rounded-lg bg-board-elevated border border-board-border">
+                <div key={ps.id} className="p-3 bg-gray-50 border-2 border-black">
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-xs text-board-muted mr-2">#{index + 2}</span>
-                      <span className="font-medium text-white">{ps.brand} {ps.model}</span>
+                      <span className="text-xs text-gray-500 font-medium mr-2">#{index + 2}</span>
+                      <span className="font-bold text-black">{ps.brand} {ps.model}</span>
                       {ps.isolated && (
-                        <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-green-500/20 text-green-400">
+                        <span className="ml-2 text-xs px-1.5 py-0.5 bg-green-300 text-black border border-black font-medium">
                           Isolated
                         </span>
                       )}
                     </div>
                     <div className="text-right">
-                      <span className="font-medium text-white">${ps.reverbPrice}</span>
+                      <span className="font-bold text-black">${ps.reverbPrice}</span>
                     </div>
                   </div>
-                  <div className="flex gap-4 mt-1 text-xs text-board-muted">
+                  <div className="flex gap-4 mt-1 text-xs text-gray-600 font-medium">
                     <span>{ps.totalOutputs} outputs</span>
                     <span>{ps.totalMa}mA</span>
                     <span>{ps.widthIn}" × {ps.depthIn}"</span>
@@ -362,16 +362,22 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
   const topGenreMatch = genreMatches.length > 0 ? genreMatches[0] : null;
   
   return (
-    <div className="min-h-full p-8 lg:p-12">
+    <div className="min-h-full p-6 lg:p-12" style={{ backgroundColor: '#FFFEF0' }}>
       {/* Header */}
       <div className="max-w-4xl mx-auto mb-12 text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-board-success/20 mb-6">
-          <ListChecks className="w-8 h-8 text-board-success" />
+        <div 
+          className="inline-flex items-center justify-center w-16 h-16 bg-board-success mb-6"
+          style={{ border: '4px solid black' }}
+        >
+          <ListChecks className="w-8 h-8 text-white" />
         </div>
-        <h1 className="text-4xl font-bold text-white mb-4">
-          Your Pedalboard is Ready!
+        <h1 
+          className="text-4xl font-black text-black mb-4 uppercase"
+          style={{ fontFamily: '"Space Grotesk", sans-serif' }}
+        >
+          Your Board is Ready!
         </h1>
-        <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+        <p className="text-lg text-black/60 max-w-2xl mx-auto font-bold">
           {isCreateYourOwnMode && topGenreMatch ? (
             <>
               Based on your choices, your board is <span className="font-semibold" style={{ color: topGenreMatch.genre.color }}>{Math.round(topGenreMatch.fitPercent)}% {topGenreMatch.genre.name}</span>! See the breakdown below.
@@ -384,19 +390,18 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
         {/* Show Initially Selected Genre(s) */}
         {!isCreateYourOwnMode && selectedGenreObjects.length > 0 && (
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <span className="text-sm text-zinc-500 self-center">Built for:</span>
+            <span className="text-sm text-gray-600 font-bold self-center">Built for:</span>
             {selectedGenreObjects.map((genre) => (
               <div 
                 key={genre!.id}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border"
+                className="flex items-center gap-2 px-4 py-2 border-2 border-black shadow-[3px_3px_0_0_#000]"
                 style={{ 
-                  backgroundColor: `${genre!.color}15`,
-                  borderColor: `${genre!.color}50`,
+                  backgroundColor: `${genre!.color}20`,
                 }}
               >
                 <GenreIcon genre={genre!} size="md" />
                 <span 
-                  className="font-semibold text-lg"
+                  className="font-bold text-lg"
                   style={{ color: genre!.color }}
                 >
                   {genre!.name}
@@ -412,25 +417,24 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
             {genreMatches.map((match, index) => (
               <div 
                 key={match.genre.id}
-                className="flex items-center gap-3 px-5 py-3 rounded-xl border"
+                className="flex items-center gap-3 px-5 py-3 border-2 border-black shadow-[4px_4px_0_0_#000]"
                 style={{ 
-                  backgroundColor: `${match.genre.color}15`,
-                  borderColor: `${match.genre.color}40`,
+                  backgroundColor: `${match.genre.color}20`,
                 }}
               >
                 <GenreIcon genre={match.genre} size="lg" />
                 <div>
                   <div className="flex items-center gap-2">
                     <span 
-                      className="text-xs font-bold px-1.5 py-0.5 rounded"
-                      style={{ backgroundColor: `${match.genre.color}30`, color: match.genre.color }}
+                      className="text-xs font-bold px-1.5 py-0.5 border border-black"
+                      style={{ backgroundColor: `${match.genre.color}40`, color: '#000' }}
                     >
                       #{index + 1}
                     </span>
-                    <span className="font-semibold text-white">{match.genre.name}</span>
+                    <span className="font-bold text-black">{match.genre.name}</span>
                   </div>
                   <div 
-                    className="text-lg font-bold"
+                    className="text-lg font-extrabold"
                     style={{ color: match.genre.color }}
                   >
                     {Math.round(match.fitPercent)}% match
@@ -447,10 +451,10 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
         <div className="flex justify-center mb-8">
           <button
             onClick={() => setShowRecommendations(!showRecommendations)}
-            className={`px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${
+            className={`px-6 py-3 font-bold uppercase transition-all flex items-center gap-2 border-3 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[6px_6px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 ${
               showRecommendations
-                ? 'bg-board-accent text-white'
-                : 'border border-board-accent text-board-accent hover:bg-board-accent/10'
+                ? 'bg-teal-400 text-black'
+                : 'bg-white text-black'
             }`}
           >
             <Settings2 className="w-5 h-5" />
@@ -467,12 +471,17 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
         
         {/* Board Layout - Interactive */}
         {board.slots.length > 0 && (
-          <div className="mb-8 bg-board-surface border border-board-border rounded-xl overflow-hidden">
-            <div className="p-3 border-b border-board-border flex items-center gap-2">
-              <LayoutGrid className="w-4 h-4 text-board-accent" />
-              <h3 className="text-sm font-semibold text-white">Board Layout</h3>
-              <span className="text-xs text-board-muted">Drag to arrange • Click for details</span>
-              <span className="text-xs text-board-muted ml-auto">
+          <div 
+            className="mb-8 bg-white overflow-hidden"
+            style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
+          >
+            <div 
+              className="p-3 flex items-center gap-2 bg-black text-white"
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <h3 className="text-sm font-black uppercase">Board Layout</h3>
+              <span className="text-xs opacity-60">Drag to arrange • Click for details</span>
+              <span className="text-xs opacity-60 ml-auto">
                 {formatInches(board.constraints.maxWidthMm)}" × {formatInches(board.constraints.maxDepthMm)}"
               </span>
             </div>
@@ -482,68 +491,80 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
         
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-board-surface border border-board-border rounded-xl p-5">
-            <div className="flex items-center gap-2 text-board-success mb-2">
+          <div 
+            className="bg-board-success p-5"
+            style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
+          >
+            <div className="flex items-center gap-2 text-white mb-2">
               <DollarSign className="w-5 h-5" />
-              <span className="text-sm text-board-muted">Total Cost</span>
+              <span className="text-sm font-bold uppercase">Total Cost</span>
             </div>
-            <div className="text-3xl font-bold text-white">${totalCost}</div>
-            <div className="mt-2 h-1.5 bg-board-dark rounded-full overflow-hidden">
+            <div className="text-3xl font-black text-white">${totalCost}</div>
+            <div className="mt-2 h-3 bg-white overflow-hidden" style={{ border: '2px solid black' }}>
               <div 
-                className={`h-full rounded-full transition-all ${budgetPercent > 100 ? 'bg-board-danger' : 'bg-board-success'}`}
+                className={`h-full transition-all ${budgetPercent > 100 ? 'bg-red-500' : 'bg-black'}`}
                 style={{ width: `${Math.min(budgetPercent, 100)}%` }}
               />
             </div>
-            <div className="text-xs text-board-muted mt-1">
+            <div className="text-xs text-white/80 mt-1 font-bold">
               {budgetPercent.toFixed(0)}% of ${board.constraints.maxBudget}
             </div>
           </div>
           
-          <div className="bg-board-surface border border-board-border rounded-xl p-5">
-            <div className="flex items-center gap-2 text-blue-400 mb-2">
+          <div 
+            className="bg-board-blue p-5"
+            style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
+          >
+            <div className="flex items-center gap-2 text-white mb-2">
               <Square className="w-5 h-5" />
-              <span className="text-sm text-board-muted">Space Used</span>
+              <span className="text-sm font-bold uppercase">Space Used</span>
             </div>
-            <div className="text-3xl font-bold text-white">{formatArea(totalArea)}</div>
-            <div className="mt-2 h-1.5 bg-board-dark rounded-full overflow-hidden">
+            <div className="text-3xl font-black text-white">{formatArea(totalArea)}</div>
+            <div className="mt-2 h-3 bg-white overflow-hidden" style={{ border: '2px solid black' }}>
               <div 
-                className={`h-full rounded-full transition-all ${areaPercent > 100 ? 'bg-board-danger' : 'bg-blue-400'}`}
+                className={`h-full transition-all ${areaPercent > 100 ? 'bg-red-500' : 'bg-black'}`}
                 style={{ width: `${Math.min(areaPercent, 100)}%` }}
               />
             </div>
-            <div className="text-xs text-board-muted mt-1">
+            <div className="text-xs text-white/80 mt-1 font-bold">
               {areaPercent.toFixed(0)}% of {formatArea(maxArea)} sq in
             </div>
           </div>
           
-          <div className="bg-board-surface border border-board-border rounded-xl p-5">
-            <div className="flex items-center gap-2 text-board-warning mb-2">
+          <div 
+            className="bg-board-warning p-5"
+            style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
+          >
+            <div className="flex items-center gap-2 text-black mb-2">
               <Zap className="w-5 h-5" />
-              <span className="text-sm text-board-muted">Power Draw</span>
+              <span className="text-sm font-bold uppercase">Power Draw</span>
             </div>
-            <div className="text-3xl font-bold text-white">{totalCurrent}mA</div>
+            <div className="text-3xl font-black text-black">{totalCurrent}mA</div>
             {board.constraints.maxCurrentMa && (
               <>
-                <div className="mt-2 h-1.5 bg-board-dark rounded-full overflow-hidden">
+                <div className="mt-2 h-3 bg-white overflow-hidden" style={{ border: '2px solid black' }}>
                   <div 
-                    className={`h-full rounded-full transition-all ${powerPercent > 100 ? 'bg-board-danger' : 'bg-board-warning'}`}
+                    className={`h-full transition-all ${powerPercent > 100 ? 'bg-red-500' : 'bg-black'}`}
                     style={{ width: `${Math.min(powerPercent, 100)}%` }}
                   />
                 </div>
-                <div className="text-xs text-board-muted mt-1">
+                <div className="text-xs text-black/60 mt-1 font-bold">
                   {powerPercent.toFixed(0)}% of {board.constraints.maxCurrentMa}mA
                 </div>
               </>
             )}
           </div>
           
-          <div className="bg-board-surface border border-board-border rounded-xl p-5">
-            <div className="flex items-center gap-2 text-purple-400 mb-2">
+          <div 
+            className="bg-board-purple p-5"
+            style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
+          >
+            <div className="flex items-center gap-2 text-white mb-2">
               <Music className="w-5 h-5" />
-              <span className="text-sm text-board-muted">Pedals</span>
+              <span className="text-sm font-bold uppercase">Pedals</span>
             </div>
-            <div className="text-3xl font-bold text-white">{board.slots.length}</div>
-            <div className="text-xs text-board-muted mt-3">
+            <div className="text-3xl font-black text-white">{board.slots.length}</div>
+            <div className="text-xs text-white/80 mt-3 font-bold">
               {selectedGenreObjects.length > 0 
                 ? selectedGenreObjects.map(g => `${g!.icon} ${g!.name}`).join(' + ')
                 : genreMatches.length > 0 
@@ -558,12 +579,15 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
         {sectionScores.length > 0 && (
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center">
+              <div 
+                className="w-10 h-10 bg-board-highlight flex items-center justify-center"
+                style={{ border: '3px solid black' }}
+              >
                 🏆
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Your Achievements</h3>
-                <p className="text-xs text-zinc-500">Badges earned based on your pedal choices</p>
+                <h3 className="text-lg font-black text-black uppercase">Your Achievements</h3>
+                <p className="text-xs text-black/50 font-bold">Badges earned based on your pedal choices</p>
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
@@ -574,17 +598,21 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                 return (
                   <div 
                     key={score.category} 
-                    className={`relative p-4 rounded-xl border text-center transition-all hover:scale-105 ${
+                    className={`relative p-4 text-center transition-all hover:-translate-y-1 ${
                       isHighScore 
-                        ? 'bg-gradient-to-br from-board-surface to-board-elevated border-yellow-500/30' 
-                        : 'bg-board-surface border-board-border'
+                        ? 'bg-board-highlight' 
+                        : 'bg-white'
                     }`}
                     style={{
-                      boxShadow: isHighScore ? `0 0 20px ${catInfo.color}20` : undefined,
+                      border: '3px solid black',
+                      boxShadow: isHighScore ? '4px 4px 0px black' : '3px 3px 0px black',
                     }}
                   >
                     {isHighScore && (
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-xs shadow-lg">
+                      <div 
+                        className="absolute -top-2 -right-2 w-7 h-7 bg-board-highlight flex items-center justify-center text-sm font-black"
+                        style={{ border: '2px solid black' }}
+                      >
                         ⭐
                       </div>
                     )}
@@ -617,25 +645,25 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                     </div>
                     
                     {/* Category */}
-                    <div className="text-xs text-zinc-500 mb-2">
+                    <div className="text-xs text-gray-600 font-medium mb-2">
                       {catInfo.displayName}
                     </div>
                     
                     {/* Score */}
                     <div className="flex items-center justify-center gap-1">
                       <div 
-                        className="text-lg font-bold"
+                        className="text-lg font-extrabold"
                         style={{ color: catInfo.color }}
                       >
                         {score.totalScore}
                       </div>
-                      <div className="text-xs text-zinc-600">/{score.maxScore}</div>
+                      <div className="text-xs text-gray-700 font-medium">/{score.maxScore}</div>
                     </div>
                     
                     {/* Mini progress bar */}
-                    <div className="h-1 bg-board-dark rounded-full overflow-hidden mt-2">
+                    <div className="h-1 bg-gray-200 overflow-hidden mt-2">
                       <div 
-                        className="h-full rounded-full transition-all"
+                        className="h-full transition-all"
                         style={{ 
                           width: `${Math.min(percentage, 100)}%`,
                           backgroundColor: catInfo.color,
@@ -652,25 +680,25 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
         {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Pedal List */}
-          <div className="lg:col-span-2 bg-board-surface border border-board-border rounded-xl overflow-hidden">
-            <div className="p-4 border-b border-board-border flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-white">Your Pedals</h2>
-              <span className="text-xs text-zinc-500">Drag to reorder signal chain</span>
+          <div className="lg:col-span-2 bg-white border-4 border-black overflow-hidden shadow-[6px_6px_0_0_#000]">
+            <div className="p-4 border-b-2 border-black bg-black flex items-center justify-between">
+              <h2 className="text-lg font-extrabold text-white uppercase">Your Pedals</h2>
+              <span className="text-xs text-white/70 font-medium">Drag to reorder signal chain</span>
             </div>
-            <div className="divide-y divide-board-border">
+            <div className="divide-y-2 divide-black">
               {board.slots.map((slot, index) => {
                 const catInfo = CATEGORY_INFO[slot.pedal.category];
                 return (
-                  <div key={slot.pedal.id} className="p-4 flex items-center gap-3 group hover:bg-board-elevated/50 transition-colors">
+                  <div key={slot.pedal.id} className="p-4 flex items-center gap-3 group hover:bg-yellow-50 transition-colors">
                     {/* Reorder buttons */}
                     <div className="flex flex-col gap-0.5">
                       <button
                         onClick={() => dispatch({ type: 'MOVE_PEDAL', fromIndex: index, toIndex: index - 1 })}
                         disabled={index === 0}
-                        className={`p-1 rounded transition-colors ${
+                        className={`p-1 transition-colors ${
                           index === 0 
-                            ? 'text-zinc-700 cursor-not-allowed' 
-                            : 'text-zinc-500 hover:text-white hover:bg-board-accent/20'
+                            ? 'text-gray-300 cursor-not-allowed' 
+                            : 'text-gray-500 hover:text-black hover:bg-yellow-200'
                         }`}
                         title="Move up"
                       >
@@ -679,10 +707,10 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                       <button
                         onClick={() => dispatch({ type: 'MOVE_PEDAL', fromIndex: index, toIndex: index + 1 })}
                         disabled={index === board.slots.length - 1}
-                        className={`p-1 rounded transition-colors ${
+                        className={`p-1 transition-colors ${
                           index === board.slots.length - 1 
-                            ? 'text-zinc-700 cursor-not-allowed' 
-                            : 'text-zinc-500 hover:text-white hover:bg-board-accent/20'
+                            ? 'text-gray-300 cursor-not-allowed' 
+                            : 'text-gray-500 hover:text-black hover:bg-yellow-200'
                         }`}
                         title="Move down"
                       >
@@ -690,22 +718,22 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                       </button>
                     </div>
                     
-                    <div className="w-8 h-8 rounded-lg bg-board-elevated flex items-center justify-center text-sm font-bold text-board-muted">
+                    <div className="w-8 h-8 bg-gray-100 border-2 border-black flex items-center justify-center text-sm font-bold text-gray-700">
                       {index + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-white">{slot.pedal.model}</div>
-                      <div className="text-sm text-board-muted">{slot.pedal.brand}</div>
+                      <div className="font-bold text-black">{slot.pedal.model}</div>
+                      <div className="text-sm text-gray-600">{slot.pedal.brand}</div>
                     </div>
                     <div 
-                      className="px-2 py-1 text-xs rounded-full"
-                      style={{ backgroundColor: `${catInfo.color}20`, color: catInfo.color }}
+                      className="px-2 py-1 text-xs font-bold border border-black"
+                      style={{ backgroundColor: `${catInfo.color}30`, color: '#000' }}
                     >
                       {catInfo.displayName}
                     </div>
                     <div className="text-right">
-                      <div className="font-medium text-white">${slot.pedal.reverbPrice}</div>
-                      <div className="text-xs text-board-muted">
+                      <div className="font-bold text-black">${slot.pedal.reverbPrice}</div>
+                      <div className="text-xs text-gray-600">
                         {formatInches(slot.pedal.widthMm)}" × {formatInches(slot.pedal.depthMm)}"
                       </div>
                     </div>
@@ -723,20 +751,20 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
             )}
             
             {/* Signal Chain */}
-            <div className="bg-board-surface border border-board-border rounded-xl p-5">
-              <h2 className="text-lg font-semibold text-white mb-4">Suggested Signal Chain</h2>
+            <div className="bg-white border-4 border-black p-5 shadow-[6px_6px_0_0_#000]">
+              <h2 className="text-lg font-extrabold text-black uppercase mb-4">Suggested Signal Chain</h2>
               <div className="space-y-2">
                 {board.slots.map((slot, index) => (
                   <div key={slot.pedal.id} className="flex items-center gap-2 text-sm">
-                    <span className="text-board-muted">{index + 1}.</span>
-                    <span className="text-white">{slot.pedal.model}</span>
+                    <span className="text-gray-600 font-medium">{index + 1}.</span>
+                    <span className="text-black font-medium">{slot.pedal.model}</span>
                     {index < board.slots.length - 1 && (
-                      <ArrowRight className="w-3 h-3 text-board-muted ml-auto" />
+                      <ArrowRight className="w-3 h-3 text-gray-400 ml-auto" />
                     )}
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-board-muted mt-3 italic">
+              <p className="text-xs text-gray-500 mt-3 italic">
                 This is a suggested order. Feel free to experiment!
               </p>
             </div>
@@ -773,7 +801,7 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                       setShowSaveModal(true);
                     }
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-green-400 text-black font-bold uppercase border-3 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[6px_6px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all"
                 >
                   <Save className="w-5 h-5" />
                   {currentSavedBoardId ? 'Update Saved Board' : 'Save Board'}
@@ -781,7 +809,7 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
               ) : (
                 <button
                   onClick={onSignInClick}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-green-600/50 text-white font-medium rounded-xl hover:bg-green-600/70 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-green-200 text-black font-bold uppercase border-3 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[6px_6px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all"
                 >
                   <Save className="w-5 h-5" />
                   Sign in to Save
@@ -790,14 +818,14 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
               
               <button
                 onClick={handleExport}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-board-accent text-white font-medium rounded-xl hover:bg-board-accent-dim transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-teal-400 text-black font-bold uppercase border-3 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[6px_6px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all"
               >
                 <Download className="w-5 h-5" />
                 Export Board
               </button>
               <button
                 onClick={handleShare}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 border border-board-border text-white font-medium rounded-xl hover:bg-board-elevated transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white text-black font-bold uppercase border-3 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[6px_6px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all"
               >
                 <Share2 className="w-5 h-5" />
                 Share
@@ -809,72 +837,76 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
       
       {/* Save Board Modal */}
       {showSaveModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-board-surface border border-board-border rounded-2xl max-w-md w-full p-6">
-            <h2 className="text-xl font-bold text-white mb-4">
-              {currentSavedBoardId ? 'Update Board' : 'Save Board'}
-            </h2>
-            
-            {currentSavedBoardId && (
-              <div className="mb-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
-                <p className="text-sm text-yellow-400">
-                  This will overwrite your existing saved board.
-                </p>
-              </div>
-            )}
-            
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-zinc-400 mb-2">Board Name</label>
-              <input
-                type="text"
-                value={saveName}
-                onChange={(e) => setSaveName(e.target.value)}
-                placeholder="My Pedalboard"
-                className="w-full px-4 py-3 bg-board-elevated border border-board-border rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-board-accent transition-colors"
-              />
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+          <div className="bg-white border-4 border-black max-w-md w-full shadow-[8px_8px_0_0_#000]">
+            <div className="p-4 bg-green-400 border-b-4 border-black">
+              <h2 className="text-xl font-extrabold text-black uppercase">
+                {currentSavedBoardId ? 'Update Board' : 'Save Board'}
+              </h2>
             </div>
             
-            <div className="mb-6 text-sm text-zinc-500">
-              <div className="flex items-center gap-2 mb-1">
-                <Music className="w-4 h-4" />
-                {selectedGenres.length > 0 
-                  ? selectedGenreObjects.map(g => g!.name).join(' / ')
-                  : 'Created Board'}
+            <div className="p-6">
+              {currentSavedBoardId && (
+                <div className="mb-4 p-3 bg-yellow-200 border-2 border-black">
+                  <p className="text-sm text-black font-medium">
+                    This will overwrite your existing saved board.
+                  </p>
+                </div>
+              )}
+              
+              <div className="mb-4">
+                <label className="block text-sm font-bold text-black uppercase mb-2">Board Name</label>
+                <input
+                  type="text"
+                  value={saveName}
+                  onChange={(e) => setSaveName(e.target.value)}
+                  placeholder="My Pedalboard"
+                  className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-400 focus:outline-none focus:bg-yellow-50 transition-colors"
+                />
               </div>
-              <div>{board.slots.length} pedals • ${totalCost}</div>
-            </div>
-            
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowSaveModal(false)}
-                className="flex-1 py-3 border border-board-border text-white font-medium rounded-lg hover:bg-board-elevated transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (onSaveBoard && saveName.trim()) {
-                    const savedBoard: SavedBoard = {
-                      id: currentSavedBoardId || generateUUID(),
-                      name: saveName.trim(),
-                      board: { ...board },
-                      genres: selectedGenres.length > 0 
-                        ? selectedGenreObjects.map(g => g!.name)
-                        : [],
-                      createdAt: currentSavedBoardId 
-                        ? (savedBoards.find(b => b.id === currentSavedBoardId)?.createdAt || new Date())
-                        : new Date(),
-                      updatedAt: new Date(),
-                    };
-                    onSaveBoard(savedBoard);
-                    setShowSaveModal(false);
-                  }
-                }}
-                disabled={!saveName.trim()}
-                className="flex-1 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {currentSavedBoardId ? 'Update' : 'Save'}
-              </button>
+              
+              <div className="mb-6 text-sm text-gray-600 font-medium">
+                <div className="flex items-center gap-2 mb-1">
+                  <Music className="w-4 h-4" />
+                  {selectedGenres.length > 0 
+                    ? selectedGenreObjects.map(g => g!.name).join(' / ')
+                    : 'Created Board'}
+                </div>
+                <div>{board.slots.length} pedals • ${totalCost}</div>
+              </div>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowSaveModal(false)}
+                  className="flex-1 py-3 bg-white text-black font-bold uppercase border-2 border-black shadow-[3px_3px_0_0_#000] hover:shadow-[4px_4px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    if (onSaveBoard && saveName.trim()) {
+                      const savedBoard: SavedBoard = {
+                        id: currentSavedBoardId || generateUUID(),
+                        name: saveName.trim(),
+                        board: { ...board },
+                        genres: selectedGenres.length > 0 
+                          ? selectedGenreObjects.map(g => g!.name)
+                          : [],
+                        createdAt: currentSavedBoardId 
+                          ? (savedBoards.find(b => b.id === currentSavedBoardId)?.createdAt || new Date())
+                          : new Date(),
+                        updatedAt: new Date(),
+                      };
+                      onSaveBoard(savedBoard);
+                      setShowSaveModal(false);
+                    }
+                  }}
+                  disabled={!saveName.trim()}
+                  className="flex-1 py-3 bg-green-400 text-black font-bold uppercase border-2 border-black shadow-[3px_3px_0_0_#000] hover:shadow-[4px_4px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {currentSavedBoardId ? 'Update' : 'Save'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

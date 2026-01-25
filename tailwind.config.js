@@ -8,58 +8,52 @@ export default {
     extend: {
       colors: {
         'board': {
-          'dark': '#0a0a0f',
-          'surface': '#12121a',
-          'elevated': '#1a1a25',
-          'border': '#2a2a3a',
-          'accent': '#ff6b35',
-          'accent-dim': '#cc5529',
-          'highlight': '#ffd23f',
-          'success': '#4ecdc4',
-          'warning': '#ffe66d',
-          'danger': '#ff6b6b',
-          'muted': '#6b7280',
+          'dark': '#FFFEF0',      // Cream background
+          'surface': '#FFFFFF',   // White cards
+          'elevated': '#F5F5DC',  // Beige
+          'border': '#000000',    // Black borders
+          'accent': '#FF5722',    // Orange
+          'accent-dim': '#E64A19',
+          'highlight': '#FFEB3B', // Yellow
+          'success': '#4CAF50',   // Green
+          'warning': '#FF9800',   // Orange/Yellow
+          'danger': '#F44336',    // Red
+          'muted': '#666666',
+          'blue': '#2196F3',
+          'purple': '#9C27B0',
+          'teal': '#009688',
         },
         'pedal': {
-          'gain': '#ff4444',
-          'modulation': '#9b59b6',
-          'delay': '#3498db',
-          'reverb': '#1abc9c',
-          'dynamics': '#e67e22',
-          'filter': '#f1c40f',
-          'pitch': '#e91e63',
-          'eq': '#00bcd4',
-          'volume': '#607d8b',
+          'gain': '#F44336',
+          'modulation': '#9C27B0',
+          'delay': '#2196F3',
+          'reverb': '#009688',
+          'dynamics': '#FF9800',
+          'filter': '#FFEB3B',
+          'pitch': '#E91E63',
+          'eq': '#00BCD4',
+          'volume': '#607D8B',
           'amp': '#795548',
-          'utility': '#9e9e9e',
-          'synth': '#673ab7',
+          'utility': '#9E9E9E',
+          'synth': '#673AB7',
         }
       },
       fontFamily: {
-        'display': ['Instrument Sans', 'system-ui', 'sans-serif'],
-        'mono': ['JetBrains Mono', 'Fira Code', 'monospace'],
+        'display': ['"Space Grotesk"', 'Inter', 'system-ui', 'sans-serif'],
+        'mono': ['"Space Mono"', '"IBM Plex Mono"', 'monospace'],
+        'body': ['"Space Mono"', 'monospace'],
       },
-      animation: {
-        'glow': 'glow 2s ease-in-out infinite alternate',
-        'float': 'float 3s ease-in-out infinite',
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      boxShadow: {
+        'brutal': '4px 4px 0px #000000',
+        'brutal-sm': '2px 2px 0px #000000',
+        'brutal-lg': '8px 8px 0px #000000',
+        'brutal-hover': '6px 6px 0px #000000',
       },
-      keyframes: {
-        glow: {
-          '0%': { boxShadow: '0 0 5px currentColor, 0 0 10px currentColor' },
-          '100%': { boxShadow: '0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-5px)' },
-        },
-      },
-      backgroundImage: {
-        'grid-pattern': 'linear-gradient(rgba(255,107,53,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,53,0.03) 1px, transparent 1px)',
-        'noise': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+      borderWidth: {
+        '3': '3px',
+        '4': '4px',
       },
     },
   },
   plugins: [],
 }
-

@@ -27,11 +27,9 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
     setError(null);
 
     try {
-      // Google Apps Script Web App URL (same as pedal requests)
       const GOOGLE_SCRIPT_URL = import.meta.env.VITE_FEEDBACK_URL || import.meta.env.VITE_PEDAL_REQUEST_URL;
       
       if (!GOOGLE_SCRIPT_URL) {
-        // Fallback: just show success (for development)
         console.log('Feedback:', { type, message: message.trim() });
         setSuccess(true);
         setTimeout(() => {
@@ -86,28 +84,36 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70"
         onClick={handleClose}
       />
       
-      {/* Modal */}
-      <div className="relative bg-board-surface border border-board-border rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+      <div 
+        className="relative bg-white w-full max-w-md overflow-hidden"
+        style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-board-border">
+        <div 
+          className="flex items-center justify-between p-4 bg-board-purple text-white"
+          style={{ borderBottom: '4px solid black' }}
+        >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
+            <div 
+              className="w-10 h-10 bg-white flex items-center justify-center"
+              style={{ border: '3px solid black' }}
+            >
               <span className="text-xl">💡</span>
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Help Make Boardsie Better</h2>
-              <p className="text-xs text-zinc-400">Share your feedback with us</p>
+              <h2 className="text-lg font-black uppercase">Feedback</h2>
+              <p className="text-xs text-white/80 font-bold">Share your thoughts</p>
             </div>
           </div>
           <button
             onClick={handleClose}
-            className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-board-elevated transition-colors"
+            className="p-2 bg-white text-black hover:bg-gray-100"
+            style={{ border: '2px solid black' }}
           >
             <X className="w-5 h-5" />
           </button>
@@ -117,37 +123,41 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         <div className="p-6">
           {success ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
-                <CheckCircle className="w-8 h-8 text-green-500" />
+              <div 
+                className="w-16 h-16 bg-board-success flex items-center justify-center mb-4"
+                style={{ border: '3px solid black' }}
+              >
+                <CheckCircle className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Feedback Submitted!</h3>
-              <p className="text-sm text-zinc-400">Thanks for helping make Boardsie better.</p>
+              <h3 className="text-lg font-black text-black mb-2 uppercase">Submitted!</h3>
+              <p className="text-sm text-black/60 font-bold">Thanks for helping make Boardsie better.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
-                  What type of feedback?
+                <label className="block text-sm font-black text-black mb-2 uppercase">
+                  Type
                 </label>
                 <div className="flex gap-2">
                   {[
-                    { id: 'bug', label: '🐛 Bug', color: 'red' },
-                    { id: 'suggestion', label: '✨ Suggestion', color: 'violet' },
-                    { id: 'other', label: '💬 Other', color: 'zinc' },
+                    { id: 'bug', label: '🐛 Bug', color: '#F44336' },
+                    { id: 'suggestion', label: '✨ Idea', color: '#9C27B0' },
+                    { id: 'other', label: '💬 Other', color: '#607D8B' },
                   ].map((option) => (
                     <button
                       key={option.id}
                       type="button"
                       onClick={() => setType(option.id as FeedbackType)}
-                      className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                      className={`flex-1 px-3 py-2 text-sm font-bold transition-all ${
                         type === option.id
-                          ? option.color === 'red'
-                            ? 'bg-red-500/20 border-red-500/50 text-red-300 border'
-                            : option.color === 'violet'
-                              ? 'bg-violet-500/20 border-violet-500/50 text-violet-300 border'
-                              : 'bg-zinc-500/20 border-zinc-500/50 text-zinc-300 border'
-                          : 'bg-board-elevated border border-board-border text-zinc-400 hover:text-white hover:border-zinc-500'
+                          ? 'text-white -translate-y-0.5'
+                          : 'bg-white text-black hover:-translate-y-0.5'
                       }`}
+                      style={{ 
+                        backgroundColor: type === option.id ? option.color : undefined,
+                        border: '3px solid black',
+                        boxShadow: type === option.id ? '3px 3px 0px black' : '2px 2px 0px black',
+                      }}
                     >
                       {option.label}
                     </button>
@@ -156,28 +166,32 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
-                  Your feedback
+                <label className="block text-sm font-black text-black mb-2 uppercase">
+                  Your Feedback
                 </label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder={
                     type === 'bug' 
-                      ? "Describe the bug you found..." 
+                      ? "Describe the bug..." 
                       : type === 'suggestion'
-                        ? "Share your idea or suggestion..."
+                        ? "Share your idea..."
                         : "What's on your mind?"
                   }
                   rows={4}
-                  className="w-full px-4 py-3 bg-board-elevated border border-board-border rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all resize-none"
+                  className="w-full px-4 py-3 bg-white text-black placeholder-black/40 focus:outline-none font-bold resize-none"
+                  style={{ border: '3px solid black' }}
                   disabled={loading}
                   autoFocus
                 />
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+                <div 
+                  className="flex items-center gap-2 p-3 bg-red-100 text-red-700 text-sm font-bold"
+                  style={{ border: '2px solid black' }}
+                >
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   {error}
                 </div>
@@ -186,7 +200,8 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               <button
                 type="submit"
                 disabled={loading || !message.trim()}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-violet-500 to-purple-600 text-white font-medium rounded-xl hover:from-violet-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-board-purple text-white font-black uppercase disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5"
+                style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
               >
                 {loading ? (
                   <>
@@ -196,7 +211,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 ) : (
                   <>
                     <Send className="w-4 h-4" />
-                    Submit Feedback
+                    Submit
                   </>
                 )}
               </button>
