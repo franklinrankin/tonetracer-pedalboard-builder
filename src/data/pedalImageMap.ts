@@ -2342,6 +2342,22 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "https://rvb-img.reverb.com/i/s--75O8Cy1V--/quality=medium-low,height=800,width=800,fit=contain/rggmndddbte0cwfswqvk.jpg",
     "small": "https://rvb-img.reverb.com/i/s--iNibWbST--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/rggmndddbte0cwfswqvk.jpg"
   },
+  "tc-polytune3": {
+    "large": "/images/pedals/tc-polytune3.jpg",
+    "small": "/images/pedals/tc-polytune3.jpg"
+  },
+  "tc-polytune3-mini": {
+    "large": "/images/pedals/tc-polytune3-mini.jpg",
+    "small": "/images/pedals/tc-polytune3-mini.jpg"
+  },
+  "tc-polytune-3-noir": {
+    "large": "/images/pedals/tc-polytune-3-noir.jpg",
+    "small": "/images/pedals/tc-polytune-3-noir.jpg"
+  },
+  "tc-polytune-3-mini-noir": {
+    "large": "/images/pedals/tc-polytune-3-mini-noir.jpg",
+    "small": "/images/pedals/tc-polytune-3-mini-noir.jpg"
+  },
   "ehx-720-looper": {
     "large": "https://rvb-img.reverb.com/i/s--TsYwmB9R--/quality=medium-low,height=800,width=800,fit=contain/wkee0qglmgnfsmlh0cv7.jpg",
     "small": "https://rvb-img.reverb.com/i/s--FYdghFWE--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/wkee0qglmgnfsmlh0cv7.jpg"
@@ -2681,6 +2697,702 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
   "boss-rc30": {
     "large": "https://rvb-img.reverb.com/i/s--Y5-NEK9C--/quality=medium-low,height=800,width=800,fit=contain/zjlwqhlcymsaporrcogl.jpg",
     "small": "https://rvb-img.reverb.com/i/s--0ck-8iSF--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/zjlwqhlcymsaporrcogl.jpg"
+  },
+  "akai-analogcustom-reverb": {
+    "large": "/images/pedals/akai-analogcustom-reverb.jpg",
+    "small": "/images/pedals/akai-analogcustom-reverb.jpg"
+  },
+  "ampeg-scrambler": {
+    "large": "/images/pedals/ampeg-scrambler.jpg",
+    "small": "/images/pedals/ampeg-scrambler.jpg"
+  },
+  "analog-man-beano-boost": {
+    "large": "/images/pedals/analog-man-beano-boost.jpg",
+    "small": "/images/pedals/analog-man-beano-boost.jpg"
+  },
+  "blackstar-lt-drive": {
+    "large": "/images/pedals/blackstar-lt-drive.jpg",
+    "small": "/images/pedals/blackstar-lt-drive.jpg"
+  },
+  "boss-bf2-flanger": {
+    "large": "/images/pedals/boss-bf2-flanger.jpg",
+    "small": "/images/pedals/boss-bf2-flanger.jpg"
+  },
+  "boss-dd3": {
+    "large": "/images/pedals/boss-dd3.jpg",
+    "small": "/images/pedals/boss-dd3.jpg"
+  },
+  "boss-dd6": {
+    "large": "/images/pedals/boss-dd6.jpg",
+    "small": "/images/pedals/boss-dd6.jpg"
+  },
+  "boss-dm2-delay": {
+    "large": "/images/pedals/boss-dm2-delay.jpg",
+    "small": "/images/pedals/boss-dm2-delay.jpg"
+  },
+  "boss-ev30": {
+    "large": "/images/pedals/boss-ev30.jpg",
+    "small": "/images/pedals/boss-ev30.jpg"
+  },
+  "boss-fv30h": {
+    "large": "/images/pedals/boss-fv30h.jpg",
+    "small": "/images/pedals/boss-fv30h.jpg"
+  },
+  "boss-fv500h": {
+    "large": "/images/pedals/boss-fv500h.jpg",
+    "small": "/images/pedals/boss-fv500h.jpg"
+  },
+  "boss-fv500l": {
+    "large": "/images/pedals/boss-fv500l.jpg",
+    "small": "/images/pedals/boss-fv500l.jpg"
+  },
+  "boss-hm2-heavy-metal": {
+    "large": "/images/pedals/boss-hm2-heavy-metal.jpg",
+    "small": "/images/pedals/boss-hm2-heavy-metal.jpg"
+  },
+  "boss-vb2-vibrato": {
+    "large": "/images/pedals/boss-vb2-vibrato.jpg",
+    "small": "/images/pedals/boss-vb2-vibrato.jpg"
+  },
+  "cali76-compressor": {
+    "large": "/images/pedals/cali76-compressor.jpg",
+    "small": "/images/pedals/cali76-compressor.jpg"
+  },
+  "caline-10-band": {
+    "large": "/images/pedals/caline-10-band.jpg",
+    "small": "/images/pedals/caline-10-band.jpg"
+  },
+  "cmatmods-brownie": {
+    "large": "/images/pedals/cmatmods-brownie.jpg",
+    "small": "/images/pedals/cmatmods-brownie.jpg"
+  },
+  "crowther-hotcake": {
+    "large": "/images/pedals/crowther-hotcake.jpg",
+    "small": "/images/pedals/crowther-hotcake.jpg"
+  },
+  "digitech-supernatural": {
+    "large": "/images/pedals/digitech-supernatural.jpg",
+    "small": "/images/pedals/digitech-supernatural.jpg"
+  },
+  "digitech-timebender": {
+    "large": "/images/pedals/digitech-timebender.jpg",
+    "small": "/images/pedals/digitech-timebender.jpg"
+  },
+  "digitech-whammy-5": {
+    "large": "/images/pedals/digitech-whammy-5.jpg",
+    "small": "/images/pedals/digitech-whammy-5.jpg"
+  },
+  "dr-scientist-reverberator": {
+    "large": "/images/pedals/dr-scientist-reverberator.jpg",
+    "small": "/images/pedals/dr-scientist-reverberator.jpg"
+  },
+  "dsm-simplifier-dlx": {
+    "large": "/images/pedals/dsm-simplifier-dlx.jpg",
+    "small": "/images/pedals/dsm-simplifier-dlx.jpg"
+  },
+  "dsm-simplifier": {
+    "large": "/images/pedals/dsm-simplifier.jpg",
+    "small": "/images/pedals/dsm-simplifier.jpg"
+  },
+  "dunlop-535q": {
+    "large": "/images/pedals/dunlop-535q.jpg",
+    "small": "/images/pedals/dunlop-535q.jpg"
+  },
+  "dunlop-cbm95": {
+    "large": "/images/pedals/dunlop-cbm95.jpg",
+    "small": "/images/pedals/dunlop-cbm95.jpg"
+  },
+  "dunlop-crybaby-95q": {
+    "large": "/images/pedals/dunlop-crybaby-95q.jpg",
+    "small": "/images/pedals/dunlop-crybaby-95q.jpg"
+  },
+  "dunlop-crybaby-gcb95": {
+    "large": "/images/pedals/dunlop-crybaby-gcb95.jpg",
+    "small": "/images/pedals/dunlop-crybaby-gcb95.jpg"
+  },
+  "dunlop-crybaby-mini": {
+    "large": "/images/pedals/dunlop-crybaby-mini.jpg",
+    "small": "/images/pedals/dunlop-crybaby-mini.jpg"
+  },
+  "dunlop-dvp3": {
+    "large": "/images/pedals/dunlop-dvp3.jpg",
+    "small": "/images/pedals/dunlop-dvp3.jpg"
+  },
+  "dunlop-dvp4": {
+    "large": "/images/pedals/dunlop-dvp4.png",
+    "small": "/images/pedals/dunlop-dvp4.png"
+  },
+  "dunlop-jh1d": {
+    "large": "/images/pedals/dunlop-jh1d.jpg",
+    "small": "/images/pedals/dunlop-jh1d.jpg"
+  },
+  "earthquaker-cloven-hoof": {
+    "large": "/images/pedals/earthquaker-cloven-hoof.jpg",
+    "small": "/images/pedals/earthquaker-cloven-hoof.jpg"
+  },
+  "earthquaker-hoof-reaper": {
+    "large": "/images/pedals/earthquaker-hoof-reaper.jpg",
+    "small": "/images/pedals/earthquaker-hoof-reaper.jpg"
+  },
+  "earthquaker-rainbow-machine-synth": {
+    "large": "/images/pedals/earthquaker-rainbow-machine-synth.jpg",
+    "small": "/images/pedals/earthquaker-rainbow-machine-synth.jpg"
+  },
+  "earthquaker-rainbow-machine": {
+    "large": "/images/pedals/earthquaker-rainbow-machine.jpg",
+    "small": "/images/pedals/earthquaker-rainbow-machine.jpg"
+  },
+  "earthquaker-westwood": {
+    "large": "/images/pedals/earthquaker-westwood.jpg",
+    "small": "/images/pedals/earthquaker-westwood.jpg"
+  },
+  "ehx-big-muff-triangle": {
+    "large": "/images/pedals/ehx-big-muff-triangle.jpg",
+    "small": "/images/pedals/ehx-big-muff-triangle.jpg"
+  },
+  "ehx-big-muff": {
+    "large": "/images/pedals/ehx-big-muff.jpg",
+    "small": "/images/pedals/ehx-big-muff.jpg"
+  },
+  "ehx-deluxe-big-muff": {
+    "large": "/images/pedals/ehx-deluxe-big-muff.jpg",
+    "small": "/images/pedals/ehx-deluxe-big-muff.jpg"
+  },
+  "ehx-electric-mistress-v1": {
+    "large": "/images/pedals/ehx-electric-mistress-v1.jpg",
+    "small": "/images/pedals/ehx-electric-mistress-v1.jpg"
+  },
+  "ehx-enigma": {
+    "large": "/images/pedals/ehx-enigma.jpg",
+    "small": "/images/pedals/ehx-enigma.jpg"
+  },
+  "ehx-good-vibes": {
+    "large": "/images/pedals/ehx-good-vibes.jpg",
+    "small": "/images/pedals/ehx-good-vibes.jpg"
+  },
+  "ehx-green-russian-big-muff": {
+    "large": "/images/pedals/ehx-green-russian-big-muff.jpg",
+    "small": "/images/pedals/ehx-green-russian-big-muff.jpg"
+  },
+  "ehx-knockout": {
+    "large": "/images/pedals/ehx-knockout.jpg",
+    "small": "/images/pedals/ehx-knockout.jpg"
+  },
+  "ehx-memory-boy": {
+    "large": "/images/pedals/ehx-memory-boy.jpg",
+    "small": "/images/pedals/ehx-memory-boy.jpg"
+  },
+  "ehx-memory-toy": {
+    "large": "/images/pedals/ehx-memory-toy.jpg",
+    "small": "/images/pedals/ehx-memory-toy.jpg"
+  },
+  "ehx-mole": {
+    "large": "/images/pedals/ehx-mole.jpg",
+    "small": "/images/pedals/ehx-mole.jpg"
+  },
+  "ehx-nano-big-muff": {
+    "large": "/images/pedals/ehx-nano-big-muff.png",
+    "small": "/images/pedals/ehx-nano-big-muff.png"
+  },
+  "ehx-nano-holy-grail": {
+    "large": "/images/pedals/ehx-nano-holy-grail.png",
+    "small": "/images/pedals/ehx-nano-holy-grail.png"
+  },
+  "ehx-neo-clone": {
+    "large": "/images/pedals/ehx-neo-clone.jpg",
+    "small": "/images/pedals/ehx-neo-clone.jpg"
+  },
+  "ehx-neo-mistress": {
+    "large": "/images/pedals/ehx-neo-mistress.png",
+    "small": "/images/pedals/ehx-neo-mistress.png"
+  },
+  "ehx-pitchfork-plus": {
+    "large": "/images/pedals/ehx-pitchfork-plus.jpg",
+    "small": "/images/pedals/ehx-pitchfork-plus.jpg"
+  },
+  "ehx-screaming-bird": {
+    "large": "/images/pedals/ehx-screaming-bird.jpg",
+    "small": "/images/pedals/ehx-screaming-bird.jpg"
+  },
+  "ehx-small-clone": {
+    "large": "/images/pedals/ehx-small-clone.jpg",
+    "small": "/images/pedals/ehx-small-clone.jpg"
+  },
+  "ehx-small-stone-v1": {
+    "large": "/images/pedals/ehx-small-stone-v1.jpg",
+    "small": "/images/pedals/ehx-small-stone-v1.jpg"
+  },
+  "ehx-soul-food": {
+    "large": "/images/pedals/ehx-soul-food.jpg",
+    "small": "/images/pedals/ehx-soul-food.jpg"
+  },
+  "ehx-soul-preacher": {
+    "large": "/images/pedals/ehx-soul-preacher.png",
+    "small": "/images/pedals/ehx-soul-preacher.png"
+  },
+  "ehx-triangle-big-muff": {
+    "large": "/images/pedals/ehx-triangle-big-muff.jpg",
+    "small": "/images/pedals/ehx-triangle-big-muff.jpg"
+  },
+  "electro-harmonix-cathedral": {
+    "large": "/images/pedals/electro-harmonix-cathedral.jpg",
+    "small": "/images/pedals/electro-harmonix-cathedral.jpg"
+  },
+  "electro-harmonix-memory-man-v1": {
+    "large": "/images/pedals/electro-harmonix-memory-man-v1.jpg",
+    "small": "/images/pedals/electro-harmonix-memory-man-v1.jpg"
+  },
+  "emerson-paramount": {
+    "large": "/images/pedals/emerson-paramount.jpg",
+    "small": "/images/pedals/emerson-paramount.jpg"
+  },
+  "empress-phaser": {
+    "large": "/images/pedals/empress-phaser.jpg",
+    "small": "/images/pedals/empress-phaser.jpg"
+  },
+  "ernie-ball-mvp": {
+    "large": "/images/pedals/ernie-ball-mvp.jpg",
+    "small": "/images/pedals/ernie-ball-mvp.jpg"
+  },
+  "ernie-ball-vp-jr-25k": {
+    "large": "/images/pedals/ernie-ball-vp-jr-25k.jpg",
+    "small": "/images/pedals/ernie-ball-vp-jr-25k.jpg"
+  },
+  "ernie-ball-vp-jr": {
+    "large": "/images/pedals/ernie-ball-vp-jr.jpg",
+    "small": "/images/pedals/ernie-ball-vp-jr.jpg"
+  },
+  "eventide-h9-max": {
+    "large": "/images/pedals/eventide-h9-max.jpg",
+    "small": "/images/pedals/eventide-h9-max.jpg"
+  },
+  "eventide-timefactor": {
+    "large": "/images/pedals/eventide-timefactor.jpg",
+    "small": "/images/pedals/eventide-timefactor.jpg"
+  },
+  "fairfield-meet-maude": {
+    "large": "/images/pedals/fairfield-meet-maude.jpg",
+    "small": "/images/pedals/fairfield-meet-maude.jpg"
+  },
+  "fender-63-reverb-pedal": {
+    "large": "/images/pedals/fender-63-reverb-pedal.jpg",
+    "small": "/images/pedals/fender-63-reverb-pedal.jpg"
+  },
+  "fender-reverb-tank-6g15": {
+    "large": "/images/pedals/fender-reverb-tank-6g15.jpg",
+    "small": "/images/pedals/fender-reverb-tank-6g15.jpg"
+  },
+  "fulltone-deja-vibe": {
+    "large": "/images/pedals/fulltone-deja-vibe.jpg",
+    "small": "/images/pedals/fulltone-deja-vibe.jpg"
+  },
+  "fulltone-octafuzz": {
+    "large": "/images/pedals/fulltone-octafuzz.jpg",
+    "small": "/images/pedals/fulltone-octafuzz.jpg"
+  },
+  "fulltone-plimsoul": {
+    "large": "/images/pedals/fulltone-plimsoul.jpg",
+    "small": "/images/pedals/fulltone-plimsoul.jpg"
+  },
+  "fulltone-supa-trem": {
+    "large": "/images/pedals/fulltone-supa-trem.jpg",
+    "small": "/images/pedals/fulltone-supa-trem.jpg"
+  },
+  "fulltone-tt2": {
+    "large": "/images/pedals/fulltone-tt2.jpg",
+    "small": "/images/pedals/fulltone-tt2.jpg"
+  },
+  "gamechanger-plus": {
+    "large": "/images/pedals/gamechanger-plus.jpg",
+    "small": "/images/pedals/gamechanger-plus.jpg"
+  },
+  "gfi-specular-tempus-delay": {
+    "large": "/images/pedals/gfi-specular-tempus-delay.jpg",
+    "small": "/images/pedals/gfi-specular-tempus-delay.jpg"
+  },
+  "gfi-specular-tempus": {
+    "large": "/images/pedals/gfi-specular-tempus.jpg",
+    "small": "/images/pedals/gfi-specular-tempus.jpg"
+  },
+  "hotone-harmony": {
+    "large": "/images/pedals/hotone-harmony.jpg",
+    "small": "/images/pedals/hotone-harmony.jpg"
+  },
+  "hotone-verb": {
+    "large": "/images/pedals/hotone-verb.jpg",
+    "small": "/images/pedals/hotone-verb.jpg"
+  },
+  "hotone-volume-exp": {
+    "large": "/images/pedals/hotone-volume-exp.png",
+    "small": "/images/pedals/hotone-volume-exp.png"
+  },
+  "ibanez-ad9-analog-delay": {
+    "large": "/images/pedals/ibanez-ad9-analog-delay.jpg",
+    "small": "/images/pedals/ibanez-ad9-analog-delay.jpg"
+  },
+  "ibanez-ad9": {
+    "large": "/images/pedals/ibanez-ad9.jpg",
+    "small": "/images/pedals/ibanez-ad9.jpg"
+  },
+  "irs-plasma-pedal": {
+    "large": "/images/pedals/irs-plasma-pedal.jpg",
+    "small": "/images/pedals/irs-plasma-pedal.jpg"
+  },
+  "jhs-bender": {
+    "large": "/images/pedals/jhs-bender.jpg",
+    "small": "/images/pedals/jhs-bender.jpg"
+  },
+  "jhs-little-black-buffer": {
+    "large": "/images/pedals/jhs-little-black-buffer.jpg",
+    "small": "/images/pedals/jhs-little-black-buffer.jpg"
+  },
+  "jhs-panther-cub-v2": {
+    "large": "/images/pedals/jhs-panther-cub-v2.jpg",
+    "small": "/images/pedals/jhs-panther-cub-v2.jpg"
+  },
+  "jhs-summing-amp": {
+    "large": "/images/pedals/jhs-summing-amp.png",
+    "small": "/images/pedals/jhs-summing-amp.png"
+  },
+  "jhs-supreme": {
+    "large": "/images/pedals/jhs-supreme.jpg",
+    "small": "/images/pedals/jhs-supreme.jpg"
+  },
+  "joyo-atmosphere": {
+    "large": "/images/pedals/joyo-atmosphere.jpg",
+    "small": "/images/pedals/joyo-atmosphere.jpg"
+  },
+  "joyo-dyna-compressor": {
+    "large": "/images/pedals/joyo-dyna-compressor.jpg",
+    "small": "/images/pedals/joyo-dyna-compressor.jpg"
+  },
+  "joyo-jeq-band": {
+    "large": "/images/pedals/joyo-jeq-band.jpg",
+    "small": "/images/pedals/joyo-jeq-band.jpg"
+  },
+  "joyo-noise-gate": {
+    "large": "/images/pedals/joyo-noise-gate.jpg",
+    "small": "/images/pedals/joyo-noise-gate.jpg"
+  },
+  "jrockett-archer-ikon": {
+    "large": "/images/pedals/jrockett-archer-ikon.jpg",
+    "small": "/images/pedals/jrockett-archer-ikon.jpg"
+  },
+  "jrockett-archer": {
+    "large": "/images/pedals/jrockett-archer.jpg",
+    "small": "/images/pedals/jrockett-archer.jpg"
+  },
+  "jrockett-boing": {
+    "large": "/images/pedals/jrockett-boing.jpg",
+    "small": "/images/pedals/jrockett-boing.jpg"
+  },
+  "keeley-delay-workstation": {
+    "large": "/images/pedals/keeley-delay-workstation.jpg",
+    "small": "/images/pedals/keeley-delay-workstation.jpg"
+  },
+  "keeley-omni-reverb": {
+    "large": "/images/pedals/keeley-omni-reverb.jpg",
+    "small": "/images/pedals/keeley-omni-reverb.jpg"
+  },
+  "keeley-oxblood": {
+    "large": "/images/pedals/keeley-oxblood.jpg",
+    "small": "/images/pedals/keeley-oxblood.jpg"
+  },
+  "keeley-realizer": {
+    "large": "/images/pedals/keeley-realizer.jpg",
+    "small": "/images/pedals/keeley-realizer.jpg"
+  },
+  "keeley-seafoam-plus": {
+    "large": "/images/pedals/keeley-seafoam-plus.jpg",
+    "small": "/images/pedals/keeley-seafoam-plus.jpg"
+  },
+  "keeley-synth-1-synth": {
+    "large": "/images/pedals/keeley-synth-1-synth.jpg",
+    "small": "/images/pedals/keeley-synth-1-synth.jpg"
+  },
+  "keeley-synth-1": {
+    "large": "/images/pedals/keeley-synth-1.jpg",
+    "small": "/images/pedals/keeley-synth-1.jpg"
+  },
+  "keeley-tremolo": {
+    "large": "/images/pedals/keeley-tremolo.jpg",
+    "small": "/images/pedals/keeley-tremolo.jpg"
+  },
+  "klon-centaur-gold": {
+    "large": "/images/pedals/klon-centaur-gold.jpg",
+    "small": "/images/pedals/klon-centaur-gold.jpg"
+  },
+  "klon-ktr": {
+    "large": "/images/pedals/klon-ktr.jpg",
+    "small": "/images/pedals/klon-ktr.jpg"
+  },
+  "kma-wurm": {
+    "large": "/images/pedals/kma-wurm.jpg",
+    "small": "/images/pedals/kma-wurm.jpg"
+  },
+  "korg-pitchblack-advance": {
+    "large": "/images/pedals/korg-pitchblack-advance.jpg",
+    "small": "/images/pedals/korg-pitchblack-advance.jpg"
+  },
+  "korg-pitchblack": {
+    "large": "/images/pedals/korg-pitchblack.jpg",
+    "small": "/images/pedals/korg-pitchblack.jpg"
+  },
+  "lehle-d-loop": {
+    "large": "/images/pedals/lehle-d-loop.jpg",
+    "small": "/images/pedals/lehle-d-loop.jpg"
+  },
+  "lehle-mono-volume": {
+    "large": "/images/pedals/lehle-mono-volume.jpg",
+    "small": "/images/pedals/lehle-mono-volume.jpg"
+  },
+  "line6-verbzilla": {
+    "large": "/images/pedals/line6-verbzilla.jpg",
+    "small": "/images/pedals/line6-verbzilla.jpg"
+  },
+  "mad-professor-snow-white": {
+    "large": "/images/pedals/mad-professor-snow-white.jpg",
+    "small": "/images/pedals/mad-professor-snow-white.jpg"
+  },
+  "maxon-ad999": {
+    "large": "/images/pedals/maxon-ad999.jpg",
+    "small": "/images/pedals/maxon-ad999.jpg"
+  },
+  "meris-hedra": {
+    "large": "/images/pedals/meris-hedra.jpg",
+    "small": "/images/pedals/meris-hedra.jpg"
+  },
+  "mesa-flux-drive": {
+    "large": "/images/pedals/mesa-flux-drive.jpg",
+    "small": "/images/pedals/mesa-flux-drive.jpg"
+  },
+  "mesa-throttle-box": {
+    "large": "/images/pedals/mesa-throttle-box.jpg",
+    "small": "/images/pedals/mesa-throttle-box.jpg"
+  },
+  "mission-exp": {
+    "large": "/images/pedals/mission-exp.jpg",
+    "small": "/images/pedals/mission-exp.jpg"
+  },
+  "mooer-d7": {
+    "large": "/images/pedals/mooer-d7.jpg",
+    "small": "/images/pedals/mooer-d7.jpg"
+  },
+  "mooer-leveline": {
+    "large": "/images/pedals/mooer-leveline.jpg",
+    "small": "/images/pedals/mooer-leveline.jpg"
+  },
+  "mooer-r7": {
+    "large": "/images/pedals/mooer-r7.jpg",
+    "small": "/images/pedals/mooer-r7.jpg"
+  },
+  "mooer-radar": {
+    "large": "/images/pedals/mooer-radar.jpg",
+    "small": "/images/pedals/mooer-radar.jpg"
+  },
+  "mooer-tender-octaver": {
+    "large": "/images/pedals/mooer-tender-octaver.jpg",
+    "small": "/images/pedals/mooer-tender-octaver.jpg"
+  },
+  "moog-ep3": {
+    "large": "/images/pedals/moog-ep3.jpg",
+    "small": "/images/pedals/moog-ep3.jpg"
+  },
+  "morley-mini-wah": {
+    "large": "/images/pedals/morley-mini-wah.jpg",
+    "small": "/images/pedals/morley-mini-wah.jpg"
+  },
+  "morley-pvo": {
+    "large": "/images/pedals/morley-pvo.jpg",
+    "small": "/images/pedals/morley-pvo.jpg"
+  },
+  "mutron-bi-phase": {
+    "large": "/images/pedals/mutron-bi-phase.jpg",
+    "small": "/images/pedals/mutron-bi-phase.jpg"
+  },
+  "mxr-distortion-plus-vintage": {
+    "large": "/images/pedals/mxr-distortion-plus-vintage.jpg",
+    "small": "/images/pedals/mxr-distortion-plus-vintage.jpg"
+  },
+  "mxr-m193-gt-od": {
+    "large": "/images/pedals/mxr-m193-gt-od.jpg",
+    "small": "/images/pedals/mxr-m193-gt-od.jpg"
+  },
+  "mxr-mc404-wah": {
+    "large": "/images/pedals/mxr-mc404-wah.jpg",
+    "small": "/images/pedals/mxr-mc404-wah.jpg"
+  },
+  "old-blood-black-fountain": {
+    "large": "/images/pedals/old-blood-black-fountain.jpg",
+    "small": "/images/pedals/old-blood-black-fountain.jpg"
+  },
+  "old-blood-procession": {
+    "large": "/images/pedals/old-blood-procession.jpg",
+    "small": "/images/pedals/old-blood-procession.jpg"
+  },
+  "orange-squeezer": {
+    "large": "/images/pedals/orange-squeezer.jpg",
+    "small": "/images/pedals/orange-squeezer.jpg"
+  },
+  "origin-cali76-compact-deluxe": {
+    "large": "/images/pedals/origin-cali76-compact-deluxe.jpg",
+    "small": "/images/pedals/origin-cali76-compact-deluxe.jpg"
+  },
+  "origin-cali76-stacked": {
+    "large": "/images/pedals/origin-cali76-stacked.jpg",
+    "small": "/images/pedals/origin-cali76-stacked.jpg"
+  },
+  "pigtronix-disnortion": {
+    "large": "/images/pedals/pigtronix-disnortion.jpg",
+    "small": "/images/pedals/pigtronix-disnortion.jpg"
+  },
+  "pigtronix-envelope-phaser": {
+    "large": "/images/pedals/pigtronix-envelope-phaser.jpg",
+    "small": "/images/pedals/pigtronix-envelope-phaser.jpg"
+  },
+  "pigtronix-philosophers-tone": {
+    "large": "/images/pedals/pigtronix-philosophers-tone.jpg",
+    "small": "/images/pedals/pigtronix-philosophers-tone.jpg"
+  },
+  "proco-fat-rat": {
+    "large": "/images/pedals/proco-fat-rat.jpg",
+    "small": "/images/pedals/proco-fat-rat.jpg"
+  },
+  "red-panda-context-v2": {
+    "large": "/images/pedals/red-panda-context-v2.jpg",
+    "small": "/images/pedals/red-panda-context-v2.jpg"
+  },
+  "roland-space-echo-re201": {
+    "large": "/images/pedals/roland-space-echo-re201.jpg",
+    "small": "/images/pedals/roland-space-echo-re201.jpg"
+  },
+  "saturnworks-ab": {
+    "large": "/images/pedals/saturnworks-ab.jpg",
+    "small": "/images/pedals/saturnworks-ab.jpg"
+  },
+  "seymour-duncan-vise-grip": {
+    "large": "/images/pedals/seymour-duncan-vise-grip.jpg",
+    "small": "/images/pedals/seymour-duncan-vise-grip.jpg"
+  },
+  "shin-ei-fuzz-wah": {
+    "large": "/images/pedals/shin-ei-fuzz-wah.jpg",
+    "small": "/images/pedals/shin-ei-fuzz-wah.jpg"
+  },
+  "snouse-blackbox2": {
+    "large": "/images/pedals/snouse-blackbox2.jpg",
+    "small": "/images/pedals/snouse-blackbox2.jpg"
+  },
+  "sola-sound-tonebender-mk1": {
+    "large": "/images/pedals/sola-sound-tonebender-mk1.jpg",
+    "small": "/images/pedals/sola-sound-tonebender-mk1.jpg"
+  },
+  "source-audio-dual-exp": {
+    "large": "/images/pedals/source-audio-dual-exp.jpg",
+    "small": "/images/pedals/source-audio-dual-exp.jpg"
+  },
+  "source-audio-eq2": {
+    "large": "/images/pedals/source-audio-eq2.jpg",
+    "small": "/images/pedals/source-audio-eq2.jpg"
+  },
+  "supro-drive": {
+    "large": "/images/pedals/supro-drive.jpg",
+    "small": "/images/pedals/supro-drive.jpg"
+  },
+  "tc-bodyrez": {
+    "large": "/images/pedals/tc-bodyrez.jpg",
+    "small": "/images/pedals/tc-bodyrez.jpg"
+  },
+  "tc-corona-chorus": {
+    "large": "/images/pedals/tc-corona-chorus.jpg",
+    "small": "/images/pedals/tc-corona-chorus.jpg"
+  },
+  "tc-echobrain": {
+    "large": "/images/pedals/tc-echobrain.jpg",
+    "small": "/images/pedals/tc-echobrain.jpg"
+  },
+  "tc-hof-mini": {
+    "large": "/images/pedals/tc-hof-mini.jpg",
+    "small": "/images/pedals/tc-hof-mini.jpg"
+  },
+  "tc-hof2": {
+    "large": "/images/pedals/tc-hof2.jpg",
+    "small": "/images/pedals/tc-hof2.jpg"
+  },
+  "tc-hypergravity-mini": {
+    "large": "/images/pedals/tc-hypergravity-mini.jpg",
+    "small": "/images/pedals/tc-hypergravity-mini.jpg"
+  },
+  "tc-sentry": {
+    "large": "/images/pedals/tc-sentry.jpg",
+    "small": "/images/pedals/tc-sentry.jpg"
+  },
+  "tc-skysurfer": {
+    "large": "/images/pedals/tc-skysurfer.jpg",
+    "small": "/images/pedals/tc-skysurfer.jpg"
+  },
+  "tc-zeus-drive": {
+    "large": "/images/pedals/tc-zeus-drive.jpg",
+    "small": "/images/pedals/tc-zeus-drive.jpg"
+  },
+  "tech21-fly-rig-5": {
+    "large": "/images/pedals/tech21-fly-rig-5.jpg",
+    "small": "/images/pedals/tech21-fly-rig-5.jpg"
+  },
+  "tech21-sansamp-classic": {
+    "large": "/images/pedals/tech21-sansamp-classic.jpg",
+    "small": "/images/pedals/tech21-sansamp-classic.jpg"
+  },
+  "two-notes-cab-m-plus": {
+    "large": "/images/pedals/two-notes-cab-m-plus.jpg",
+    "small": "/images/pedals/two-notes-cab-m-plus.jpg"
+  },
+  "walrus-arp87": {
+    "large": "/images/pedals/walrus-arp87.jpg",
+    "small": "/images/pedals/walrus-arp87.jpg"
+  },
+  "walrus-contraband": {
+    "large": "/images/pedals/walrus-contraband.jpg",
+    "small": "/images/pedals/walrus-contraband.jpg"
+  },
+  "walrus-d1-delay": {
+    "large": "/images/pedals/walrus-d1-delay.jpg",
+    "small": "/images/pedals/walrus-d1-delay.jpg"
+  },
+  "walrus-d1": {
+    "large": "/images/pedals/walrus-d1.jpg",
+    "small": "/images/pedals/walrus-d1.jpg"
+  },
+  "walrus-jupiter": {
+    "large": "/images/pedals/walrus-jupiter.jpg",
+    "small": "/images/pedals/walrus-jupiter.jpg"
+  },
+  "wampler-decibel": {
+    "large": "/images/pedals/wampler-decibel.jpg",
+    "small": "/images/pedals/wampler-decibel.jpg"
+  },
+  "wampler-sovereign": {
+    "large": "/images/pedals/wampler-sovereign.jpg",
+    "small": "/images/pedals/wampler-sovereign.jpg"
+  },
+  "wampler-triple-wreck": {
+    "large": "/images/pedals/wampler-triple-wreck.jpg",
+    "small": "/images/pedals/wampler-triple-wreck.jpg"
+  },
+  "wilson-ten-spot-ii": {
+    "large": "/images/pedals/wilson-ten-spot-ii.jpg",
+    "small": "/images/pedals/wilson-ten-spot-ii.jpg"
+  },
+  "xotic-ep-booster": {
+    "large": "/images/pedals/xotic-ep-booster.png",
+    "small": "/images/pedals/xotic-ep-booster.png"
+  },
+  "xotic-sp-comp": {
+    "large": "/images/pedals/xotic-sp-comp.png",
+    "small": "/images/pedals/xotic-sp-comp.png"
+  },
+  "xotic-xvp-250k": {
+    "large": "/images/pedals/xotic-xvp-250k.jpg",
+    "small": "/images/pedals/xotic-xvp-250k.jpg"
   },
 };
 
