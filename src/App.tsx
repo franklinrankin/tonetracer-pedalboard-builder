@@ -426,6 +426,10 @@ function AppContent() {
   };
   
   const handleCollection = () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
     setCurrentPage('collection');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
