@@ -349,7 +349,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                     <div className="flex items-center gap-1">
                       {genres.slice(0, 2).map((g) => g && (
                         <span key={g.id} className="flex items-center gap-1">
-                          {g.icon} {g.name}
+                          {g.name}
                         </span>
                       ))}
                       {genres.length > 2 && <span>+{genres.length - 2}</span>}

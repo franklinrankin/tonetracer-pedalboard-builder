@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Sliders, Users, BookOpen, HelpCircle, Lightbulb, Plus, ArrowRight } from 'lucide-react';
+import { Sliders, Users, BookOpen, HelpCircle, Lightbulb, Plus, ArrowRight, Package } from 'lucide-react';
 import { UserMenu } from '../components/UserMenu';
+import { AboutModal } from '../components/AboutModal';
 
 interface HomePageProps {
   onBuildBoard: () => void;
@@ -12,11 +13,13 @@ interface HomePageProps {
   onProfile?: () => void;
   onPedalRequest?: () => void;
   onFeedback?: () => void;
+  onCollection?: () => void;
 }
 
-export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbout, onSignIn, onSavedBoards, onProfile, onPedalRequest, onFeedback }: HomePageProps) {
+export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbout, onSignIn, onSavedBoards, onProfile, onPedalRequest, onFeedback, onCollection }: HomePageProps) {
   const [mounted, setMounted] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [showAbout, setShowAbout] = useState(false);
   
   useEffect(() => {
     setMounted(true);
@@ -29,7 +32,7 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
       subtitle: 'A BOARD',
       description: 'Create your perfect pedalboard from scratch',
       icon: Sliders,
-      bgColor: '#FF5722',
+      bgColor: '#FFCDD2', // soft coral/pink
       onClick: onBuildBoard,
       featured: true,
     },
@@ -39,7 +42,7 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
       subtitle: 'BOARDS',
       description: 'See what professionals use',
       icon: Users,
-      bgColor: '#2196F3',
+      bgColor: '#BBDEFB', // soft blue
       onClick: onBrowseProBoards,
     },
     {
@@ -48,18 +51,26 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
       subtitle: 'INDEX',
       description: '700+ pedals in database',
       icon: BookOpen,
-      bgColor: '#4CAF50',
+      bgColor: '#C8E6C9', // soft green
       onClick: onPedalIndex,
+    },
+    {
+      id: 'collection',
+      title: 'MY',
+      subtitle: 'COLLECTION',
+      description: 'Track pedals you own',
+      icon: Package,
+      bgColor: '#FFECB3', // pastel amber/yellow
+      onClick: onCollection || (() => {}),
     },
     {
       id: 'about',
       title: 'ABOUT',
-      subtitle: '',
-      description: 'Coming soon',
+      subtitle: 'BOARDSIE',
+      description: 'Learn about Boardsie',
       icon: HelpCircle,
-      bgColor: '#9E9E9E',
-      onClick: onAbout,
-      disabled: true,
+      bgColor: '#E1BEE7', // pastel purple
+      onClick: () => setShowAbout(true),
     },
   ];
 
@@ -116,8 +127,8 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {options.map((option, index) => {
             const Icon = option.icon;
-            const isDisabled = 'disabled' in option && option.disabled;
-            const isFeatured = 'featured' in option && option.featured;
+            const isDisabled = 'disabled' in option && (option as { disabled?: boolean }).disabled === true;
+            const isFeatured = 'featured' in option && (option as { featured?: boolean }).featured === true;
             const isHovered = hoveredCard === option.id;
             
             return (
@@ -165,20 +176,18 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
                   {/* Title */}
                   <div className="mb-2">
                     <h2 
-                      className="text-3xl sm:text-5xl font-black text-white leading-none"
+                      className="text-3xl sm:text-5xl font-black text-black leading-none"
                       style={{ 
                         fontFamily: '"Space Grotesk", "Inter", sans-serif',
-                        textShadow: '3px 3px 0px black',
                       }}
                     >
                       {option.title}
                     </h2>
                     {option.subtitle && (
                       <h2 
-                        className="text-3xl sm:text-5xl font-black text-white leading-none"
+                        className="text-3xl sm:text-5xl font-black text-black leading-none"
                         style={{ 
                           fontFamily: '"Space Grotesk", "Inter", sans-serif',
-                          textShadow: '3px 3px 0px black',
                         }}
                       >
                         {option.subtitle}
@@ -188,8 +197,7 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
                   
                   {/* Description */}
                   <p 
-                    className="text-sm sm:text-base font-bold text-white uppercase tracking-wide"
-                    style={{ textShadow: '1px 1px 0px black' }}
+                    className="text-sm sm:text-base font-bold text-black/80 uppercase tracking-wide"
                   >
                     {option.description}
                   </p>
@@ -226,27 +234,6 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
           })}
         </div>
 
-        {/* Stats Row */}
-        <div 
-          className={`flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 sm:mb-12 transition-all duration-500 delay-300 ${
-            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-        >
-          {[
-            { value: '700+', label: 'PEDALS' },
-            { value: 'SMART', label: 'MATCHING' },
-            { value: 'BUDGET', label: 'AWARE' },
-          ].map((stat, i) => (
-            <div 
-              key={i} 
-              className="px-4 py-3 sm:px-6 sm:py-4 bg-black text-white text-center"
-              style={{ border: '3px solid black' }}
-            >
-              <div className="text-xl sm:text-2xl font-black">{stat.value}</div>
-              <div className="text-xs sm:text-sm font-bold tracking-wider opacity-70">{stat.label}</div>
-            </div>
-          ))}
-        </div>
         
         {/* Feedback Section */}
         <div 
@@ -300,6 +287,9 @@ export function HomePage({ onBuildBoard, onBrowseProBoards, onPedalIndex, onAbou
           </p>
         </footer>
       </div>
+      
+      {/* About Modal */}
+      <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
     </div>
   );
 }

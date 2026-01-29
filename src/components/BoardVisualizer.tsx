@@ -386,8 +386,11 @@ export function BoardVisualizer() {
 
   if (board.slots.length === 0) {
     return (
-      <div className="flex items-center justify-center h-96 bg-board-elevated rounded-xl border border-board-border">
-        <p className="text-board-muted">Add pedals to your board to visualize the signal flow</p>
+      <div 
+        className="flex items-center justify-center h-96"
+        style={{ backgroundColor: '#FFFEF0', border: '3px solid black' }}
+      >
+        <p className="text-black font-bold">Add pedals to your board to visualize the signal flow</p>
       </div>
     );
   }
@@ -491,8 +494,8 @@ export function BoardVisualizer() {
       {/* Board Visualization */}
       <div 
         ref={containerRef}
-        className="relative bg-board-elevated rounded-xl p-6 border border-board-border overflow-visible"
-        style={{ minHeight: '500px', paddingTop: '80px', paddingBottom: '80px' }}
+        className="relative p-6 overflow-visible"
+        style={{ minHeight: '500px', paddingTop: '80px', paddingBottom: '80px', backgroundColor: '#e5e5e5', border: '4px solid black' }}
       >
         {/* Board Surface */}
         <div
@@ -1022,15 +1025,21 @@ export function BoardVisualizer() {
         </div>
         
         {/* Board dimensions label */}
-        <div className="text-center mt-4 text-sm text-board-muted">
+        <div 
+          className="text-center mt-4 text-sm font-black text-black px-4 py-2 mx-auto w-fit"
+          style={{ backgroundColor: '#FFFEF0', border: '2px solid black' }}
+        >
           {(boardWidthMm / 25.4).toFixed(1)}" × {(boardDepthMm / 25.4).toFixed(1)}" pedalboard
         </div>
       </div>
 
       {/* Instructions - Hidden on mobile */}
-      <div className="hidden sm:block bg-board-surface/50 rounded-xl p-4 border border-board-border">
-        <h3 className="text-sm font-medium text-white mb-2">Tips</h3>
-        <ul className="text-xs text-board-muted space-y-1">
+      <div 
+        className="hidden sm:block p-4"
+        style={{ backgroundColor: '#FFFEF0', border: '3px solid black' }}
+      >
+        <h3 className="text-sm font-black text-black mb-2 uppercase">Tips</h3>
+        <ul className="text-xs text-black space-y-1">
           <li>• <strong>Click</strong> a pedal to select it and view details</li>
           <li>• <strong>Drag</strong> pedals to reposition them on the board</li>
           <li>• <strong>Rotate</strong> – click a pedal first, then use rotate buttons above</li>

@@ -6,7 +6,6 @@ export type GenreCategoryId = 'rock-roots' | 'heavy' | 'atmospheric' | 'groove' 
 export interface GenreCategory {
   id: GenreCategoryId;
   name: string;
-  icon: string;
   color: string;
   description: string;
 }
@@ -15,35 +14,30 @@ export const GENRE_CATEGORIES: GenreCategory[] = [
   {
     id: 'rock-roots',
     name: 'Rock & Roll Roots',
-    icon: '🎸',
     color: '#ef4444',
     description: 'Classic guitar-driven sounds from blues to indie',
   },
   {
     id: 'heavy',
     name: 'Heavy & Aggressive',
-    icon: '🔥',
     color: '#7c3aed',
     description: 'High-gain intensity and sonic exploration',
   },
   {
     id: 'atmospheric',
     name: 'Atmospheric & Textural',
-    icon: '🌊',
     color: '#06b6d4',
     description: 'Ambient soundscapes and ethereal textures',
   },
   {
     id: 'groove',
     name: 'Groove & Feel',
-    icon: '🎷',
     color: '#10b981',
     description: 'Dynamic expression and rhythmic playing',
   },
   {
     id: 'contemporary',
     name: 'Contemporary & Production',
-    icon: '🎤',
     color: '#f472b6',
     description: 'Modern polished tones for recording and performance',
   },
@@ -59,8 +53,7 @@ export interface GenreProfile {
   ambienceRating: number; // 1-10 numeric rating
   modulationRating: number; // 1-10 numeric rating
   dynamicsRating: number; // 1-10 numeric rating (compression/gating needs)
-  icon: string;
-  iconImage?: string; // Optional image URL to use instead of emoji
+  iconImage?: string; // Optional image URL
   iconImagePosition?: string; // Optional CSS background-position (e.g., 'top', 'center', '50% 30%')
   iconImageSize?: string; // Optional CSS background-size (e.g., 'cover', 'contain', '150%')
   color: string;
@@ -101,7 +94,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 4,
     modulationRating: 2,
     dynamicsRating: 6,
-    icon: '🎸',
     iconImage: '/images/genres/blues.jpg',
     color: '#3b82f6',
     artists: ['Stevie Ray Vaughan', 'B.B. King', 'John Mayer', 'Gary Clark Jr.'],
@@ -139,7 +131,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 5,
     modulationRating: 5,
     dynamicsRating: 3,
-    icon: '🤘',
     iconImage: '/images/genres/classic-rock.jpg',
     color: '#ef4444',
     artists: ['Led Zeppelin', 'AC/DC', 'The Rolling Stones', 'Foo Fighters'],
@@ -176,7 +167,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 2,
     modulationRating: 1,
     dynamicsRating: 8,
-    icon: '🔥',
     iconImage: '/images/genres/metal.jpg',
     color: '#1f2937',
     artists: ['Metallica', 'Slipknot', 'Gojira', 'Meshuggah'],
@@ -212,7 +202,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 7,
     modulationRating: 6,
     dynamicsRating: 3,
-    icon: '🌙',
     iconImage: '/images/genres/alternative.jpg',
     color: '#8b5cf6',
     artists: ['Radiohead', 'Arctic Monkeys', 'Tame Impala', 'The Strokes'],
@@ -250,14 +239,13 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 10,
     modulationRating: 9,
     dynamicsRating: 2,
-    icon: '🌊',
     iconImage: '/images/genres/shoegaze.jpg',
     color: '#ec4899',
     artists: ['My Bloody Valentine', 'Slowdive', 'Ride', 'Nothing'],
     // Core shoegaze: fuzz, heavy mod, massive reverb, delay for wash
     essentialCategories: ['gain', 'modulation', 'reverb', 'delay'],
-    // Extras: pitch for shimmer/octave, more modulation
-    extraCategories: ['pitch', 'modulation'],
+    // Extras: pitch for shimmer/octave, more modulation, synth for textures
+    extraCategories: ['pitch', 'modulation', 'synth'],
     sectionTargets: {
       gain: { min: 8, ideal: 16, max: 22 },
       modulation: { min: 10, ideal: 14, max: 15 },
@@ -265,7 +253,7 @@ export const GENRES: GenreProfile[] = [
       reverb: { min: 12, ideal: 15, max: 15 },
       pitch: { min: 3, ideal: 6, max: 10 },
     },
-    preferredSubtypes: ['Fuzz', 'Distortion', 'Chorus', 'Flanger', 'Vibrato', 'Ambient', 'Multi', 'Shimmer', 'Octave', 'Shifter'],
+    preferredSubtypes: ['Fuzz', 'Distortion', 'Chorus', 'Flanger', 'Vibrato', 'Ambient', 'Multi', 'Shimmer', 'Octave', 'Shifter', 'Synth', 'Granular'],
     keywords: ['ambient', 'dreamy', 'lush', 'wall of sound', 'ethereal'],
     characteristics: {
       gainLevel: 'medium',
@@ -288,14 +276,13 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 10,
     modulationRating: 6,
     dynamicsRating: 4,
-    icon: '✨',
     iconImage: '/images/genres/ambient.jpg',
     color: '#06b6d4',
     artists: ['Explosions in the Sky', 'Sigur Rós', 'Mogwai', 'Hammock'],
     // Core ambient: reverb is KING, delay for texture, mod for movement, light gain
     essentialCategories: ['reverb', 'delay', 'modulation', 'gain'],
-    // Extras: second delay, volume for swells, pitch for shimmer
-    extraCategories: ['delay', 'volume', 'pitch'],
+    // Extras: synth for soundscapes, volume for swells, pitch for shimmer
+    extraCategories: ['synth', 'volume', 'pitch'],
     sectionTargets: {
       gain: { min: 2, ideal: 4, max: 8 },
       modulation: { min: 6, ideal: 10, max: 15 },
@@ -304,7 +291,7 @@ export const GENRES: GenreProfile[] = [
       pitch: { min: 3, ideal: 6, max: 10 },
       volume: { min: 5, ideal: 10, max: 10 },
     },
-    preferredSubtypes: ['Boost', 'Overdrive', 'Tremolo', 'Chorus', 'Tape', 'Multi', 'Ambient', 'Shimmer', 'Octave', 'Volume', 'Looper'],
+    preferredSubtypes: ['Boost', 'Overdrive', 'Tremolo', 'Chorus', 'Tape', 'Multi', 'Ambient', 'Shimmer', 'Octave', 'Volume', 'Looper', 'Synth', 'Granular', 'Sustainer'],
     keywords: ['ambient', 'atmospheric', 'ethereal', 'expansive', 'cinematic'],
     characteristics: {
       gainLevel: 'low',
@@ -327,7 +314,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 4,
     modulationRating: 2,
     dynamicsRating: 8,
-    icon: '🤠',
     iconImage: '/images/genres/country.jpg',
     color: '#f59e0b',
     artists: ['Brad Paisley', 'Keith Urban', 'Brent Mason', 'Vince Gill'],
@@ -365,7 +351,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 3,
     modulationRating: 3,
     dynamicsRating: 5,
-    icon: '🎷',
     iconImage: '/images/genres/jazz.jpg',
     color: '#6366f1',
     artists: ['Pat Metheny', 'John Scofield', 'Julian Lage', 'Kurt Rosenwinkel'],
@@ -404,7 +389,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 2,
     modulationRating: 5,
     dynamicsRating: 8,
-    icon: '🕺',
     iconImage: '/images/genres/funk.jpg',
     color: '#10b981',
     artists: ['Nile Rodgers', 'Prince', 'Cory Wong', 'John Mayer'],
@@ -443,15 +427,14 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 5,
     modulationRating: 7,
     dynamicsRating: 4,
-    icon: '🎹',
     iconImage: '/images/genres/progressive.jpg',
     iconImagePosition: '50% 25%', // Move crop up
     color: '#7c3aed',
     artists: ['Dream Theater', 'Tool', 'Porcupine Tree', 'Animals as Leaders'],
     // Core prog: versatile gain, modulation, delay, reverb
     essentialCategories: ['gain', 'modulation', 'delay', 'reverb'],
-    // Extras: second gain, pitch effects
-    extraCategories: ['gain', 'pitch'],
+    // Extras: second gain, pitch effects, synth for textures
+    extraCategories: ['gain', 'pitch', 'synth'],
     sectionTargets: {
       gain: { min: 10, ideal: 18, max: 25 },
       modulation: { min: 6, ideal: 12, max: 15 },
@@ -459,7 +442,7 @@ export const GENRES: GenreProfile[] = [
       reverb: { min: 6, ideal: 10, max: 14 },
       pitch: { min: 5, ideal: 8, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Distortion', 'Boost', 'Multi', 'Chorus', 'Phaser', 'Harmonizer', 'Shifter', 'Whammy', 'Looper'],
+    preferredSubtypes: ['Overdrive', 'Distortion', 'Boost', 'Multi', 'Chorus', 'Phaser', 'Harmonizer', 'Shifter', 'Whammy', 'Looper', 'Synth'],
     keywords: ['versatile', 'complex', 'progressive', 'technical', 'dynamic'],
     characteristics: {
       gainLevel: 'high',
@@ -482,7 +465,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 9,
     modulationRating: 5,
     dynamicsRating: 5,
-    icon: '🙏',
     iconImage: '/images/genres/worship.jpg',
     color: '#0ea5e9',
     artists: ['Lincoln Brewster', 'The War on Drugs', 'Hillsong', 'Bethel'],
@@ -520,7 +502,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 5,
     modulationRating: 8,
     dynamicsRating: 3,
-    icon: '🔮',
     iconImage: '/images/genres/noise.jpg',
     color: '#f43f5e',
     artists: ['Sonic Youth', 'Nine Inch Nails', 'St. Vincent', 'Battles'],
@@ -558,7 +539,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 5,
     modulationRating: 4,
     dynamicsRating: 6,
-    icon: '🎤',
     iconImage: '/images/genres/pop.jpg',
     iconImagePosition: '50% 75%',
     iconImageSize: '180%',
@@ -566,8 +546,8 @@ export const GENRES: GenreProfile[] = [
     artists: ['John Mayer', 'Ed Sheeran', 'Taylor Swift', 'Harry Styles'],
     // Core pop: compressor for polish, light drive, subtle mod, reverb for space
     essentialCategories: ['dynamics', 'gain', 'modulation', 'reverb'],
-    // Extras: delay for depth
-    extraCategories: ['delay'],
+    // Extras: delay for depth, synth for modern textures
+    extraCategories: ['delay', 'synth'],
     sectionTargets: {
       gain: { min: 2, ideal: 5, max: 8 },
       modulation: { min: 3, ideal: 6, max: 10 },
@@ -575,7 +555,7 @@ export const GENRES: GenreProfile[] = [
       delay: { min: 3, ideal: 6, max: 9 },
       reverb: { min: 4, ideal: 7, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Boost', 'Chorus', 'Compressor', 'Digital', 'Plate', 'Hall', 'Room'],
+    preferredSubtypes: ['Overdrive', 'Boost', 'Chorus', 'Compressor', 'Digital', 'Plate', 'Hall', 'Room', 'Synth'],
     keywords: ['polished', 'clean', 'radio', 'pop', 'bright', 'clear'],
     characteristics: {
       gainLevel: 'clean',
@@ -598,14 +578,13 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 6,
     modulationRating: 7,
     dynamicsRating: 4,
-    icon: '📼',
     iconImage: '/images/genres/lo-fi.jpg',
     color: '#a78bfa',
     artists: ['Mac DeMarco', 'Clairo', 'Boy Pablo', 'Men I Trust'],
     // Core lo-fi: vibrato/chorus for wobble, tape delay, warm reverb, light drive
     essentialCategories: ['modulation', 'delay', 'reverb', 'gain'],
-    // Extras: compression, more modulation
-    extraCategories: ['dynamics', 'modulation'],
+    // Extras: compression, more modulation, synth for lo-fi textures
+    extraCategories: ['dynamics', 'modulation', 'synth'],
     sectionTargets: {
       gain: { min: 2, ideal: 5, max: 9 },
       modulation: { min: 5, ideal: 9, max: 13 },
@@ -613,7 +592,7 @@ export const GENRES: GenreProfile[] = [
       reverb: { min: 4, ideal: 8, max: 12 },
       dynamics: { min: 4, ideal: 7, max: 10 },
     },
-    preferredSubtypes: ['Overdrive', 'Boost', 'Preamp', 'Vibrato', 'Chorus', 'Tape', 'Analog', 'Lo-Fi', 'Compressor', 'Spring', 'Room'],
+    preferredSubtypes: ['Overdrive', 'Boost', 'Preamp', 'Vibrato', 'Chorus', 'Tape', 'Analog', 'Lo-Fi', 'Compressor', 'Spring', 'Room', 'Synth', 'Granular'],
     keywords: ['lofi', 'tape', 'warm', 'vintage', 'wobbly', 'degraded', 'cassette'],
     characteristics: {
       gainLevel: 'low',
@@ -636,7 +615,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 4,
     modulationRating: 2,
     dynamicsRating: 6,
-    icon: '🎵',
     iconImage: '/images/genres/singer-songwriter.jpg',
     iconImagePosition: '30% 25%', // Show faces higher up and to the left
     color: '#fbbf24',
@@ -674,7 +652,6 @@ export const GENRES: GenreProfile[] = [
     ambienceRating: 5,
     modulationRating: 5,
     dynamicsRating: 4,
-    icon: '🎸',
     iconImage: '/images/genres/indie-rock.jpg',
     color: '#fb923c',
     artists: ['The National', 'Interpol', 'Spoon', 'Vampire Weekend'],

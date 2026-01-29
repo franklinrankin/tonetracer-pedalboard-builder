@@ -291,7 +291,7 @@ export function BoardRecommendations() {
           
           {board.constraints.maxBudget < totalCost && (
             <p className="text-xs text-board-warning mt-2">
-              ⚠️ Current budget (${board.constraints.maxBudget}) is below pedal cost (${totalCost})
+              WARNING: Current budget (${board.constraints.maxBudget}) is below pedal cost (${totalCost})
             </p>
           )}
         </div>

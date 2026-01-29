@@ -98,10 +98,10 @@ export function PedalRequestModal({ isOpen, onClose }: PedalRequestModalProps) {
         >
           <div className="flex items-center gap-3">
             <div 
-              className="w-10 h-10 bg-white flex items-center justify-center"
+              className="w-10 h-10 bg-white flex items-center justify-center font-black text-black"
               style={{ border: '3px solid black' }}
             >
-              <span className="text-xl">🎸</span>
+              +
             </div>
             <div>
               <h2 className="text-lg font-black uppercase">Request Pedal</h2>

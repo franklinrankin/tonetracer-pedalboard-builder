@@ -7,9 +7,11 @@ import { PedalImage } from '../components/PedalImage';
 import { CATEGORY_INFO, getRatingLabel } from '../data/categories';
 import { getYouTubeReviewUrl } from '../utils/youtube';
 import { generateUUID } from '../utils/uuid';
+import { getReverbSearchUrl } from '../utils/reverb';
 
 interface BuildPageProps {
   onContinue: () => void;
+  collection?: string[];
 }
 
 // Type slot represents a pedal TYPE with optional selected pedal
@@ -22,36 +24,37 @@ interface TypeSlot {
 }
 
 // All available types organized by category with signal chain order
-const TYPE_OPTIONS: { type: string; category: Category; signalOrder: number; icon: string }[] = [
-  { type: 'Tuner', category: 'utility', signalOrder: 1, icon: '🎯' },
-  { type: 'Wah', category: 'filter', signalOrder: 10, icon: '👄' },
-  { type: 'Envelope Filter', category: 'filter', signalOrder: 11, icon: '🎺' },
-  { type: 'Compressor', category: 'dynamics', signalOrder: 20, icon: '🗜️' },
-  { type: 'Noise Gate', category: 'dynamics', signalOrder: 22, icon: '🚪' },
-  { type: 'Octave', category: 'pitch', signalOrder: 30, icon: '🎹' },
-  { type: 'Pitch Shifter', category: 'pitch', signalOrder: 31, icon: '↕️' },
-  { type: 'Harmonizer', category: 'pitch', signalOrder: 33, icon: '🎶' },
-  { type: 'Boost', category: 'gain', signalOrder: 40, icon: '📈' },
-  { type: 'Overdrive', category: 'gain', signalOrder: 45, icon: '🔥' },
-  { type: 'Distortion', category: 'gain', signalOrder: 50, icon: '⚡' },
-  { type: 'Fuzz', category: 'gain', signalOrder: 55, icon: '🐝' },
-  { type: 'EQ', category: 'eq', signalOrder: 60, icon: '📊' },
-  { type: 'Chorus', category: 'modulation', signalOrder: 72, icon: '🌊' },
-  { type: 'Phaser', category: 'modulation', signalOrder: 70, icon: '🌀' },
-  { type: 'Flanger', category: 'modulation', signalOrder: 71, icon: '✈️' },
-  { type: 'Tremolo', category: 'modulation', signalOrder: 74, icon: '〰️' },
-  { type: 'Vibrato', category: 'modulation', signalOrder: 73, icon: '📳' },
-  { type: 'Rotary', category: 'modulation', signalOrder: 75, icon: '🎡' },
-  { type: 'Uni-Vibe', category: 'modulation', signalOrder: 77, icon: '☀️' },
-  { type: 'Analog Delay', category: 'delay', signalOrder: 90, icon: '📼' },
-  { type: 'Digital Delay', category: 'delay', signalOrder: 92, icon: '💾' },
-  { type: 'Tape Delay', category: 'delay', signalOrder: 91, icon: '🎞️' },
-  { type: 'Spring Reverb', category: 'reverb', signalOrder: 95, icon: '🌿' },
-  { type: 'Hall Reverb', category: 'reverb', signalOrder: 96, icon: '🏛️' },
-  { type: 'Plate Reverb', category: 'reverb', signalOrder: 97, icon: '🍽️' },
-  { type: 'Ambient Reverb', category: 'reverb', signalOrder: 99, icon: '🌌' },
-  { type: 'Volume', category: 'volume', signalOrder: 80, icon: '🎚️' },
-  { type: 'Looper', category: 'utility', signalOrder: 110, icon: '🔄' },
+const TYPE_OPTIONS: { type: string; category: Category; signalOrder: number }[] = [
+  { type: 'Tuner', category: 'utility', signalOrder: 1 },
+  { type: 'Wah', category: 'filter', signalOrder: 10 },
+  { type: 'Envelope Filter', category: 'filter', signalOrder: 11 },
+  { type: 'Compressor', category: 'dynamics', signalOrder: 20 },
+  { type: 'Noise Gate', category: 'dynamics', signalOrder: 22 },
+  { type: 'Octave', category: 'pitch', signalOrder: 30 },
+  { type: 'Pitch Shifter', category: 'pitch', signalOrder: 31 },
+  { type: 'Harmonizer', category: 'pitch', signalOrder: 33 },
+  { type: 'Boost', category: 'gain', signalOrder: 40 },
+  { type: 'Overdrive', category: 'gain', signalOrder: 45 },
+  { type: 'Distortion', category: 'gain', signalOrder: 50 },
+  { type: 'Fuzz', category: 'gain', signalOrder: 55 },
+  { type: 'EQ', category: 'eq', signalOrder: 60 },
+  { type: 'Chorus', category: 'modulation', signalOrder: 72 },
+  { type: 'Phaser', category: 'modulation', signalOrder: 70 },
+  { type: 'Flanger', category: 'modulation', signalOrder: 71 },
+  { type: 'Tremolo', category: 'modulation', signalOrder: 74 },
+  { type: 'Vibrato', category: 'modulation', signalOrder: 73 },
+  { type: 'Rotary', category: 'modulation', signalOrder: 75 },
+  { type: 'Uni-Vibe', category: 'modulation', signalOrder: 77 },
+  { type: 'Synth', category: 'synth', signalOrder: 78 },
+  { type: 'Analog Delay', category: 'delay', signalOrder: 90 },
+  { type: 'Digital Delay', category: 'delay', signalOrder: 92 },
+  { type: 'Tape Delay', category: 'delay', signalOrder: 91 },
+  { type: 'Spring Reverb', category: 'reverb', signalOrder: 95 },
+  { type: 'Hall Reverb', category: 'reverb', signalOrder: 96 },
+  { type: 'Plate Reverb', category: 'reverb', signalOrder: 97 },
+  { type: 'Ambient Reverb', category: 'reverb', signalOrder: 99 },
+  { type: 'Volume', category: 'volume', signalOrder: 80 },
+  { type: 'Looper', category: 'utility', signalOrder: 110 },
 ];
 
 // Map generic type names to actual pedal subtypes in database
@@ -76,6 +79,7 @@ const TYPE_TO_SUBTYPES: Record<string, string[]> = {
   'Vibrato': ['Vibrato'],
   'Rotary': ['Rotary'],
   'Uni-Vibe': ['Uni-Vibe'],
+  'Synth': ['Synth', 'Organ', 'Sustainer', 'Slicer', 'Lo-Fi', 'Granular', 'Special'],
   'Analog Delay': ['Analog', 'Analog Delay'],
   'Digital Delay': ['Digital', 'Digital Delay', 'Multi'],
   'Tape Delay': ['Tape', 'Tape Delay'],
@@ -87,17 +91,14 @@ const TYPE_TO_SUBTYPES: Record<string, string[]> = {
   'Looper': ['Looper'],
 };
 
-type SortOption = 'recommended' | 'rating' | 'price-low' | 'price-high' | 'name';
+type SortOption = 'recommended' | 'rating' | 'price-low' | 'price-high' | 'name' | 'collection';
 
-function getTypeIcon(type: string): string {
-  return TYPE_OPTIONS.find(t => t.type === type)?.icon || '🎸';
-}
 
 function getTypeInfo(type: string) {
   return TYPE_OPTIONS.find(t => t.type === type);
 }
 
-export function BuildPage({ onContinue }: BuildPageProps) {
+export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   const { state, dispatch } = useBoard();
   const { selectedGenres, allPedals, board } = state;
   const maxSlots = board.constraints.maxPedalCount || 8;
@@ -484,6 +485,18 @@ export function BuildPage({ onContinue }: BuildPageProps) {
       case 'name':
         sorted = [...filtered].sort((a, b) => a.model.localeCompare(b.model));
         break;
+      case 'collection':
+        // Sort collection pedals first, then by recommendation score
+        const collectionSet = new Set(collection);
+        sorted = [...filtered].sort((a, b) => {
+          const aInCollection = collectionSet.has(a.id);
+          const bInCollection = collectionSet.has(b.id);
+          if (aInCollection && !bInCollection) return -1;
+          if (!aInCollection && bInCollection) return 1;
+          // Within same group, sort by recommendation score
+          return getRecommendationScore(b) - getRecommendationScore(a);
+        });
+        break;
       default:
         sorted = [...filtered];
     }
@@ -505,7 +518,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
     }
     
     return withMetadata;
-  }, [selectedSlot, allPedals, typeSlots, sortOption, budgetRemaining, board.constraints.applyAfterBudget, searchQuery]);
+  }, [selectedSlot, allPedals, typeSlots, sortOption, budgetRemaining, board.constraints.applyAfterBudget, searchQuery, collection]);
   
   // Get selected pedal object from ID
   const getSelectedPedal = (pedalId?: string) => {
@@ -626,71 +639,10 @@ export function BuildPage({ onContinue }: BuildPageProps) {
   
   return (
     <div className="min-h-full flex flex-col" style={{ backgroundColor: '#FFFEF0' }}>
-      {/* Header */}
-      <div className="bg-white" style={{ borderBottom: '4px solid black' }}>
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              {genre && (
-                <div 
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg flex-shrink-0"
-                  style={{ backgroundColor: `${genre.color}20` }}
-                >
-                  {genre.icon}
-                </div>
-              )}
-              <div className="min-w-0">
-                <h1 className="text-sm sm:text-lg font-black text-black truncate uppercase">
-                  Build Your {genre?.name || ''} Board
-                </h1>
-                <p className="text-[10px] sm:text-xs text-black/60 font-bold">
-                  {selectedCount}/{typeSlots.length} selected
-                  {totalCost > 0 && ` · $${totalCost}`}
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-              {selectedCount > 0 && (
-                <button
-                  onClick={handleClearBoard}
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm text-zinc-400 hover:text-white border border-board-border rounded-lg hover:bg-board-elevated transition-colors"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Clear
-                </button>
-              )}
-              {selectedCount > 0 && (
-                <button
-                  onClick={handleClearBoard}
-                  className="sm:hidden p-2 text-zinc-400 hover:text-white border border-board-border rounded-lg hover:bg-board-elevated transition-colors"
-                  title="Clear"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                </button>
-              )}
-              
-              <button
-                onClick={handleContinue}
-                disabled={!canContinue}
-                className={`hidden sm:flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  canContinue
-                    ? 'bg-green-600 text-white hover:bg-green-500'
-                    : 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
-                }`}
-              >
-                <Check className="w-4 h-4" />
-                Continue
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Budget Bar */}
+      {/* Budget Bar - Sticky below fixed header */}
       <div 
-        className="bg-board-highlight"
-        style={{ borderBottom: '4px solid black' }}
+        className="sticky top-20 sm:top-24 z-20"
+        style={{ borderBottom: '4px solid black', backgroundColor: '#B8D4E3' }}
       >
         <div className="max-w-6xl mx-auto px-4 py-3">
           <div className="flex items-center gap-4">
@@ -714,8 +666,8 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                     budgetRemaining < 0 
                       ? 'bg-red-500' 
                       : budgetRemaining < 100 
-                        ? 'bg-orange-400'
-                        : 'bg-green-500'
+                        ? 'bg-orange-300'
+                        : 'bg-green-300'
                   }`}
                   style={{ width: `${Math.min((currentBuildCost / board.constraints.maxBudget) * 100, 100)}%` }}
                 />
@@ -767,14 +719,14 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                     onClick={() => handleSelectSlot(slot.id)}
                     className="w-full p-3 flex items-center gap-3 text-left"
                   >
-                    {/* Icon */}
+                    {/* Type Initial */}
                     <div 
-                      className={`w-10 h-10 flex items-center justify-center text-xl ${
-                        isSelected ? 'bg-white' : hasPedal ? 'bg-white' : 'bg-black/10'
+                      className={`w-10 h-10 flex items-center justify-center text-sm font-black ${
+                        isSelected ? 'bg-white text-black' : hasPedal ? 'bg-white text-black' : 'bg-black/10 text-black'
                       }`}
                       style={{ border: '2px solid black' }}
                     >
-                      {getTypeIcon(slot.type)}
+                      {slot.type.substring(0, 2).toUpperCase()}
                     </div>
                     
                     {/* Type Info */}
@@ -797,25 +749,29 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                   
                   {/* Expanded actions when selected */}
                   {isSelected && (
-                    <div className="px-3 pb-3 pt-1 border-t border-board-border/50">
+                    <div className="px-3 pb-3 pt-2">
                       <div className="flex items-center gap-2">
                         {/* Change type dropdown */}
                         {typeAlternatives.length > 0 && (
                           <div className="relative group">
                             <button
-                              className="px-3 py-1.5 text-xs text-zinc-400 hover:text-white border border-board-border rounded-lg hover:bg-board-elevated transition-colors"
+                              className="px-3 py-1.5 text-xs font-black text-black bg-white uppercase"
+                              style={{ border: '2px solid black' }}
                             >
                               Type
                             </button>
-                            <div className="absolute left-0 top-full mt-1 bg-board-elevated border border-board-border rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 min-w-[140px]">
+                            <div 
+                              className="absolute left-0 top-full mt-1 bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 min-w-[140px]"
+                              style={{ border: '3px solid black', boxShadow: '3px 3px 0px black' }}
+                            >
                               {typeAlternatives.map(alt => (
                                 <button
                                   key={alt.type}
                                   onClick={() => handleChangeType(slot.id, alt.type)}
-                                  className="w-full px-3 py-2 text-left text-sm text-white hover:bg-board-border flex items-center gap-2"
+                                  className="w-full px-3 py-2 text-left text-sm text-black font-bold hover:bg-gray-100"
+                                  style={{ borderBottom: '1px solid black' }}
                                 >
-                                  <span>{alt.icon}</span>
-                                  <span>{alt.type}</span>
+                                  {alt.type}
                                 </button>
                               ))}
                             </div>
@@ -826,7 +782,8 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                         {typeSlots.length > 1 && (
                           <button
                             onClick={() => handleRemoveSlot(slot.id)}
-                            className="px-3 py-1.5 text-xs text-red-400 hover:text-red-300 border border-red-900/50 rounded-lg hover:bg-red-900/20 transition-colors"
+                            className="px-3 py-1.5 text-xs font-black text-black bg-white uppercase hover:bg-red-100"
+                            style={{ border: '2px solid black' }}
                           >
                             Remove
                           </button>
@@ -873,10 +830,9 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                             <button
                               key={t.type}
                               onClick={() => handleAddType(t.type)}
-                              className="w-full px-2 py-1.5 text-left text-sm text-black hover:bg-board-highlight font-bold flex items-center gap-2"
+                              className="w-full px-2 py-1.5 text-left text-sm text-black hover:bg-board-highlight font-bold"
                             >
-                              <span>{t.icon}</span>
-                              <span>{t.type}</span>
+                              {t.type}
                             </button>
                           ))}
                         </div>
@@ -890,18 +846,15 @@ export function BuildPage({ onContinue }: BuildPageProps) {
           
           {/* RIGHT COLUMN - Pedal Selection */}
           <div 
-            className="bg-white p-4 min-h-[400px] flex flex-col"
+            className="bg-white p-4 flex flex-col h-[calc(100vh-180px)] lg:h-[calc(100vh-200px)]"
             style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
           >
             {selectedSlot ? (
               <>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">{getTypeIcon(selectedSlot.type)}</span>
-                    <h2 className="text-lg font-black text-black uppercase">
-                      Choose a {selectedSlot.type}
-                    </h2>
-                  </div>
+                  <h2 className="text-lg font-black text-black uppercase">
+                    Choose a {selectedSlot.type}
+                  </h2>
                   
                   {/* Sorting Options */}
                   <div className="flex items-center gap-1">
@@ -913,6 +866,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                       style={{ border: '2px solid black' }}
                     >
                       <option value="recommended">Recommended</option>
+                      <option value="collection">My Collection</option>
                       <option value="rating">Rating</option>
                       <option value="price-low">Price: Low</option>
                       <option value="price-high">Price: High</option>
@@ -943,7 +897,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                 </div>
                 
                 {pedalsForSelectedType.length > 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 flex-1 overflow-y-auto max-h-[50vh] lg:max-h-[calc(100vh-300px)] pb-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 flex-1 overflow-y-auto pb-4 content-start">
                     {pedalsForSelectedType.slice(0, 50).map(pedal => {
                       const isSelected = selectedSlot.selectedPedalId === pedal.id;
                       const isUsedByOther = pedal.usedByOtherSlot;
@@ -951,6 +905,7 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                       const isDisabled = isUsedByOther || isOverBudget;
                       const categoryInfo = CATEGORY_INFO[pedal.category];
                       const ratingLabel = getRatingLabel(pedal.category, pedal.categoryRating);
+                      const isInCollection = collection.includes(pedal.id);
                       
                       return (
                         <div
@@ -959,107 +914,213 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                           onMouseEnter={() => setHoveredPedal(pedal)}
                           onMouseLeave={() => setHoveredPedal(null)}
                         >
+                          {/* Trading Card Style */}
                           <button
                             onClick={() => handleSelectPedal(pedal, isDisabled)}
                             disabled={isDisabled}
-                            className={`w-full group p-2 sm:p-3 text-left transition-all active:scale-[0.98] ${
+                            className={`w-full group text-left transition-all active:scale-[0.98] ${
                               isSelected
-                                ? 'bg-board-success -translate-y-1'
+                                ? '-translate-y-1'
                                 : isDisabled
-                                  ? 'bg-gray-200 opacity-50 cursor-not-allowed'
-                                  : 'bg-board-dark hover:-translate-y-1'
+                                  ? 'opacity-60 cursor-not-allowed'
+                                  : 'hover:-translate-y-1 hover:rotate-1'
                             }`}
-                            style={{
-                              border: '3px solid black',
-                              boxShadow: isSelected ? '4px 4px 0px black' : '3px 3px 0px black',
-                            }}
                           >
-                            <div className={`aspect-square mb-2 overflow-hidden ${isDisabled ? 'grayscale' : ''}`} style={{ border: '2px solid black' }}>
-                              <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
-                            </div>
-                            <p className={`text-[10px] sm:text-xs truncate font-bold ${isSelected ? 'text-white/80' : isDisabled ? 'text-gray-500' : 'text-black/60'}`}>{pedal.brand}</p>
-                            <p className={`text-xs sm:text-sm font-medium truncate ${isDisabled ? 'text-zinc-500' : 'text-white'}`}>{pedal.model}</p>
-                            <div className="flex items-center justify-between mt-1">
-                              <p className={`text-[10px] sm:text-xs ${isOverBudget ? 'text-red-400' : isDisabled ? 'text-zinc-600' : 'text-green-400'}`}>${pedal.reverbPrice}</p>
-                              <span 
-                                className="text-[10px] sm:text-xs font-bold px-1 sm:px-1.5 py-0.5 rounded"
-                                style={{ 
-                                  backgroundColor: isDisabled ? '#27272a' : `${categoryInfo?.color}20`, 
-                                  color: isDisabled ? '#52525b' : categoryInfo?.color 
+                            {/* Card Frame */}
+                            <div 
+                              className="relative p-1.5 sm:p-2"
+                              style={{
+                                backgroundColor: isSelected ? '#A5D6A7' : isDisabled ? '#E0E0E0' : categoryInfo?.color ? `${categoryInfo.color}40` : '#FFF9C4',
+                                border: '4px solid black',
+                                boxShadow: isSelected ? '5px 5px 0px black' : '4px 4px 0px black',
+                              }}
+                            >
+                              {/* Category Badge */}
+                              <div 
+                                className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide"
+                                style={{
+                                  backgroundColor: '#FFFEF0',
+                                  border: '2px solid black',
+                                  whiteSpace: 'nowrap',
                                 }}
                               >
-                                {pedal.categoryRating}/10
-                              </span>
+                                {pedal.subtype || pedal.category}
+                              </div>
+                              
+                              {/* Collection Badge */}
+                              {isInCollection && (
+                                <div 
+                                  className="absolute -top-2 -right-2 px-1.5 py-0.5 text-[7px] sm:text-[8px] font-black uppercase bg-blue-400 text-white z-10"
+                                  style={{ border: '2px solid black' }}
+                                  title="In your collection"
+                                >
+                                  OWNED
+                                </div>
+                              )}
+                              
+                              {/* Inner Card (white area) */}
+                              <div 
+                                className="bg-white p-1.5 sm:p-2"
+                                style={{ border: '3px solid black' }}
+                              >
+                                {/* Image Container */}
+                                <div 
+                                  className={`aspect-square mb-2 overflow-hidden bg-gray-100 ${isDisabled ? 'grayscale' : ''}`}
+                                  style={{ border: '2px solid black' }}
+                                >
+                                  <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
+                                </div>
+                                
+                                {/* Name Section */}
+                                <div className="text-center mb-2">
+                                  <p className="text-[9px] sm:text-[10px] text-gray-500 font-bold uppercase tracking-wide truncate">{pedal.brand}</p>
+                                  <p className="text-[11px] sm:text-xs font-black text-black truncate leading-tight">{pedal.model}</p>
+                                </div>
+                                
+                                {/* Stats Bar */}
+                                <div 
+                                  className="flex items-center justify-between px-1.5 py-1"
+                                  style={{ 
+                                    backgroundColor: isDisabled ? '#e5e7eb' : `${categoryInfo?.color}15`,
+                                    border: '2px solid black',
+                                  }}
+                                >
+                                  <span className={`text-[10px] sm:text-xs font-black ${isOverBudget ? 'text-red-600' : 'text-green-600'}`}>
+                                    ${pedal.reverbPrice}
+                                  </span>
+                                  <div className="flex items-center gap-1">
+                                    <div className="flex">
+                                      {[...Array(5)].map((_, i) => (
+                                        <span 
+                                          key={i} 
+                                          className="text-[8px] sm:text-[10px]"
+                                          style={{ color: i < Math.round(pedal.categoryRating / 2) ? categoryInfo?.color : '#d1d5db' }}
+                                        >
+                                          ★
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {/* Selected Overlay */}
+                              {isSelected && (
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                  <div 
+                                    className="bg-green-200 px-2 py-1 rotate-[-8deg]"
+                                    style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
+                                  >
+                                    <div className="flex items-center gap-1 text-white">
+                                      <Check className="w-4 h-4" strokeWidth={3} />
+                                      <span className="text-xs font-black uppercase">Selected</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Status Badges */}
+                              {isUsedByOther && (
+                                <div 
+                                  className="absolute bottom-1 right-1 px-1.5 py-0.5 bg-gray-700 text-white text-[8px] font-bold"
+                                  style={{ border: '2px solid black' }}
+                                >
+                                  IN USE
+                                </div>
+                              )}
+                              {isOverBudget && !isUsedByOther && (
+                                <div 
+                                  className="absolute bottom-1 right-1 px-1.5 py-0.5 bg-red-500 text-white text-[8px] font-bold"
+                                  style={{ border: '2px solid black' }}
+                                >
+                                  OVER $
+                                </div>
+                              )}
                             </div>
-                            {isSelected && (
-                              <div className="mt-2 flex items-center gap-1 text-green-400 text-[10px] sm:text-xs">
-                                <Check className="w-3 h-3" />
-                                <span className="hidden sm:inline">Selected · tap to deselect</span>
-                                <span className="sm:hidden">✓ Selected</span>
-                              </div>
-                            )}
-                            {isUsedByOther && (
-                              <div className="mt-2 text-[10px] sm:text-xs text-zinc-600">
-                                Used in another slot
-                              </div>
-                            )}
-                            {isOverBudget && !isUsedByOther && (
-                              <div className="mt-2 text-[10px] sm:text-xs text-red-400">
-                                Over budget
-                              </div>
-                            )}
                           </button>
                           
                           {/* Hover Card - Desktop only (hidden on touch devices via CSS) */}
                           {hoveredPedal?.id === pedal.id && (
-                            <div className="hover-only absolute inset-0 bg-board-dark/95 backdrop-blur-sm border border-board-accent rounded-xl p-2 shadow-2xl z-30 flex flex-col justify-between pointer-events-none">
-                              {/* Header with rating */}
-                              <div>
-                                <p className="text-[10px] text-zinc-500 truncate">{pedal.brand}</p>
-                                <p className="text-xs font-semibold text-white truncate">{pedal.model}</p>
-                                <div className="flex items-center gap-1 mt-1">
-                                  <span 
-                                    className="text-sm font-bold"
-                                    style={{ color: categoryInfo?.color }}
-                                  >
-                                    {pedal.categoryRating}/10
-                                  </span>
-                                  <span className="text-[9px] text-zinc-500">{ratingLabel}</span>
-                                </div>
-                                <div className="w-full h-1 bg-board-elevated rounded-full overflow-hidden mt-1">
-                                  <div 
-                                    className="h-full rounded-full"
-                                    style={{ 
-                                      width: `${(pedal.categoryRating / 10) * 100}%`,
-                                      backgroundColor: categoryInfo?.color
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                              
-                              {/* Quick Stats */}
-                              <div className="flex gap-2 text-[10px] my-1">
-                                <div className="flex-1 bg-board-elevated rounded px-1.5 py-1">
-                                  <span className="text-zinc-500">$</span>
-                                  <span className="text-green-400 font-medium">{pedal.reverbPrice}</span>
-                                </div>
-                                <div className="flex-1 bg-board-elevated rounded px-1.5 py-1">
-                                  <span className="text-zinc-500">⚡</span>
-                                  <span className="text-white font-medium">{pedal.currentMa}mA</span>
-                                </div>
-                              </div>
-                              
-                              {/* YouTube Review Link */}
-                              <a
-                                href={getYouTubeReviewUrl(pedal.brand, pedal.model)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-1 w-full px-2 py-1.5 bg-red-600/20 text-red-400 rounded-lg hover:bg-red-600/30 transition-colors text-[10px] font-medium pointer-events-auto"
-                                onClick={(e) => e.stopPropagation()}
+                            <div 
+                              className="hover-only absolute inset-0 z-30 flex flex-col justify-between pointer-events-none p-1.5 sm:p-2"
+                              style={{
+                                backgroundColor: categoryInfo?.color || '#FFB800',
+                                border: '4px solid black',
+                                boxShadow: '6px 6px 0px black',
+                              }}
+                            >
+                              <div 
+                                className="bg-white p-2 h-full flex flex-col"
+                                style={{ border: '3px solid black' }}
                               >
-                                <Youtube className="w-3 h-3" />
-                                Reviews
-                              </a>
+                                {/* Header */}
+                                <div className="mb-2">
+                                  <p className="text-[9px] text-gray-500 font-bold uppercase truncate">{pedal.brand}</p>
+                                  <p className="text-xs font-black text-black truncate">{pedal.model}</p>
+                                </div>
+                                
+                                {/* Rating Display */}
+                                <div 
+                                  className="p-2 mb-2"
+                                  style={{ backgroundColor: `${categoryInfo?.color}15`, border: '2px solid black' }}
+                                >
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="text-xs font-black" style={{ color: categoryInfo?.color }}>
+                                      {pedal.categoryRating}/10
+                                    </span>
+                                    <span className="text-[9px] font-bold text-gray-600 uppercase">{ratingLabel}</span>
+                                  </div>
+                                  <div className="w-full h-2 bg-gray-200" style={{ border: '1px solid black' }}>
+                                    <div 
+                                      className="h-full"
+                                      style={{ 
+                                        width: `${(pedal.categoryRating / 10) * 100}%`,
+                                        backgroundColor: categoryInfo?.color
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              
+                                {/* Quick Stats */}
+                                <div className="flex gap-1 text-[10px] mb-2">
+                                  <div 
+                                    className="flex-1 px-1.5 py-1 text-center"
+                                    style={{ backgroundColor: '#e5e7eb', border: '2px solid black' }}
+                                  >
+                                    <span className="text-green-600 font-black">${pedal.reverbPrice}</span>
+                                  </div>
+                                  <div 
+                                    className="flex-1 px-1.5 py-1 text-center"
+                                    style={{ backgroundColor: '#e5e7eb', border: '2px solid black' }}
+                                  >
+                                    <span className="text-black font-black">{pedal.currentMa}mA</span>
+                                  </div>
+                                </div>
+                                
+                                {/* Action Buttons */}
+                                <div className="flex gap-1 justify-center">
+                                  <a
+                                    href={getReverbSearchUrl(pedal.brand, pedal.model)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center px-3 py-1 bg-orange-500 text-white text-[9px] font-black uppercase pointer-events-auto hover:bg-orange-600 transition-colors"
+                                    style={{ border: '2px solid black' }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    Buy
+                                  </a>
+                                  <a
+                                    href={getYouTubeReviewUrl(pedal.brand, pedal.model)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center px-3 py-1 bg-red-500 text-white text-[9px] font-black uppercase pointer-events-auto hover:bg-red-600 transition-colors"
+                                    style={{ border: '2px solid black' }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <Youtube className="w-2.5 h-2.5" />
+                                  </a>
+                                </div>
+                              </div>
                             </div>
                           )}
                         </div>
@@ -1073,9 +1134,9 @@ export function BuildPage({ onContinue }: BuildPageProps) {
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-zinc-500 py-8">
-                <div className="text-4xl mb-3">👆</div>
-                <p className="text-center text-sm">
+              <div className="flex flex-col items-center justify-center h-full text-black/50 py-8">
+                <div className="text-2xl font-black mb-3" style={{ border: '3px solid black', padding: '8px 16px', backgroundColor: '#FFF9C4' }}>←</div>
+                <p className="text-center text-sm font-bold">
                   <span className="lg:hidden">Select a type above<br />to see available pedals</span>
                   <span className="hidden lg:inline">Select a type on the left<br />to see available pedals</span>
                 </p>

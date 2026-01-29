@@ -121,34 +121,38 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
       <div className="relative" ref={menuRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 px-3 py-1.5 bg-board-elevated border border-board-border rounded-lg text-sm text-white hover:bg-board-border transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 bg-white text-black text-sm font-bold hover:bg-yellow-100 transition-colors"
+          style={{ border: '3px solid black' }}
         >
           <User className="w-4 h-4" />
           <span className="hidden sm:inline">Menu</span>
-          <ChevronDown className={`w-3 h-3 text-zinc-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         </button>
 
         {isOpen && (
-          <div className="absolute right-0 top-full mt-2 w-56 bg-board-elevated border border-board-border rounded-xl shadow-xl overflow-hidden z-50">
+          <div 
+            className="absolute right-0 top-full mt-2 w-56 bg-white overflow-hidden z-50"
+            style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+          >
             <div className="p-2">
               <button
                 onClick={() => {
                   setIsOpen(false);
                   onSignInClick();
                 }}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-white hover:bg-board-border rounded-lg transition-colors"
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-black font-bold hover:bg-yellow-100 transition-colors"
               >
                 <User className="w-4 h-4" />
                 Sign In
               </button>
             </div>
-            <div className="p-2 border-t border-board-border">
+            <div className="p-2" style={{ borderTop: '2px solid black' }}>
               <button
                 onClick={() => {
                   setIsOpen(false);
                   onFeedback?.();
                 }}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-black font-medium hover:bg-yellow-100 transition-colors"
               >
                 <Lightbulb className="w-4 h-4" />
                 Help Make Boardsie Better
@@ -158,7 +162,7 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
                   setIsOpen(false);
                   onPedalRequest?.();
                 }}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-black font-medium hover:bg-yellow-100 transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 Request a Pedal
@@ -185,7 +189,8 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-2 py-1.5 bg-board-elevated border border-board-border rounded-lg hover:bg-board-border transition-colors"
+        className="flex items-center gap-2 px-2 py-1.5 bg-white hover:bg-yellow-100 transition-colors"
+        style={{ border: '3px solid black' }}
       >
         {user.user_metadata?.avatar_url ? (
           <img
@@ -194,25 +199,31 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
             className="w-6 h-6 rounded-full"
           />
         ) : (
-          <div className="w-6 h-6 rounded-full bg-board-accent flex items-center justify-center text-xs font-bold text-white">
+          <div 
+            className="w-6 h-6 flex items-center justify-center text-xs font-black text-black bg-yellow-200"
+            style={{ border: '2px solid black' }}
+          >
             {getInitials()}
           </div>
         )}
-        <span className="hidden sm:block text-sm text-white max-w-[100px] truncate">
+        <span className="hidden sm:block text-sm text-black font-bold max-w-[100px] truncate">
           {getDisplayName()}
         </span>
-        <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-black transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-56 bg-board-elevated border border-board-border rounded-xl shadow-xl overflow-hidden z-50">
+        <div 
+          className="absolute right-0 top-full mt-2 w-56 bg-white overflow-hidden z-50"
+          style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+        >
           {/* User Info */}
-          <div className="px-4 py-3 border-b border-board-border">
-            <p className="font-medium text-white truncate">
+          <div className="px-4 py-3" style={{ borderBottom: '2px solid black', backgroundColor: '#FFF9C4' }}>
+            <p className="font-bold text-black truncate">
               {getDisplayName()}
             </p>
-            <p className="text-xs text-zinc-500 truncate">{user.email}</p>
+            <p className="text-xs text-black/60 truncate">{user.email}</p>
           </div>
 
           {/* Menu Items */}
@@ -222,7 +233,7 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
                 setIsOpen(false);
                 onProfile?.();
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-black font-medium hover:bg-yellow-100 transition-colors"
             >
               <UserCircle className="w-4 h-4" />
               My Profile
@@ -232,7 +243,7 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
                 setIsOpen(false);
                 onSavedBoards?.();
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-black font-medium hover:bg-yellow-100 transition-colors"
             >
               <FolderOpen className="w-4 h-4" />
               Saved Boards
@@ -240,13 +251,13 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
           </div>
 
           {/* Feedback */}
-          <div className="p-2 border-t border-board-border">
+          <div className="p-2" style={{ borderTop: '2px solid black' }}>
             <button
               onClick={() => {
                 setIsOpen(false);
                 onFeedback?.();
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-black font-medium hover:bg-yellow-100 transition-colors"
             >
               <Lightbulb className="w-4 h-4" />
               Help Make Boardsie Better
@@ -256,7 +267,7 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
                 setIsOpen(false);
                 onPedalRequest?.();
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-board-border rounded-lg transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-black font-medium hover:bg-yellow-100 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Request a Pedal
@@ -264,13 +275,13 @@ export function UserMenu({ onSignInClick, onSavedBoards, onProfile, onPedalReque
           </div>
 
           {/* Sign Out */}
-          <div className="p-2 border-t border-board-border">
+          <div className="p-2" style={{ borderTop: '2px solid black' }}>
             <button
               onClick={() => {
                 signOut();
                 setIsOpen(false);
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 font-bold hover:bg-red-100 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               Sign Out

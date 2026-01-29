@@ -100,10 +100,10 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         >
           <div className="flex items-center gap-3">
             <div 
-              className="w-10 h-10 bg-white flex items-center justify-center"
+              className="w-10 h-10 bg-white flex items-center justify-center font-black text-black"
               style={{ border: '3px solid black' }}
             >
-              <span className="text-xl">💡</span>
+              ?!
             </div>
             <div>
               <h2 className="text-lg font-black uppercase">Feedback</h2>
@@ -140,9 +140,9 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 </label>
                 <div className="flex gap-2">
                   {[
-                    { id: 'bug', label: '🐛 Bug', color: '#F44336' },
-                    { id: 'suggestion', label: '✨ Idea', color: '#9C27B0' },
-                    { id: 'other', label: '💬 Other', color: '#607D8B' },
+                    { id: 'bug', label: 'Bug', color: '#F44336' },
+                    { id: 'suggestion', label: 'Idea', color: '#9C27B0' },
+                    { id: 'other', label: 'Other', color: '#607D8B' },
                   ].map((option) => (
                     <button
                       key={option.id}

@@ -110,10 +110,9 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 backgroundColor: `${displayGenre.color}10`,
               }}
             >
-              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start justify-between mb-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl">{displayGenre.icon}</span>
                     <h3 className="font-semibold text-white">{displayGenre.name}</h3>
                   </div>
                   <p className="text-sm text-zinc-400 mt-1">{displayGenre.description}</p>
@@ -124,7 +123,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs">🔥</span>
+                    <span className="text-xs font-black">GN</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Gain</div>
@@ -133,7 +132,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs">🌊</span>
+                    <span className="text-xs font-black">MD</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Modulation</div>
@@ -142,7 +141,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs">✨</span>
+                    <span className="text-xs font-black">AM</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Ambience</div>
@@ -151,7 +150,7 @@ export function GenreSelector({ selectedGenre, onSelectGenre }: GenreSelectorPro
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded bg-board-elevated flex items-center justify-center">
-                    <span className="text-xs">🎛️</span>
+                    <span className="text-xs font-black">CX</span>
                   </div>
                   <div>
                     <div className="text-[10px] text-board-muted uppercase">Complexity</div>

@@ -2615,7 +2615,11 @@
     "large": "/images/pedals/ibanez-ts808-original.jpg",
     "small": "/images/pedals/ibanez-ts808-original.jpg"
   },
-  "proco-rat-vintage": null,
+  "proco-rat-vintage": {
+    "large": "https://rvb-img.reverb.com/i/s--frEm54Hb--/quality=medium-low,height=800,width=800,fit=contain/f136bef5-f5d9-4fc3-bfd1-ecc1cf4f4830.png",
+    "small": "https://rvb-img.reverb.com/i/s--gd5XN_HY--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/f136bef5-f5d9-4fc3-bfd1-ecc1cf4f4830.png",
+    "full": "https://rvb-img.reverb.com/i/s--frEm54Hb--/quality=medium-low,height=800,width=800,fit=contain/f136bef5-f5d9-4fc3-bfd1-ecc1cf4f4830.png"
+  },
   "boss-ce1-chorus-ensemble": {
     "large": "/images/pedals/boss-ce1-chorus-ensemble.jpg",
     "small": "/images/pedals/boss-ce1-chorus-ensemble.jpg"
@@ -3552,5 +3556,25 @@
     "large": "https://rvb-img.reverb.com/i/s--Y5-NEK9C--/quality=medium-low,height=800,width=800,fit=contain/zjlwqhlcymsaporrcogl.jpg",
     "small": "https://rvb-img.reverb.com/i/s--0ck-8iSF--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/zjlwqhlcymsaporrcogl.jpg",
     "full": "https://rvb-img.reverb.com/i/s--Y5-NEK9C--/quality=medium-low,height=800,width=800,fit=contain/zjlwqhlcymsaporrcogl.jpg"
-  }
+  },
+  "analogman-mini-bicomp": {
+    "large": "https://rvb-img.reverb.com/i/s--zhfc2rZ9--/quality=medium-low,height=800,width=800,fit=contain/f9ebc47f-2ccf-4a7c-8404-9fee4b5ad534.jpg",
+    "small": "https://rvb-img.reverb.com/i/s--umWDrx6Q--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/f9ebc47f-2ccf-4a7c-8404-9fee4b5ad534.jpg",
+    "full": "https://rvb-img.reverb.com/i/s--zhfc2rZ9--/quality=medium-low,height=800,width=800,fit=contain/f9ebc47f-2ccf-4a7c-8404-9fee4b5ad534.jpg"
+  },
+  "analogman-ar20-envelope": null,
+  "analogman-bad-bob": {
+    "large": "https://rvb-img.reverb.com/i/s--mbfaWS0q--/quality=medium-low,height=800,width=800,fit=contain/j6pjax5hd4uy7e38jhfa.jpg",
+    "small": "https://rvb-img.reverb.com/i/s--jdHQmhTV--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/j6pjax5hd4uy7e38jhfa.jpg",
+    "full": "https://rvb-img.reverb.com/i/s--mbfaWS0q--/quality=medium-low,height=800,width=800,fit=contain/j6pjax5hd4uy7e38jhfa.jpg"
+  },
+  "analogman-sun-lion": null,
+  "analogman-sun-bender": null,
+  "analogman-peppermint-fuzz": {
+    "large": "https://rvb-img.reverb.com/i/s--Z0oEQFHp--/quality=medium-low,height=800,width=800,fit=contain/pbwgdzt6jrcdw3e7cpgr.jpg",
+    "small": "https://rvb-img.reverb.com/i/s--FH-pMuEP--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/pbwgdzt6jrcdw3e7cpgr.jpg",
+    "full": "https://rvb-img.reverb.com/i/s--Z0oEQFHp--/quality=medium-low,height=800,width=800,fit=contain/pbwgdzt6jrcdw3e7cpgr.jpg"
+  },
+  "analogman-astro-tone": null,
+  "analogman-juicer": null
 }

@@ -27,8 +27,8 @@ export const GenreIcon = ({ genre, size = 'md', className = '' }: GenreIconProps
   }
   
   return (
-    <span className={`${sizeClass} flex items-center justify-center ${className}`}>
-      {genre.icon}
+    <span className={`${sizeClass} flex items-center justify-center font-black ${className}`}>
+      {genre.name.substring(0, 2).toUpperCase()}
     </span>
   );
 };

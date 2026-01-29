@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid, GripVertical, ArrowUp, ArrowDown, Save } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid, GripVertical, ArrowUp, ArrowDown, Save, ShoppingBag } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { useAuth } from '../context/AuthContext';
 import { getGenreById, getTopGenreMatches, GenreMatch } from '../data/genres';
@@ -11,6 +11,7 @@ import { BoardVisualizer } from '../components/BoardVisualizer';
 import { GenreIcon } from '../components/GenreIcon';
 import { SavedBoard } from '../types';
 import { generateUUID } from '../utils/uuid';
+import { getReverbSearchUrl } from '../utils/reverb';
 
 // Genre Matches Component - shown when user didn't pre-select genres
 function GenreMatchesSection({ matches }: { matches: GenreMatch[] }) {
@@ -377,7 +378,7 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
         >
           Your Board is Ready!
         </h1>
-        <p className="text-lg text-black/60 max-w-2xl mx-auto font-bold">
+        <p className="text-lg text-black max-w-2xl mx-auto font-bold">
           {isCreateYourOwnMode && topGenreMatch ? (
             <>
               Based on your choices, your board is <span className="font-semibold" style={{ color: topGenreMatch.genre.color }}>{Math.round(topGenreMatch.fitPercent)}% {topGenreMatch.genre.name}</span>! See the breakdown below.
@@ -492,47 +493,47 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div 
-            className="bg-board-success p-5"
+            className="bg-green-100 p-5"
             style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
           >
-            <div className="flex items-center gap-2 text-white mb-2">
+            <div className="flex items-center gap-2 text-black mb-2">
               <DollarSign className="w-5 h-5" />
               <span className="text-sm font-bold uppercase">Total Cost</span>
             </div>
-            <div className="text-3xl font-black text-white">${totalCost}</div>
+            <div className="text-3xl font-black text-black">${totalCost}</div>
             <div className="mt-2 h-3 bg-white overflow-hidden" style={{ border: '2px solid black' }}>
               <div 
-                className={`h-full transition-all ${budgetPercent > 100 ? 'bg-red-500' : 'bg-black'}`}
+                className={`h-full transition-all ${budgetPercent > 100 ? 'bg-red-500' : 'bg-green-500'}`}
                 style={{ width: `${Math.min(budgetPercent, 100)}%` }}
               />
             </div>
-            <div className="text-xs text-white/80 mt-1 font-bold">
+            <div className="text-xs text-black/70 mt-1 font-bold">
               {budgetPercent.toFixed(0)}% of ${board.constraints.maxBudget}
             </div>
           </div>
           
           <div 
-            className="bg-board-blue p-5"
+            className="bg-blue-100 p-5"
             style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
           >
-            <div className="flex items-center gap-2 text-white mb-2">
+            <div className="flex items-center gap-2 text-black mb-2">
               <Square className="w-5 h-5" />
               <span className="text-sm font-bold uppercase">Space Used</span>
             </div>
-            <div className="text-3xl font-black text-white">{formatArea(totalArea)}</div>
+            <div className="text-3xl font-black text-black">{formatArea(totalArea)}</div>
             <div className="mt-2 h-3 bg-white overflow-hidden" style={{ border: '2px solid black' }}>
               <div 
-                className={`h-full transition-all ${areaPercent > 100 ? 'bg-red-500' : 'bg-black'}`}
+                className={`h-full transition-all ${areaPercent > 100 ? 'bg-red-500' : 'bg-blue-500'}`}
                 style={{ width: `${Math.min(areaPercent, 100)}%` }}
               />
             </div>
-            <div className="text-xs text-white/80 mt-1 font-bold">
+            <div className="text-xs text-black/70 mt-1 font-bold">
               {areaPercent.toFixed(0)}% of {formatArea(maxArea)} sq in
             </div>
           </div>
           
           <div 
-            className="bg-board-warning p-5"
+            className="bg-yellow-100 p-5"
             style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
           >
             <div className="flex items-center gap-2 text-black mb-2">
@@ -544,11 +545,11 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
               <>
                 <div className="mt-2 h-3 bg-white overflow-hidden" style={{ border: '2px solid black' }}>
                   <div 
-                    className={`h-full transition-all ${powerPercent > 100 ? 'bg-red-500' : 'bg-black'}`}
+                    className={`h-full transition-all ${powerPercent > 100 ? 'bg-red-500' : 'bg-yellow-500'}`}
                     style={{ width: `${Math.min(powerPercent, 100)}%` }}
                   />
                 </div>
-                <div className="text-xs text-black/60 mt-1 font-bold">
+                <div className="text-xs text-black/70 mt-1 font-bold">
                   {powerPercent.toFixed(0)}% of {board.constraints.maxCurrentMa}mA
                 </div>
               </>
@@ -556,19 +557,19 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
           </div>
           
           <div 
-            className="bg-board-purple p-5"
+            className="bg-purple-100 p-5"
             style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
           >
-            <div className="flex items-center gap-2 text-white mb-2">
+            <div className="flex items-center gap-2 text-black mb-2">
               <Music className="w-5 h-5" />
               <span className="text-sm font-bold uppercase">Pedals</span>
             </div>
-            <div className="text-3xl font-black text-white">{board.slots.length}</div>
-            <div className="text-xs text-white/80 mt-3 font-bold">
+            <div className="text-3xl font-black text-black">{board.slots.length}</div>
+            <div className="text-xs text-black/70 mt-3 font-bold">
               {selectedGenreObjects.length > 0 
-                ? selectedGenreObjects.map(g => `${g!.icon} ${g!.name}`).join(' + ')
+                ? selectedGenreObjects.map(g => g!.name).join(' + ')
                 : genreMatches.length > 0 
-                  ? genreMatches.slice(0, 2).map(m => `${m.genre.icon} ${m.genre.name}`).join(' + ')
+                  ? genreMatches.slice(0, 2).map(m => m.genre.name).join(' + ')
                   : genres.length > 0 ? genres.join(', ') : 'Mixed style'}
             </div>
           </div>
@@ -580,14 +581,14 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <div 
-                className="w-10 h-10 bg-board-highlight flex items-center justify-center"
+                className="w-10 h-10 bg-board-highlight flex items-center justify-center font-black text-black"
                 style={{ border: '3px solid black' }}
               >
-                🏆
+                A+
               </div>
               <div>
                 <h3 className="text-lg font-black text-black uppercase">Your Achievements</h3>
-                <p className="text-xs text-black/50 font-bold">Badges earned based on your pedal choices</p>
+                <p className="text-xs text-black font-bold">Badges earned based on your pedal choices</p>
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
@@ -598,75 +599,61 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                 return (
                   <div 
                     key={score.category} 
-                    className={`relative p-4 text-center transition-all hover:-translate-y-1 ${
-                      isHighScore 
-                        ? 'bg-board-highlight' 
-                        : 'bg-white'
-                    }`}
+                    className="relative p-4 text-center transition-all hover:-translate-y-1"
                     style={{
+                      backgroundColor: isHighScore ? catInfo.color : `${catInfo.color}25`,
                       border: '3px solid black',
-                      boxShadow: isHighScore ? '4px 4px 0px black' : '3px 3px 0px black',
+                      boxShadow: isHighScore ? '5px 5px 0px black' : '3px 3px 0px black',
                     }}
                   >
                     {isHighScore && (
                       <div 
-                        className="absolute -top-2 -right-2 w-7 h-7 bg-board-highlight flex items-center justify-center text-sm font-black"
+                        className="absolute -top-2 -right-2 w-7 h-7 bg-yellow-400 flex items-center justify-center text-xs font-black text-black"
                         style={{ border: '2px solid black' }}
                       >
-                        ⭐
+                        MAX
                       </div>
                     )}
                     
-                    {/* Category Icon */}
+                    {/* Category Name */}
                     <div 
-                      className="w-12 h-12 mx-auto mb-2 rounded-xl flex items-center justify-center text-2xl"
-                      style={{ backgroundColor: `${catInfo.color}20` }}
+                      className="px-3 py-2 mx-auto mb-2 flex items-center justify-center text-xs font-black text-black bg-white uppercase"
+                      style={{ border: '2px solid black' }}
                     >
-                      {score.category === 'gain' && '🔥'}
-                      {score.category === 'modulation' && '🌀'}
-                      {score.category === 'delay' && '📼'}
-                      {score.category === 'reverb' && '🌌'}
-                      {score.category === 'dynamics' && '🗜️'}
-                      {score.category === 'filter' && '👄'}
-                      {score.category === 'pitch' && '🎹'}
-                      {score.category === 'eq' && '📊'}
-                      {score.category === 'volume' && '🎚️'}
-                      {score.category === 'utility' && '🔧'}
-                      {score.category === 'amp' && '🎸'}
-                      {score.category === 'synth' && '🎛️'}
+                      {catInfo.displayName}
                     </div>
                     
                     {/* Tag/Title */}
                     <div 
-                      className="font-bold text-sm mb-1 capitalize"
-                      style={{ color: catInfo.color }}
+                      className="font-black text-sm mb-1 capitalize"
+                      style={{ color: isHighScore ? 'white' : 'black', textShadow: isHighScore ? '1px 1px 0px black' : 'none' }}
                     >
                       "{score.tag}"
-                    </div>
-                    
-                    {/* Category */}
-                    <div className="text-xs text-gray-600 font-medium mb-2">
-                      {catInfo.displayName}
                     </div>
                     
                     {/* Score */}
                     <div className="flex items-center justify-center gap-1">
                       <div 
-                        className="text-lg font-extrabold"
-                        style={{ color: catInfo.color }}
+                        className="text-lg font-black"
+                        style={{ color: isHighScore ? 'white' : 'black' }}
                       >
                         {score.totalScore}
                       </div>
-                      <div className="text-xs text-gray-700 font-medium">/{score.maxScore}</div>
+                      <div 
+                        className="text-xs font-bold"
+                        style={{ color: isHighScore ? 'rgba(255,255,255,0.8)' : 'black' }}
+                      >
+                        /{score.maxScore}
+                      </div>
                     </div>
                     
                     {/* Mini progress bar */}
-                    <div className="h-1 bg-gray-200 overflow-hidden mt-2">
+                    <div className="h-2 bg-white overflow-hidden mt-2" style={{ border: '2px solid black' }}>
                       <div 
                         className="h-full transition-all"
                         style={{ 
                           width: `${Math.min(percentage, 100)}%`,
-                          backgroundColor: catInfo.color,
+                          backgroundColor: isHighScore ? 'white' : catInfo.color,
                         }}
                       />
                     </div>
@@ -681,15 +668,22 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Pedal List */}
           <div className="lg:col-span-2 bg-white border-4 border-black overflow-hidden shadow-[6px_6px_0_0_#000]">
-            <div className="p-4 border-b-2 border-black bg-black flex items-center justify-between">
+            <div className="p-4 border-b-4 border-black bg-black flex items-center justify-between">
               <h2 className="text-lg font-extrabold text-white uppercase">Your Pedals</h2>
-              <span className="text-xs text-white/70 font-medium">Drag to reorder signal chain</span>
+              <span className="text-xs text-white/70 font-medium">Reorder with arrows</span>
             </div>
-            <div className="divide-y-2 divide-black">
+            <div>
               {board.slots.map((slot, index) => {
                 const catInfo = CATEGORY_INFO[slot.pedal.category];
                 return (
-                  <div key={slot.pedal.id} className="p-4 flex items-center gap-3 group hover:bg-yellow-50 transition-colors">
+                  <div 
+                    key={slot.pedal.id} 
+                    className="p-4 flex items-center gap-3 group transition-colors"
+                    style={{ 
+                      backgroundColor: `${catInfo.color}15`,
+                      borderBottom: index < board.slots.length - 1 ? '3px solid black' : 'none',
+                    }}
+                  >
                     {/* Reorder buttons */}
                     <div className="flex flex-col gap-0.5">
                       <button
@@ -697,9 +691,10 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                         disabled={index === 0}
                         className={`p-1 transition-colors ${
                           index === 0 
-                            ? 'text-gray-300 cursor-not-allowed' 
-                            : 'text-gray-500 hover:text-black hover:bg-yellow-200'
+                            ? 'text-gray-400 cursor-not-allowed' 
+                            : 'text-black hover:bg-white'
                         }`}
+                        style={{ border: index === 0 ? 'none' : '2px solid black' }}
                         title="Move up"
                       >
                         <ArrowUp className="w-3.5 h-3.5" />
@@ -709,34 +704,48 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                         disabled={index === board.slots.length - 1}
                         className={`p-1 transition-colors ${
                           index === board.slots.length - 1 
-                            ? 'text-gray-300 cursor-not-allowed' 
-                            : 'text-gray-500 hover:text-black hover:bg-yellow-200'
+                            ? 'text-gray-400 cursor-not-allowed' 
+                            : 'text-black hover:bg-white'
                         }`}
+                        style={{ border: index === board.slots.length - 1 ? 'none' : '2px solid black' }}
                         title="Move down"
                       >
                         <ArrowDown className="w-3.5 h-3.5" />
                       </button>
                     </div>
                     
-                    <div className="w-8 h-8 bg-gray-100 border-2 border-black flex items-center justify-center text-sm font-bold text-gray-700">
+                    <div 
+                      className="w-10 h-10 flex items-center justify-center text-sm font-black text-white"
+                      style={{ backgroundColor: catInfo.color, border: '2px solid black' }}
+                    >
                       {index + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold text-black">{slot.pedal.model}</div>
-                      <div className="text-sm text-gray-600">{slot.pedal.brand}</div>
+                      <div className="font-black text-black">{slot.pedal.model}</div>
+                      <div className="text-sm font-bold text-black">{slot.pedal.brand}</div>
                     </div>
                     <div 
-                      className="px-2 py-1 text-xs font-bold border border-black"
-                      style={{ backgroundColor: `${catInfo.color}30`, color: '#000' }}
+                      className="px-3 py-1.5 text-xs font-black uppercase"
+                      style={{ backgroundColor: catInfo.color, color: 'white', border: '2px solid black' }}
                     >
                       {catInfo.displayName}
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-black">${slot.pedal.reverbPrice}</div>
-                      <div className="text-xs text-gray-600">
+                      <div className="font-black text-black">${slot.pedal.reverbPrice}</div>
+                      <div className="text-xs font-bold text-black">
                         {formatInches(slot.pedal.widthMm)}" × {formatInches(slot.pedal.depthMm)}"
                       </div>
                     </div>
+                    <a
+                      href={getReverbSearchUrl(slot.pedal.brand, slot.pedal.model)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center px-3 py-1.5 bg-orange-500 text-white text-xs font-black uppercase hover:bg-orange-600 transition-colors"
+                      style={{ border: '2px solid black' }}
+                    >
+                      <ShoppingBag className="w-3.5 h-3.5 mr-1" />
+                      Buy
+                    </a>
                   </div>
                 );
               })}
@@ -752,20 +761,33 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
             
             {/* Signal Chain */}
             <div className="bg-white border-4 border-black p-5 shadow-[6px_6px_0_0_#000]">
-              <h2 className="text-lg font-extrabold text-black uppercase mb-4">Suggested Signal Chain</h2>
+              <h2 className="text-lg font-extrabold text-black uppercase mb-4">Signal Chain</h2>
               <div className="space-y-2">
-                {board.slots.map((slot, index) => (
-                  <div key={slot.pedal.id} className="flex items-center gap-2 text-sm">
-                    <span className="text-gray-600 font-medium">{index + 1}.</span>
-                    <span className="text-black font-medium">{slot.pedal.model}</span>
-                    {index < board.slots.length - 1 && (
-                      <ArrowRight className="w-3 h-3 text-gray-400 ml-auto" />
-                    )}
-                  </div>
-                ))}
+                {board.slots.map((slot, index) => {
+                  const catInfo = CATEGORY_INFO[slot.pedal.category];
+                  return (
+                    <div key={slot.pedal.id} className="flex items-center gap-2">
+                      <div 
+                        className="w-7 h-7 flex items-center justify-center text-xs font-black text-white flex-shrink-0"
+                        style={{ backgroundColor: catInfo.color, border: '2px solid black' }}
+                      >
+                        {index + 1}
+                      </div>
+                      <div 
+                        className="flex-1 px-3 py-2 text-sm font-bold text-black"
+                        style={{ backgroundColor: `${catInfo.color}20`, border: '2px solid black' }}
+                      >
+                        {slot.pedal.model}
+                      </div>
+                      {index < board.slots.length - 1 && (
+                        <ArrowDown className="w-4 h-4 text-black flex-shrink-0" />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-              <p className="text-xs text-gray-500 mt-3 italic">
-                This is a suggested order. Feel free to experiment!
+              <p className="text-xs text-black mt-4 font-bold uppercase">
+                Suggested order — feel free to experiment!
               </p>
             </div>
             

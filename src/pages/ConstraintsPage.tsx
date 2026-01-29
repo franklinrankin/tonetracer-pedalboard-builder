@@ -117,13 +117,13 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
         <div 
           className={`p-5 sm:p-6 transition-all ${sizeEnabled ? '' : 'opacity-50'}`}
           style={{
-            backgroundColor: sizeEnabled ? '#FF5722' : '#E0E0E0',
+            backgroundColor: sizeEnabled ? '#FFCCBC' : '#E0E0E0',
             border: '4px solid black',
             boxShadow: sizeEnabled ? '6px 6px 0px black' : '4px 4px 0px black',
           }}
         >
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 text-white uppercase">
+            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 text-black uppercase">
               <div 
                 className="w-10 h-10 bg-white flex items-center justify-center"
                 style={{ border: '3px solid black' }}
@@ -163,7 +163,7 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
             ))}
           </div>
           
-          <p className="text-xs text-white/80 mt-4 text-center font-bold">
+          <p className="text-xs text-black/60 mt-4 text-center font-bold">
             We'll suggest a board that fits on the review page.
           </p>
         </div>
@@ -172,13 +172,13 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
         <div 
           className={`p-5 sm:p-6 transition-all ${budgetEnabled ? '' : 'opacity-50'}`}
           style={{
-            backgroundColor: budgetEnabled ? '#4CAF50' : '#E0E0E0',
+            backgroundColor: budgetEnabled ? '#C8E6C9' : '#E0E0E0',
             border: '4px solid black',
             boxShadow: budgetEnabled ? '6px 6px 0px black' : '4px 4px 0px black',
           }}
         >
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 text-white uppercase">
+            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 text-black uppercase">
               <div 
                 className="w-10 h-10 bg-white flex items-center justify-center"
                 style={{ border: '3px solid black' }}

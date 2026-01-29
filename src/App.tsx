@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { BoardProvider, useBoard } from './context/BoardContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
 import { GenrePage, ConstraintsPage, BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
 import { SavedBoardsPage } from './pages/SavedBoardsPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { CollectionPage } from './pages/CollectionPage';
 import { PedalCatalog } from './components/PedalCatalog';
 import { AuthModal } from './components/AuthModal';
 import { UserMenu } from './components/UserMenu';
@@ -15,12 +16,14 @@ import { PEDALS } from './data/pedals';
 import { sortBySignalChain } from './utils/signalChain';
 import { SavedBoard } from './types';
 import { generateUUID } from './utils/uuid';
+import { supabase } from './lib/supabase';
 
-type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review' | 'saved-boards' | 'profile';
+type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review' | 'saved-boards' | 'profile' | 'collection';
 
 // Local storage helpers
 const SAVED_BOARDS_KEY = 'boardsie_saved_boards';
 const FAVORITES_KEY = 'boardsie_favorites';
+const COLLECTION_KEY = 'boardsie_collection';
 
 type FavoritesMap = Record<string, string | null>;
 
@@ -77,6 +80,26 @@ function saveBoardsToStorage(boards: SavedBoard[]) {
   }
 }
 
+function loadCollection(): string[] {
+  try {
+    const stored = localStorage.getItem(COLLECTION_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (e) {
+    console.error('Failed to load collection:', e);
+  }
+  return [];
+}
+
+function saveCollectionToStorage(collection: string[]) {
+  try {
+    localStorage.setItem(COLLECTION_KEY, JSON.stringify(collection));
+  } catch (e) {
+    console.error('Failed to save collection:', e);
+  }
+}
+
 function AppContent() {
   const [currentPage, setCurrentPage] = useState<AppPage>('home');
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
@@ -87,6 +110,9 @@ function AppContent() {
   const [savedBoards, setSavedBoards] = useState<SavedBoard[]>(() => loadSavedBoards());
   const [currentSavedBoardId, setCurrentSavedBoardId] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<FavoritesMap>(() => loadFavorites());
+  const [collection, setCollection] = useState<string[]>(() => loadCollection());
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const isInitialMount = useRef(true);
   const { dispatch, state } = useBoard();
   const { user } = useAuth();
   
@@ -99,6 +125,227 @@ function AppContent() {
   useEffect(() => {
     saveFavoritesToStorage(favorites);
   }, [favorites]);
+  
+  // Persist collection to localStorage when it changes
+  useEffect(() => {
+    saveCollectionToStorage(collection);
+  }, [collection]);
+  
+  // Load all data from Supabase when user logs in
+  useEffect(() => {
+    async function loadDataFromSupabase() {
+      if (!user || !supabase) {
+        setDataLoaded(true);
+        return;
+      }
+      
+      try {
+        // Load Collection
+        const { data: collectionData, error: collectionError } = await supabase
+          .from('collections')
+          .select('pedal_ids')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (collectionError && collectionError.code !== 'PGRST116') {
+          console.error('Error loading collection:', collectionError);
+        }
+        
+        if (collectionData?.pedal_ids) {
+          const localPedals = loadCollection();
+          const merged = [...new Set([...collectionData.pedal_ids, ...localPedals])];
+          setCollection(merged);
+          
+          if (merged.length > collectionData.pedal_ids.length && supabase) {
+            await supabase
+              .from('collections')
+              .update({ pedal_ids: merged, updated_at: new Date().toISOString() })
+              .eq('user_id', user.id);
+          }
+        } else if (supabase) {
+          const localCollection = loadCollection();
+          if (localCollection.length > 0) {
+            await supabase
+              .from('collections')
+              .insert({ user_id: user.id, pedal_ids: localCollection });
+          }
+        }
+        
+        // Load Favorites
+        const { data: favoritesData, error: favoritesError } = await supabase
+          .from('favorites')
+          .select('favorites_data')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (favoritesError && favoritesError.code !== 'PGRST116') {
+          console.error('Error loading favorites:', favoritesError);
+        }
+        
+        if (favoritesData?.favorites_data) {
+          const localFavorites = loadFavorites();
+          const merged = { ...localFavorites, ...favoritesData.favorites_data };
+          setFavorites(merged);
+        } else if (supabase) {
+          const localFavorites = loadFavorites();
+          if (Object.keys(localFavorites).length > 0) {
+            await supabase
+              .from('favorites')
+              .insert({ user_id: user.id, favorites_data: localFavorites });
+          }
+        }
+        
+        // Load Saved Boards
+        const { data: boardsData, error: boardsError } = await supabase
+          .from('saved_boards')
+          .select('*')
+          .eq('user_id', user.id);
+        
+        if (boardsError) {
+          console.error('Error loading saved boards:', boardsError);
+        }
+        
+        if (boardsData && boardsData.length > 0) {
+          const cloudBoards: SavedBoard[] = boardsData.map(b => ({
+            id: b.board_id,
+            name: b.name,
+            genres: b.genres || [],
+            board: b.board_data,
+            createdAt: new Date(b.created_at),
+            updatedAt: new Date(b.updated_at),
+          }));
+          
+          // Merge with local boards (cloud takes priority for same ID)
+          const localBoards = loadSavedBoards();
+          const cloudIds = new Set(cloudBoards.map(b => b.id));
+          const uniqueLocalBoards = localBoards.filter(b => !cloudIds.has(b.id));
+          const merged = [...cloudBoards, ...uniqueLocalBoards];
+          setSavedBoards(merged);
+          
+          // Upload unique local boards to cloud
+          if (uniqueLocalBoards.length > 0 && supabase) {
+            for (const board of uniqueLocalBoards) {
+              await supabase
+                .from('saved_boards')
+                .insert({
+                  user_id: user.id,
+                  board_id: board.id,
+                  name: board.name,
+                  genres: board.genres,
+                  board_data: board.board,
+                  created_at: board.createdAt.toISOString(),
+                  updated_at: board.updatedAt.toISOString(),
+                });
+            }
+          }
+        } else if (supabase) {
+          // No cloud boards - upload local boards
+          const localBoards = loadSavedBoards();
+          for (const board of localBoards) {
+            await supabase
+              .from('saved_boards')
+              .insert({
+                user_id: user.id,
+                board_id: board.id,
+                name: board.name,
+                genres: board.genres,
+                board_data: board.board,
+                created_at: board.createdAt.toISOString(),
+                updated_at: board.updatedAt.toISOString(),
+              });
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load data from Supabase:', e);
+      }
+      
+      setDataLoaded(true);
+    }
+    
+    loadDataFromSupabase();
+  }, [user]);
+  
+  // Save collection to Supabase when it changes
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    if (!dataLoaded || !user || !supabase) return;
+    
+    supabase
+      .from('collections')
+      .upsert({ 
+        user_id: user.id, 
+        pedal_ids: collection,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id' })
+      .then(({ error }) => {
+        if (error) console.error('Error saving collection:', error);
+      });
+  }, [collection, user, dataLoaded]);
+  
+  // Save favorites to Supabase when they change
+  useEffect(() => {
+    if (!dataLoaded || !user || !supabase) return;
+    
+    supabase
+      .from('favorites')
+      .upsert({ 
+        user_id: user.id, 
+        favorites_data: favorites,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id' })
+      .then(({ error }) => {
+        if (error) console.error('Error saving favorites:', error);
+      });
+  }, [favorites, user, dataLoaded]);
+  
+  // Save boards to Supabase when they change
+  useEffect(() => {
+    if (!dataLoaded || !user || !supabase) return;
+    
+    const userId = user.id;
+    const sb = supabase;
+    
+    // This syncs the full list - for individual updates, we handle in the handlers
+    async function syncBoards() {
+      const { data: existingBoards } = await sb
+        .from('saved_boards')
+        .select('board_id')
+        .eq('user_id', userId);
+      
+      const existingIds = new Set(existingBoards?.map(b => b.board_id) || []);
+      const currentIds = new Set(savedBoards.map(b => b.id));
+      
+      // Delete boards that were removed
+      const toDelete = [...existingIds].filter(id => !currentIds.has(id));
+      for (const boardId of toDelete) {
+        await sb
+          .from('saved_boards')
+          .delete()
+          .eq('user_id', userId)
+          .eq('board_id', boardId);
+      }
+      
+      // Upsert current boards
+      for (const board of savedBoards) {
+        await sb
+          .from('saved_boards')
+          .upsert({
+            user_id: userId,
+            board_id: board.id,
+            name: board.name,
+            genres: board.genres,
+            board_data: board.board,
+            created_at: board.createdAt.toISOString(),
+            updated_at: board.updatedAt.toISOString(),
+          }, { onConflict: 'user_id,board_id' });
+      }
+    }
+    
+    syncBoards().catch(e => console.error('Error syncing boards:', e));
+  }, [savedBoards, user, dataLoaded]);
   
   const handleStepChange = (step: WizardStep) => {
     // Sync buildSlots to board when going to review
@@ -176,6 +423,22 @@ function AppContent() {
   const handleProfile = () => {
     setCurrentPage('profile');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handleCollection = () => {
+    setCurrentPage('collection');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handleAddToCollection = (pedalId: string) => {
+    setCollection(prev => {
+      if (prev.includes(pedalId)) return prev;
+      return [...prev, pedalId];
+    });
+  };
+  
+  const handleRemoveFromCollection = (pedalId: string) => {
+    setCollection(prev => prev.filter(id => id !== pedalId));
   };
   
   const handleUpdateFavorites = (newFavorites: FavoritesMap) => {
@@ -341,7 +604,7 @@ function AppContent() {
       case 'constraints':
         return <ConstraintsPage onContinue={() => handleStepChange('build')} />;
       case 'build':
-        return <BuildPage onContinue={() => handleStepChange('review')} />;
+        return <BuildPage onContinue={() => handleStepChange('review')} collection={collection} />;
       case 'review':
         return (
           <ReviewPage 
@@ -373,6 +636,7 @@ function AppContent() {
             onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
             onFeedback={() => setShowFeedbackModal(true)}
+            onCollection={handleCollection}
           />
         </div>
         <AuthModal 
@@ -409,6 +673,43 @@ function AppContent() {
           onBack={handleGoHome}
           favorites={favorites}
           onUpdateFavorites={handleUpdateFavorites}
+        />
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
+        />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
+        />
+      </div>
+    );
+  }
+  
+  // Collection page
+  if (currentPage === 'collection') {
+    return (
+      <div className="min-h-screen bg-board-dark">
+        {/* User Menu - Top Right */}
+        <div className="fixed top-4 right-4 z-50">
+          <UserMenu 
+            onSignInClick={() => setShowAuthModal(true)} 
+            onSavedBoards={handleSavedBoards}
+            onProfile={handleProfile}
+            onPedalRequest={() => setShowPedalRequestModal(true)}
+            onFeedback={() => setShowFeedbackModal(true)}
+          />
+        </div>
+        <CollectionPage
+          collection={collection}
+          allPedals={PEDALS}
+          onAddToCollection={handleAddToCollection}
+          onRemoveFromCollection={handleRemoveFromCollection}
+          onBack={handleGoHome}
         />
         <AuthModal 
           isOpen={showAuthModal} 

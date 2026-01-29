@@ -66,14 +66,20 @@ export function PedalCatalog() {
   })();
   
   return (
-    <div className="bg-white overflow-hidden" style={{ border: '3px solid black' }}>
+    <div 
+      className="bg-white overflow-hidden" 
+      style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
+    >
       {/* Header */}
-      <div className="p-4" style={{ borderBottom: '3px solid black' }}>
+      <div 
+        className="p-4" 
+        style={{ borderBottom: '4px solid black', backgroundColor: '#FFF9C4' }}
+      >
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="font-black text-black uppercase">Pedal Catalog</h2>
-            <p className="text-xs text-black/50 font-bold">
-              {filteredPedals.length} pedals
+            <h2 className="text-xl font-black text-black uppercase tracking-tight">Pedal Index</h2>
+            <p className="text-xs text-black/60 font-bold uppercase">
+              {filteredPedals.length} pedals in collection
             </p>
           </div>
           
@@ -85,7 +91,7 @@ export function PedalCatalog() {
                   ? 'bg-black text-white' 
                   : 'bg-white text-black hover:bg-gray-100'
               }`}
-              style={{ border: '2px solid black' }}
+              style={{ border: '3px solid black' }}
             >
               <Grid className="w-4 h-4" />
             </button>
@@ -96,7 +102,7 @@ export function PedalCatalog() {
                   ? 'bg-black text-white' 
                   : 'bg-white text-black hover:bg-gray-100'
               }`}
-              style={{ border: '2px solid black' }}
+              style={{ border: '3px solid black' }}
             >
               <List className="w-4 h-4" />
             </button>
@@ -105,18 +111,19 @@ export function PedalCatalog() {
         
         {/* Search */}
         <div className="relative mb-4 z-10">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-board-muted pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50 pointer-events-none" />
           <input
             type="text"
             placeholder="Search pedals..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-10 py-2.5 bg-board-dark border border-board-border rounded-lg text-white placeholder:text-board-muted focus:outline-none focus:border-board-accent focus:ring-2 focus:ring-board-accent/20 transition-colors"
+            className="w-full pl-10 pr-10 py-2.5 bg-white text-black placeholder:text-black/40 font-bold focus:outline-none"
+            style={{ border: '3px solid black' }}
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-board-muted hover:text-white z-10"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-black/50 hover:text-black z-10"
             >
               <X className="w-4 h-4" />
             </button>
@@ -129,40 +136,44 @@ export function PedalCatalog() {
           <div className="relative">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center gap-2 px-3 py-2 bg-board-elevated border border-board-border rounded-lg text-sm hover:border-board-accent/50 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-white text-sm font-bold text-black hover:bg-gray-50 transition-colors"
+              style={{ border: '3px solid black' }}
             >
-              <Filter className="w-4 h-4 text-board-muted" />
-              <span className="text-white">
+              <Filter className="w-4 h-4" />
+              <span>
                 {selectedCategory === 'all' ? 'All Categories' : CATEGORY_INFO[selectedCategory].displayName}
               </span>
-              <ChevronDown className="w-4 h-4 text-board-muted" />
+              <ChevronDown className="w-4 h-4" />
             </button>
             
             {isFilterOpen && (
-              <div className="absolute top-full left-0 mt-2 w-56 bg-board-elevated border border-board-border rounded-lg shadow-xl z-20 py-2 animate-fadeIn">
+              <div 
+                className="absolute top-full left-0 mt-2 w-56 bg-white z-20 py-2"
+                style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+              >
                 <button
                   onClick={() => { setSelectedCategory('all'); setIsFilterOpen(false); }}
-                  className={`w-full px-3 py-2 text-left text-sm hover:bg-board-surface transition-colors ${
-                    selectedCategory === 'all' ? 'text-board-accent' : 'text-white'
+                  className={`w-full px-3 py-2 text-left text-sm font-bold hover:bg-yellow-100 transition-colors ${
+                    selectedCategory === 'all' ? 'bg-yellow-200' : ''
                   }`}
                 >
                   All Categories
                 </button>
-                <div className="h-px bg-board-border my-1" />
-                <div className="px-3 py-1 text-[10px] text-board-muted italic">
-                  in signal chain order
+                <div className="h-1 bg-black my-1" />
+                <div className="px-3 py-1 text-[10px] text-black/50 font-bold uppercase">
+                  Signal Chain Order
                 </div>
                 {CATEGORY_ORDER.map(cat => (
                   <button
                     key={cat}
                     onClick={() => { setSelectedCategory(cat); setIsFilterOpen(false); }}
-                    className={`w-full px-3 py-2 text-left text-sm hover:bg-board-surface transition-colors flex items-center gap-2 ${
-                      selectedCategory === cat ? 'text-board-accent' : 'text-white'
+                    className={`w-full px-3 py-2 text-left text-sm font-bold hover:bg-yellow-100 transition-colors flex items-center gap-2 ${
+                      selectedCategory === cat ? 'bg-yellow-200' : ''
                     }`}
                   >
                     <span 
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: CATEGORY_INFO[cat].color }}
+                      className="w-3 h-3"
+                      style={{ backgroundColor: CATEGORY_INFO[cat].color, border: '2px solid black' }}
                     />
                     {CATEGORY_INFO[cat].displayName}
                   </button>
@@ -172,26 +183,27 @@ export function PedalCatalog() {
           </div>
           
           {/* Sort Buttons */}
-          <div className="flex items-center gap-1 bg-board-elevated border border-board-border rounded-lg p-1">
-            <span className="text-xs text-board-muted px-1">Sort:</span>
+          <div 
+            className="flex items-center gap-1 bg-white p-1"
+            style={{ border: '3px solid black' }}
+          >
+            <span className="text-xs text-black font-black px-1 uppercase">Sort:</span>
             {[
-              { value: 'name-asc', label: 'Name ↑' },
-              { value: 'name-desc', label: 'Name ↓' },
-              { value: 'price-asc', label: 'Price ↑' },
-              { value: 'price-desc', label: 'Price ↓' },
-              { value: 'rating-asc', label: 'Rating ↑' },
-              { value: 'rating-desc', label: 'Rating ↓' },
-              { value: 'size-asc', label: 'Size ↑' },
-              { value: 'size-desc', label: 'Size ↓' },
+              { value: 'name-asc', label: 'A-Z' },
+              { value: 'name-desc', label: 'Z-A' },
+              { value: 'price-asc', label: '$↑' },
+              { value: 'price-desc', label: '$↓' },
+              { value: 'rating-desc', label: '★↓' },
             ].map(option => (
               <button
                 key={option.value}
                 onClick={() => setSortBy(option.value as SortOption)}
-                className={`px-2 py-1 text-xs rounded transition-colors ${
+                className={`px-2 py-1 text-xs font-bold transition-colors ${
                   sortBy === option.value
-                    ? 'bg-board-accent text-white'
-                    : 'text-board-muted hover:text-white hover:bg-board-surface'
+                    ? 'bg-black text-white'
+                    : 'text-black hover:bg-gray-100'
                 }`}
+                style={{ border: '2px solid black' }}
               >
                 {option.label}
               </button>
@@ -205,15 +217,21 @@ export function PedalCatalog() {
         key={`pedal-grid-${sortBy}-${selectedCategory}`}
         className={`p-4 ${
           viewMode === 'grid' 
-            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' 
+            ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4' 
             : 'space-y-3'
         } max-h-[600px] overflow-y-auto`}
+        style={{ backgroundColor: '#FFFEF0' }}
       >
         {filteredPedals.length === 0 ? (
           <div className="col-span-full text-center py-12">
-            <div className="text-4xl mb-3">🔍</div>
-            <h3 className="font-semibold text-white mb-1">No pedals found</h3>
-            <p className="text-sm text-board-muted">
+            <div 
+              className="inline-block px-4 py-2 mb-3 font-black text-2xl"
+              style={{ backgroundColor: '#FFF9C4', border: '3px solid black' }}
+            >
+              ?
+            </div>
+            <h3 className="font-black text-black uppercase mb-1">No Pedals Found</h3>
+            <p className="text-sm text-black/60 font-bold">
               Try adjusting your filters or search query
             </p>
           </div>

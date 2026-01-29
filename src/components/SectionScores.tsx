@@ -2,22 +2,22 @@ import { useBoard } from '../context/BoardContext';
 import { CATEGORY_INFO, CATEGORY_ORDER } from '../data/categories';
 import { Category } from '../types';
 
-const CategoryIcon = ({ category }: { category: Category }) => {
-  const icons: Record<Category, string> = {
-    gain: '🔥',
-    modulation: '🌊',
-    delay: '⏱️',
-    reverb: '✨',
-    dynamics: '💪',
-    filter: '🎭',
-    pitch: '🎵',
-    eq: '📊',
-    volume: '🎚️',
-    amp: '🔊',
-    utility: '🔧',
-    synth: '🎹',
+const CategoryAbbrev = ({ category }: { category: Category }) => {
+  const abbrevs: Record<Category, string> = {
+    gain: 'GN',
+    modulation: 'MD',
+    delay: 'DL',
+    reverb: 'RV',
+    dynamics: 'DY',
+    filter: 'FL',
+    pitch: 'PT',
+    eq: 'EQ',
+    volume: 'VL',
+    amp: 'AM',
+    utility: 'UT',
+    synth: 'SY',
   };
-  return <span className="text-lg">{icons[category]}</span>;
+  return <span className="text-xs font-black">{abbrevs[category]}</span>;
 };
 
 export function SectionScores() {
@@ -27,7 +27,7 @@ export function SectionScores() {
   if (board.slots.length === 0) {
     return (
       <div className="bg-board-surface border border-board-border rounded-xl p-6 text-center">
-        <div className="text-4xl mb-3">🎸</div>
+        <div className="text-2xl font-black mb-3">---</div>
         <h3 className="font-semibold text-white mb-1">No pedals yet</h3>
         <p className="text-sm text-board-muted">
           Add pedals to see your section scores and tags
@@ -57,7 +57,7 @@ export function SectionScores() {
             <div key={category} className="p-4 hover:bg-board-elevated/30 transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-3">
-                  <CategoryIcon category={category} />
+                  <CategoryAbbrev category={category} />
                   <div>
                     <h3 className="font-medium text-white">{info.displayName}</h3>
                     <p className="text-xs text-board-muted">

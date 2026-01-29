@@ -156,7 +156,7 @@ export function BoardBuilder({ onPedalClick, selectedIndex, minimal }: BoardBuil
     return (
       <div className="bg-board-surface border border-board-border rounded-xl p-8 text-center">
         <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-board-accent/20 to-board-highlight/20 flex items-center justify-center">
-          <span className="text-4xl">🎛️</span>
+          <span className="text-2xl font-black text-white">EMPTY</span>
         </div>
         <h2 className="text-xl font-semibold text-white mb-2">Your Board is Empty</h2>
         <p className="text-board-muted max-w-md mx-auto mb-6">
@@ -346,7 +346,7 @@ export function BoardBuilder({ onPedalClick, selectedIndex, minimal }: BoardBuil
             {/* Guitar input (right side) */}
             <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 flex items-center z-10">
               <span className="text-[7px] text-zinc-500 mr-0.5">IN</span>
-              <span className="text-sm">🎸</span>
+              <span className="text-sm font-black">~</span>
             </div>
             
             {hasCustomLayout ? (
