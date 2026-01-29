@@ -61,34 +61,49 @@ const TYPE_OPTIONS: { type: string; category: Category; signalOrder: number }[] 
 const TYPE_TO_SUBTYPES: Record<string, string[]> = {
   'Tuner': ['Tuner'],
   'Wah': ['Wah'],
-  'Envelope Filter': ['Envelope', 'Auto-Wah'],
+  'Envelope Filter': ['Envelope Filter', 'Fixed Filter'],
   'Compressor': ['Compressor'],
-  'Noise Gate': ['Gate', 'Noise Gate'],
+  'Noise Gate': ['Noise Gate'],
   'Octave': ['Octave'],
-  'Pitch Shifter': ['Pitch', 'Shifter', 'Whammy'],
-  'Harmonizer': ['Harmonizer'],
-  'Boost': ['Boost'],
-  'Overdrive': ['Overdrive'],
-  'Distortion': ['Distortion'],
-  'Fuzz': ['Fuzz'],
-  'EQ': ['EQ', 'Graphic', 'Parametric'],
+  'Pitch Shifter': ['Pitch Shift / Whammy', 'Harmony'],
+  'Harmonizer': ['Harmony'],
+  'Boost': ['Clean Boost', 'Mid Boost', 'Treble Boost'],
+  'Overdrive': ['Tube Screamer-style', 'Klon-style', 'Bluesbreaker-style', 'Transparent OD', 'Amp-like OD'],
+  'Distortion': ['RAT-style', 'Marshall-style', 'Hard-Clipping Distortion', 'High-Gain / Metal Distortion'],
+  'Fuzz': ['Fuzz Face-style', 'Tone Bender-style', 'Muff-style', 'Gated Fuzz', 'Octave Fuzz'],
+  'EQ': ['EQ'],
   'Chorus': ['Chorus'],
   'Phaser': ['Phaser'],
   'Flanger': ['Flanger'],
   'Tremolo': ['Tremolo'],
   'Vibrato': ['Vibrato'],
-  'Rotary': ['Rotary'],
-  'Uni-Vibe': ['Uni-Vibe'],
-  'Synth': ['Synth', 'Organ', 'Sustainer', 'Slicer', 'Lo-Fi', 'Granular', 'Special'],
-  'Analog Delay': ['Analog', 'Analog Delay'],
-  'Digital Delay': ['Digital', 'Digital Delay', 'Multi'],
-  'Tape Delay': ['Tape', 'Tape Delay'],
+  'Rotary': ['Univibe / Rotary'],
+  'Uni-Vibe': ['Univibe / Rotary'],
+  'Synth': ['Synth', 'Ring Mod', 'Bitcrusher', 'Freeze / Sustain', 'Glitch / Granular'],
+  'Analog Delay': ['Analog-style Delay'],
+  'Digital Delay': ['Digital Delay', 'Multi / Experimental Delay'],
+  'Tape Delay': ['Tape-style Delay'],
   'Spring Reverb': ['Spring'],
-  'Hall Reverb': ['Hall'],
+  'Hall Reverb': ['Hall', 'Room'],
   'Plate Reverb': ['Plate'],
-  'Ambient Reverb': ['Ambient', 'Shimmer'],
+  'Ambient Reverb': ['Ambient / Shimmer'],
   'Volume': ['Volume', 'Expression'],
-  'Looper': ['Looper'],
+  'Looper': ['Loop Switcher'],
+};
+
+// Flavor options for each type (subcategory filtering)
+// Only types with multiple flavors get a dropdown
+const TYPE_FLAVORS: Record<string, string[]> = {
+  'Boost': ['Clean Boost', 'Mid Boost', 'Treble Boost'],
+  'Overdrive': ['Tube Screamer-style', 'Klon-style', 'Bluesbreaker-style', 'Transparent OD', 'Amp-like OD'],
+  'Distortion': ['RAT-style', 'Marshall-style', 'Hard-Clipping Distortion', 'High-Gain / Metal Distortion'],
+  'Fuzz': ['Fuzz Face-style', 'Tone Bender-style', 'Muff-style', 'Gated Fuzz', 'Octave Fuzz'],
+  'Synth': ['Synth', 'Ring Mod', 'Bitcrusher', 'Freeze / Sustain', 'Glitch / Granular'],
+  'Digital Delay': ['Digital Delay', 'Multi / Experimental Delay'],
+  'Hall Reverb': ['Hall', 'Room'],
+  'Volume': ['Volume', 'Expression'],
+  'Envelope Filter': ['Envelope Filter', 'Fixed Filter'],
+  'Pitch Shifter': ['Pitch Shift / Whammy', 'Harmony'],
 };
 
 type SortOption = 'recommended' | 'rating' | 'price-low' | 'price-high' | 'name' | 'collection';
@@ -118,6 +133,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   const [sortOption, setSortOption] = useState<SortOption>('recommended');
   const [hoveredPedal, setHoveredPedal] = useState<PedalWithStatus | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null);
   
   // Calculate current cost from BUILD PAGE selections (not board state)
   const currentBuildCost = useMemo(() => {
@@ -360,6 +376,12 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
           return p.subtype === 'Tuner' || p.subtype === 'Chromatic Tuner' || 
                  (p.model && p.model.toLowerCase().includes('tuner'));
         }
+        
+        // If a flavor is selected, only show pedals with that exact subtype
+        if (selectedFlavor) {
+          return p.subtype === selectedFlavor;
+        }
+        
         const matchesSubtype = subtypes.includes(p.subtype || '') || p.category === selectedSlot.category;
         return matchesSubtype;
       });
@@ -518,7 +540,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     }
     
     return withMetadata;
-  }, [selectedSlot, allPedals, typeSlots, sortOption, budgetRemaining, board.constraints.applyAfterBudget, searchQuery, collection]);
+  }, [selectedSlot, allPedals, typeSlots, sortOption, budgetRemaining, board.constraints.applyAfterBudget, searchQuery, collection, selectedFlavor, genre]);
   
   // Get selected pedal object from ID
   const getSelectedPedal = (pedalId?: string) => {
@@ -530,6 +552,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     setSelectedSlotId(slotId === selectedSlotId ? null : slotId);
     setShowAddMenu(false);
     setHoveredPedal(null);
+    setSelectedFlavor(null); // Reset flavor when changing slots
   };
   
   const handleSelectPedal = (pedal: PedalWithStatus, isUsedByOther: boolean) => {
@@ -851,27 +874,44 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
           >
             {selectedSlot ? (
               <>
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                   <h2 className="text-lg font-black text-black uppercase">
                     Choose a {selectedSlot.type}
                   </h2>
                   
-                  {/* Sorting Options */}
-                  <div className="flex items-center gap-1">
-                    <ArrowUpDown className="w-3 h-3 text-black/50" />
-                    <select
-                      value={sortOption}
-                      onChange={(e) => setSortOption(e.target.value as SortOption)}
-                      className="text-xs bg-white text-black font-bold px-2 py-1 focus:outline-none"
-                      style={{ border: '2px solid black' }}
-                    >
-                      <option value="recommended">Recommended</option>
-                      <option value="collection">My Collection</option>
-                      <option value="rating">Rating</option>
-                      <option value="price-low">Price: Low</option>
-                      <option value="price-high">Price: High</option>
-                      <option value="name">Name</option>
-                    </select>
+                  <div className="flex items-center gap-3">
+                    {/* Flavor Dropdown - only show if this type has flavors */}
+                    {TYPE_FLAVORS[selectedSlot.type] && TYPE_FLAVORS[selectedSlot.type].length > 1 && (
+                      <select
+                        value={selectedFlavor || ''}
+                        onChange={(e) => setSelectedFlavor(e.target.value || null)}
+                        className="text-xs bg-white text-black font-bold px-2 py-1 focus:outline-none"
+                        style={{ border: '2px solid black' }}
+                      >
+                        <option value="">All Flavors</option>
+                        {TYPE_FLAVORS[selectedSlot.type].map(flavor => (
+                          <option key={flavor} value={flavor}>{flavor}</option>
+                        ))}
+                      </select>
+                    )}
+                    
+                    {/* Sorting Options */}
+                    <div className="flex items-center gap-1">
+                      <ArrowUpDown className="w-3 h-3 text-black/50" />
+                      <select
+                        value={sortOption}
+                        onChange={(e) => setSortOption(e.target.value as SortOption)}
+                        className="text-xs bg-white text-black font-bold px-2 py-1 focus:outline-none"
+                        style={{ border: '2px solid black' }}
+                      >
+                        <option value="recommended">Recommended</option>
+                        <option value="collection">My Collection</option>
+                        <option value="rating">Rating</option>
+                        <option value="price-low">Price: Low</option>
+                        <option value="price-high">Price: High</option>
+                        <option value="name">Name</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 
