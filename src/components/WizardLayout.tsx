@@ -339,10 +339,10 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
         {hasProgress && (
           <div 
             className="hidden md:block bg-board-highlight"
-            style={{ borderTop: '3px solid black' }}
+            style={{ borderTop: '3px solid var(--color-board-border)' }}
           >
             <div className="max-w-7xl mx-auto px-6 py-2">
-              <div className="flex items-center gap-6 text-sm font-bold text-black">
+              <div className="flex items-center gap-6 text-sm font-bold text-white">
                 {genres.length > 0 && (
                   <div className="flex items-center gap-2">
                     <span className="opacity-60">Style:</span>
@@ -367,7 +367,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                     <span className="opacity-30">|</span>
                     <div className="flex items-center gap-2">
                       <span className="opacity-60">Cost:</span>
-                      <span className="text-black font-black">${totalCost}</span>
+                      <span className="text-white font-black">${totalCost}</span>
                     </div>
                   </>
                 )}

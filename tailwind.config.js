@@ -15,7 +15,7 @@ export default {
           'border': '#000000',    // Black borders
           'accent': '#FF5722',    // Orange
           'accent-dim': '#E64A19',
-          'highlight': '#FFEB3B', // Yellow
+          'highlight': '#1E3A5F', // Dark blue
           'success': '#4CAF50',   // Green
           'warning': '#FF9800',   // Orange/Yellow
           'danger': '#F44336',    // Red
