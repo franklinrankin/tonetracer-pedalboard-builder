@@ -1,13 +1,14 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { ChevronRight, Plus, X, Check, ArrowUpDown, Youtube, RotateCcw, Search } from 'lucide-react';
+import { ChevronRight, Plus, X, Check, ArrowUpDown, Youtube, RotateCcw, Search, ChevronDown, Zap, Volume2 } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
+import { useTheme } from '../context/ThemeContext';
 import { getGenreById } from '../data/genres';
 import { Category, PedalWithStatus } from '../types';
 import { PedalImage } from '../components/PedalImage';
 import { CATEGORY_INFO, getRatingLabel } from '../data/categories';
 import { getYouTubeReviewUrl } from '../utils/youtube';
 import { generateUUID } from '../utils/uuid';
-import { getReverbSearchUrl } from '../utils/reverb';
+
 
 interface BuildPageProps {
   onContinue: () => void;
@@ -55,6 +56,7 @@ const TYPE_OPTIONS: { type: string; category: Category; signalOrder: number }[] 
   { type: 'Ambient Reverb', category: 'reverb', signalOrder: 99 },
   { type: 'Volume', category: 'volume', signalOrder: 80 },
   { type: 'Looper', category: 'utility', signalOrder: 110 },
+  { type: 'Amp Sim', category: 'amp', signalOrder: 200 },
 ];
 
 // Map generic type names to actual pedal subtypes in database
@@ -89,6 +91,7 @@ const TYPE_TO_SUBTYPES: Record<string, string[]> = {
   'Ambient Reverb': ['Ambient / Shimmer'],
   'Volume': ['Volume', 'Expression'],
   'Looper': ['Loop Switcher'],
+  'Amp Sim': ['Amp-in-a-Box', 'Multi-FX / Modeler', 'Cab Sim / IR Loader'],
 };
 
 // Flavor options for each type (subcategory filtering)
@@ -115,10 +118,19 @@ function getTypeInfo(type: string) {
 
 export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   const { state, dispatch } = useBoard();
+  const { theme } = useTheme();
   const { selectedGenres, allPedals, board } = state;
   const maxSlots = board.constraints.maxPedalCount || 8;
   
   const genre = selectedGenres.length > 0 ? getGenreById(selectedGenres[0]) : null;
+  
+  // Multi-FX inline prompt state
+  const [multiFxPrompt, setMultiFxPrompt] = useState<{
+    pedal: PedalWithStatus;
+    slotId: string | null; // null when adding via "Add Multi" button (no specific slot)
+    selectedSlotIds: string[]; // Track selected slots by ID
+    addAmpSim: boolean; // Whether to add an Amp Sim slot
+  } | null>(null);
   
   // Type slots state - persist in board context
   const [typeSlots, setTypeSlots] = useState<TypeSlot[]>(() => {
@@ -129,17 +141,21 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     return [];
   });
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
+  const [randomSeed, setRandomSeed] = useState(0); // Forces pedal list to re-randomize
   const [showAddMenu, setShowAddMenu] = useState(false);
+  const [showMultiMenu, setShowMultiMenu] = useState(false);
+  const [showSimMenu, setShowSimMenu] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>('recommended');
   const [hoveredPedal, setHoveredPedal] = useState<PedalWithStatus | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null);
   
   // Calculate current cost from BUILD PAGE selections (not board state)
+  // Only count each unique pedal once (multi-FX covering multiple slots is one pedal)
   const currentBuildCost = useMemo(() => {
-    return typeSlots.reduce((sum, slot) => {
-      if (!slot.selectedPedalId) return sum;
-      const pedal = allPedals.find(p => p.id === slot.selectedPedalId);
+    const uniquePedalIds = new Set(typeSlots.map(s => s.selectedPedalId).filter(Boolean));
+    return Array.from(uniquePedalIds).reduce((sum, pedalId) => {
+      const pedal = allPedals.find(p => p.id === pedalId);
       return sum + (pedal?.reverbPrice || 0);
     }, 0);
   }, [typeSlots, allPedals]);
@@ -277,7 +293,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       
       // Phase 3: Fill remaining slots with genre-appropriate types
       // Build a comprehensive list of all types sorted by genre relevance
-      const allTypesRanked: string[] = [];
+      const allTypesRanked: { type: string; category: Category }[] = [];
       
       // Sort categories by genre rating (highest first)
       const categoryRatings: [Category, number][] = [
@@ -294,26 +310,26 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       ];
       categoryRatings.sort((a, b) => b[1] - a[1]);
       
-      // Build ranked list of all available types
+      // Build ranked list of all available types with their categories
       for (const [category] of categoryRatings) {
         const typesForCategory = categoryToType[category] || [];
         for (const typeName of typesForCategory) {
-          if (!allTypesRanked.includes(typeName)) {
-            allTypesRanked.push(typeName);
+          if (!allTypesRanked.some(t => t.type === typeName)) {
+            allTypesRanked.push({ type: typeName, category });
           }
         }
       }
       
       // Keep filling until we reach target
-      for (const typeName of allTypesRanked) {
+      for (const { type: typeName } of allTypesRanked) {
         if (slots.length >= targetSlots) break;
         addSlot(typeName);
       }
     } else {
       // No genre selected - use sensible defaults
       const defaultTypes = [
-        'Compressor', 'Overdrive', 'Chorus', 'Analog Delay', 'Hall Reverb', 
-        'Distortion', 'Tremolo', 'EQ', 'Wah', 'Fuzz', 'Phaser', 'Digital Delay'
+        'Compressor', 'Overdrive', 'Chorus', 'Analog Delay', 'Hall Reverb',
+        'Distortion', 'Tremolo', 'EQ', 'Wah', 'Fuzz', 'Phaser', 'Digital Delay',
       ];
       for (const typeName of defaultTypes) {
         if (slots.length >= targetSlots) break;
@@ -380,6 +396,11 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
         // If a flavor is selected, only show pedals with that exact subtype
         if (selectedFlavor) {
           return p.subtype === selectedFlavor;
+        }
+        
+        // Don't show Multi-FX in regular categories - they have their own "Add Multi" button
+        if (p.subtype === 'Multi-FX / Modeler' && selectedSlot.type !== 'Amp Sim') {
+          return false;
         }
         
         const matchesSubtype = subtypes.includes(p.subtype || '') || p.category === selectedSlot.category;
@@ -455,23 +476,25 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
           
           sorted = [...pinned, ...rest];
         } else {
-          // Add variety by shuffling within score bands
-          // First, calculate scores and group into bands
+          // Add significant variety by adding random jitter to scores
+          // This ensures different pedals surface each time
           const withScores = filtered.map(p => ({
             pedal: p,
-            score: getRecommendationScore(p),
+            baseScore: getRecommendationScore(p),
+            // Add random jitter of ±15 points to mix things up significantly
+            score: getRecommendationScore(p) + (Math.random() * 30 - 15),
           }));
           
-          // Sort by score descending
+          // Sort by jittered score descending
           withScores.sort((a, b) => b.score - a.score);
           
-          // Shuffle within score bands (pedals within 3 points of each other)
+          // Additional shuffle within wider score bands (10 points) for more variety
           const shuffled: typeof withScores = [];
           let band: typeof withScores = [];
           let bandMinScore = withScores[0]?.score ?? 0;
           
           for (const item of withScores) {
-            if (item.score >= bandMinScore - 3) {
+            if (item.score >= bandMinScore - 10) {
               band.push(item);
             } else {
               // Shuffle current band and add to result
@@ -540,7 +563,8 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     }
     
     return withMetadata;
-  }, [selectedSlot, allPedals, typeSlots, sortOption, budgetRemaining, board.constraints.applyAfterBudget, searchQuery, collection, selectedFlavor, genre]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSlot, allPedals, typeSlots, sortOption, budgetRemaining, board.constraints.applyAfterBudget, searchQuery, collection, selectedFlavor, genre, randomSeed]);
   
   // Get selected pedal object from ID
   const getSelectedPedal = (pedalId?: string) => {
@@ -550,6 +574,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   
   const handleSelectSlot = (slotId: string) => {
     setSelectedSlotId(slotId === selectedSlotId ? null : slotId);
+    setRandomSeed(prev => prev + 1); // Re-randomize pedal suggestions
     setShowAddMenu(false);
     setHoveredPedal(null);
     setSelectedFlavor(null); // Reset flavor when changing slots
@@ -561,6 +586,33 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     // Don't allow selecting a pedal that's used by another slot
     if (isUsedByOther) return;
     
+    const currentSlot = typeSlots.find(s => s.id === selectedSlotId);
+    
+    // Check if this is a multi-FX pedal being selected (not deselected)
+    const isMultiFx = pedal.subtype === 'Multi-FX / Modeler';
+    const isNewSelection = currentSlot?.selectedPedalId !== pedal.id;
+    
+    if (isMultiFx && isNewSelection) {
+      // Find slots already filled by this multi-FX
+      const alreadyFilledSlotIds = typeSlots
+        .filter(slot => slot.selectedPedalId === pedal.id && slot.id !== selectedSlotId)
+        .map(slot => slot.id);
+      
+      // Check if there's already an amp sim slot with this multi-FX
+      const hasAmpSimWithMulti = typeSlots.some(slot => 
+        slot.type === 'Amp Sim' && slot.selectedPedalId === pedal.id
+      );
+      
+      // Show the multi-FX prompt with pre-selected slots
+      setMultiFxPrompt({
+        pedal,
+        slotId: selectedSlotId,
+        selectedSlotIds: alreadyFilledSlotIds,
+        addAmpSim: hasAmpSimWithMulti,
+      });
+      return;
+    }
+    
     setTypeSlots(prev => prev.map(slot => {
       if (slot.id !== selectedSlotId) return slot;
       
@@ -568,6 +620,114 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       const newPedalId = slot.selectedPedalId === pedal.id ? undefined : pedal.id;
       return { ...slot, selectedPedalId: newPedalId };
     }));
+  };
+  
+  // Handle multi-FX prompt confirmation
+  const handleMultiFxConfirm = () => {
+    if (!multiFxPrompt) return;
+    
+    const { pedal, slotId, selectedSlotIds, addAmpSim } = multiFxPrompt;
+    
+    setTypeSlots(prev => {
+      // First, remove Tuner slot since multi-FX units have built-in tuners
+      let newSlots = prev.filter(slot => slot.type !== 'Tuner');
+      
+      newSlots = newSlots.map(slot => {
+        // If this is the original slot (when selecting from pedal list)
+        if (slotId && slot.id === slotId) {
+          return { ...slot, selectedPedalId: pedal.id };
+        }
+        
+        const isSelectedSlot = selectedSlotIds.includes(slot.id);
+        const hasThisMultiFx = slot.selectedPedalId === pedal.id;
+        
+        if (isSelectedSlot && !hasThisMultiFx) {
+          // Fill selected slots with multi-FX
+          return { ...slot, selectedPedalId: pedal.id };
+        } else if (!isSelectedSlot && hasThisMultiFx && slot.id !== slotId) {
+          // Clear slots that had this multi-FX but are no longer selected
+          // But don't clear Amp Sim slots if addAmpSim is still checked
+          if (slot.type === 'Amp Sim' && addAmpSim) {
+            return slot;
+          }
+          return { ...slot, selectedPedalId: undefined };
+        }
+        
+        return slot;
+      });
+      
+      // Handle Amp Sim slot
+      const existingAmpSimSlot = newSlots.find(s => s.type === 'Amp Sim');
+      
+      if (addAmpSim) {
+        if (existingAmpSimSlot) {
+          // Update existing Amp Sim slot with this multi-FX
+          newSlots = newSlots.map(slot => 
+            slot.type === 'Amp Sim' ? { ...slot, selectedPedalId: pedal.id } : slot
+          );
+        } else {
+          // Add new Amp Sim slot
+          const ampSimInfo = getTypeInfo('Amp Sim');
+          if (ampSimInfo) {
+            newSlots.push({
+              id: generateUUID(),
+              type: 'Amp Sim',
+              category: ampSimInfo.category,
+              signalOrder: ampSimInfo.signalOrder,
+              selectedPedalId: pedal.id,
+            });
+            newSlots = newSlots.sort((a, b) => a.signalOrder - b.signalOrder);
+          }
+        }
+      } else {
+        // If addAmpSim is unchecked but there's an Amp Sim with this multi-FX, clear it
+        if (existingAmpSimSlot && existingAmpSimSlot.selectedPedalId === pedal.id) {
+          newSlots = newSlots.map(slot => 
+            slot.type === 'Amp Sim' && slot.selectedPedalId === pedal.id
+              ? { ...slot, selectedPedalId: undefined }
+              : slot
+          );
+        }
+      }
+      
+      return newSlots;
+    });
+    
+    // Get the categories being covered for the context
+    const coveringCategories = typeSlots
+      .filter(s => selectedSlotIds.includes(s.id) || s.id === slotId)
+      .map(s => s.category);
+    
+    if (addAmpSim) {
+      coveringCategories.push('amp');
+    }
+    
+    // Update multi-FX state in context for Review page badges
+    dispatch({
+      type: 'SET_MULTI_EFFECTS',
+      multiEffects: {
+        pedalId: pedal.id,
+        coveringCategories,
+        isAmpSimOnly: false,
+      },
+    });
+    
+    setMultiFxPrompt(null);
+  };
+  
+  // Toggle slot in multi-FX prompt
+  const toggleMultiFxSlot = (slotId: string) => {
+    if (!multiFxPrompt) return;
+    setMultiFxPrompt(prev => {
+      if (!prev) return null;
+      const isSelected = prev.selectedSlotIds.includes(slotId);
+      return {
+        ...prev,
+        selectedSlotIds: isSelected
+          ? prev.selectedSlotIds.filter(id => id !== slotId)
+          : [...prev.selectedSlotIds, slotId],
+      };
+    });
   };
   
   const handleClearBoard = () => {
@@ -635,10 +795,11 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     ? TYPE_OPTIONS.filter(t => t.category === selectedSlot.category && t.type !== selectedSlot.type)
     : [];
   
-  // Count selected pedals
-  const selectedCount = typeSlots.filter(s => s.selectedPedalId).length;
-  const totalCost = typeSlots.reduce((sum, s) => {
-    const pedal = getSelectedPedal(s.selectedPedalId);
+  // Count unique selected pedals (multi-FX only counted once)
+  const uniqueSelectedPedalIds = new Set(typeSlots.map(s => s.selectedPedalId).filter(Boolean));
+  const selectedCount = uniqueSelectedPedalIds.size;
+  const totalCost = Array.from(uniqueSelectedPedalIds).reduce((sum, pedalId) => {
+    const pedal = getSelectedPedal(pedalId);
     return sum + (pedal?.reverbPrice || 0);
   }, 0);
   
@@ -661,17 +822,17 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   const canContinue = selectedCount > 0;
   
   return (
-    <div className="min-h-full flex flex-col" style={{ backgroundColor: '#FFFEF0' }}>
+    <div className="min-h-full flex flex-col" style={{ backgroundColor: 'var(--color-board-dark)' }}>
       {/* Budget Bar - Sticky below fixed header */}
       <div 
         className="sticky top-20 sm:top-24 z-20"
-        style={{ borderBottom: '4px solid black', backgroundColor: '#B8D4E3' }}
+        style={{ borderBottom: '4px solid var(--color-board-border)', backgroundColor: theme === 'dark' ? '#1A3A5C' : '#B8D4E3' }}
       >
-        <div className="max-w-6xl mx-auto px-4 py-3">
+        <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-4">
             <div className="flex-1">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-black text-black flex items-center gap-2 uppercase">
+                <span className="text-sm font-black text-theme flex items-center gap-2 uppercase">
                   💰 Budget
                 </span>
                 <span className={`text-sm font-black ${
@@ -681,8 +842,8 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                 </span>
               </div>
               <div 
-                className="h-4 bg-white overflow-hidden"
-                style={{ border: '3px solid black' }}
+                className="h-4 bg-theme-surface overflow-hidden"
+                style={{ border: '3px solid var(--color-board-border)' }}
               >
                 <div 
                   className={`h-full transition-all duration-300 ${
@@ -696,10 +857,10 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                 />
               </div>
               <div className="flex justify-between mt-1">
-                <span className="text-xs text-black/60 font-bold">
+                <span className="text-xs text-theme-muted font-bold">
                   {selectedCount} pedals selected
                 </span>
-                <span className={`text-xs font-bold ${budgetRemaining < 0 ? 'text-red-600' : 'text-black/60'}`}>
+                <span className={`text-xs font-bold ${budgetRemaining < 0 ? 'text-red-600' : 'text-theme-muted'}`}>
                   {budgetRemaining >= 0 ? `$${budgetRemaining} remaining` : `$${Math.abs(budgetRemaining)} over budget`}
                 </span>
               </div>
@@ -709,13 +870,214 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       </div>
       
       {/* Two Column Layout */}
-      <div className="flex-1 max-w-6xl mx-auto w-full p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+      <div className="flex-1 max-w-7xl mx-auto w-full p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
           {/* LEFT COLUMN - Type Slots */}
           <div className="space-y-3">
-            <h2 className="text-sm font-black text-black uppercase mb-3">
-              Pedal Types ({typeSlots.length}/{maxSlots})
-            </h2>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-sm font-black text-theme uppercase">
+                Pedal Types ({typeSlots.length}/{maxSlots})
+              </h2>
+              
+              <div className="flex gap-2 relative">
+                  {/* Add Pedal Button */}
+                  <div className="relative">
+                    <button
+                      onClick={() => {
+                        setShowAddMenu(!showAddMenu);
+                        setShowMultiMenu(false);
+                        setShowSimMenu(false);
+                        setSelectedSlotId(null);
+                      }}
+                      className="px-3 py-1.5 bg-theme-surface text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all"
+                      style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
+                    >
+                      <Plus className="w-3 h-3" />
+                      Add Pedal
+                    </button>
+                    
+                    {/* Add Pedal Menu */}
+                    {showAddMenu && (
+                      <div 
+                        className="absolute left-0 top-full mt-2 bg-theme-surface z-30 w-48 max-h-64 overflow-y-auto"
+                        style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
+                      >
+                        {(['gain', 'dynamics', 'modulation', 'delay', 'reverb', 'filter', 'pitch', 'eq', 'volume', 'utility'] as Category[]).map(category => {
+                          const typesInCategory = availableToAdd.filter(t => t.category === category);
+                          if (typesInCategory.length === 0) return null;
+                          
+                          return (
+                            <div key={category} className="p-2" style={{ borderBottom: '2px solid black' }}>
+                              <p className="text-[10px] text-theme-muted uppercase tracking-wider px-2 mb-1 font-bold">{category}</p>
+                              {typesInCategory.map(t => (
+                                <button
+                                  key={t.type}
+                                  onClick={() => handleAddType(t.type)}
+                                  className="w-full px-2 py-1.5 text-left text-sm text-theme hover:bg-board-highlight font-bold"
+                                >
+                                  {t.type}
+                                </button>
+                              ))}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Add Multi Button */}
+                  <div className="relative">
+                    <button
+                      onClick={() => {
+                        setShowMultiMenu(!showMultiMenu);
+                        setShowAddMenu(false);
+                        setShowSimMenu(false);
+                        setSelectedSlotId(null);
+                      }}
+                      className="px-3 py-1.5 bg-cyan-400 text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all"
+                      style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
+                    >
+                      <Zap className="w-3 h-3" />
+                      Add Multi
+                    </button>
+                    
+                    {/* Add Multi Menu */}
+                    {showMultiMenu && (
+                      <div 
+                        className="absolute right-0 top-full mt-2 bg-theme-surface z-30 w-56 max-h-80 overflow-y-auto"
+                        style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
+                      >
+                        <div className="p-2 bg-cyan-100" style={{ borderBottom: '2px solid black' }}>
+                          <p className="text-[10px] text-theme-muted font-bold uppercase">Multi-FX / Modelers</p>
+                        </div>
+                        {allPedals
+                          .filter(p => p.subtype === 'Multi-FX / Modeler')
+                          .sort((a, b) => a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model))
+                          .map(pedal => (
+                            <button
+                              key={pedal.id}
+                              onClick={() => {
+                                // Find slots already filled by this multi-FX
+                                const alreadyFilledSlotIds = typeSlots
+                                  .filter(slot => slot.selectedPedalId === pedal.id)
+                                  .map(slot => slot.id);
+                                
+                                // Check if there's already an amp sim slot with this multi-FX
+                                const hasAmpSimWithMulti = typeSlots.some(slot => 
+                                  slot.type === 'Amp Sim' && slot.selectedPedalId === pedal.id
+                                );
+                                
+                                // Show the multi-FX prompt
+                                setMultiFxPrompt({
+                                  pedal,
+                                  slotId: null, // No specific slot, just filling existing slots
+                                  selectedSlotIds: alreadyFilledSlotIds,
+                                  addAmpSim: hasAmpSimWithMulti,
+                                });
+                                setShowMultiMenu(false);
+                              }}
+                              className="w-full px-3 py-2 text-left hover:bg-cyan-50 flex items-center gap-2"
+                              style={{ borderBottom: '1px solid #e5e7eb' }}
+                            >
+                              <div className="w-8 h-8 bg-gradient-to-br from-cyan-100 to-blue-100 flex items-center justify-center flex-shrink-0" style={{ border: '2px solid var(--color-board-border)' }}>
+                                <Zap className="w-4 h-4 text-cyan-600" />
+                              </div>
+                              <div className="min-w-0">
+                                <div className="text-sm font-black text-theme truncate">{pedal.model}</div>
+                                <div className="text-[10px] text-theme-muted font-bold truncate">{pedal.brand}</div>
+                              </div>
+                            </button>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Add Sim Button */}
+                  <div className="relative">
+                    <button
+                      onClick={() => {
+                        setShowSimMenu(!showSimMenu);
+                        setShowAddMenu(false);
+                        setShowMultiMenu(false);
+                        setSelectedSlotId(null);
+                      }}
+                      className="px-3 py-1.5 bg-orange-400 text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all"
+                      style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
+                    >
+                      <Volume2 className="w-3 h-3" />
+                      Add Sim
+                    </button>
+                    
+                    {/* Add Sim Menu */}
+                    {showSimMenu && (
+                      <div 
+                        className="absolute right-0 top-full mt-2 bg-theme-surface z-30 w-56 max-h-80 overflow-y-auto"
+                        style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
+                      >
+                        <div className="p-2 bg-orange-100" style={{ borderBottom: '2px solid black' }}>
+                          <p className="text-[10px] text-theme-muted font-bold uppercase">Amp Sims & Cab IRs</p>
+                        </div>
+                        {allPedals
+                          .filter(p => p.subtype === 'Amp-in-a-Box' || p.subtype === 'Cab Sim / IR Loader')
+                          .sort((a, b) => a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model))
+                          .map(pedal => (
+                            <button
+                              key={pedal.id}
+                              onClick={() => {
+                                // Add an Amp Sim slot with this pedal selected
+                                const newSlotId = generateUUID();
+                                const ampSimInfo = getTypeInfo('Amp Sim');
+                                if (ampSimInfo) {
+                                  setTypeSlots(prev => {
+                                    const newSlots = [...prev, {
+                                      id: newSlotId,
+                                      type: 'Amp Sim',
+                                      category: ampSimInfo.category,
+                                      signalOrder: ampSimInfo.signalOrder,
+                                      selectedPedalId: pedal.id,
+                                    }];
+                                    return newSlots.sort((a, b) => a.signalOrder - b.signalOrder);
+                                  });
+                                }
+                                setShowSimMenu(false);
+                              }}
+                              className="w-full px-3 py-2 text-left hover:bg-orange-50 flex items-center gap-2"
+                              style={{ borderBottom: '1px solid #e5e7eb' }}
+                            >
+                              <div className="w-8 h-8 bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center flex-shrink-0" style={{ border: '2px solid var(--color-board-border)' }}>
+                                <Volume2 className="w-4 h-4 text-orange-600" />
+                              </div>
+                              <div className="min-w-0">
+                                <div className="text-sm font-black text-theme truncate">{pedal.model}</div>
+                                <div className="text-[10px] text-theme-muted font-bold truncate">{pedal.brand}</div>
+                              </div>
+                            </button>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Reset Board Button */}
+                  <button
+                    onClick={() => {
+                      // Reset everything - clear all slots and start fresh
+                      setTypeSlots([]);
+                      setSelectedSlotId(null);
+                      setShowAddMenu(false);
+                      setShowMultiMenu(false);
+                      setShowSimMenu(false);
+                      setMultiFxPrompt(null);
+                      // Clear multi-FX from context
+                      dispatch({ type: 'CLEAR_MULTI_EFFECTS' });
+                    }}
+                    className="px-3 py-1.5 bg-red-500 text-white font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all"
+                    style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    Reset
+                  </button>
+                </div>
+            </div>
             
             {sortedSlots.map((slot) => {
               const isSelected = selectedSlotId === slot.id;
@@ -730,37 +1092,54 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                       ? 'bg-board-accent' 
                       : hasPedal
                         ? 'bg-board-success'
-                        : 'bg-white hover:-translate-y-0.5'
+                        : 'bg-theme-surface hover:-translate-y-0.5'
                   }`}
                   style={{
-                    border: '3px solid black',
+                    border: '3px solid var(--color-board-border)',
                     boxShadow: isSelected ? '4px 4px 0px black' : '3px 3px 0px black',
                   }}
                 >
                   {/* Type Header - Always clickable */}
                   <button
                     onClick={() => handleSelectSlot(slot.id)}
-                    className="w-full p-3 flex items-center gap-3 text-left"
+                    className="w-full p-4 flex items-center gap-4 text-left"
                   >
                     {/* Type Initial */}
                     <div 
-                      className={`w-10 h-10 flex items-center justify-center text-sm font-black ${
-                        isSelected ? 'bg-white text-black' : hasPedal ? 'bg-white text-black' : 'bg-black/10 text-black'
+                      className={`w-12 h-12 flex items-center justify-center text-base font-black ${
+                        isSelected ? 'bg-theme-surface text-theme' : hasPedal ? 'bg-theme-surface text-theme' : 'bg-black/10 dark:bg-white/10 text-theme'
                       }`}
-                      style={{ border: '2px solid black' }}
+                      style={{ border: '2px solid var(--color-board-border)' }}
                     >
                       {slot.type.substring(0, 2).toUpperCase()}
                     </div>
                     
                     {/* Type Info */}
                     <div className="flex-1 min-w-0">
-                      <div className={`font-bold ${isSelected || hasPedal ? 'text-white' : 'text-black'}`}>{slot.type}</div>
+                      <div className={`text-lg font-bold flex items-center gap-1 ${isSelected || hasPedal ? 'text-white' : 'text-theme'}`}>
+                        {slot.type}
+                        {/* Show indicator if there are alternative types in this category */}
+                        {(() => {
+                          const altCount = TYPE_OPTIONS.filter(t => t.category === slot.category && t.type !== slot.type).length;
+                          return altCount > 0 && (
+                            <span className={`text-xs font-bold flex items-center ${isSelected || hasPedal ? 'text-white/60' : 'text-theme-muted'}`}>
+                              <ChevronDown className="w-4 h-4" />
+                              <span className="hidden sm:inline">+{altCount}</span>
+                            </span>
+                          );
+                        })()}
+                        {slot.type === 'Tuner' && (
+                          <span className="text-xs font-bold ml-1 text-theme">
+                            (not necessary but generally a good idea)
+                          </span>
+                        )}
+                      </div>
                       {hasPedal ? (
-                        <div className="text-xs text-white/80 truncate font-bold">
+                        <div className="text-sm text-white/80 truncate font-bold">
                           {selectedPedal.brand} {selectedPedal.model} · ${selectedPedal.reverbPrice}
                         </div>
                       ) : (
-                        <div className={`text-xs ${isSelected ? 'text-white/70' : 'text-black/50'} font-bold`}>Tap to select a pedal</div>
+                        <div className={`text-sm ${isSelected ? 'text-white/70' : 'text-theme-muted'} font-bold`}>Tap to select a pedal</div>
                       )}
                     </div>
                     
@@ -772,110 +1151,60 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                   
                   {/* Expanded actions when selected */}
                   {isSelected && (
-                    <div className="px-3 pb-3 pt-2">
-                      <div className="flex items-center gap-2">
-                        {/* Change type dropdown */}
-                        {typeAlternatives.length > 0 && (
-                          <div className="relative group">
-                            <button
-                              className="px-3 py-1.5 text-xs font-black text-black bg-white uppercase"
-                              style={{ border: '2px solid black' }}
-                            >
-                              Type
-                            </button>
-                            <div 
-                              className="absolute left-0 top-full mt-1 bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 min-w-[140px]"
-                              style={{ border: '3px solid black', boxShadow: '3px 3px 0px black' }}
-                            >
-                              {typeAlternatives.map(alt => (
+                    <div className="px-3 pb-3 pt-2 relative">
+                      {/* Type selector boxes */}
+                      {(() => {
+                        const allTypesInCategory = TYPE_OPTIONS.filter(t => t.category === slot.category);
+                        return allTypesInCategory.length > 1 && (
+                          <div className="flex flex-wrap gap-1.5 pr-16">
+                            {allTypesInCategory.map(typeOpt => {
+                              const isCurrentType = typeOpt.type === slot.type;
+                              return (
                                 <button
-                                  key={alt.type}
-                                  onClick={() => handleChangeType(slot.id, alt.type)}
-                                  className="w-full px-3 py-2 text-left text-sm text-black font-bold hover:bg-gray-100"
-                                  style={{ borderBottom: '1px solid black' }}
+                                  key={typeOpt.type}
+                                  onClick={() => !isCurrentType && handleChangeType(slot.id, typeOpt.type)}
+                                  className={`px-2.5 py-1.5 text-xs font-black uppercase transition-all ${
+                                    isCurrentType
+                                      ? 'bg-green-500 text-white'
+                                      : 'bg-theme-surface text-theme hover:bg-gray-100'
+                                  }`}
+                                  style={{ border: '2px solid var(--color-board-border)' }}
                                 >
-                                  {alt.type}
+                                  {typeOpt.type}
                                 </button>
-                              ))}
-                            </div>
+                              );
+                            })}
                           </div>
-                        )}
-                        
-                        {/* Remove */}
-                        {typeSlots.length > 1 && (
-                          <button
-                            onClick={() => handleRemoveSlot(slot.id)}
-                            className="px-3 py-1.5 text-xs font-black text-black bg-white uppercase hover:bg-red-100"
-                            style={{ border: '2px solid black' }}
-                          >
-                            Remove
-                          </button>
-                        )}
-                      </div>
+                        );
+                      })()}
+                      
+                      {/* Remove button - bottom right */}
+                      {typeSlots.length > 1 && (
+                        <button
+                          onClick={() => handleRemoveSlot(slot.id)}
+                          className="absolute bottom-3 right-3 px-2 py-1 text-[10px] font-black text-black bg-board-highlight uppercase hover:bg-yellow-500"
+                          style={{ border: '2px solid var(--color-board-border)' }}
+                        >
+                          Remove
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
               );
             })}
             
-            {/* Add Type Button */}
-            {typeSlots.length < maxSlots && (
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    setShowAddMenu(!showAddMenu);
-                    setSelectedSlotId(null);
-                  }}
-                  className="w-full py-4 bg-board-blue text-white font-black text-lg uppercase flex items-center justify-center gap-2 transition-all hover:-translate-y-1"
-                  style={{
-                    border: '4px solid black',
-                    boxShadow: '4px 4px 0px black',
-                  }}
-                >
-                  <Plus className="w-6 h-6" />
-                  Add Pedal Type
-                </button>
-                
-                {/* Add menu dropdown */}
-                {showAddMenu && (
-                  <div 
-                    className="absolute left-0 right-0 top-full mt-2 bg-white z-20 max-h-64 overflow-y-auto"
-                    style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
-                  >
-                    {(['gain', 'dynamics', 'modulation', 'delay', 'reverb', 'filter', 'pitch', 'eq', 'volume', 'utility'] as Category[]).map(category => {
-                      const typesInCategory = availableToAdd.filter(t => t.category === category);
-                      if (typesInCategory.length === 0) return null;
-                      
-                      return (
-                        <div key={category} className="p-2" style={{ borderBottom: '2px solid black' }}>
-                          <p className="text-[10px] text-black/50 uppercase tracking-wider px-2 mb-1 font-bold">{category}</p>
-                          {typesInCategory.map(t => (
-                            <button
-                              key={t.type}
-                              onClick={() => handleAddType(t.type)}
-                              className="w-full px-2 py-1.5 text-left text-sm text-black hover:bg-board-highlight font-bold"
-                            >
-                              {t.type}
-                            </button>
-                          ))}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+            </div>
           
           {/* RIGHT COLUMN - Pedal Selection */}
           <div 
-            className="bg-white p-4 flex flex-col h-[calc(100vh-180px)] lg:h-[calc(100vh-200px)]"
-            style={{ border: '4px solid black', boxShadow: '6px 6px 0px black' }}
+            className="bg-theme-surface p-4 flex flex-col h-[calc(100vh-180px)] lg:h-[calc(100vh-200px)]"
+            style={{ border: '4px solid var(--color-board-border)', boxShadow: '6px 6px 0px black' }}
           >
             {selectedSlot ? (
               <>
                 <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-                  <h2 className="text-lg font-black text-black uppercase">
+                  <h2 className="text-lg font-black text-theme uppercase">
                     Choose a {selectedSlot.type}
                   </h2>
                   
@@ -885,8 +1214,8 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                       <select
                         value={selectedFlavor || ''}
                         onChange={(e) => setSelectedFlavor(e.target.value || null)}
-                        className="text-xs bg-white text-black font-bold px-2 py-1 focus:outline-none"
-                        style={{ border: '2px solid black' }}
+                        className="text-xs bg-theme-surface text-theme font-bold px-2 py-1 focus:outline-none"
+                        style={{ border: '2px solid var(--color-board-border)' }}
                       >
                         <option value="">All Flavors</option>
                         {TYPE_FLAVORS[selectedSlot.type].map(flavor => (
@@ -897,12 +1226,12 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                     
                     {/* Sorting Options */}
                     <div className="flex items-center gap-1">
-                      <ArrowUpDown className="w-3 h-3 text-black/50" />
+                      <ArrowUpDown className="w-3 h-3 text-theme-muted" />
                       <select
                         value={sortOption}
                         onChange={(e) => setSortOption(e.target.value as SortOption)}
-                        className="text-xs bg-white text-black font-bold px-2 py-1 focus:outline-none"
-                        style={{ border: '2px solid black' }}
+                        className="text-xs bg-theme-surface text-theme font-bold px-2 py-1 focus:outline-none"
+                        style={{ border: '2px solid var(--color-board-border)' }}
                       >
                         <option value="recommended">Recommended</option>
                         <option value="collection">My Collection</option>
@@ -917,19 +1246,19 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                 
                 {/* Search Bar */}
                 <div className="relative mb-3">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-muted" />
                   <input
                     type="text"
                     placeholder="Search pedals..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-8 py-2 bg-white text-sm text-black placeholder-black/40 focus:outline-none font-bold"
-                    style={{ border: '3px solid black' }}
+                    className="w-full pl-9 pr-8 py-2 bg-theme-surface text-sm text-theme placeholder-gray-400 focus:outline-none font-bold"
+                    style={{ border: '3px solid var(--color-board-border)' }}
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-black/50 hover:text-black"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-theme-muted hover:text-theme"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -937,12 +1266,12 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                 </div>
                 
                 {pedalsForSelectedType.length > 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 flex-1 overflow-y-auto pb-4 content-start">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 flex-1 overflow-y-auto pb-4 content-start">
                     {pedalsForSelectedType.slice(0, 50).map(pedal => {
                       const isSelected = selectedSlot.selectedPedalId === pedal.id;
                       const isUsedByOther = pedal.usedByOtherSlot;
                       const isOverBudget = pedal.overBudget && !isSelected;
-                      const isDisabled = isUsedByOther || isOverBudget;
+                      const isDisabled = isUsedByOther; // Only disable if used by another slot, not for over budget
                       const categoryInfo = CATEGORY_INFO[pedal.category];
                       const ratingLabel = getRatingLabel(pedal.category, pedal.categoryRating);
                       const isInCollection = collection.includes(pedal.id);
@@ -964,14 +1293,14 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                                 : isDisabled
                                   ? 'opacity-60 cursor-not-allowed'
                                   : 'hover:-translate-y-1 hover:rotate-1'
-                            }`}
+                            } ${isOverBudget && !isDisabled ? 'opacity-80' : ''}`}
                           >
                             {/* Card Frame */}
                             <div 
                               className="relative p-1.5 sm:p-2"
                               style={{
-                                backgroundColor: isSelected ? '#A5D6A7' : isDisabled ? '#E0E0E0' : categoryInfo?.color ? `${categoryInfo.color}40` : '#FFF9C4',
-                                border: '4px solid black',
+                                backgroundColor: isSelected ? '#A5D6A7' : isDisabled ? '#E0E0E0' : isOverBudget ? '#FEE2E2' : categoryInfo?.color ? `${categoryInfo.color}40` : '#FFF9C4',
+                                border: isOverBudget && !isDisabled ? '4px solid #DC2626' : '4px solid black',
                                 boxShadow: isSelected ? '5px 5px 0px black' : '4px 4px 0px black',
                               }}
                             >
@@ -980,7 +1309,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                                 className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide"
                                 style={{
                                   backgroundColor: '#FFFEF0',
-                                  border: '2px solid black',
+                                  border: '2px solid var(--color-board-border)',
                                   whiteSpace: 'nowrap',
                                 }}
                               >
@@ -991,7 +1320,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                               {isInCollection && (
                                 <div 
                                   className="absolute -top-2 -right-2 px-1.5 py-0.5 text-[7px] sm:text-[8px] font-black uppercase bg-blue-400 text-white z-10"
-                                  style={{ border: '2px solid black' }}
+                                  style={{ border: '2px solid var(--color-board-border)' }}
                                   title="In your collection"
                                 >
                                   OWNED
@@ -1000,29 +1329,36 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                               
                               {/* Inner Card (white area) */}
                               <div 
-                                className="bg-white p-1.5 sm:p-2"
-                                style={{ border: '3px solid black' }}
+                                className="bg-theme-surface p-1.5 sm:p-2"
+                                style={{ border: '3px solid var(--color-board-border)' }}
                               >
                                 {/* Image Container */}
                                 <div 
-                                  className={`aspect-square mb-2 overflow-hidden bg-gray-100 ${isDisabled ? 'grayscale' : ''}`}
-                                  style={{ border: '2px solid black' }}
+                                  className={`aspect-square mb-2 overflow-hidden bg-gray-100 ${isDisabled && !isOverBudget ? 'grayscale' : ''}`}
+                                  style={{ border: '2px solid var(--color-board-border)' }}
                                 >
-                                  <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
+                                  {pedal.subtype === 'Multi-FX / Modeler' ? (
+                                    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-cyan-100 to-blue-100">
+                                      <Zap className="w-8 h-8 text-cyan-600 mb-1" />
+                                      <span className="text-[9px] font-black text-cyan-700 uppercase">Multi-FX</span>
+                                    </div>
+                                  ) : (
+                                    <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
+                                  )}
                                 </div>
                                 
                                 {/* Name Section */}
                                 <div className="text-center mb-2">
                                   <p className="text-[9px] sm:text-[10px] text-gray-500 font-bold uppercase tracking-wide truncate">{pedal.brand}</p>
-                                  <p className="text-[11px] sm:text-xs font-black text-black truncate leading-tight">{pedal.model}</p>
+                                  <p className="text-[11px] sm:text-xs font-black text-theme truncate leading-tight">{pedal.model}</p>
                                 </div>
                                 
                                 {/* Stats Bar */}
                                 <div 
                                   className="flex items-center justify-between px-1.5 py-1"
                                   style={{ 
-                                    backgroundColor: isDisabled ? '#e5e7eb' : `${categoryInfo?.color}15`,
-                                    border: '2px solid black',
+                                    backgroundColor: isDisabled ? '#e5e7eb' : isOverBudget ? '#FEE2E2' : `${categoryInfo?.color}15`,
+                                    border: '2px solid var(--color-board-border)',
                                   }}
                                 >
                                   <span className={`text-[10px] sm:text-xs font-black ${isOverBudget ? 'text-red-600' : 'text-green-600'}`}>
@@ -1049,7 +1385,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                   <div 
                                     className="bg-green-200 px-2 py-1 rotate-[-8deg]"
-                                    style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
+                                    style={{ border: '3px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
                                   >
                                     <div className="flex items-center gap-1 text-white">
                                       <Check className="w-4 h-4" strokeWidth={3} />
@@ -1063,7 +1399,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                               {isUsedByOther && (
                                 <div 
                                   className="absolute bottom-1 right-1 px-1.5 py-0.5 bg-gray-700 text-white text-[8px] font-bold"
-                                  style={{ border: '2px solid black' }}
+                                  style={{ border: '2px solid var(--color-board-border)' }}
                                 >
                                   IN USE
                                 </div>
@@ -1071,7 +1407,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                               {isOverBudget && !isUsedByOther && (
                                 <div 
                                   className="absolute bottom-1 right-1 px-1.5 py-0.5 bg-red-500 text-white text-[8px] font-bold"
-                                  style={{ border: '2px solid black' }}
+                                  style={{ border: '2px solid var(--color-board-border)' }}
                                 >
                                   OVER $
                                 </div>
@@ -1085,24 +1421,24 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                               className="hover-only absolute inset-0 z-30 flex flex-col justify-between pointer-events-none p-1.5 sm:p-2"
                               style={{
                                 backgroundColor: categoryInfo?.color || '#FFB800',
-                                border: '4px solid black',
+                                border: '4px solid var(--color-board-border)',
                                 boxShadow: '6px 6px 0px black',
                               }}
                             >
                               <div 
-                                className="bg-white p-2 h-full flex flex-col"
-                                style={{ border: '3px solid black' }}
+                                className="bg-theme-surface p-2 h-full flex flex-col"
+                                style={{ border: '3px solid var(--color-board-border)' }}
                               >
                                 {/* Header */}
                                 <div className="mb-2">
                                   <p className="text-[9px] text-gray-500 font-bold uppercase truncate">{pedal.brand}</p>
-                                  <p className="text-xs font-black text-black truncate">{pedal.model}</p>
+                                  <p className="text-xs font-black text-theme truncate">{pedal.model}</p>
                                 </div>
                                 
                                 {/* Rating Display */}
                                 <div 
                                   className="p-2 mb-2"
-                                  style={{ backgroundColor: `${categoryInfo?.color}15`, border: '2px solid black' }}
+                                  style={{ backgroundColor: `${categoryInfo?.color}15`, border: '2px solid var(--color-board-border)' }}
                                 >
                                   <div className="flex items-center justify-between mb-1">
                                     <span className="text-xs font-black" style={{ color: categoryInfo?.color }}>
@@ -1125,39 +1461,30 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                                 <div className="flex gap-1 text-[10px] mb-2">
                                   <div 
                                     className="flex-1 px-1.5 py-1 text-center"
-                                    style={{ backgroundColor: '#e5e7eb', border: '2px solid black' }}
+                                    style={{ backgroundColor: '#e5e7eb', border: '2px solid var(--color-board-border)' }}
                                   >
                                     <span className="text-green-600 font-black">${pedal.reverbPrice}</span>
                                   </div>
                                   <div 
                                     className="flex-1 px-1.5 py-1 text-center"
-                                    style={{ backgroundColor: '#e5e7eb', border: '2px solid black' }}
+                                    style={{ backgroundColor: '#e5e7eb', border: '2px solid var(--color-board-border)' }}
                                   >
-                                    <span className="text-black font-black">{pedal.currentMa}mA</span>
+                                    <span className="text-theme font-black">{pedal.currentMa}mA</span>
                                   </div>
                                 </div>
                                 
                                 {/* Action Buttons */}
                                 <div className="flex gap-1 justify-center">
                                   <a
-                                    href={getReverbSearchUrl(pedal.brand, pedal.model)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center justify-center px-3 py-1 bg-orange-500 text-white text-[9px] font-black uppercase pointer-events-auto hover:bg-orange-600 transition-colors"
-                                    style={{ border: '2px solid black' }}
-                                    onClick={(e) => e.stopPropagation()}
-                                  >
-                                    Buy
-                                  </a>
-                                  <a
                                     href={getYouTubeReviewUrl(pedal.brand, pedal.model)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center justify-center px-3 py-1 bg-red-500 text-white text-[9px] font-black uppercase pointer-events-auto hover:bg-red-600 transition-colors"
-                                    style={{ border: '2px solid black' }}
+                                    style={{ border: '2px solid var(--color-board-border)' }}
                                     onClick={(e) => e.stopPropagation()}
                                   >
-                                    <Youtube className="w-2.5 h-2.5" />
+                                    <Youtube className="w-2.5 h-2.5 mr-1" />
+                                    Review
                                   </a>
                                 </div>
                               </div>
@@ -1174,8 +1501,8 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-black/50 py-8">
-                <div className="text-2xl font-black mb-3" style={{ border: '3px solid black', padding: '8px 16px', backgroundColor: '#FFF9C4' }}>←</div>
+              <div className="flex flex-col items-center justify-center h-full text-theme-muted py-8">
+                <div className="text-2xl font-black mb-3" style={{ border: '3px solid var(--color-board-border)', padding: '8px 16px', backgroundColor: '#FFF9C4' }}>←</div>
                 <p className="text-center text-sm font-bold">
                   <span className="lg:hidden">Select a type above<br />to see available pedals</span>
                   <span className="hidden lg:inline">Select a type on the left<br />to see available pedals</span>
@@ -1196,6 +1523,178 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
             Continue ({selectedCount} pedals)
             <ChevronRight className="w-5 h-5" />
           </button>
+        </div>
+      )}
+      
+      {/* Multi-FX Prompt Modal */}
+      {multiFxPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black/70"
+            onClick={handleMultiFxConfirm}
+          />
+          <div 
+            className="relative bg-theme-surface w-full max-w-md"
+            style={{ border: '4px solid var(--color-board-border)', boxShadow: '8px 8px 0px black' }}
+          >
+            {/* Header */}
+            <div 
+              className="p-4 bg-cyan-400"
+              style={{ borderBottom: '4px solid black' }}
+            >
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-12 h-12 bg-theme-surface flex items-center justify-center"
+                  style={{ border: '3px solid var(--color-board-border)' }}
+                >
+                  <Zap className="w-6 h-6 text-theme" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-black text-theme uppercase">
+                    Multi-FX Detected
+                  </h2>
+                  <p className="text-sm font-bold text-theme-muted">
+                    {multiFxPrompt.pedal.brand} {multiFxPrompt.pedal.model}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Content */}
+            <div className="p-4" style={{ backgroundColor: '#FFFEF0' }}>
+              <p className="text-sm font-bold text-theme mb-4">
+                This unit can cover multiple effects. What else is it handling on your board?
+              </p>
+              
+              {/* Show actual slots on the board */}
+              {(() => {
+                const thisMultiFxId = multiFxPrompt.pedal.id;
+                
+                // Get all coverable slots (excluding the current one if any)
+                // Only include slots with categories that multi-FX can cover
+                const coverableCategories = ['gain', 'modulation', 'delay', 'reverb', 'dynamics', 'pitch', 'filter', 'eq'];
+                const slotsOnBoard = typeSlots.filter(slot => 
+                  slot.id !== multiFxPrompt.slotId &&
+                  coverableCategories.includes(slot.category)
+                );
+                
+                if (slotsOnBoard.length === 0) {
+                  return (
+                    <p className="text-xs text-theme-muted font-bold text-center py-4">
+                      No other slots on your board to fill with this multi-FX.
+                    </p>
+                  );
+                }
+                
+                // Get category colors
+                const categoryColors: Record<string, string> = {
+                  gain: '#EF4444',
+                  modulation: '#8B5CF6',
+                  delay: '#3B82F6',
+                  reverb: '#06B6D4',
+                  dynamics: '#F59E0B',
+                  pitch: '#EC4899',
+                  filter: '#10B981',
+                  eq: '#6366F1',
+                };
+                
+                return (
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    {slotsOnBoard.map(slot => {
+                      const isSelected = multiFxPrompt.selectedSlotIds.includes(slot.id);
+                      const hasOtherPedal = slot.selectedPedalId && slot.selectedPedalId !== thisMultiFxId;
+                      const isAvailable = !hasOtherPedal;
+                      
+                      // Find what pedal is in this slot (if any)
+                      const occupyingPedal = hasOtherPedal
+                        ? allPedals.find(p => p.id === slot.selectedPedalId)
+                        : null;
+                      
+                      const color = categoryColors[slot.category] || '#666';
+                      
+                      return (
+                        <button
+                          key={slot.id}
+                          onClick={() => isAvailable && toggleMultiFxSlot(slot.id)}
+                          disabled={!isAvailable}
+                          className={`p-3 text-center transition-all ${
+                            !isAvailable 
+                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                              : isSelected 
+                                ? 'text-white' 
+                                : 'bg-theme-surface text-theme hover:bg-gray-100'
+                          }`}
+                          style={{
+                            border: '3px solid var(--color-board-border)',
+                            backgroundColor: isSelected ? color : undefined,
+                            boxShadow: isSelected ? '3px 3px 0px black' : 'none',
+                            opacity: !isAvailable ? 0.6 : 1,
+                          }}
+                        >
+                          <div className="text-sm font-black uppercase">{slot.type}</div>
+                          {isSelected && <Check className="w-4 h-4 mx-auto mt-1" />}
+                          {!isAvailable && occupyingPedal && (
+                            <div className="text-[10px] mt-1 truncate">
+                              ({occupyingPedal.model})
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+              
+              {/* Amp Sim Checkbox */}
+              <label 
+                className="flex items-center gap-3 p-3 mb-4 cursor-pointer transition-all hover:bg-orange-50"
+                style={{ border: '3px solid var(--color-board-border)', backgroundColor: multiFxPrompt.addAmpSim ? '#FB923C' : 'white' }}
+              >
+                <input
+                  type="checkbox"
+                  checked={multiFxPrompt.addAmpSim}
+                  onChange={(e) => setMultiFxPrompt(prev => prev ? { ...prev, addAmpSim: e.target.checked } : null)}
+                  className="w-5 h-5 accent-black"
+                />
+                <div>
+                  <span className={`text-sm font-black uppercase ${multiFxPrompt.addAmpSim ? 'text-white' : 'text-theme'}`}>
+                    Also use as Amp Sim
+                  </span>
+                  <p className={`text-[10px] ${multiFxPrompt.addAmpSim ? 'text-white/70' : 'text-theme-muted'}`}>
+                    Add an Amp Sim slot with this multi-FX
+                  </p>
+                </div>
+              </label>
+              
+              {/* Summary */}
+              {(multiFxPrompt.selectedSlotIds.length > 0 || multiFxPrompt.addAmpSim) && (
+                <div 
+                  className="p-3 mb-4 bg-black text-white"
+                  style={{ border: '3px solid var(--color-board-border)' }}
+                >
+                  <p className="text-xs font-bold">
+                    {multiFxPrompt.pedal.model} will fill your{' '}
+                    {[
+                      ...multiFxPrompt.selectedSlotIds.map(id => typeSlots.find(s => s.id === id)?.type),
+                      ...(multiFxPrompt.addAmpSim ? ['Amp Sim'] : [])
+                    ].filter(Boolean).join(', ')}{' '}
+                    {(multiFxPrompt.selectedSlotIds.length + (multiFxPrompt.addAmpSim ? 1 : 0)) === 1 ? 'slot' : 'slots'}.
+                  </p>
+                </div>
+              )}
+              
+              {/* Actions */}
+              <div className="flex gap-2">
+                <button
+                  onClick={handleMultiFxConfirm}
+                  className="flex-1 py-3 bg-green-500 text-white font-black uppercase text-sm transition-all hover:-translate-y-0.5"
+                  style={{ border: '3px solid var(--color-board-border)', boxShadow: '3px 3px 0px var(--color-board-shadow)' }}
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

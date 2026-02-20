@@ -90,7 +90,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
       />
       
       <div 
-        className="relative bg-white w-full max-w-md overflow-hidden"
+        className="relative bg-theme-surface w-full max-w-md overflow-hidden"
         style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
       >
         {/* Header */}
@@ -100,8 +100,8 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         >
           <div className="flex items-center gap-3">
             <div 
-              className="w-10 h-10 bg-white flex items-center justify-center font-black text-black"
-              style={{ border: '3px solid black' }}
+              className="w-10 h-10 bg-theme-surface flex items-center justify-center font-black text-theme"
+              style={{ border: '3px solid var(--color-board-border)' }}
             >
               ?!
             </div>
@@ -112,7 +112,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           </div>
           <button
             onClick={handleClose}
-            className="p-2 bg-white text-black hover:bg-gray-100"
+            className="p-2 bg-theme-surface text-theme hover:bg-gray-100"
             style={{ border: '2px solid black' }}
           >
             <X className="w-5 h-5" />
@@ -125,17 +125,17 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <div 
                 className="w-16 h-16 bg-board-success flex items-center justify-center mb-4"
-                style={{ border: '3px solid black' }}
+                style={{ border: '3px solid var(--color-board-border)' }}
               >
                 <CheckCircle className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-lg font-black text-black mb-2 uppercase">Submitted!</h3>
-              <p className="text-sm text-black/60 font-bold">Thanks for helping make Boardsie better.</p>
+              <h3 className="text-lg font-black text-theme mb-2 uppercase">Submitted!</h3>
+              <p className="text-sm text-theme-muted font-bold">Thanks for helping make Boardsie better.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-black text-black mb-2 uppercase">
+                <label className="block text-sm font-black text-theme mb-2 uppercase">
                   Type
                 </label>
                 <div className="flex gap-2">
@@ -151,11 +151,11 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                       className={`flex-1 px-3 py-2 text-sm font-bold transition-all ${
                         type === option.id
                           ? 'text-white -translate-y-0.5'
-                          : 'bg-white text-black hover:-translate-y-0.5'
+                          : 'bg-theme-surface text-theme hover:-translate-y-0.5'
                       }`}
                       style={{ 
                         backgroundColor: type === option.id ? option.color : undefined,
-                        border: '3px solid black',
+                        border: '3px solid var(--color-board-border)',
                         boxShadow: type === option.id ? '3px 3px 0px black' : '2px 2px 0px black',
                       }}
                     >
@@ -166,7 +166,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               </div>
               
               <div>
-                <label className="block text-sm font-black text-black mb-2 uppercase">
+                <label className="block text-sm font-black text-theme mb-2 uppercase">
                   Your Feedback
                 </label>
                 <textarea
@@ -180,8 +180,8 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                         : "What's on your mind?"
                   }
                   rows={4}
-                  className="w-full px-4 py-3 bg-white text-black placeholder-black/40 focus:outline-none font-bold resize-none"
-                  style={{ border: '3px solid black' }}
+                  className="w-full px-4 py-3 bg-theme-surface text-theme placeholder-black/40 focus:outline-none font-bold resize-none"
+                  style={{ border: '3px solid var(--color-board-border)' }}
                   disabled={loading}
                   autoFocus
                 />
@@ -201,7 +201,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 type="submit"
                 disabled={loading || !message.trim()}
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-board-purple text-white font-black uppercase disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5"
-                style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+                style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px black' }}
               >
                 {loading ? (
                   <>

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { Board, BoardConstraints, BoardSlot, Pedal, PedalWithStatus, DisqualificationReason, Category, SectionScore, TypeSlot, BuildSlot } from '../types';
+import { Board, BoardConstraints, BoardSlot, Pedal, PedalWithStatus, DisqualificationReason, Category, SectionScore, TypeSlot, BuildSlot, MultiEffectsSelection } from '../types';
 import { CATEGORY_INFO, getCategoryTag } from '../data/categories';
 import { PEDALS } from '../data/pedals';
 import { formatInches } from '../utils/measurements';
@@ -15,6 +15,7 @@ interface BoardState {
   totalCurrent: number;
   genres: string[];
   selectedGenres: string[]; // Up to 3 genres
+  multiEffects: MultiEffectsSelection; // Multi-FX/modeler selection
 }
 
 type BoardAction =
@@ -30,7 +31,10 @@ type BoardAction =
   | { type: 'TOGGLE_GENRE'; genreId: string }
   | { type: 'CLEAR_GENRES' }
   | { type: 'SET_TYPE_SLOTS'; slots: TypeSlot[] }
-  | { type: 'SET_BUILD_SLOTS'; buildSlots: BuildSlot[] };
+  | { type: 'SET_BUILD_SLOTS'; buildSlots: BuildSlot[] }
+  | { type: 'SET_PEDAL_POSITIONS'; positions: Map<string, { x: number; y: number; rotation: number }> }
+  | { type: 'SET_MULTI_EFFECTS'; multiEffects: MultiEffectsSelection }
+  | { type: 'CLEAR_MULTI_EFFECTS' };
 
 const defaultConstraints: BoardConstraints = {
   maxWidthMm: 610,
@@ -228,12 +232,31 @@ function guessGenres(slots: BoardSlot[], sectionScores: SectionScore[]): string[
 function calculateState(board: Board): Omit<BoardState, 'board' | 'selectedGenres'> {
   const allPedals = PEDALS.map(p => calculatePedalStatus(p, board.constraints, board.slots));
   const sectionScores = calculateSectionScores(board.slots);
-  const totalCost = board.slots.reduce((sum, s) => sum + s.pedal.reverbPrice, 0);
-  const totalArea = board.slots.reduce((sum, s) => sum + (s.pedal.widthMm * s.pedal.depthMm), 0);
-  const totalCurrent = board.slots.reduce((sum, s) => sum + s.pedal.currentMa, 0);
+  
+  // Get unique pedals only (multi-FX covering multiple slots should only count once)
+  const uniquePedals = new Map<string, typeof board.slots[0]['pedal']>();
+  board.slots.forEach(s => {
+    if (!uniquePedals.has(s.pedal.id)) {
+      uniquePedals.set(s.pedal.id, s.pedal);
+    }
+  });
+  
+  // Calculate totals based on unique pedals only
+  const uniquePedalArray = Array.from(uniquePedals.values());
+  const totalCost = uniquePedalArray.reduce((sum, p) => sum + p.reverbPrice, 0);
+  const totalArea = uniquePedalArray.reduce((sum, p) => sum + (p.widthMm * p.depthMm), 0);
+  const totalCurrent = uniquePedalArray.reduce((sum, p) => sum + p.currentMa, 0);
+  
   const genres = guessGenres(board.slots, sectionScores);
   
-  return { allPedals, sectionScores, totalCost, totalArea, totalCurrent, genres };
+  // Preserve multiEffects from board or use default
+  const multiEffects: MultiEffectsSelection = board.multiEffects || { 
+    pedalId: null, 
+    coveringCategories: [], 
+    isAmpSimOnly: false 
+  };
+  
+  return { allPedals, sectionScores, totalCost, totalArea, totalCurrent, genres, multiEffects };
 }
 
 function boardReducer(state: BoardState, action: BoardAction): BoardState {
@@ -365,6 +388,19 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
     case 'CLEAR_GENRES':
       return { ...state, selectedGenres: [] };
     
+    case 'SET_MULTI_EFFECTS':
+      return { ...state, multiEffects: action.multiEffects };
+    
+    case 'CLEAR_MULTI_EFFECTS':
+      return { 
+        ...state, 
+        multiEffects: {
+          pedalId: null,
+          coveringCategories: [],
+          isAmpSimOnly: false,
+        }
+      };
+    
     case 'SET_TYPE_SLOTS':
       return {
         ...state,
@@ -384,6 +420,27 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
           updatedAt: new Date(),
         },
       };
+    
+    case 'SET_PEDAL_POSITIONS':
+      // Update each slot with its new position from the visualizer
+      const positionedSlots = state.board.slots.map(slot => {
+        const pos = action.positions.get(slot.pedal.id);
+        if (pos) {
+          return {
+            ...slot,
+            positionX: pos.x,
+            positionY: pos.y,
+            rotation: pos.rotation,
+          };
+        }
+        return slot;
+      });
+      newBoard = {
+        ...state.board,
+        slots: positionedSlots,
+        updatedAt: new Date(),
+      };
+      return { ...state, board: newBoard };
       
     default:
       return state;
@@ -401,6 +458,11 @@ export function BoardProvider({ children }: { children: ReactNode }) {
     board: defaultBoard,
     ...calculateState(defaultBoard),
     selectedGenres: [],
+    multiEffects: {
+      pedalId: null,
+      coveringCategories: [],
+      isAmpSimOnly: false,
+    },
   };
   
   const [state, dispatch] = useReducer(boardReducer, initialState);

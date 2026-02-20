@@ -880,7 +880,7 @@ export const DISTORTION_PEDALS: Pedal[] = [
     brand: 'PRS',
     model: 'Horsemeat Transparent Overdrive',
     category: 'gain',
-    subtype: 'Hard-Clipping Distortion',
+    subtype: 'Transparent OD',
     categoryRating: 6,
     widthMm: inToMm(2.4),
     depthMm: inToMm(4.4),

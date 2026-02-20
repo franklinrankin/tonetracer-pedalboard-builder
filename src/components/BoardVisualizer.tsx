@@ -26,8 +26,15 @@ const SIGNAL_COLORS = [
   '#14b8a6', // teal
 ];
 
-export function BoardVisualizer() {
-  const { state } = useBoard();
+interface BoardVisualizerProps {
+  overrideWidth?: number;
+  overrideDepth?: number;
+  boardName?: string;
+  boardDimensions?: string;
+}
+
+export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, boardDimensions }: BoardVisualizerProps = {}) {
+  const { state, dispatch } = useBoard();
   const { board } = state;
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -38,9 +45,9 @@ export function BoardVisualizer() {
   const [hasMoved, setHasMoved] = useState(false);
   const [showPedalCard, setShowPedalCard] = useState<string | null>(null);
 
-  // Board dimensions in mm
-  const boardWidthMm = board.constraints.maxWidthMm;
-  const boardDepthMm = board.constraints.maxDepthMm;
+  // Board dimensions in mm - use overrides if provided
+  const boardWidthMm = overrideWidth || board.constraints.maxWidthMm;
+  const boardDepthMm = overrideDepth || board.constraints.maxDepthMm;
   
   // Calculate display scale (pixels per mm)
   const [displayScale, setDisplayScale] = useState(1);
@@ -328,19 +335,33 @@ export function BoardVisualizer() {
     if (!hasMoved && selectedPedal) {
       // It was a click, not a drag - show the pedal card
       setShowPedalCard(prev => prev === selectedPedal ? null : selectedPedal);
+    } else if (hasMoved) {
+      // Save positions to board context when drag ends
+      const positionsMap = new Map<string, { x: number; y: number; rotation: number }>();
+      positions.forEach((pos, id) => {
+        positionsMap.set(id, { x: pos.x, y: pos.y, rotation: pos.rotation });
+      });
+      dispatch({ type: 'SET_PEDAL_POSITIONS', positions: positionsMap });
     }
     setIsDragging(false);
     setHasMoved(false);
-  }, [hasMoved, selectedPedal]);
+  }, [hasMoved, selectedPedal, positions, dispatch]);
 
   const handleTouchEnd = useCallback(() => {
     if (!hasMoved && selectedPedal) {
       // It was a tap, not a drag - show the pedal card
       setShowPedalCard(prev => prev === selectedPedal ? null : selectedPedal);
+    } else if (hasMoved) {
+      // Save positions to board context when drag ends
+      const positionsMap = new Map<string, { x: number; y: number; rotation: number }>();
+      positions.forEach((pos, id) => {
+        positionsMap.set(id, { x: pos.x, y: pos.y, rotation: pos.rotation });
+      });
+      dispatch({ type: 'SET_PEDAL_POSITIONS', positions: positionsMap });
     }
     setIsDragging(false);
     setHasMoved(false);
-  }, [hasMoved, selectedPedal]);
+  }, [hasMoved, selectedPedal, positions, dispatch]);
 
   useEffect(() => {
     if (isDragging) {
@@ -376,6 +397,14 @@ export function BoardVisualizer() {
           : (currentIndex - 1 + 4) % 4;
         newMap.set(selectedPedal, { ...pos, rotation: rotations[newIndex] });
       }
+      
+      // Save positions to board context after rotation
+      const positionsMap = new Map<string, { x: number; y: number; rotation: number }>();
+      newMap.forEach((p, id) => {
+        positionsMap.set(id, { x: p.x, y: p.y, rotation: p.rotation });
+      });
+      dispatch({ type: 'SET_PEDAL_POSITIONS', positions: positionsMap });
+      
       return newMap;
     });
   };
@@ -390,7 +419,7 @@ export function BoardVisualizer() {
         className="flex items-center justify-center h-96"
         style={{ backgroundColor: '#FFFEF0', border: '3px solid black' }}
       >
-        <p className="text-black font-bold">Add pedals to your board to visualize the signal flow</p>
+        <p className="text-theme font-bold">Add pedals to your board to visualize the signal flow</p>
       </div>
     );
   }
@@ -1024,12 +1053,21 @@ export function BoardVisualizer() {
           })}
         </div>
         
-        {/* Board dimensions label */}
+        {/* Board name and dimensions label */}
         <div 
-          className="text-center mt-4 text-sm font-black text-black px-4 py-2 mx-auto w-fit"
+          className="text-center mt-4 px-4 py-2 mx-auto w-fit"
           style={{ backgroundColor: '#FFFEF0', border: '2px solid black' }}
         >
-          {(boardWidthMm / 25.4).toFixed(1)}" × {(boardDepthMm / 25.4).toFixed(1)}" pedalboard
+          {boardName ? (
+            <>
+              <div className="text-base font-black text-theme">{boardName}</div>
+              <div className="text-sm font-bold text-theme-muted">{boardDimensions}</div>
+            </>
+          ) : (
+            <div className="text-sm font-black text-theme">
+              {(boardWidthMm / 25.4).toFixed(1)}" × {(boardDepthMm / 25.4).toFixed(1)}" pedalboard
+            </div>
+          )}
         </div>
       </div>
 
@@ -1038,8 +1076,8 @@ export function BoardVisualizer() {
         className="hidden sm:block p-4"
         style={{ backgroundColor: '#FFFEF0', border: '3px solid black' }}
       >
-        <h3 className="text-sm font-black text-black mb-2 uppercase">Tips</h3>
-        <ul className="text-xs text-black space-y-1">
+        <h3 className="text-sm font-black text-theme mb-2 uppercase">Tips</h3>
+        <ul className="text-xs text-theme space-y-1">
           <li>• <strong>Click</strong> a pedal to select it and view details</li>
           <li>• <strong>Drag</strong> pedals to reposition them on the board</li>
           <li>• <strong>Rotate</strong> – click a pedal first, then use rotate buttons above</li>

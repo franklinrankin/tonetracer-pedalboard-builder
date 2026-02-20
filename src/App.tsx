@@ -1,37 +1,105 @@
 import { useState, useEffect, useRef } from 'react';
 import { BoardProvider, useBoard } from './context/BoardContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
 import { GenrePage, ConstraintsPage, BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
 import { SavedBoardsPage } from './pages/SavedBoardsPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { CollectionPage } from './pages/CollectionPage';
+import { PedalReviewPage } from './pages/PedalReviewPage';
 import { PedalCatalog } from './components/PedalCatalog';
 import { AuthModal } from './components/AuthModal';
 import { UserMenu } from './components/UserMenu';
+import { ThemeToggle } from './components/ThemeToggle';
 import { PedalRequestModal } from './components/PedalRequestModal';
 import { FeedbackModal } from './components/FeedbackModal';
+import { CommunityPage, PublicBoard, PublicCollection } from './pages/CommunityPage';
 import { getProBoardById, ProBoard } from './data/proBoards';
 import { PEDALS } from './data/pedals';
 import { sortBySignalChain } from './utils/signalChain';
 import { SavedBoard } from './types';
 import { generateUUID } from './utils/uuid';
 import { supabase } from './lib/supabase';
+import { getSharedBoardFromUrl, clearShareFromUrl } from './utils/shareBoard';
 
-type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review' | 'saved-boards' | 'profile' | 'collection';
+type AppPage = 'home' | 'wizard' | 'proboards' | 'index' | 'about' | 'pro-review' | 'saved-boards' | 'profile' | 'collection' | 'pedal-review' | 'community' | 'community-review' | 'community-collection';
+
+// Check if localStorage is available (some in-app browsers block it)
+function isLocalStorageAvailable(): boolean {
+  try {
+    const test = '__storage_test__';
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+const storageAvailable = isLocalStorageAvailable();
+
+// Safe localStorage helpers
+function safeGetItem(key: string): string | null {
+  if (!storageAvailable) return null;
+  try {
+    return localStorage.getItem(key);
+  } catch (e) {
+    return null;
+  }
+}
+
+function safeSetItem(key: string, value: string): void {
+  if (!storageAvailable) return;
+  try {
+    localStorage.setItem(key, value);
+  } catch (e) {
+    // Silently fail
+  }
+}
 
 // Local storage helpers
 const SAVED_BOARDS_KEY = 'boardsie_saved_boards';
 const FAVORITES_KEY = 'boardsie_favorites';
 const COLLECTION_KEY = 'boardsie_collection';
+const BOOKMARKS_KEY = 'boardsie_bookmarks';
 
 type FavoritesMap = Record<string, string | null>;
+
+// Bookmarked board type
+interface BookmarkedBoard {
+  id: string;
+  board_id: string;
+  username: string;
+  name: string;
+  bookmarkedAt: Date;
+}
+
+function loadBookmarks(): BookmarkedBoard[] {
+  try {
+    const stored = safeGetItem(BOOKMARKS_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (e) {
+    console.error('Failed to load bookmarks:', e);
+  }
+  return [];
+}
+
+function saveBookmarksToStorage(bookmarks: BookmarkedBoard[]) {
+  try {
+    safeSetItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+  } catch (e) {
+    console.error('Failed to save bookmarks:', e);
+  }
+}
 
 const DEFAULT_FAVORITES: FavoritesMap = {};
 
 function loadFavorites(): FavoritesMap {
   try {
-    const stored = localStorage.getItem(FAVORITES_KEY);
+    const stored = safeGetItem(FAVORITES_KEY);
     if (stored) {
       return { ...DEFAULT_FAVORITES, ...JSON.parse(stored) };
     }
@@ -43,7 +111,7 @@ function loadFavorites(): FavoritesMap {
 
 function saveFavoritesToStorage(favorites: FavoritesMap) {
   try {
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+    safeSetItem(FAVORITES_KEY, JSON.stringify(favorites));
   } catch (e) {
     console.error('Failed to save favorites:', e);
   }
@@ -51,7 +119,7 @@ function saveFavoritesToStorage(favorites: FavoritesMap) {
 
 function loadSavedBoards(): SavedBoard[] {
   try {
-    const stored = localStorage.getItem(SAVED_BOARDS_KEY);
+    const stored = safeGetItem(SAVED_BOARDS_KEY);
     if (stored) {
       const boards = JSON.parse(stored);
       // Convert date strings back to Date objects
@@ -74,7 +142,7 @@ function loadSavedBoards(): SavedBoard[] {
 
 function saveBoardsToStorage(boards: SavedBoard[]) {
   try {
-    localStorage.setItem(SAVED_BOARDS_KEY, JSON.stringify(boards));
+    safeSetItem(SAVED_BOARDS_KEY, JSON.stringify(boards));
   } catch (e) {
     console.error('Failed to save boards:', e);
   }
@@ -82,9 +150,11 @@ function saveBoardsToStorage(boards: SavedBoard[]) {
 
 function loadCollection(): string[] {
   try {
-    const stored = localStorage.getItem(COLLECTION_KEY);
+    const stored = safeGetItem(COLLECTION_KEY);
     if (stored) {
-      return JSON.parse(stored);
+      const parsed: string[] = JSON.parse(stored);
+      // Deduplicate in case of corrupted data
+      return [...new Set(parsed)];
     }
   } catch (e) {
     console.error('Failed to load collection:', e);
@@ -94,16 +164,57 @@ function loadCollection(): string[] {
 
 function saveCollectionToStorage(collection: string[]) {
   try {
-    localStorage.setItem(COLLECTION_KEY, JSON.stringify(collection));
+    safeSetItem(COLLECTION_KEY, JSON.stringify(collection));
   } catch (e) {
     console.error('Failed to save collection:', e);
   }
 }
 
+// Map URL hashes to pages
+const HASH_TO_PAGE: Record<string, AppPage> = {
+  '': 'home',
+  'home': 'home',
+  'wizard': 'wizard',
+  'proboards': 'proboards',
+  'index': 'index',
+  'saved-boards': 'saved-boards',
+  'profile': 'profile',
+  'collection': 'collection',
+  'community': 'community',
+};
+
+const PAGE_TO_HASH: Record<AppPage, string> = {
+  'home': '',
+  'wizard': 'wizard',
+  'proboards': 'proboards',
+  'index': 'index',
+  'about': 'about',
+  'pro-review': 'pro-review',
+  'saved-boards': 'saved-boards',
+  'profile': 'profile',
+  'collection': 'collection',
+  'pedal-review': 'pedal-review',
+  'community': 'community',
+  'community-review': 'community-review',
+  'community-collection': 'community-collection',
+};
+
+function getInitialPage(): AppPage {
+  try {
+    const hash = window.location.hash.slice(1); // Remove the #
+    return HASH_TO_PAGE[hash] || 'home';
+  } catch (e) {
+    return 'home';
+  }
+}
+
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<AppPage>('home');
+  const [currentPage, setCurrentPage] = useState<AppPage>(getInitialPage);
   const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
   const [selectedProBoard, setSelectedProBoard] = useState<ProBoard | null>(null);
+  const [selectedCommunityBoard, setSelectedCommunityBoard] = useState<PublicBoard | null>(null);
+  const [selectedCommunityCollection, setSelectedCommunityCollection] = useState<PublicCollection | null>(null);
+  const [initialForumPostId, setInitialForumPostId] = useState<string | undefined>(undefined);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showPedalRequestModal, setShowPedalRequestModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -111,11 +222,39 @@ function AppContent() {
   const [currentSavedBoardId, setCurrentSavedBoardId] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<FavoritesMap>(() => loadFavorites());
   const [collection, setCollection] = useState<string[]>(() => loadCollection());
+  const [bookmarks, setBookmarks] = useState<BookmarkedBoard[]>(() => loadBookmarks());
   const [dataLoaded, setDataLoaded] = useState(false);
   const isInitialMount = useRef(true);
   const { dispatch, state } = useBoard();
   const { user } = useAuth();
   
+  // Update URL hash when page changes
+  useEffect(() => {
+    const hash = PAGE_TO_HASH[currentPage];
+    if (hash) {
+      window.location.hash = hash;
+    } else {
+      // Remove hash for home page
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  }, [currentPage]);
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1);
+      const page = HASH_TO_PAGE[hash];
+      if (page && page !== currentPage) {
+        setCurrentPage(page);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [currentPage]);
+
   // Persist saved boards to localStorage when they change
   useEffect(() => {
     saveBoardsToStorage(savedBoards);
@@ -152,24 +291,17 @@ function AppContent() {
         }
         
         if (collectionData?.pedal_ids) {
-          const localPedals = loadCollection();
-          const merged = [...new Set([...collectionData.pedal_ids, ...localPedals])];
-          setCollection(merged);
-          
-          if (merged.length > collectionData.pedal_ids.length && supabase) {
-            await supabase
-              .from('collections')
-              .update({ pedal_ids: merged, updated_at: new Date().toISOString() })
-              .eq('user_id', user.id);
-          }
+          // Logged-in users: ONLY use Supabase data, ignore localStorage
+          // This prevents cross-contamination between accounts on shared browsers
+          const ids: string[] = collectionData.pedal_ids;
+          setCollection([...new Set(ids)]);
         } else if (supabase) {
-          const localCollection = loadCollection();
-          if (localCollection.length > 0) {
-            await supabase
-              .from('collections')
-              .insert({ user_id: user.id, pedal_ids: localCollection });
-          }
+          // User has no collection in Supabase - start fresh
+          // Don't inherit localStorage from previous users on this browser
+          setCollection([]);
         }
+        // Clear localStorage to prevent contamination
+        saveCollectionToStorage([]);
         
         // Load Favorites
         const { data: favoritesData, error: favoritesError } = await supabase
@@ -183,17 +315,14 @@ function AppContent() {
         }
         
         if (favoritesData?.favorites_data) {
-          const localFavorites = loadFavorites();
-          const merged = { ...localFavorites, ...favoritesData.favorites_data };
-          setFavorites(merged);
+          // Logged-in users: ONLY use Supabase data, ignore localStorage
+          setFavorites(favoritesData.favorites_data);
         } else if (supabase) {
-          const localFavorites = loadFavorites();
-          if (Object.keys(localFavorites).length > 0) {
-            await supabase
-              .from('favorites')
-              .insert({ user_id: user.id, favorites_data: localFavorites });
-          }
+          // User has no favorites in Supabase - start fresh
+          setFavorites({});
         }
+        // Clear localStorage to prevent contamination
+        saveFavoritesToStorage({});
         
         // Load Saved Boards
         const { data: boardsData, error: boardsError } = await supabase
@@ -206,14 +335,22 @@ function AppContent() {
         }
         
         if (boardsData && boardsData.length > 0) {
-          const cloudBoards: SavedBoard[] = boardsData.map(b => ({
-            id: b.board_id,
-            name: b.name,
-            genres: b.genres || [],
-            board: b.board_data,
-            createdAt: new Date(b.created_at),
-            updatedAt: new Date(b.updated_at),
-          }));
+          const cloudBoards: SavedBoard[] = boardsData.map(b => {
+            // Parse the board_data and convert date strings to Date objects
+            const boardData = b.board_data;
+            return {
+              id: b.board_id,
+              name: b.name,
+              genres: b.genres || [],
+              board: {
+                ...boardData,
+                createdAt: new Date(boardData.createdAt),
+                updatedAt: new Date(boardData.updatedAt),
+              },
+              createdAt: new Date(b.created_at),
+              updatedAt: new Date(b.updated_at),
+            };
+          });
           
           // Merge with local boards (cloud takes priority for same ID)
           const localBoards = loadSavedBoards();
@@ -225,34 +362,60 @@ function AppContent() {
           // Upload unique local boards to cloud
           if (uniqueLocalBoards.length > 0 && supabase) {
             for (const board of uniqueLocalBoards) {
-              await supabase
+              const { error } = await supabase
                 .from('saved_boards')
                 .insert({
                   user_id: user.id,
                   board_id: board.id,
                   name: board.name,
                   genres: board.genres,
-                  board_data: board.board,
-                  created_at: board.createdAt.toISOString(),
-                  updated_at: board.updatedAt.toISOString(),
+                  board_data: {
+                    ...board.board,
+                    createdAt: board.board.createdAt instanceof Date 
+                      ? board.board.createdAt.toISOString() 
+                      : board.board.createdAt,
+                    updatedAt: board.board.updatedAt instanceof Date 
+                      ? board.board.updatedAt.toISOString() 
+                      : board.board.updatedAt,
+                  },
+                  created_at: board.createdAt instanceof Date 
+                    ? board.createdAt.toISOString() 
+                    : board.createdAt,
+                  updated_at: board.updatedAt instanceof Date 
+                    ? board.updatedAt.toISOString() 
+                    : board.updatedAt,
                 });
+              if (error) console.error('Error uploading local board:', board.id, error);
             }
           }
         } else if (supabase) {
           // No cloud boards - upload local boards
           const localBoards = loadSavedBoards();
           for (const board of localBoards) {
-            await supabase
+            const { error } = await supabase
               .from('saved_boards')
               .insert({
                 user_id: user.id,
                 board_id: board.id,
                 name: board.name,
                 genres: board.genres,
-                board_data: board.board,
-                created_at: board.createdAt.toISOString(),
-                updated_at: board.updatedAt.toISOString(),
+                board_data: {
+                  ...board.board,
+                  createdAt: board.board.createdAt instanceof Date 
+                    ? board.board.createdAt.toISOString() 
+                    : board.board.createdAt,
+                  updatedAt: board.board.updatedAt instanceof Date 
+                    ? board.board.updatedAt.toISOString() 
+                    : board.board.updatedAt,
+                },
+                created_at: board.createdAt instanceof Date 
+                  ? board.createdAt.toISOString() 
+                  : board.createdAt,
+                updated_at: board.updatedAt instanceof Date 
+                  ? board.updatedAt.toISOString() 
+                  : board.updatedAt,
               });
+            if (error) console.error('Error uploading local board:', board.id, error);
           }
         }
       } catch (e) {
@@ -308,12 +471,16 @@ function AppContent() {
     const userId = user.id;
     const sb = supabase;
     
-    // This syncs the full list - for individual updates, we handle in the handlers
     async function syncBoards() {
-      const { data: existingBoards } = await sb
+      const { data: existingBoards, error: fetchError } = await sb
         .from('saved_boards')
         .select('board_id')
         .eq('user_id', userId);
+      
+      if (fetchError) {
+        console.error('Error fetching existing boards:', fetchError);
+        return;
+      }
       
       const existingIds = new Set(existingBoards?.map(b => b.board_id) || []);
       const currentIds = new Set(savedBoards.map(b => b.id));
@@ -330,22 +497,113 @@ function AppContent() {
       
       // Upsert current boards
       for (const board of savedBoards) {
-        await sb
+        const { error } = await sb
           .from('saved_boards')
           .upsert({
             user_id: userId,
             board_id: board.id,
             name: board.name,
             genres: board.genres,
-            board_data: board.board,
-            created_at: board.createdAt.toISOString(),
-            updated_at: board.updatedAt.toISOString(),
+            board_data: {
+              ...board.board,
+              createdAt: board.board.createdAt instanceof Date 
+                ? board.board.createdAt.toISOString() 
+                : board.board.createdAt,
+              updatedAt: board.board.updatedAt instanceof Date 
+                ? board.board.updatedAt.toISOString() 
+                : board.board.updatedAt,
+            },
+            created_at: board.createdAt instanceof Date 
+              ? board.createdAt.toISOString() 
+              : board.createdAt,
+            updated_at: board.updatedAt instanceof Date 
+              ? board.updatedAt.toISOString() 
+              : board.updatedAt,
           }, { onConflict: 'user_id,board_id' });
+        
+        if (error) {
+          console.error('Error upserting board:', board.id, error);
+        }
       }
     }
     
     syncBoards().catch(e => console.error('Error syncing boards:', e));
   }, [savedBoards, user, dataLoaded]);
+  
+  // Check for shared board in URL on mount
+  useEffect(() => {
+    const sharedBoard = getSharedBoardFromUrl();
+    if (sharedBoard) {
+      // Look up pedals by ID and reconstruct the board
+      const slots = sharedBoard.slots
+        .map(slotData => {
+          const pedal = PEDALS.find(p => p.id === slotData.pedalId);
+          if (!pedal) return null;
+          return {
+            pedal,
+            positionX: slotData.positionX,
+            positionY: slotData.positionY,
+            rotation: slotData.rotation,
+          };
+        })
+        .filter(Boolean) as typeof state.board.slots;
+      
+      if (slots.length > 0) {
+        // Clear existing board and load the shared one
+        dispatch({ type: 'CLEAR_BOARD' });
+        dispatch({ type: 'CLEAR_GENRES' });
+        
+        // Set constraints
+        dispatch({
+          type: 'SET_CONSTRAINTS',
+          constraints: {
+            maxWidthMm: sharedBoard.constraints.maxWidthMm,
+            maxDepthMm: sharedBoard.constraints.maxDepthMm,
+            maxBudget: sharedBoard.constraints.maxBudget,
+            maxPedalCount: sharedBoard.constraints.maxPedalCount,
+            maxCurrentMa: 2000, // Default
+            applyAfterSize: true,
+            applyAfterBudget: true,
+          },
+        });
+        
+        // Set board name
+        dispatch({ type: 'SET_BOARD_NAME', name: sharedBoard.name });
+        
+        // Add pedals (they already have positions)
+        slots.forEach(slot => {
+          dispatch({ type: 'ADD_PEDAL', pedal: slot.pedal });
+        });
+        
+        // Set positions after adding all pedals
+        const positionsMap = new Map<string, { x: number; y: number; rotation: number }>();
+        slots.forEach(slot => {
+          if (slot.positionX !== undefined && slot.positionY !== undefined) {
+            positionsMap.set(slot.pedal.id, {
+              x: slot.positionX,
+              y: slot.positionY,
+              rotation: slot.rotation || 0,
+            });
+          }
+        });
+        if (positionsMap.size > 0) {
+          dispatch({ type: 'SET_PEDAL_POSITIONS', positions: positionsMap });
+        }
+        
+        // Toggle genres
+        sharedBoard.genres.forEach(genreId => {
+          dispatch({ type: 'TOGGLE_GENRE', genreId });
+        });
+        
+        // Navigate to review page
+        setCurrentPage('wizard');
+        setCurrentStep('review');
+        
+        // Clear the URL parameter
+        clearShareFromUrl();
+      }
+    }
+  }, []); // Run only on mount
   
   const handleStepChange = (step: WizardStep) => {
     // Sync buildSlots to board when going to review
@@ -473,10 +731,23 @@ function AppContent() {
     ));
   };
   
-  const handleDeleteBoard = (boardId: string) => {
+  const handleDeleteBoard = async (boardId: string) => {
     setSavedBoards(prev => prev.filter(b => b.id !== boardId));
     if (currentSavedBoardId === boardId) {
       setCurrentSavedBoardId(null);
+    }
+    
+    // Delete from Supabase
+    if (supabase && user) {
+      const { error } = await supabase
+        .from('saved_boards')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('board_id', boardId);
+      
+      if (error) {
+        console.error('Error deleting board from cloud:', error);
+      }
     }
   };
   
@@ -601,6 +872,142 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleViewCommunityBoard = (publicBoard: PublicBoard) => {
+    setSelectedCommunityBoard(publicBoard);
+    
+    // Clear existing board
+    dispatch({ type: 'CLEAR_BOARD' });
+    dispatch({ type: 'CLEAR_GENRES' });
+    
+    // Get pedals from the public board
+    const boardSlots = publicBoard.board_data.slots;
+    const boardPedals = boardSlots.map(s => s.pedal);
+    
+    const totalPower = boardPedals.reduce((sum, p) => sum + p.currentMa, 0);
+    const totalCost = boardPedals.reduce((sum, p) => sum + p.reverbPrice, 0);
+    
+    // Calculate board dimensions
+    const totalArea = boardPedals.reduce((sum, p) => sum + (p.widthMm * p.depthMm), 0);
+    const maxPedalWidth = Math.max(...boardPedals.map(p => p.widthMm));
+    const maxPedalDepth = Math.max(...boardPedals.map(p => p.depthMm));
+    const usableAreaRatio = 0.85;
+    const estimatedArea = totalArea / usableAreaRatio;
+    const aspectRatio = 2;
+    const boardWidth = Math.max(maxPedalWidth * 1.1, Math.sqrt(estimatedArea * aspectRatio));
+    const boardDepth = Math.max(maxPedalDepth * 1.1, Math.sqrt(estimatedArea / aspectRatio));
+
+    // Set genres if available
+    publicBoard.genres.forEach(genre => {
+      dispatch({ type: 'TOGGLE_GENRE', genreId: genre });
+    });
+
+    // Set constraints
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        maxWidthMm: Math.ceil(boardWidth),
+        maxDepthMm: Math.ceil(boardDepth),
+        maxBudget: Math.ceil(totalCost * 1.1),
+        maxCurrentMa: Math.ceil(totalPower * 1.2),
+        applyAfterSize: true,
+        applyAfterBudget: true,
+        applyAfterPower: true,
+      },
+    });
+
+    // Load the board with slots (including positions if available)
+    const slots = boardSlots.map(s => ({
+      pedal: s.pedal,
+      positionX: (s as any).positionX,
+      positionY: (s as any).positionY,
+      rotation: (s as any).rotation || 0,
+    }));
+
+    dispatch({
+      type: 'LOAD_BOARD',
+      board: {
+        id: generateUUID(),
+        name: publicBoard.name,
+        constraints: {
+          maxWidthMm: Math.ceil(boardWidth),
+          maxDepthMm: Math.ceil(boardDepth),
+          maxBudget: Math.ceil(totalCost * 1.1),
+          maxCurrentMa: Math.ceil(totalPower * 1.2),
+          applyAfterSize: true,
+          applyAfterBudget: true,
+          applyAfterPower: true,
+        },
+        slots,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    // Go to community review page
+    setCurrentPage('community-review');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const toggleBookmark = (board: PublicBoard) => {
+    const isBookmarked = bookmarks.some(b => b.board_id === board.board_id);
+    
+    if (isBookmarked) {
+      const newBookmarks = bookmarks.filter(b => b.board_id !== board.board_id);
+      setBookmarks(newBookmarks);
+      saveBookmarksToStorage(newBookmarks);
+    } else {
+      const newBookmark: BookmarkedBoard = {
+        id: board.id,
+        board_id: board.board_id,
+        username: board.username,
+        name: board.name,
+        bookmarkedAt: new Date(),
+      };
+      const newBookmarks = [...bookmarks, newBookmark];
+      setBookmarks(newBookmarks);
+      saveBookmarksToStorage(newBookmarks);
+    }
+  };
+
+  const isBookmarked = (boardId: string) => bookmarks.some(b => b.board_id === boardId);
+
+  const handleOpenBookmark = async (bookmark: BookmarkedBoard) => {
+    if (!supabase) return;
+    
+    try {
+      // Fetch the full board data from Supabase
+      const { data } = await supabase
+        .from('public_boards')
+        .select('*')
+        .eq('board_id', bookmark.board_id)
+        .single();
+      
+      if (data) {
+        handleViewCommunityBoard(data as PublicBoard);
+      }
+    } catch (e) {
+      console.warn('Failed to open bookmark:', e);
+    }
+  };
+
+  const handleRemoveBookmark = (boardId: string) => {
+    const newBookmarks = bookmarks.filter(b => b.board_id !== boardId);
+    setBookmarks(newBookmarks);
+    saveBookmarksToStorage(newBookmarks);
+  };
+
+  const handleViewCommunityCollection = (publicCollection: PublicCollection) => {
+    setSelectedCommunityCollection(publicCollection);
+    setCurrentPage('community-collection');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleViewForumPost = (postId: string) => {
+    setInitialForumPostId(postId);
+    setCurrentPage('community');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const renderPage = () => {
     switch (currentStep) {
       case 'genre':
@@ -637,10 +1044,11 @@ function AppContent() {
             onAbout={handleAbout}
             onSignIn={() => setShowAuthModal(true)}
             onSavedBoards={handleSavedBoards}
-            onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
             onFeedback={() => setShowFeedbackModal(true)}
             onCollection={handleCollection}
+            onCommunity={() => setCurrentPage('community')}
+            onViewForumPost={handleViewForumPost}
           />
         </div>
         <AuthModal 
@@ -668,7 +1076,6 @@ function AppContent() {
           <UserMenu 
             onSignInClick={() => setShowAuthModal(true)} 
             onSavedBoards={handleSavedBoards}
-            onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
             onFeedback={() => setShowFeedbackModal(true)}
           />
@@ -703,7 +1110,6 @@ function AppContent() {
           <UserMenu 
             onSignInClick={() => setShowAuthModal(true)} 
             onSavedBoards={handleSavedBoards}
-            onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
             onFeedback={() => setShowFeedbackModal(true)}
           />
@@ -714,6 +1120,42 @@ function AppContent() {
           onAddToCollection={handleAddToCollection}
           onRemoveFromCollection={handleRemoveFromCollection}
           onBack={handleGoHome}
+        />
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
+        />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
+        />
+      </div>
+    );
+  }
+
+  // Community page
+  if (currentPage === 'community') {
+    return (
+      <div className="min-h-screen bg-board-dark">
+        {/* User Menu - Top Right */}
+        <div className="fixed top-4 right-4 z-50">
+          <UserMenu 
+            onSignInClick={() => setShowAuthModal(true)} 
+            onSavedBoards={handleSavedBoards}
+            onPedalRequest={() => setShowPedalRequestModal(true)}
+            onFeedback={() => setShowFeedbackModal(true)}
+          />
+        </div>
+        <CommunityPage
+          onBack={() => { setInitialForumPostId(undefined); handleGoHome(); }}
+          onViewBoard={handleViewCommunityBoard}
+          onViewCollection={handleViewCommunityCollection}
+          onSignInClick={() => setShowAuthModal(true)}
+          initialForumPostId={initialForumPostId}
         />
         <AuthModal 
           isOpen={showAuthModal} 
@@ -742,7 +1184,6 @@ function AppContent() {
           <UserMenu 
             onSignInClick={() => setShowAuthModal(true)} 
             onSavedBoards={handleSavedBoards}
-            onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
             onFeedback={() => setShowFeedbackModal(true)}
           />
@@ -754,6 +1195,9 @@ function AppContent() {
             savedBoards={savedBoards}
             onRenameBoard={handleRenameBoard}
             onDeleteBoard={handleDeleteBoard}
+            bookmarks={bookmarks}
+            onOpenBookmark={handleOpenBookmark}
+            onRemoveBookmark={handleRemoveBookmark}
           />
         </div>
         <AuthModal 
@@ -783,7 +1227,6 @@ function AppContent() {
           <UserMenu 
             onSignInClick={() => setShowAuthModal(true)} 
             onSavedBoards={handleSavedBoards}
-            onProfile={handleProfile}
             onPedalRequest={() => setShowPedalRequestModal(true)}
             onFeedback={() => setShowFeedbackModal(true)}
           />
@@ -837,10 +1280,10 @@ function AppContent() {
                 >
                   Build a Board
                 </button>
+                <ThemeToggle />
                 <UserMenu 
                   onSignInClick={() => setShowAuthModal(true)} 
                   onSavedBoards={handleSavedBoards}
-                  onProfile={handleProfile}
                   onPedalRequest={() => setShowPedalRequestModal(true)}
                   onFeedback={() => setShowFeedbackModal(true)}
                 />
@@ -866,6 +1309,11 @@ function AppContent() {
         />
       </div>
     );
+  }
+
+  // Pedal Review page (for subcategory editing)
+  if (currentPage === 'pedal-review') {
+    return <PedalReviewPage />;
   }
 
   // Pro Board Review page
@@ -898,10 +1346,10 @@ function AppContent() {
                 >
                   Build Your Own
                 </button>
+                <ThemeToggle />
                 <UserMenu 
                   onSignInClick={() => setShowAuthModal(true)} 
                   onSavedBoards={handleSavedBoards}
-                  onProfile={handleProfile}
                   onPedalRequest={() => setShowPedalRequestModal(true)}
                   onFeedback={() => setShowFeedbackModal(true)}
                 />
@@ -931,6 +1379,109 @@ function AppContent() {
     );
   }
 
+  // Community Board Review page (read-only)
+  if (currentPage === 'community-review' && selectedCommunityBoard) {
+    return (
+      <div className="min-h-screen bg-board-dark">
+        <div className="noise-overlay" />
+        <div className="fixed inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 pointer-events-none" />
+        <div className="relative">
+          {/* Custom header for community board review */}
+          <div className="sticky top-0 z-50 bg-board-dark/95 backdrop-blur-sm border-b border-board-border">
+            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+              <button
+                onClick={() => setCurrentPage('community')}
+                className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Community
+              </button>
+              <div className="text-center">
+                <span className="text-sm text-purple-400 font-medium">COMMUNITY BOARD</span>
+                <h1 className="text-lg font-bold text-white">{selectedCommunityBoard.name}</h1>
+                <p className="text-xs text-zinc-400">by {selectedCommunityBoard.username}</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => toggleBookmark(selectedCommunityBoard)}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+                    isBookmarked(selectedCommunityBoard.board_id)
+                      ? 'bg-yellow-400 text-black'
+                      : 'bg-zinc-700 text-white hover:bg-zinc-600'
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill={isBookmarked(selectedCommunityBoard.board_id) ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  </svg>
+                  {isBookmarked(selectedCommunityBoard.board_id) ? 'Bookmarked' : 'Bookmark'}
+                </button>
+                <button
+                  onClick={handleBuildBoard}
+                  className="px-4 py-2 bg-board-accent text-white text-sm font-medium rounded-lg hover:bg-board-accent-dim transition-colors"
+                >
+                  Build Your Own
+                </button>
+                <ThemeToggle />
+                <UserMenu 
+                  onSignInClick={() => setShowAuthModal(true)} 
+                  onSavedBoards={handleSavedBoards}
+                  onPedalRequest={() => setShowPedalRequestModal(true)}
+                  onFeedback={() => setShowFeedbackModal(true)}
+                />
+              </div>
+            </div>
+          </div>
+          <ReviewPage 
+            onSignInClick={() => setShowAuthModal(true)}
+            readOnly={true}
+            communityUsername={selectedCommunityBoard.username}
+          />
+        </div>
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
+        />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
+        />
+      </div>
+    );
+  }
+
+  // Community Collection page (read-only)
+  if (currentPage === 'community-collection' && selectedCommunityCollection) {
+    return (
+      <div className="min-h-screen" style={{ backgroundColor: '#FFFEF0' }}>
+        <CollectionPage
+          collection={selectedCommunityCollection.pedal_ids}
+          allPedals={PEDALS}
+          onBack={() => setCurrentPage('community')}
+          readOnly={true}
+          communityUsername={selectedCommunityCollection.username}
+        />
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
+        <PedalRequestModal
+          isOpen={showPedalRequestModal}
+          onClose={() => setShowPedalRequestModal(false)}
+        />
+        <FeedbackModal
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
+        />
+      </div>
+    );
+  }
+
   // Wizard pages (build flow)
   return (
     <WizardLayout 
@@ -940,7 +1491,6 @@ function AppContent() {
       onGoHome={handleGoHome}
       onSignInClick={() => setShowAuthModal(true)}
       onSavedBoards={handleSavedBoards}
-      onProfile={handleProfile}
       onPedalRequest={() => setShowPedalRequestModal(true)}
       onFeedback={() => setShowFeedbackModal(true)}
     >
@@ -967,11 +1517,13 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <BoardProvider>
-        <AppContent />
-      </BoardProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <BoardProvider>
+          <AppContent />
+        </BoardProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

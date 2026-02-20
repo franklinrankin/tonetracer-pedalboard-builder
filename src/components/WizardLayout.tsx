@@ -8,6 +8,7 @@ import { AboutModal } from './AboutModal';
 import { PedalCatalog } from './PedalCatalog';
 import { GenreIcon } from './GenreIcon';
 import { UserMenu } from './UserMenu';
+import { ThemeToggle } from './ThemeToggle';
 
 export type WizardStep = 'genre' | 'constraints' | 'build' | 'review';
 
@@ -18,7 +19,6 @@ interface WizardLayoutProps {
   onGoHome?: () => void;
   onSignInClick?: () => void;
   onSavedBoards?: () => void;
-  onProfile?: () => void;
   onPedalRequest?: () => void;
   onFeedback?: () => void;
   children: ReactNode;
@@ -31,7 +31,7 @@ const STEPS: { id: WizardStep; label: string; shortLabel: string; icon: ReactNod
   { id: 'review', label: 'Review', shortLabel: 'Review', icon: <ListChecks className="w-4 h-4" /> },
 ];
 
-export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, onSignInClick, onSavedBoards, onProfile, onPedalRequest, onFeedback, children }: WizardLayoutProps) {
+export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, onSignInClick, onSavedBoards, onPedalRequest, onFeedback, children }: WizardLayoutProps) {
   const { state } = useBoard();
   const { selectedGenres, board, totalCost, sectionScores } = state;
   const [showAbout, setShowAbout] = useState(false);
@@ -78,11 +78,11 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
   );
   
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#FFFEF0' }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--color-board-dark)' }}>
       {/* Neo-Brutalist Header */}
       <header 
-        className="fixed top-0 left-0 right-0 z-50 bg-white"
-        style={{ borderBottom: '4px solid black' }}
+        className="fixed top-0 left-0 right-0 z-50"
+        style={{ backgroundColor: 'var(--color-board-surface)', borderBottom: '4px solid var(--color-board-border)' }}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           <div className="flex items-center h-16 sm:h-20 gap-3 sm:gap-6">
@@ -93,13 +93,13 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
             >
               <div 
                 className="w-10 h-10 bg-black flex items-center justify-center"
-                style={{ border: '3px solid black' }}
+                style={{ border: '3px solid var(--color-board-border)' }}
               >
                 <Sliders className="w-5 h-5 text-white" />
               </div>
               <div className="hidden sm:block">
                 <h1 
-                  className="text-lg font-black tracking-tight text-black"
+                  className="text-lg font-black tracking-tight text-theme"
                   style={{ fontFamily: '"Space Grotesk", sans-serif' }}
                 >
                   BOARDSIE
@@ -111,7 +111,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
             <div className="flex-1 flex items-center justify-center sm:hidden">
               <div 
                 className="flex items-center gap-2 px-4 py-2 bg-black text-white font-bold text-sm"
-                style={{ border: '3px solid black' }}
+                style={{ border: '3px solid var(--color-board-border)' }}
               >
                 <span>{currentStepIndex + 1}/4</span>
                 <span className="uppercase">{STEPS[currentStepIndex].shortLabel}</span>
@@ -137,11 +137,11 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                             : isCompleted
                               ? 'bg-board-success text-white'
                               : isClickable
-                                ? 'bg-white text-black hover:-translate-y-0.5'
+                                ? 'bg-theme-surface text-theme hover:-translate-y-0.5'
                                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                         }`}
                         style={{ 
-                          border: '3px solid black',
+                          border: '3px solid var(--color-board-border)',
                           boxShadow: isActive || isCompleted ? '4px 4px 0px black' : '2px 2px 0px black',
                         }}
                       >
@@ -167,8 +167,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
               <div className="hidden sm:flex items-center gap-2">
                 <button
                   onClick={() => setShowPedalIndex(true)}
-                  className="p-2 bg-white text-black font-bold transition-all hover:-translate-y-0.5"
-                  style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
+                  className="p-2 bg-theme-surface text-theme font-bold transition-all hover:-translate-y-0.5"
+                  style={{ border: '3px solid var(--color-board-border)', boxShadow: '2px 2px 0px black' }}
                   title="Pedal Index"
                 >
                   <Database className="w-5 h-5" />
@@ -176,8 +176,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                 
                 <button
                   onClick={() => setShowAbout(true)}
-                  className="p-2 bg-white text-black font-bold transition-all hover:-translate-y-0.5"
-                  style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
+                  className="p-2 bg-theme-surface text-theme font-bold transition-all hover:-translate-y-0.5"
+                  style={{ border: '3px solid var(--color-board-border)', boxShadow: '2px 2px 0px black' }}
                   title="About"
                 >
                   <HelpCircle className="w-5 h-5" />
@@ -186,18 +186,19 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                 {hasProgress && (
                   <button
                     onClick={onStartOver}
-                    className="p-2 bg-white text-board-danger font-bold transition-all hover:-translate-y-0.5"
-                    style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
+                    className="p-2 bg-theme-surface text-board-danger font-bold transition-all hover:-translate-y-0.5"
+                    style={{ border: '3px solid var(--color-board-border)', boxShadow: '2px 2px 0px black' }}
                     title="Reset"
                   >
                     <RotateCcw className="w-5 h-5" />
                   </button>
                 )}
                 
+                <ThemeToggle />
+                
                 <UserMenu 
                   onSignInClick={onSignInClick || (() => {})} 
                   onSavedBoards={onSavedBoards}
-                  onProfile={onProfile}
                   onPedalRequest={onPedalRequest}
                   onFeedback={onFeedback}
                 />
@@ -206,8 +207,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
               {/* Mobile Menu */}
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="sm:hidden p-2 bg-white text-black"
-                style={{ border: '3px solid black', boxShadow: '2px 2px 0px black' }}
+                className="sm:hidden p-2 bg-theme-surface text-theme"
+                style={{ border: '3px solid var(--color-board-border)', boxShadow: '2px 2px 0px black' }}
               >
                 <Menu className="w-5 h-5" />
               </button>
@@ -217,8 +218,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                 {currentStepIndex > 0 && (
                   <button
                     onClick={goPrev}
-                    className="flex items-center gap-1 px-3 py-2 bg-white text-black font-bold uppercase text-sm transition-all hover:-translate-y-0.5"
-                    style={{ border: '3px solid black', boxShadow: '3px 3px 0px black' }}
+                    className="flex items-center gap-1 px-3 py-2 bg-theme-surface text-theme font-bold uppercase text-sm transition-all hover:-translate-y-0.5"
+                    style={{ border: '3px solid var(--color-board-border)', boxShadow: '3px 3px 0px black' }}
                   >
                     <ChevronLeft className="w-4 h-4" />
                     <span className="hidden sm:inline">Back</span>
@@ -234,7 +235,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }`}
                     style={{ 
-                      border: '3px solid black', 
+                      border: '3px solid var(--color-board-border)', 
                       boxShadow: canGoNext() ? '3px 3px 0px black' : 'none' 
                     }}
                   >
@@ -250,7 +251,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
         {/* Mobile Menu Dropdown */}
         {showMobileMenu && (
           <div 
-            className="sm:hidden bg-white"
+            className="sm:hidden bg-theme-surface"
             style={{ borderTop: '3px solid black' }}
           >
             <div className="px-4 py-4 space-y-3">
@@ -277,7 +278,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                           : isCompleted
                             ? 'bg-board-success text-white'
                             : isClickable
-                              ? 'bg-white text-black'
+                              ? 'bg-theme-surface text-theme'
                               : 'bg-gray-200 text-gray-400'
                       }`}
                       style={{ border: '2px solid black' }}
@@ -295,7 +296,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
               >
                 <button
                   onClick={() => { onGoHome?.(); setShowMobileMenu(false); }}
-                  className="flex-1 flex items-center justify-center gap-2 p-2 bg-white text-black font-bold text-xs uppercase"
+                  className="flex-1 flex items-center justify-center gap-2 p-2 bg-theme-surface text-theme font-bold text-xs uppercase"
                   style={{ border: '2px solid black' }}
                 >
                   <Home className="w-4 h-4" />
@@ -303,7 +304,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                 </button>
                 <button
                   onClick={() => { setShowPedalIndex(true); setShowMobileMenu(false); }}
-                  className="flex-1 flex items-center justify-center gap-2 p-2 bg-white text-black font-bold text-xs uppercase"
+                  className="flex-1 flex items-center justify-center gap-2 p-2 bg-theme-surface text-theme font-bold text-xs uppercase"
                   style={{ border: '2px solid black' }}
                 >
                   <Database className="w-4 h-4" />
@@ -325,7 +326,6 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                 <UserMenu 
                   onSignInClick={onSignInClick || (() => {})} 
                   onSavedBoards={onSavedBoards}
-                  onProfile={onProfile}
                   onPedalRequest={onPedalRequest}
                   onFeedback={onFeedback}
                   mobile
@@ -367,7 +367,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                     <span className="opacity-30">|</span>
                     <div className="flex items-center gap-2">
                       <span className="opacity-60">Cost:</span>
-                      <span className="text-board-accent">${totalCost}</span>
+                      <span className="text-black font-black">${totalCost}</span>
                     </div>
                   </>
                 )}
@@ -394,8 +394,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
           />
           
           <div 
-            className="relative bg-white w-full max-w-5xl h-[85vh] overflow-hidden flex flex-col"
-            style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
+            className="relative bg-theme-surface w-full max-w-5xl h-[85vh] overflow-hidden flex flex-col"
+            style={{ border: '4px solid var(--color-board-border)', boxShadow: '8px 8px 0px black' }}
           >
             <div 
               className="p-4 bg-board-blue text-white flex items-center justify-between flex-shrink-0"
@@ -403,10 +403,10 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
             >
               <div className="flex items-center gap-3">
                 <div 
-                  className="w-10 h-10 bg-white flex items-center justify-center"
-                  style={{ border: '3px solid black' }}
+                  className="w-10 h-10 bg-theme-surface flex items-center justify-center"
+                  style={{ border: '3px solid var(--color-board-border)' }}
                 >
-                  <Database className="w-5 h-5 text-black" />
+                  <Database className="w-5 h-5 text-theme" />
                 </div>
                 <div>
                   <h2 className="text-xl font-black uppercase">Pedal Index</h2>
@@ -415,8 +415,8 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
               </div>
               <button
                 onClick={() => setShowPedalIndex(false)}
-                className="px-4 py-2 bg-white text-black font-bold uppercase text-sm transition-all hover:-translate-y-0.5"
-                style={{ border: '3px solid black', boxShadow: '3px 3px 0px black' }}
+                className="px-4 py-2 bg-theme-surface text-theme font-bold uppercase text-sm transition-all hover:-translate-y-0.5"
+                style={{ border: '3px solid var(--color-board-border)', boxShadow: '3px 3px 0px black' }}
               >
                 Close
               </button>

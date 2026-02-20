@@ -1,28 +1,25 @@
 import { useState } from 'react';
 import { Ruler, DollarSign, Check } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
+import { useTheme } from '../context/ThemeContext';
 
 // Neo-Brutalist Toggle
 function OnOffToggle({ 
   enabled, 
   onToggle,
-  color = 'board-accent',
 }: { 
   enabled: boolean; 
   onToggle: () => void;
-  color?: string;
 }) {
   return (
     <button
       onClick={onToggle}
-      className={`relative px-4 py-2 font-bold text-xs uppercase transition-all ${
-        enabled 
-          ? 'bg-black text-white' 
-          : 'bg-white text-black'
-      }`}
+      className="relative px-4 py-2 font-bold text-xs uppercase transition-all"
       style={{ 
-        border: '3px solid black',
-        boxShadow: enabled ? '3px 3px 0px black' : 'none',
+        backgroundColor: enabled ? 'var(--color-board-border)' : 'var(--color-board-surface)',
+        color: enabled ? 'var(--color-board-dark)' : 'var(--color-board-text)',
+        border: '3px solid var(--color-board-border)',
+        boxShadow: enabled ? '3px 3px 0px var(--color-board-shadow)' : 'none',
       }}
     >
       {enabled ? 'ON' : 'OFF'}
@@ -31,11 +28,9 @@ function OnOffToggle({
 }
 
 const SIZE_OPTIONS = [
-  { id: 'mini', name: 'Mini', pedals: 4, description: 'Essentials only' },
-  { id: 'small', name: 'Small', pedals: 6, description: 'Compact setup' },
-  { id: 'medium', name: 'Medium', pedals: 8, description: 'Most popular' },
-  { id: 'large', name: 'Large', pedals: 10, description: 'Full rig' },
-  { id: 'huge', name: 'Huge', pedals: 12, description: 'Go big' },
+  { id: 'small', label: 'Small', range: '3-5', pedals: 5 },
+  { id: 'medium', label: 'Medium', range: '6-9', pedals: 8 },
+  { id: 'large', label: 'Large', range: '10+', pedals: 12 },
 ] as const;
 
 interface ConstraintsPageProps {
@@ -45,11 +40,18 @@ interface ConstraintsPageProps {
 export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
   const { state, dispatch } = useBoard();
   const { board } = state;
+  const { theme } = useTheme();
   
-  const currentSize = SIZE_OPTIONS.find(s => s.pedals === board.constraints.maxPedalCount) || SIZE_OPTIONS[2];
-  const [selectedSize, setSelectedSize] = useState(currentSize.id);
+  // Find which size category the current pedal count falls into
+  const getCurrentSizeId = () => {
+    const count = board.constraints.maxPedalCount ?? 8; // Default to 8 if undefined
+    if (count <= 5) return 'small';
+    if (count <= 9) return 'medium';
+    return 'large';
+  };
+  const [selectedSize, setSelectedSize] = useState(getCurrentSizeId());
   
-  const handleSizeSelect = (sizeId: typeof SIZE_OPTIONS[number]['id']) => {
+  const handleSizeSelect = (sizeId: 'small' | 'medium' | 'large') => {
     const size = SIZE_OPTIONS.find(s => s.id === sizeId);
     if (!size) return;
     
@@ -74,16 +76,6 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
     });
   };
   
-  const toggleSizeEnabled = () => {
-    dispatch({
-      type: 'SET_CONSTRAINTS',
-      constraints: {
-        ...board.constraints,
-        applyAfterSize: board.constraints.applyAfterSize ? false : true,
-      },
-    });
-  };
-  
   const toggleBudgetEnabled = () => {
     dispatch({
       type: 'SET_CONSTRAINTS',
@@ -94,77 +86,77 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
     });
   };
   
-  const sizeEnabled = !board.constraints.applyAfterSize || board.constraints.maxPedalCount !== undefined;
   const budgetEnabled = !board.constraints.applyAfterBudget;
   
+  // Theme-aware colors
+  const sizeCardBg = theme === 'dark' ? '#5D3A2A' : '#FFCCBC';
+  const budgetCardBg = theme === 'dark' ? '#1A3D1A' : '#C8E6C9';
+  const disabledBg = theme === 'dark' ? '#333333' : '#E0E0E0';
+
   return (
-    <div className="min-h-full p-4 sm:p-6 lg:p-8 overflow-auto" style={{ backgroundColor: '#FFFEF0' }}>
+    <div className="min-h-full p-4 sm:p-6 lg:p-8 overflow-auto" style={{ backgroundColor: 'var(--color-board-dark)' }}>
       {/* Header */}
-      <div className="max-w-3xl mx-auto mb-8 text-center">
+      <div className="max-w-4xl mx-auto mb-8 text-center">
         <h1 
-          className="text-2xl sm:text-4xl font-black text-black mb-2 uppercase tracking-tight"
-          style={{ fontFamily: '"Space Grotesk", sans-serif' }}
+          className="text-2xl sm:text-4xl font-black mb-2 uppercase tracking-tight"
+          style={{ fontFamily: '"Space Grotesk", sans-serif', color: 'var(--color-board-text)' }}
         >
           Set Your Limits
         </h1>
-        <p className="text-sm sm:text-base text-black/70 font-bold">
+        <p className="text-sm sm:text-base font-bold" style={{ color: 'var(--color-board-text-muted)' }}>
           How big? How much?
         </p>
       </div>
       
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="max-w-3xl mx-auto space-y-8">
         {/* Board Size */}
         <div 
-          className={`p-5 sm:p-6 transition-all ${sizeEnabled ? '' : 'opacity-50'}`}
+          className="p-5 sm:p-6 transition-all"
           style={{
-            backgroundColor: sizeEnabled ? '#FFCCBC' : '#E0E0E0',
-            border: '4px solid black',
-            boxShadow: sizeEnabled ? '6px 6px 0px black' : '4px 4px 0px black',
+            backgroundColor: sizeCardBg,
+            border: '4px solid var(--color-board-border)',
+            boxShadow: '6px 6px 0px var(--color-board-shadow)',
           }}
         >
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 text-black uppercase">
+          <div className="flex items-center mb-5">
+            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 uppercase" style={{ color: 'var(--color-board-text)' }}>
               <div 
-                className="w-10 h-10 bg-white flex items-center justify-center"
-                style={{ border: '3px solid black' }}
+                className="w-10 h-10 flex items-center justify-center"
+                style={{ backgroundColor: 'var(--color-board-surface)', border: '3px solid var(--color-board-border)' }}
               >
-                <Ruler className="w-5 h-5 text-black" />
+                <Ruler className="w-5 h-5" style={{ color: 'var(--color-board-text)' }} />
               </div>
-              Board Size
+              Size
             </h2>
-            <OnOffToggle 
-              enabled={sizeEnabled}
-              onToggle={toggleSizeEnabled}
-            />
           </div>
           
           {/* Size Options */}
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-3 gap-4">
             {SIZE_OPTIONS.map(size => (
               <button
                 key={size.id}
                 onClick={() => handleSizeSelect(size.id)}
-                className={`p-3 text-center transition-all font-bold ${
-                  selectedSize === size.id
-                    ? 'bg-black text-white -translate-y-1'
-                    : 'bg-white text-black hover:-translate-y-0.5'
+                className={`p-6 text-center transition-all font-bold ${
+                  selectedSize === size.id ? '-translate-y-1' : 'hover:-translate-y-0.5'
                 }`}
                 style={{ 
-                  border: '3px solid black',
-                  boxShadow: selectedSize === size.id ? '4px 4px 0px white' : '3px 3px 0px black',
+                  backgroundColor: selectedSize === size.id ? 'var(--color-board-border)' : 'var(--color-board-surface)',
+                  color: selectedSize === size.id ? 'var(--color-board-dark)' : 'var(--color-board-text)',
+                  border: '3px solid var(--color-board-border)',
+                  boxShadow: selectedSize === size.id ? '4px 4px 0px var(--color-board-surface)' : '3px 3px 0px var(--color-board-shadow)',
                 }}
               >
-                <div className="text-2xl sm:text-3xl mb-1">{size.pedals}</div>
-                <div className="text-[10px] sm:text-xs uppercase">{size.name}</div>
+                <div className="text-2xl font-black uppercase">{size.label}</div>
+                <div className="text-base opacity-70">{size.range} pedals</div>
                 {selectedSize === size.id && (
-                  <Check className="w-4 h-4 mx-auto mt-1" />
+                  <Check className="w-5 h-5 mx-auto mt-2" />
                 )}
               </button>
             ))}
           </div>
           
-          <p className="text-xs text-black/60 mt-4 text-center font-bold">
-            We'll suggest a board that fits on the review page.
+          <p className="text-xs mt-4 text-center font-bold" style={{ color: 'var(--color-board-text-muted)' }}>
+            Multi-FX units count as one pedal but fill multiple slots.
           </p>
         </div>
         
@@ -172,18 +164,18 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
         <div 
           className={`p-5 sm:p-6 transition-all ${budgetEnabled ? '' : 'opacity-50'}`}
           style={{
-            backgroundColor: budgetEnabled ? '#C8E6C9' : '#E0E0E0',
-            border: '4px solid black',
-            boxShadow: budgetEnabled ? '6px 6px 0px black' : '4px 4px 0px black',
+            backgroundColor: budgetEnabled ? budgetCardBg : disabledBg,
+            border: '4px solid var(--color-board-border)',
+            boxShadow: budgetEnabled ? '6px 6px 0px var(--color-board-shadow)' : '4px 4px 0px var(--color-board-shadow)',
           }}
         >
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 text-black uppercase">
+            <h2 className="text-lg sm:text-xl font-black flex items-center gap-2 uppercase" style={{ color: 'var(--color-board-text)' }}>
               <div 
-                className="w-10 h-10 bg-white flex items-center justify-center"
-                style={{ border: '3px solid black' }}
+                className="w-10 h-10 flex items-center justify-center"
+                style={{ backgroundColor: 'var(--color-board-surface)', border: '3px solid var(--color-board-border)' }}
               >
-                <DollarSign className="w-5 h-5 text-black" />
+                <DollarSign className="w-5 h-5" style={{ color: 'var(--color-board-text)' }} />
               </div>
               Budget
             </h2>
@@ -195,12 +187,12 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
           
           {/* Budget Display */}
           <div 
-            className="text-center mb-5 py-4 bg-white"
-            style={{ border: '3px solid black' }}
+            className="text-center mb-6 py-6"
+            style={{ backgroundColor: 'var(--color-board-surface)', border: '3px solid var(--color-board-border)' }}
           >
             <span 
-              className="text-4xl sm:text-5xl font-black text-black"
-              style={{ fontFamily: '"Space Grotesk", sans-serif' }}
+              className="text-5xl sm:text-6xl font-black"
+              style={{ fontFamily: '"Space Grotesk", sans-serif', color: 'var(--color-board-text)' }}
             >
               ${board.constraints.maxBudget}
             </span>
@@ -214,27 +206,26 @@ export function ConstraintsPage({ onContinue }: ConstraintsPageProps) {
             step="100"
             value={board.constraints.maxBudget}
             onChange={(e) => handleBudgetChange(parseInt(e.target.value))}
-            className="w-full mb-4 h-3 bg-white appearance-none cursor-pointer"
+            className="w-full mb-4 h-3 appearance-none cursor-pointer"
             style={{ 
-              border: '2px solid black',
+              backgroundColor: 'var(--color-board-surface)',
+              border: '2px solid var(--color-board-border)',
               outline: 'none',
             }}
           />
           
           {/* Quick Presets */}
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-5 gap-3">
             {[300, 500, 1000, 1500, 2000].map(amount => (
               <button
                 key={amount}
                 onClick={() => handleBudgetChange(amount)}
-                className={`py-2 text-xs sm:text-sm font-bold transition-all ${
-                  board.constraints.maxBudget === amount
-                    ? 'bg-black text-white'
-                    : 'bg-white text-black hover:-translate-y-0.5'
-                }`}
+                className="py-3 text-sm sm:text-base font-bold transition-all hover:-translate-y-0.5"
                 style={{ 
-                  border: '2px solid black',
-                  boxShadow: board.constraints.maxBudget === amount ? '2px 2px 0px white' : '2px 2px 0px black',
+                  backgroundColor: board.constraints.maxBudget === amount ? 'var(--color-board-border)' : 'var(--color-board-surface)',
+                  color: board.constraints.maxBudget === amount ? 'var(--color-board-dark)' : 'var(--color-board-text)',
+                  border: '2px solid var(--color-board-border)',
+                  boxShadow: board.constraints.maxBudget === amount ? '2px 2px 0px var(--color-board-surface)' : '2px 2px 0px var(--color-board-shadow)',
                 }}
               >
                 ${amount >= 1000 ? `${amount/1000}k` : amount}

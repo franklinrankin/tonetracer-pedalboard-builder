@@ -89,14 +89,14 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
     return (
       <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
         <div 
-          className="bg-white max-w-md w-full p-6"
+          className="bg-theme-surface max-w-md w-full p-6"
           style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-black text-black uppercase">Authentication</h2>
+            <h2 className="text-xl font-black text-theme uppercase">Authentication</h2>
             <button 
               onClick={onClose} 
-              className="p-2 bg-white text-black hover:bg-gray-100"
+              className="p-2 bg-theme-surface text-theme hover:bg-gray-100"
               style={{ border: '2px solid black' }}
             >
               <X className="w-5 h-5" />
@@ -104,7 +104,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
           </div>
           <div className="text-center py-8">
             <AlertCircle className="w-12 h-12 text-board-warning mx-auto mb-4" />
-            <p className="text-black/60 font-bold">
+            <p className="text-theme-muted font-bold">
               Authentication is not configured. Please set up Supabase credentials.
             </p>
           </div>
@@ -116,7 +116,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
       <div 
-        className="bg-white max-w-md w-full overflow-hidden"
+        className="bg-theme-surface max-w-md w-full overflow-hidden"
         style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
       >
         {/* Header */}
@@ -129,7 +129,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
             </h2>
             <button 
               onClick={onClose} 
-              className="p-2 bg-white text-black hover:bg-gray-100"
+              className="p-2 bg-theme-surface text-theme hover:bg-gray-100"
               style={{ border: '2px solid black' }}
             >
               <X className="w-5 h-5" />
@@ -167,52 +167,52 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
           <form onSubmit={handleSubmit} className="space-y-4">
             {mode === 'signup' && (
               <div>
-                <label className="block text-sm font-bold text-black mb-1.5 uppercase">Username</label>
+                <label className="block text-sm font-bold text-theme mb-1.5 uppercase">Username</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black/50" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-theme-muted" />
                   <input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
                     placeholder="your_username"
-                    className="w-full pl-11 pr-4 py-3 bg-white text-black placeholder-black/40 focus:outline-none font-bold"
-                    style={{ border: '3px solid black' }}
+                    className="w-full pl-11 pr-4 py-3 bg-theme-surface text-theme placeholder-black/40 focus:outline-none font-bold"
+                    style={{ border: '3px solid var(--color-board-border)' }}
                   />
                 </div>
-                <p className="text-xs text-black/50 mt-1 font-bold">Letters, numbers, and underscores only</p>
+                <p className="text-xs text-theme-muted mt-1 font-bold">Letters, numbers, and underscores only</p>
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-bold text-black mb-1.5 uppercase">Email</label>
+              <label className="block text-sm font-bold text-theme mb-1.5 uppercase">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black/50" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-theme-muted" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="you@example.com"
-                  className="w-full pl-11 pr-4 py-3 bg-white text-black placeholder-black/40 focus:outline-none font-bold"
-                  style={{ border: '3px solid black' }}
+                  className="w-full pl-11 pr-4 py-3 bg-theme-surface text-theme placeholder-black/40 focus:outline-none font-bold"
+                  style={{ border: '3px solid var(--color-board-border)' }}
                 />
               </div>
             </div>
 
             {mode !== 'forgot' && (
               <div>
-                <label className="block text-sm font-bold text-black mb-1.5 uppercase">Password</label>
+                <label className="block text-sm font-bold text-theme mb-1.5 uppercase">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black/50" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-theme-muted" />
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     placeholder="••••••••"
-                    className="w-full pl-11 pr-4 py-3 bg-white text-black placeholder-black/40 focus:outline-none font-bold"
-                    style={{ border: '3px solid black' }}
+                    className="w-full pl-11 pr-4 py-3 bg-theme-surface text-theme placeholder-black/40 focus:outline-none font-bold"
+                    style={{ border: '3px solid var(--color-board-border)' }}
                   />
                 </div>
               </div>
@@ -220,17 +220,17 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
 
             {mode === 'signup' && (
               <div>
-                <label className="block text-sm font-bold text-black mb-1.5 uppercase">Confirm Password</label>
+                <label className="block text-sm font-bold text-theme mb-1.5 uppercase">Confirm Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black/50" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-theme-muted" />
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     placeholder="••••••••"
-                    className="w-full pl-11 pr-4 py-3 bg-white text-black placeholder-black/40 focus:outline-none font-bold"
-                    style={{ border: '3px solid black' }}
+                    className="w-full pl-11 pr-4 py-3 bg-theme-surface text-theme placeholder-black/40 focus:outline-none font-bold"
+                    style={{ border: '3px solid var(--color-board-border)' }}
                   />
                 </div>
               </div>
@@ -252,7 +252,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
               type="submit"
               disabled={loading}
               className="w-full py-3 bg-board-accent text-white font-black uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:-translate-y-0.5"
-              style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+              style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px black' }}
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               {mode === 'signin' && 'Sign In'}
@@ -264,7 +264,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
           {/* Mode Switch */}
           <div className="mt-6 text-center text-sm">
             {mode === 'signin' && (
-              <p className="text-black/60 font-bold">
+              <p className="text-theme-muted font-bold">
                 Don't have an account?{' '}
                 <button onClick={() => setMode('signup')} className="text-board-accent hover:underline">
                   Sign up
@@ -272,7 +272,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
               </p>
             )}
             {mode === 'signup' && (
-              <p className="text-black/60 font-bold">
+              <p className="text-theme-muted font-bold">
                 Already have an account?{' '}
                 <button onClick={() => setMode('signin')} className="text-board-accent hover:underline">
                   Sign in
@@ -280,7 +280,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
               </p>
             )}
             {mode === 'forgot' && (
-              <p className="text-black/60 font-bold">
+              <p className="text-theme-muted font-bold">
                 Remember your password?{' '}
                 <button onClick={() => setMode('signin')} className="text-board-accent hover:underline">
                   Sign in

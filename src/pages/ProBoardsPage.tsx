@@ -39,20 +39,20 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
       <div className="max-w-5xl mx-auto mb-8">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-black font-bold uppercase tracking-wide hover:bg-yellow-300 px-3 py-2 transition-colors mb-6"
-          style={{ border: '3px solid black' }}
+          className="flex items-center gap-2 text-theme font-bold uppercase tracking-wide hover:bg-yellow-300 px-3 py-2 transition-colors mb-6"
+          style={{ border: '3px solid var(--color-board-border)' }}
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
         </button>
         
         <h1 
-          className="text-3xl sm:text-5xl font-black text-black uppercase tracking-tight mb-3"
+          className="text-3xl sm:text-5xl font-black text-theme uppercase tracking-tight mb-3"
           style={{ textShadow: '3px 3px 0px #FFE600' }}
         >
           Pro Boards
         </h1>
-        <p className="text-base sm:text-lg text-black font-medium">
+        <p className="text-base sm:text-lg text-theme font-medium">
           Explore pedalboards used by professional guitarists. Click any board to see the full breakdown.
         </p>
       </div>
@@ -67,13 +67,13 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
               <button
                 key={board.id}
                 onClick={() => onSelectBoard(board)}
-                className="group relative overflow-hidden text-left transition-all duration-150 bg-white hover:-translate-x-1 hover:-translate-y-1"
+                className="group relative overflow-hidden text-left transition-all duration-150 bg-theme-surface hover:-translate-x-1 hover:-translate-y-1"
                 style={{ 
-                  border: '4px solid black',
-                  boxShadow: '6px 6px 0px black',
+                  border: '4px solid var(--color-board-border)',
+                  boxShadow: '6px 6px 0px var(--color-board-shadow)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '8px 8px 0px black';
+                  e.currentTarget.style.boxShadow = '8px 8px 0px var(--color-board-shadow)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.boxShadow = '6px 6px 0px black';
@@ -122,10 +122,10 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
 
                 {/* Content */}
                 <div className="p-4 border-t-4 border-black" style={{ backgroundColor: '#FFFEF0' }}>
-                  <h3 className="text-xl font-black text-black uppercase mb-1">
+                  <h3 className="text-xl font-black text-theme uppercase mb-1">
                     {board.artist}
                   </h3>
-                  <p className="text-sm font-bold text-black/70 mb-3">
+                  <p className="text-sm font-bold text-theme-muted mb-3">
                     {board.name}
                   </p>
                   
@@ -137,7 +137,7 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
                       {board.pedalIds.length} PEDALS
                     </span>
                     {board.source && (
-                      <span className="text-xs font-bold text-black/50 flex items-center gap-1 uppercase">
+                      <span className="text-xs font-bold text-theme-muted flex items-center gap-1 uppercase">
                         <ExternalLink className="w-3 h-3" />
                         {board.source}
                       </span>
@@ -150,7 +150,7 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
 
           {/* Coming Soon Card */}
           <div 
-            className="relative overflow-hidden bg-white"
+            className="relative overflow-hidden bg-theme-surface"
             style={{ 
               border: '4px dashed black',
             }}
@@ -158,14 +158,14 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
             <div className="aspect-[4/3] flex flex-col items-center justify-center p-6 text-center" style={{ backgroundColor: '#f5f5f5' }}>
               <div 
                 className="w-16 h-16 flex items-center justify-center mb-4 font-black text-3xl"
-                style={{ backgroundColor: '#FFE600', border: '3px solid black' }}
+                style={{ backgroundColor: '#FFE600', border: '3px solid var(--color-board-border)' }}
               >
                 +
               </div>
-              <h3 className="text-lg font-black text-black uppercase mb-2">
+              <h3 className="text-lg font-black text-theme uppercase mb-2">
                 More Coming Soon
               </h3>
-              <p className="text-sm font-medium text-black/70">
+              <p className="text-sm font-medium text-theme-muted">
                 We're adding more pro boards regularly
               </p>
             </div>

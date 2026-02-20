@@ -614,7 +614,7 @@ export const OTHER_MODULATION_PEDALS: Pedal[] = [
     brand: 'JHS',
     model: 'Unicorn V2',
     category: 'modulation',
-    subtype: 'Vibrato',
+    subtype: 'Univibe / Rotary',
     categoryRating: 10,
     widthMm: inToMm(4.7),
     depthMm: inToMm(3.7),

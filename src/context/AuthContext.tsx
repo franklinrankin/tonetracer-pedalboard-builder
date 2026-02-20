@@ -32,26 +32,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setState(prev => ({
-        ...prev,
-        session,
-        user: session?.user ?? null,
-        loading: false,
-      }));
-    });
+    let subscription: { unsubscribe: () => void } | null = null;
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setState(prev => ({
-        ...prev,
-        session,
-        user: session?.user ?? null,
-      }));
-    });
+    // Get initial session with error handling
+    const initAuth = async () => {
+      if (!supabase) return;
+      
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setState(prev => ({
+          ...prev,
+          session,
+          user: session?.user ?? null,
+          loading: false,
+        }));
 
-    return () => subscription.unsubscribe();
+        // Listen for auth changes
+        const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+          setState(prev => ({
+            ...prev,
+            session,
+            user: session?.user ?? null,
+          }));
+        });
+        subscription = data.subscription;
+      } catch (e) {
+        // Network blocked (e.g., Instagram Safe Browsing)
+        console.warn('Auth initialization failed (network may be restricted):', e);
+        setState(prev => ({ ...prev, loading: false }));
+      }
+    };
+
+    initAuth();
+
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    };
   }, []);
 
   const signIn = async (email: string, password: string) => {

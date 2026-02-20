@@ -178,10 +178,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/boss-cp1x.jpg",
     "small": "/images/pedals/boss-cp1x.jpg"
   },
-  "boss-cs3-compressor": {
-    "large": "/images/pedals/boss-cs3-compressor.jpg",
-    "small": "/images/pedals/boss-cs3-compressor.jpg"
-  },
   "boss-cs3": {
     "large": "/images/pedals/boss-cs3.jpg",
     "small": "/images/pedals/boss-cs3.jpg"
@@ -514,10 +510,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/deco-saturator.jpg",
     "small": "/images/pedals/deco-saturator.jpg"
   },
-  "diamond-compressor": {
-    "large": "/images/pedals/diamond-compressor.jpg",
-    "small": "/images/pedals/diamond-compressor.jpg"
-  },
   "diezel-herbert": {
     "large": "/images/pedals/diezel-herbert.jpg",
     "small": "/images/pedals/diezel-herbert.jpg"
@@ -746,10 +738,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/ehx-canyon.jpg",
     "small": "/images/pedals/ehx-canyon.jpg"
   },
-  "ehx-cathedral": {
-    "large": "/images/pedals/ehx-cathedral.jpg",
-    "small": "/images/pedals/ehx-cathedral.jpg"
-  },
   "ehx-deluxe-memory-boy": {
     "large": "/images/pedals/ehx-deluxe-memory-boy.jpg",
     "small": "/images/pedals/ehx-deluxe-memory-boy.jpg"
@@ -870,10 +858,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/empress-compressor-mkii.jpg",
     "small": "/images/pedals/empress-compressor-mkii.jpg"
   },
-  "empress-compressor": {
-    "large": "/images/pedals/empress-compressor.jpg",
-    "small": "/images/pedals/empress-compressor.jpg"
-  },
   "empress-echosystem": {
     "large": "/images/pedals/empress-echosystem.jpg",
     "small": "/images/pedals/empress-echosystem.jpg"
@@ -962,10 +946,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/friedman-smallbox.jpg",
     "small": "/images/pedals/friedman-smallbox.jpg"
   },
-  "fulltone-clyde-wah": {
-    "large": "/images/pedals/fulltone-clyde-wah.jpg",
-    "small": "/images/pedals/fulltone-clyde-wah.jpg"
-  },
   "fulltone-clyde": {
     "large": "/images/pedals/fulltone-clyde.jpg",
     "small": "/images/pedals/fulltone-clyde.jpg"
@@ -1009,6 +989,10 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
   "hotone-omni-ac": {
     "large": "/images/pedals/hotone-omni-ac.jpg",
     "small": "/images/pedals/hotone-omni-ac.jpg"
+  },
+  "hotone-ampero-ii-stomp": {
+    "large": "/images/pedals/hotone-ampero-ii-stomp.jpg",
+    "small": "/images/pedals/hotone-ampero-ii-stomp.jpg"
   },
   "hungry-robot-wardenclyffe": {
     "large": "/images/pedals/hungry-robot-wardenclyffe.jpg",
@@ -1481,10 +1465,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
   "old-blood-visitor": {
     "large": "/images/pedals/old-blood-visitor.jpg",
     "small": "/images/pedals/old-blood-visitor.jpg"
-  },
-  "one-control-crocodile": {
-    "large": "/images/pedals/one-control-crocodile.jpg",
-    "small": "/images/pedals/one-control-crocodile.jpg"
   },
   "one-control-purple-humper": {
     "large": "/images/pedals/one-control-purple-humper.jpg",
@@ -2227,8 +2207,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "/images/pedals/zvex-woolly-mammoth.jpg"
   },
   "mesa-flux-five": {
-    "large": "https://rvb-img.reverb.com/i/s--6OBCkveZ--/quality=medium-low,height=800,width=800,fit=contain/a11b040a-f9d4-4c38-ba6e-88565218b6d3.jpeg",
-    "small": "https://rvb-img.reverb.com/i/s--aJzdr_tO--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/a11b040a-f9d4-4c38-ba6e-88565218b6d3.jpeg"
+    "large": "/images/pedals/mesa-flux-five.jpg",
+    "small": "/images/pedals/mesa-flux-five.jpg"
   },
   "fender-noise-gate": {
     "large": "https://rvb-img.reverb.com/i/s--9GnlPp8z--/quality=medium-low,height=800,width=800,fit=contain/nhogvxg2b8x1vrsdauyj.jpg",
@@ -2271,12 +2251,12 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "https://rvb-img.reverb.com/i/s--WpmX86-C--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/s5ji3ce0pzqzapugo4az.jpg"
   },
   "boss-ls2": {
-    "large": "https://rvb-img.reverb.com/i/s--IglLDvhn--/quality=medium-low,height=800,width=800,fit=contain/rogioszrmxwjjw1gegeh.jpg",
-    "small": "https://rvb-img.reverb.com/i/s--z3HtGrcm--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/rogioszrmxwjjw1gegeh.jpg"
+    "large": "/images/pedals/boss-ls2.jpg",
+    "small": "/images/pedals/boss-ls2.jpg"
   },
   "boss-tu2": {
-    "large": "https://rvb-img.reverb.com/i/s--Ae6iqDwQ--/quality=medium-low,height=800,width=800,fit=contain/055246a0-5c71-4525-8365-476cb0354901.heic",
-    "small": "https://rvb-img.reverb.com/i/s--M4M6Y_HH--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/055246a0-5c71-4525-8365-476cb0354901.heic"
+    "large": "/images/pedals/boss-tu2.jpg",
+    "small": "/images/pedals/boss-tu2.jpg"
   },
   "boss-ms3": {
     "large": "https://rvb-img.reverb.com/i/s--sXHi1AqQ--/quality=medium-low,height=800,width=800,fit=contain/fif1xvxozkllmylbdmii.jpg",
@@ -2351,8 +2331,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "https://rvb-img.reverb.com/i/s--ySMRw7mR--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/moblgtbgn9z7pwajqpmd.jpg"
   },
   "jhs-haunting-mids": {
-    "large": "https://rvb-img.reverb.com/i/s--xNOw3dGU--/quality=medium-low,height=800,width=800,fit=contain/qqrsz8znppmcq03tsa6c.jpg",
-    "small": "https://rvb-img.reverb.com/i/s--vBGsUO8y--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/qqrsz8znppmcq03tsa6c.jpg"
+    "large": "/images/pedals/jhs-haunting-mids.jpg",
+    "small": "/images/pedals/jhs-haunting-mids.jpg"
   },
   "jhs-clover": {
     "large": "https://rvb-img.reverb.com/i/s--1rMoPXyN--/quality=medium-low,height=800,width=800,fit=contain/mixjjurawo5eajoisvos.jpg",
@@ -2547,8 +2527,12 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "https://rvb-img.reverb.com/i/s--LIDhOyvI--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/xk7tjpusha526om1ojxj.jpg"
   },
   "chase-bliss-gen-loss-mkii": {
-    "large": "https://rvb-img.reverb.com/i/s--Nc7jLDz9--/quality=medium-low,height=800,width=800,fit=contain/32930cee-84f5-4bdb-a4f1-f18f0a820a7a.jpg",
-    "small": "https://rvb-img.reverb.com/i/s--bbR839XS--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/32930cee-84f5-4bdb-a4f1-f18f0a820a7a.jpg"
+    "large": "/images/pedals/chase-bliss-gen-loss-mkii.jpg",
+    "small": "/images/pedals/chase-bliss-gen-loss-mkii.jpg"
+  },
+  "chase-bliss-mood": {
+    "large": "/images/pedals/chase-bliss-mood.jpg",
+    "small": "/images/pedals/chase-bliss-mood.jpg"
   },
   "chase-bliss-preamp-mkii": {
     "large": "https://rvb-img.reverb.com/i/s--qRY5LoZV--/quality=medium-low,height=800,width=800,fit=contain/8d3ada3c-1410-46ac-8263-40e96556199f.png",
@@ -2631,8 +2615,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "https://rvb-img.reverb.com/i/s--C94Gtgoc--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/442b7059-a7e7-4486-b982-02c325197972.jpg"
   },
   "dunlop-sw95": {
-    "large": "https://rvb-img.reverb.com/i/s--hM4smKNd--/quality=medium-low,height=800,width=800,fit=contain/de290905-6547-4e11-8685-810666a045bd.jpg",
-    "small": "https://rvb-img.reverb.com/i/s--pmjtpZyh--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/de290905-6547-4e11-8685-810666a045bd.jpg"
+    "large": "/images/pedals/dunlop-sw95.jpg",
+    "small": "/images/pedals/dunlop-sw95.jpg"
   },
   "dunlop-jb95": {
     "large": "https://rvb-img.reverb.com/i/s--ybeWUcAD--/quality=medium-low,height=800,width=800,fit=contain/sfap4kca9tzhlh90utfh.jpg",
@@ -2879,8 +2863,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "https://rvb-img.reverb.com/i/s--xbuLUd50--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/ve1ichxwra4cd6flu6sw.jpg"
   },
   "king-tone-duellist": {
-    "large": "https://rvb-img.reverb.com/i/s--Lak98LNd--/quality=medium-low,height=800,width=800,fit=contain/48d171b3-0583-4ed9-bab0-80e699e362fc.jpg",
-    "small": "https://rvb-img.reverb.com/i/s--aZcAFXn5--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/48d171b3-0583-4ed9-bab0-80e699e362fc.jpg"
+    "large": "/images/pedals/king-tone-duellist.jpg",
+    "small": "/images/pedals/king-tone-duellist.jpg"
   },
   "king-tone-minifuzz": {
     "large": "https://rvb-img.reverb.com/i/s--uMghDc6J--/quality=medium-low,height=800,width=800,fit=contain/971e0da9-338e-4aac-ac20-9a0603974ec4.jpg",
@@ -2931,8 +2915,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "https://rvb-img.reverb.com/i/s--nvJhqLgk--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/zclq08fupff3z3hhkxwl.jpg"
   },
   "caroline-parabola": {
-    "large": "https://rvb-img.reverb.com/i/s--_NJVn5bO--/quality=medium-low,height=800,width=800,fit=contain/bmcg7nvxns5jqevtwm4g.jpg",
-    "small": "https://rvb-img.reverb.com/i/s--4LS305Y2--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/bmcg7nvxns5jqevtwm4g.jpg"
+    "large": "/images/pedals/caroline-parabola.jpg",
+    "small": "/images/pedals/caroline-parabola.jpg"
   },
   "hudson-broadcast": {
     "large": "https://rvb-img.reverb.com/i/s--wzdRH7nZ--/quality=medium-low,height=800,width=800,fit=contain/jbavy2lcgxpnjhhc8hya.jpg",
@@ -2987,8 +2971,8 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "small": "https://rvb-img.reverb.com/i/s--egqEX30o--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/jbesmw56lhnrs6ysot1t.jpg"
   },
   "mxr-m159-tremolo": {
-    "large": "https://rvb-img.reverb.com/i/s--242LoNsr--/quality=medium-low,height=800,width=800,fit=contain/fab7e8f5-4460-4687-b052-83eab58a362f.heic",
-    "small": "https://rvb-img.reverb.com/i/s--XOqiO98X--/quality=medium-low,height=400,width=400,fit=cover,gravity=bottom/fab7e8f5-4460-4687-b052-83eab58a362f.heic"
+    "large": "/images/pedals/mxr-m159-tremolo.jpg",
+    "small": "/images/pedals/mxr-m159-tremolo.jpg"
   },
   "digitech-whammy-1": {
     "large": "https://rvb-img.reverb.com/i/s--T3q-I5Qn--/quality=medium-low,height=800,width=800,fit=contain/vd2piyii4p2ztdbrxwfb.jpg",
@@ -3057,10 +3041,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
   "boss-vb2-vibrato": {
     "large": "/images/pedals/boss-vb2-vibrato.jpg",
     "small": "/images/pedals/boss-vb2-vibrato.jpg"
-  },
-  "cali76-compressor": {
-    "large": "/images/pedals/cali76-compressor.jpg",
-    "small": "/images/pedals/cali76-compressor.jpg"
   },
   "caline-10-band": {
     "large": "/images/pedals/caline-10-band.jpg",
@@ -3646,10 +3626,6 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
     "large": "/images/pedals/walrus-contraband.jpg",
     "small": "/images/pedals/walrus-contraband.jpg"
   },
-  "walrus-d1-delay": {
-    "large": "/images/pedals/walrus-d1-delay.jpg",
-    "small": "/images/pedals/walrus-d1-delay.jpg"
-  },
   "walrus-d1": {
     "large": "/images/pedals/walrus-d1.jpg",
     "small": "/images/pedals/walrus-d1.jpg"
@@ -3685,6 +3661,34 @@ const PEDAL_IMAGES: Record<string, PedalImageData | null> = {
   "xotic-xvp-250k": {
     "large": "/images/pedals/xotic-xvp-250k.jpg",
     "small": "/images/pedals/xotic-xvp-250k.jpg"
+  },
+  "jackson-el-guapo": {
+    "large": "/images/pedals/jackson-el-guapo.jpg",
+    "small": "/images/pedals/jackson-el-guapo.jpg"
+  },
+  "fractal-fm3": {
+    "large": "/images/pedals/fractal-fm3.jpg",
+    "small": "/images/pedals/fractal-fm3.jpg"
+  },
+  "fractal-fm9": {
+    "large": "/images/pedals/fractal-fm9.jpg",
+    "small": "/images/pedals/fractal-fm9.jpg"
+  },
+  "mooer-ge300": {
+    "large": "/images/pedals/mooer-ge300.jpg",
+    "small": "/images/pedals/mooer-ge300.jpg"
+  },
+  "boss-gt-1000-core": {
+    "large": "/images/pedals/boss-gt-1000-core.jpg",
+    "small": "/images/pedals/boss-gt-1000-core.jpg"
+  },
+  "boss-gx-100": {
+    "large": "/images/pedals/boss-gx-100.jpg",
+    "small": "/images/pedals/boss-gx-100.jpg"
+  },
+  "digitech-dirty-robot": {
+    "large": "/images/pedals/digitech-dirty-robot.jpg",
+    "small": "/images/pedals/digitech-dirty-robot.jpg"
   },
 };
 

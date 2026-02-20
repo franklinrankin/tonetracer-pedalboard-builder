@@ -11,6 +11,23 @@
   --color-board-accent: #FF5722;
   --color-board-highlight: #FFEB3B;
   --color-board-success: #4CAF50;
+  --color-board-text: #000000;
+  --color-board-text-muted: #666666;
+  --color-board-shadow: #000000;
+}
+
+/* Dark Mode */
+.dark {
+  --color-board-dark: #121212;
+  --color-board-surface: #1E1E1E;
+  --color-board-elevated: #2A2A2A;
+  --color-board-border: #FFFFFF;
+  --color-board-accent: #FF7043;
+  --color-board-highlight: #FFD54F;
+  --color-board-success: #66BB6A;
+  --color-board-text: #FFFFFF;
+  --color-board-text-muted: #A0A0A0;
+  --color-board-shadow: #FFFFFF;
 }
 
 * {
@@ -26,60 +43,92 @@ body {
   padding: 0;
   font-family: 'Space Mono', 'IBM Plex Mono', monospace;
   background: var(--color-board-dark);
-  color: #000000;
+  color: var(--color-board-text);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Neo-Brutalist utilities */
 .brutal-border {
-  border: 3px solid #000000;
+  border: 3px solid var(--color-board-border);
 }
 
 .brutal-shadow {
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--color-board-shadow);
 }
 
 .brutal-shadow-sm {
-  box-shadow: 2px 2px 0px #000000;
+  box-shadow: 2px 2px 0px var(--color-board-shadow);
+}
+
+.brutal-border {
+  border-color: var(--color-board-border);
+}
+
+/* Theme-aware text and background utilities */
+.text-theme {
+  color: var(--color-board-text);
+}
+
+.text-theme-muted {
+  color: var(--color-board-text-muted);
+}
+
+.bg-theme-surface {
+  background-color: var(--color-board-surface);
+}
+
+.bg-theme-dark {
+  background-color: var(--color-board-dark);
+}
+
+.bg-theme-elevated {
+  background-color: var(--color-board-elevated);
+}
+
+.brutal-shadow-md {
+  box-shadow: 6px 6px 0px var(--color-board-shadow);
 }
 
 .brutal-shadow-lg {
-  box-shadow: 8px 8px 0px #000000;
+  box-shadow: 8px 8px 0px var(--color-board-shadow);
 }
 
 .brutal-card {
-  background: #FFFFFF;
-  border: 3px solid #000000;
-  box-shadow: 4px 4px 0px #000000;
+  background: var(--color-board-surface);
+  border: 3px solid var(--color-board-border);
+  box-shadow: 4px 4px 0px var(--color-board-shadow);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .brutal-card:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #000000;
+  box-shadow: 6px 6px 0px var(--color-board-shadow);
 }
 
 .brutal-button {
-  background: #FFFFFF;
-  border: 3px solid #000000;
-  box-shadow: 4px 4px 0px #000000;
+  background: var(--color-board-surface);
+  border: 3px solid var(--color-board-border);
+  box-shadow: 4px 4px 0px var(--color-board-shadow);
   font-family: 'Space Mono', monospace;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   transition: all 0.15s ease;
   cursor: pointer;
+  color: var(--color-board-text);
 }
 
 .brutal-button:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #000000;
+  box-shadow: 6px 6px 0px var(--color-board-shadow);
 }
 
 .brutal-button:active {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px #000000;
+  box-shadow: 2px 2px 0px var(--color-board-shadow);
 }
 
 .brutal-button-primary {
@@ -98,15 +147,16 @@ body {
 }
 
 .brutal-input {
-  background: #FFFFFF;
-  border: 3px solid #000000;
+  background: var(--color-board-surface);
+  border: 3px solid var(--color-board-border);
   font-family: 'Space Mono', monospace;
   padding: 0.75rem 1rem;
+  color: var(--color-board-text);
 }
 
 .brutal-input:focus {
   outline: none;
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--color-board-shadow);
 }
 
 /* Custom scrollbar - brutalist style */
@@ -117,15 +167,15 @@ body {
 
 ::-webkit-scrollbar-track {
   background: var(--color-board-dark);
-  border: 2px solid #000000;
+  border: 2px solid var(--color-board-border);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #000000;
+  background: var(--color-board-border);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+  background: var(--color-board-text-muted);
 }
 
 /* Selection */

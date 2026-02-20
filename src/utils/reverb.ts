@@ -1,37 +1,44 @@
 /**
- * Reverb Affiliate Link Utilities
+ * Reverb Affiliate Link Utilities (via Awin)
  * 
- * To set up:
- * 1. Apply at https://reverb.com/page/affiliates (or search "Reverb affiliate program")
- * 2. Get approved and receive your affiliate ID
- * 3. Replace AFFILIATE_ID below with your actual ID
+ * Commission: 5% per sale, $5 per new buyer
+ * Cookie window: 30 days
  */
 
-// TODO: Replace with your actual Reverb affiliate ID once approved
-const AFFILIATE_ID: string = 'boardsie';
+// Awin affiliate credentials
+const AWIN_AFFILIATE_ID = '2748608';
+const AWIN_MERCHANT_ID = '67144'; // Reverb's merchant ID on Awin
 
 /**
- * Generate a Reverb search link for a pedal
+ * Generate an Awin-tracked Reverb search link for a pedal
  */
 export function getReverbSearchUrl(brand: string, model: string): string {
   const query = encodeURIComponent(`${brand} ${model}`);
-  const baseUrl = `https://reverb.com/marketplace?query=${query}&product_type=effects-and-pedals`;
+  const destinationUrl = `https://reverb.com/marketplace?query=${query}&product_type=effects-and-pedals`;
   
-  // Add affiliate tracking
-  return `${baseUrl}&utm_source=affiliate&utm_medium=${AFFILIATE_ID}&utm_campaign=pedal_builder`;
+  // Awin tracking format
+  return `https://www.awin1.com/cread.php?awinmid=${AWIN_MERCHANT_ID}&awinaffid=${AWIN_AFFILIATE_ID}&ued=${encodeURIComponent(destinationUrl)}`;
 }
 
 /**
- * Generate a direct Reverb link (if you have a specific listing ID)
+ * Generate an Awin-tracked direct Reverb link (for specific listings)
  */
 export function getReverbListingUrl(listingId: string): string {
-  const baseUrl = `https://reverb.com/item/${listingId}`;
-  return `${baseUrl}?utm_source=affiliate&utm_medium=${AFFILIATE_ID}&utm_campaign=pedal_builder`;
+  const destinationUrl = `https://reverb.com/item/${listingId}`;
+  return `https://www.awin1.com/cread.php?awinmid=${AWIN_MERCHANT_ID}&awinaffid=${AWIN_AFFILIATE_ID}&ued=${encodeURIComponent(destinationUrl)}`;
 }
 
 /**
- * Check if affiliate ID has been configured
+ * Generate an Awin-tracked link to the Reverb homepage
+ */
+export function getReverbHomeUrl(): string {
+  const destinationUrl = 'https://reverb.com';
+  return `https://www.awin1.com/cread.php?awinmid=${AWIN_MERCHANT_ID}&awinaffid=${AWIN_AFFILIATE_ID}&ued=${encodeURIComponent(destinationUrl)}`;
+}
+
+/**
+ * Check if affiliate is configured
  */
 export function isAffiliateConfigured(): boolean {
-  return AFFILIATE_ID !== 'boardsie' && AFFILIATE_ID.length > 0;
+  return AWIN_AFFILIATE_ID.length > 0;
 }

@@ -29,6 +29,7 @@ export type PowerType =
   | '9V AC'
   | '12V AC'
   | 'AC'
+  | 'DC'
   | '48V Phantom'
   | 'Battery Only'
   | 'USB'
@@ -49,6 +50,7 @@ export type EnclosureType =
   | 'wah'         // wah pedal enclosure
   | 'round'       // round fuzz face style
   | 'rack'        // rack mount unit
+  | 'floor'       // floor multi-FX unit
   | 'custom';
 
 export interface Pedal {
@@ -147,6 +149,7 @@ export interface Board {
   slots: BoardSlot[];
   typeSlots?: TypeSlot[]; // Selected pedal types from build page
   buildSlots?: BuildSlot[]; // Build page state - persisted between navigation
+  multiEffects?: MultiEffectsSelection; // Multi-FX/modeler selection
   createdAt: Date;
   updatedAt: Date;
 }
@@ -194,4 +197,11 @@ export interface SavedBoard {
   genres: string[]; // Genre names or empty for "Created Board"
   createdAt: Date;
   updatedAt: Date;
+}
+
+// Multi-FX selection for when user has a modeler covering multiple effect types
+export interface MultiEffectsSelection {
+  pedalId: string | null; // The multi-FX pedal being used (e.g., 'line6-hx-stomp')
+  coveringCategories: Category[]; // Which categories it's covering (e.g., ['delay', 'reverb', 'modulation'])
+  isAmpSimOnly: boolean; // If true, just using it as amp sim at end of chain
 }

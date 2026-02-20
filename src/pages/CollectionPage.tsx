@@ -1,16 +1,22 @@
-import { useState, useMemo } from 'react';
-import { Search, X, Trash2, Package, DollarSign, Zap, ArrowLeft, Plus } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { Search, X, Trash2, Package, DollarSign, Zap, ArrowLeft, Plus, Globe, Lock, ExternalLink, Youtube } from 'lucide-react';
 import { Pedal } from '../types';
 import { PedalImage } from '../components/PedalImage';
 import { CATEGORY_INFO, getRatingLabel } from '../data/categories';
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import { supabase } from '../lib/supabase';
+import { getReverbSearchUrl } from '../utils/reverb';
 
 interface CollectionPageProps {
   collection: string[];
   allPedals: Pedal[];
-  onRemoveFromCollection: (pedalId: string) => void;
-  onAddToCollection: (pedalId: string) => void;
+  onRemoveFromCollection?: (pedalId: string) => void;
+  onAddToCollection?: (pedalId: string) => void;
   onBack: () => void;
   onBuildFromCollection?: () => void;
+  readOnly?: boolean;
+  communityUsername?: string;
 }
 
 export function CollectionPage({ 
@@ -19,17 +25,87 @@ export function CollectionPage({
   onRemoveFromCollection,
   onAddToCollection,
   onBack,
-  onBuildFromCollection
+  onBuildFromCollection,
+  readOnly = false,
+  communityUsername
 }: CollectionPageProps) {
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [addSearchQuery, setAddSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortOption, setSortOption] = useState<'name' | 'brand' | 'price'>('name');
+  const [isPublic, setIsPublic] = useState(false);
+  const [savingPublic, setSavingPublic] = useState(false);
 
-  // Get full pedal objects for collection
+  // Load public status from Supabase
+  useEffect(() => {
+    const loadPublicStatus = async () => {
+      if (!user || !supabase) return;
+      const { data } = await supabase
+        .from('public_collections')
+        .select('is_public')
+        .eq('user_id', user.id)
+        .single();
+      if (data) {
+        setIsPublic(data.is_public);
+      }
+    };
+    loadPublicStatus();
+  }, [user]);
+
+  // Toggle public/private
+  const togglePublic = async () => {
+    if (!user || !supabase) return;
+    
+    setSavingPublic(true);
+    const newIsPublic = !isPublic;
+    const username = user.user_metadata?.username || user.email?.split('@')[0] || 'Anonymous';
+    
+    try {
+      await supabase
+        .from('public_collections')
+        .upsert({
+          user_id: user.id,
+          username,
+          is_public: newIsPublic,
+          pedal_ids: collection,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'user_id' });
+      
+      setIsPublic(newIsPublic);
+    } catch (error) {
+      console.error('Error updating collection visibility:', error);
+    }
+    setSavingPublic(false);
+  };
+
+  // Sync collection to public_collections when it changes (if public)
+  useEffect(() => {
+    const syncPublicCollection = async () => {
+      if (!user || !supabase || !isPublic) return;
+      const username = user.user_metadata?.username || user.email?.split('@')[0] || 'Anonymous';
+      
+      await supabase
+        .from('public_collections')
+        .upsert({
+          user_id: user.id,
+          username,
+          is_public: true,
+          pedal_ids: collection,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'user_id' });
+    };
+    
+    if (isPublic && collection.length > 0) {
+      syncPublicCollection();
+    }
+  }, [collection, isPublic, user]);
+
+  // Get full pedal objects for collection (deduplicated)
   const collectionPedals = useMemo(() => {
-    return collection
+    const uniqueIds = [...new Set(collection)];
+    return uniqueIds
       .map(id => allPedals.find(p => p.id === id))
       .filter((p): p is Pedal => p !== undefined);
   }, [collection, allPedals]);
@@ -101,85 +177,112 @@ export function CollectionPage({
           <div className="flex items-center gap-4 mb-4">
             <button
               onClick={onBack}
-              className="w-12 h-12 bg-white flex items-center justify-center hover:-translate-y-0.5 transition-transform"
-              style={{ border: '3px solid black', boxShadow: '3px 3px 0px black' }}
+              className="w-12 h-12 bg-theme-surface flex items-center justify-center hover:-translate-y-0.5 transition-transform"
+              style={{ border: '3px solid var(--color-board-border)', boxShadow: '3px 3px 0px var(--color-board-shadow)' }}
             >
-              <ArrowLeft className="w-6 h-6 text-black" />
+              <ArrowLeft className="w-6 h-6 text-theme" />
             </button>
             <div>
               <h1 
-                className="text-2xl sm:text-4xl font-black text-black uppercase"
+                className="text-2xl sm:text-4xl font-black text-theme uppercase"
                 style={{ fontFamily: '"Space Grotesk", sans-serif' }}
               >
-                My Collection
+                {communityUsername ? `${communityUsername}'s Collection` : 'My Collection'}
               </h1>
-              <p className="text-sm text-black/60 font-bold">
-                {collectionPedals.length} pedals in your collection
+              <p className="text-sm text-theme-muted font-bold">
+                {collectionPedals.length} pedals {communityUsername ? 'in this collection' : 'in your collection'}
               </p>
             </div>
           </div>
           
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-3 bg-board-accent text-black font-black uppercase hover:-translate-y-0.5 transition-transform"
-            style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
-          >
-            <Plus className="w-5 h-5" />
-            <span>Add Pedals</span>
-          </button>
+          {!readOnly && (
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="flex items-center gap-2 px-4 py-3 bg-board-accent text-black font-black uppercase hover:-translate-y-0.5 transition-transform"
+                style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
+              >
+                <Plus className="w-5 h-5" />
+                <span>Add Pedals</span>
+              </button>
+              
+              {user && (
+                <button
+                  onClick={togglePublic}
+                  disabled={savingPublic}
+                  className={`flex items-center gap-2 px-4 py-3 font-black uppercase hover:-translate-y-0.5 transition-transform ${
+                    isPublic ? 'bg-green-300' : 'bg-gray-200'
+                  }`}
+                  style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
+                >
+                  {isPublic ? (
+                    <>
+                      <Globe className="w-5 h-5" />
+                      <span>Public</span>
+                    </>
+                  ) : (
+                    <>
+                      <Lock className="w-5 h-5" />
+                      <span>Private</span>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
           <div 
             className="p-4 bg-green-100"
-            style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+            style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
           >
-            <div className="flex items-center gap-2 text-black mb-1">
+            <div className="flex items-center gap-2 text-theme mb-1">
               <DollarSign className="w-5 h-5" />
               <span className="text-xs font-bold uppercase">Total Value</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-black">${totalValue.toLocaleString()}</div>
+            <div className="text-2xl sm:text-3xl font-black text-theme">${totalValue.toLocaleString()}</div>
           </div>
           
           <div 
             className="p-4 bg-blue-100"
-            style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+            style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
           >
-            <div className="flex items-center gap-2 text-black mb-1">
+            <div className="flex items-center gap-2 text-theme mb-1">
               <Package className="w-5 h-5" />
               <span className="text-xs font-bold uppercase">Pedals</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-black">{collectionPedals.length}</div>
+            <div className="text-2xl sm:text-3xl font-black text-theme">{collectionPedals.length}</div>
           </div>
           
           <div 
             className="p-4 bg-yellow-100"
-            style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+            style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
           >
-            <div className="flex items-center gap-2 text-black mb-1">
+            <div className="flex items-center gap-2 text-theme mb-1">
               <Zap className="w-5 h-5" />
               <span className="text-xs font-bold uppercase">Power</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-black">{totalPower}mA</div>
+            <div className="text-2xl sm:text-3xl font-black text-theme">{totalPower}mA</div>
           </div>
           
           <div 
             className="p-4 bg-purple-100"
-            style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+            style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
           >
-            <div className="flex items-center gap-2 text-black mb-1">
+            <div className="flex items-center gap-2 text-theme mb-1">
               <span className="text-xs font-bold uppercase">Categories</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-black">{Object.keys(categoryBreakdown).length}</div>
+            <div className="text-2xl sm:text-3xl font-black text-theme">{Object.keys(categoryBreakdown).length}</div>
           </div>
         </div>
 
         {/* Category Breakdown */}
         {Object.keys(categoryBreakdown).length > 0 && (
           <div 
-            className="p-4 bg-white mb-6"
-            style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+            className="p-4 bg-theme-surface mb-6"
+            style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
           >
             <h3 className="text-sm font-black uppercase mb-3">Category Breakdown</h3>
             <div className="flex flex-wrap gap-2">
@@ -188,10 +291,10 @@ export function CollectionPage({
                 return (
                   <div 
                     key={cat}
-                    className="px-3 py-1.5 font-bold text-sm text-black"
+                    className="px-3 py-1.5 font-bold text-sm text-theme"
                     style={{ 
                       backgroundColor: info?.color ? `${info.color}40` : '#E0E0E0',
-                      border: '2px solid black'
+                      border: '2px solid var(--color-board-border)'
                     }}
                   >
                     {cat}: {count}
@@ -205,19 +308,19 @@ export function CollectionPage({
         {/* Search */}
         {collectionPedals.length > 0 && (
           <div className="relative mb-6">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-black/50" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-theme-muted" />
             <input
               type="text"
-              placeholder="Search your collection..."
+              placeholder={communityUsername ? `Search ${communityUsername}'s collection...` : "Search your collection..."}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-12 py-3 bg-white text-black placeholder-black/40 font-bold"
-              style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+              className="w-full pl-12 pr-12 py-3 bg-theme-surface text-theme placeholder-gray-400 font-bold"
+              style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-black/50 hover:text-black"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-theme-muted hover:text-theme"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -240,8 +343,8 @@ export function CollectionPage({
                     className="relative p-1.5 sm:p-2"
                     style={{
                       backgroundColor: categoryInfo?.color ? `${categoryInfo.color}40` : '#FFF9C4',
-                      border: '4px solid black',
-                      boxShadow: '4px 4px 0px black',
+                      border: '4px solid var(--color-board-border)',
+                      boxShadow: '4px 4px 0px var(--color-board-shadow)',
                     }}
                   >
                     {/* Category Badge */}
@@ -249,7 +352,7 @@ export function CollectionPage({
                       className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide"
                       style={{
                         backgroundColor: '#FFFEF0',
-                        border: '2px solid black',
+                        border: '2px solid var(--color-board-border)',
                         whiteSpace: 'nowrap',
                       }}
                     >
@@ -258,13 +361,13 @@ export function CollectionPage({
                     
                     {/* Inner Card (white area) */}
                     <div 
-                      className="bg-white p-1.5 sm:p-2"
-                      style={{ border: '3px solid black' }}
+                      className="bg-theme-surface p-1.5 sm:p-2"
+                      style={{ border: '3px solid var(--color-board-border)' }}
                     >
                       {/* Image Container */}
                       <div 
                         className="aspect-square mb-2 overflow-hidden bg-gray-100"
-                        style={{ border: '2px solid black' }}
+                        style={{ border: '2px solid var(--color-board-border)' }}
                       >
                         <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
                       </div>
@@ -272,7 +375,7 @@ export function CollectionPage({
                       {/* Name Section */}
                       <div className="text-center mb-2">
                         <p className="text-[9px] sm:text-[10px] text-gray-500 font-bold uppercase tracking-wide truncate">{pedal.brand}</p>
-                        <p className="text-[11px] sm:text-xs font-black text-black truncate leading-tight">{pedal.model}</p>
+                        <p className="text-[11px] sm:text-xs font-black text-theme truncate leading-tight">{pedal.model}</p>
                       </div>
                       
                       {/* Stats Bar */}
@@ -280,7 +383,7 @@ export function CollectionPage({
                         className="flex items-center justify-between px-1.5 py-1"
                         style={{ 
                           backgroundColor: `${categoryInfo?.color}15`,
-                          border: '2px solid black',
+                          border: '2px solid var(--color-board-border)',
                         }}
                       >
                         <span className="text-[10px] sm:text-xs font-black text-green-600">
@@ -300,16 +403,46 @@ export function CollectionPage({
                           </div>
                         </div>
                       </div>
+                      
+                      {/* Reverb & YouTube buttons - only show in read-only mode */}
+                      {readOnly && (
+                        <div className="flex gap-1 mt-2">
+                          <a
+                            href={getReverbSearchUrl(pedal.brand, pedal.model)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-orange-500 text-white text-[9px] sm:text-[10px] font-black uppercase hover:bg-orange-600 transition-colors"
+                            style={{ border: '2px solid var(--color-board-border)' }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ExternalLink className="w-3 h-3" />
+                            Reverb
+                          </a>
+                          <a
+                            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`${pedal.brand} ${pedal.model} review`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-red-600 text-white text-[9px] sm:text-[10px] font-black uppercase hover:bg-red-700 transition-colors"
+                            style={{ border: '2px solid var(--color-board-border)' }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Youtube className="w-3 h-3" />
+                            Review
+                          </a>
+                        </div>
+                      )}
                     </div>
                     
-                    {/* Remove Button */}
-                    <button
-                      onClick={() => onRemoveFromCollection(pedal.id)}
-                      className="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-                      style={{ border: '2px solid black' }}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {/* Remove Button - only show if not read-only */}
+                    {!readOnly && onRemoveFromCollection && (
+                      <button
+                        onClick={() => onRemoveFromCollection(pedal.id)}
+                        className="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                        style={{ border: '2px solid var(--color-board-border)' }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -317,24 +450,24 @@ export function CollectionPage({
           </div>
         ) : (
           <div 
-            className="p-12 bg-white text-center"
-            style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+            className="p-12 bg-theme-surface text-center"
+            style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
           >
             <div 
               className="w-16 h-16 mx-auto mb-4 bg-gray-100 flex items-center justify-center"
-              style={{ border: '3px solid black' }}
+              style={{ border: '3px solid var(--color-board-border)' }}
             >
-              <Package className="w-8 h-8 text-black/40" />
+              <Package className="w-8 h-8 text-theme-muted" />
             </div>
-            <h3 className="text-xl font-black text-black mb-2">No Pedals Yet</h3>
-            <p className="text-black/60 font-bold mb-4">
+            <h3 className="text-xl font-black text-theme mb-2">No Pedals Yet</h3>
+            <p className="text-theme-muted font-bold mb-4">
               {searchQuery ? 'No pedals match your search' : 'Start adding pedals to your collection'}
             </p>
             {!searchQuery && (
               <button
                 onClick={() => setShowAddModal(true)}
                 className="px-6 py-3 bg-board-accent text-black font-black uppercase hover:-translate-y-0.5 transition-transform"
-                style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+                style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
               >
                 Add Your First Pedal
               </button>
@@ -353,34 +486,34 @@ export function CollectionPage({
           
           <div 
             className="relative bg-[#FFFEF0] w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col"
-            style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
+            style={{ border: '4px solid var(--color-board-border)', boxShadow: '8px 8px 0px black' }}
           >
             {/* Modal Header */}
             <div 
               className="p-4 bg-board-accent flex items-center justify-between"
               style={{ borderBottom: '4px solid black' }}
             >
-              <h2 className="text-xl font-black text-black uppercase">Add Pedals</h2>
+              <h2 className="text-xl font-black text-theme uppercase">Add Pedals</h2>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="w-10 h-10 bg-white flex items-center justify-center hover:-translate-y-0.5 transition-transform"
-                style={{ border: '3px solid black' }}
+                className="w-10 h-10 bg-theme-surface flex items-center justify-center hover:-translate-y-0.5 transition-transform"
+                style={{ border: '3px solid var(--color-board-border)' }}
               >
-                <X className="w-5 h-5 text-black" />
+                <X className="w-5 h-5 text-theme" />
               </button>
             </div>
             
             {/* Search & Filter */}
             <div className="p-4 space-y-3" style={{ borderBottom: '3px solid black' }}>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-muted" />
                 <input
                   type="text"
                   placeholder="Search pedals..."
                   value={addSearchQuery}
                   onChange={(e) => setAddSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-white text-black placeholder-black/40 font-bold text-sm"
-                  style={{ border: '3px solid black' }}
+                  className="w-full pl-10 pr-4 py-2 bg-theme-surface text-theme placeholder-gray-400 font-bold text-sm"
+                  style={{ border: '3px solid var(--color-board-border)' }}
                 />
               </div>
               
@@ -393,9 +526,9 @@ export function CollectionPage({
                       className={`px-2 py-1 text-xs font-bold uppercase transition-colors ${
                         selectedCategory === cat
                           ? 'bg-black text-white'
-                          : 'bg-white text-black hover:bg-gray-100'
+                          : 'bg-theme-surface text-theme hover:bg-gray-100 dark:hover:bg-gray-800'
                       }`}
-                      style={{ border: '2px solid black' }}
+                      style={{ border: '2px solid var(--color-board-border)' }}
                     >
                       {cat}
                     </button>
@@ -404,7 +537,7 @@ export function CollectionPage({
                 
                 {/* Sort Options */}
                 <div className="flex items-center gap-1 ml-auto">
-                  <span className="text-xs font-bold text-black/60 uppercase mr-1">Sort:</span>
+                  <span className="text-xs font-bold text-theme-muted uppercase mr-1">Sort:</span>
                   {[
                     { value: 'name', label: 'Name' },
                     { value: 'brand', label: 'Brand' },
@@ -416,9 +549,9 @@ export function CollectionPage({
                       className={`px-2 py-1 text-xs font-bold uppercase transition-colors ${
                         sortOption === option.value
                           ? 'bg-black text-white'
-                          : 'bg-white text-black hover:bg-gray-100'
+                          : 'bg-theme-surface text-theme hover:bg-gray-100 dark:hover:bg-gray-800'
                       }`}
-                      style={{ border: '2px solid black' }}
+                      style={{ border: '2px solid var(--color-board-border)' }}
                     >
                       {option.label}
                     </button>
@@ -435,7 +568,7 @@ export function CollectionPage({
                   return (
                     <button
                       key={pedal.id}
-                      onClick={() => onAddToCollection(pedal.id)}
+                      onClick={() => onAddToCollection?.(pedal.id)}
                       className="text-left hover:-translate-y-1 hover:rotate-1 transition-all active:scale-[0.98]"
                     >
                       {/* Card Frame */}
@@ -443,8 +576,8 @@ export function CollectionPage({
                         className="relative p-1.5 sm:p-2"
                         style={{
                           backgroundColor: categoryInfo?.color ? `${categoryInfo.color}40` : '#FFF9C4',
-                          border: '4px solid black',
-                          boxShadow: '4px 4px 0px black',
+                          border: '4px solid var(--color-board-border)',
+                          boxShadow: '4px 4px 0px var(--color-board-shadow)',
                         }}
                       >
                         {/* Category Badge */}
@@ -452,7 +585,7 @@ export function CollectionPage({
                           className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide"
                           style={{
                             backgroundColor: '#FFFEF0',
-                            border: '2px solid black',
+                            border: '2px solid var(--color-board-border)',
                             whiteSpace: 'nowrap',
                           }}
                         >
@@ -461,13 +594,13 @@ export function CollectionPage({
                         
                         {/* Inner Card (white area) */}
                         <div 
-                          className="bg-white p-1.5 sm:p-2"
-                          style={{ border: '3px solid black' }}
+                          className="bg-theme-surface p-1.5 sm:p-2"
+                          style={{ border: '3px solid var(--color-board-border)' }}
                         >
                           {/* Image Container */}
                           <div 
                             className="aspect-square mb-2 overflow-hidden bg-gray-100"
-                            style={{ border: '2px solid black' }}
+                            style={{ border: '2px solid var(--color-board-border)' }}
                           >
                             <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
                           </div>
@@ -475,7 +608,7 @@ export function CollectionPage({
                           {/* Name Section */}
                           <div className="text-center mb-2">
                             <p className="text-[9px] sm:text-[10px] text-gray-500 font-bold uppercase tracking-wide truncate">{pedal.brand}</p>
-                            <p className="text-[11px] sm:text-xs font-black text-black truncate leading-tight">{pedal.model}</p>
+                            <p className="text-[11px] sm:text-xs font-black text-theme truncate leading-tight">{pedal.model}</p>
                           </div>
                           
                           {/* Stats Bar */}
@@ -483,7 +616,7 @@ export function CollectionPage({
                             className="flex items-center justify-between px-1.5 py-1"
                             style={{ 
                               backgroundColor: `${categoryInfo?.color}15`,
-                              border: '2px solid black',
+                              border: '2px solid var(--color-board-border)',
                             }}
                           >
                             <span className="text-[10px] sm:text-xs font-black text-green-600">
@@ -511,7 +644,7 @@ export function CollectionPage({
               </div>
               
               {availablePedals.length === 0 && (
-                <div className="text-center py-12 text-black/60 font-bold">
+                <div className="text-center py-12 text-theme-muted font-bold">
                   No pedals found matching your search
                 </div>
               )}
@@ -519,16 +652,16 @@ export function CollectionPage({
             
             {/* Modal Footer */}
             <div 
-              className="p-4 bg-white flex justify-between items-center"
+              className="p-4 bg-theme-surface flex justify-between items-center"
               style={{ borderTop: '4px solid black' }}
             >
-              <span className="text-sm font-bold text-black/60">
+              <span className="text-sm font-bold text-theme-muted">
                 {collection.length} pedals in collection
               </span>
               <button
                 onClick={() => setShowAddModal(false)}
                 className="px-6 py-2 bg-black text-white font-black uppercase hover:-translate-y-0.5 transition-transform"
-                style={{ border: '3px solid black' }}
+                style={{ border: '3px solid var(--color-board-border)' }}
               >
                 Done
               </button>

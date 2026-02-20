@@ -245,19 +245,19 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
   return (
     <div className="min-h-screen bg-[#FFFEF0]">
       {/* Header - sticky with high z-index */}
-      <div className="sticky top-0 bg-white border-b-4 border-black z-50">
+      <div className="sticky top-0 bg-theme-surface border-b-4 brutal-border z-50">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
               <button
                 onClick={onBack}
-                className="p-2 text-black hover:bg-yellow-200 transition-colors flex-shrink-0"
+                className="p-2 text-theme hover:bg-yellow-200 dark:hover:bg-yellow-900/30 transition-colors flex-shrink-0"
                 style={{ border: '2px solid black' }}
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <div className="min-w-0">
-                <h1 className="text-sm sm:text-lg font-extrabold text-black uppercase tracking-tight truncate">
+                <h1 className="text-sm sm:text-lg font-extrabold text-theme uppercase tracking-tight truncate">
                   {username}'s Favorites
                 </h1>
                 <p className="text-[10px] sm:text-xs text-gray-700 font-bold">
@@ -270,15 +270,15 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
               onClick={handleSave}
               className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold uppercase transition-all flex-shrink-0 hover:-translate-x-0.5 hover:-translate-y-0.5 ${
                 showSaved 
-                  ? 'bg-green-200 text-black' 
-                  : 'bg-orange-200 text-black'
+                  ? 'bg-green-200 dark:bg-green-900/50 text-theme' 
+                  : 'bg-orange-200 dark:bg-orange-900/50 text-theme'
               }`}
               style={{ 
-                border: '3px solid black',
-                boxShadow: '4px 4px 0px black',
+                border: '3px solid var(--color-board-border)',
+                boxShadow: '4px 4px 0px var(--color-board-shadow)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '6px 6px 0px black';
+                e.currentTarget.style.boxShadow = '6px 6px 0px var(--color-board-shadow)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.boxShadow = '4px 4px 0px black';
@@ -299,7 +299,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* LEFT COLUMN - Category Slots */}
             <div className="space-y-2">
-            <h2 className="text-sm font-bold text-black uppercase tracking-wide mb-3">
+            <h2 className="text-sm font-bold text-theme uppercase tracking-wide mb-3">
               Choose Your Favorites ({favoritesCount}/{TOTAL_SELECTIONS})
             </h2>
             
@@ -310,7 +310,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                 const typesWithFavorites = cat.types.filter(t => localFavorites[t.type]);
                 
                 return (
-                  <div key={cat.category} className="border-3 border-black bg-white overflow-hidden shadow-[4px_4px_0_0_#000]">
+                  <div key={cat.category} className="border-3 brutal-border bg-theme-surface overflow-hidden brutal-shadow">
                     {/* Category Header */}
                     <button
                       onClick={() => toggleCategory(cat.category)}
@@ -323,15 +323,15 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                         {cat.name.substring(0, 2).toUpperCase()}
                       </div>
                       <div className="flex-1">
-                        <span className="font-bold text-black uppercase">{cat.name}</span>
+                        <span className="font-bold text-theme uppercase">{cat.name}</span>
                         <span className="ml-2 text-xs text-gray-600 font-medium">
                           {typesWithFavorites.length}/{cat.types.length} selected
                         </span>
                       </div>
                       {isExpanded ? (
-                        <ChevronDown className="w-4 h-4 text-black" />
+                        <ChevronDown className="w-4 h-4 text-theme" />
                       ) : (
-                        <ChevronRight className="w-4 h-4 text-black" />
+                        <ChevronRight className="w-4 h-4 text-theme" />
                       )}
                     </button>
                     
@@ -356,7 +356,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                               }`}
                             >
                               <div className="flex-1 min-w-0">
-                                <div className="text-sm text-black font-medium">{typeOpt.type}</div>
+                                <div className="text-sm text-theme font-medium">{typeOpt.type}</div>
                                 {hasFavorite && (
                                   <div className="text-xs text-green-700 font-medium truncate">
                                     {favoritePedal.brand} {favoritePedal.model}
@@ -377,7 +377,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
               
               {/* Single Categories (no subtypes) */}
               <div className="mt-4 pt-4 border-t-2 border-black">
-                <p className="text-xs text-black font-bold uppercase tracking-wider mb-2 px-1">Pick One From Each</p>
+                <p className="text-xs text-theme font-bold uppercase tracking-wider mb-2 px-1">Pick One From Each</p>
                 {SINGLE_CATEGORIES.map((cat) => {
                   const categoryInfo = CATEGORY_INFO[cat.category];
                   const isSelected = selectedKey === cat.category && selectionMode === 'category';
@@ -393,7 +393,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                           ? 'bg-orange-200' 
                           : hasFavorite
                             ? 'bg-green-100'
-                            : 'bg-white hover:bg-yellow-50'
+                            : 'bg-theme-surface hover:bg-yellow-50 dark:hover:bg-yellow-900/20'
                       }`}
                     >
                       <div 
@@ -403,7 +403,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                         {cat.name.substring(0, 2).toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-bold text-black uppercase">{cat.name}</div>
+                        <div className="font-bold text-theme uppercase">{cat.name}</div>
                         {hasFavorite ? (
                           <div className="text-xs text-green-700 font-medium truncate">
                             {favoritePedal.brand} {favoritePedal.model}
@@ -423,11 +423,11 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
           </div>
             
           {/* RIGHT COLUMN - Pedal Selection */}
-          <div className="bg-white border-4 border-black p-4 min-h-[400px] flex flex-col shadow-[8px_8px_0_0_#000]">
+          <div className="bg-theme-surface border-4 brutal-border p-4 min-h-[400px] flex flex-col brutal-shadow-lg">
             {selectedKey && (selectedTypeInfo || selectedCategoryInfo) ? (
               <>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-bold text-black uppercase">
+                  <h2 className="text-lg font-bold text-theme uppercase">
                     Favorite {selectionMode === 'type' ? selectedKey : selectedCategoryInfo?.name}
                   </h2>
                   
@@ -437,7 +437,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                     <select
                       value={sortOption}
                       onChange={(e) => setSortOption(e.target.value as SortOption)}
-                      className="text-xs bg-yellow-100 border-2 border-black px-2 py-1 text-black font-medium focus:outline-none"
+                      className="text-xs bg-yellow-100 dark:bg-yellow-900/30 border-2 brutal-border px-2 py-1 text-theme font-medium focus:outline-none"
                     >
                       <option value="rating">Rating</option>
                       <option value="price-low">Price: Low</option>
@@ -455,12 +455,12 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                     placeholder="Search pedals..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-8 py-2 bg-white border-2 border-black text-sm text-black placeholder-gray-500 focus:outline-none focus:bg-yellow-50 transition-colors"
+                    className="w-full pl-9 pr-8 py-2 bg-theme-surface border-2 brutal-border text-sm text-theme placeholder-gray-500 focus:outline-none focus:bg-yellow-50 dark:focus:bg-yellow-900/20 transition-colors"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-theme"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -486,14 +486,14 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                               className={`w-full group p-3 border-2 border-black text-left transition-all shadow-[3px_3px_0_0_#000] hover:shadow-[4px_4px_0_0_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 ${
                                 isSelected
                                   ? 'bg-green-200 ring-2 ring-green-600'
-                                  : 'bg-white hover:bg-yellow-50'
+                                  : 'bg-theme-surface hover:bg-yellow-50 dark:hover:bg-yellow-900/20'
                               }`}
                             >
                               <div className="aspect-square mb-2 overflow-hidden bg-gray-100 border border-black">
                                 <PedalImage pedalId={pedal.id} category={pedal.category} size="lg" className="w-full h-full" />
                               </div>
                               <p className="text-xs text-gray-600 truncate font-medium">{pedal.brand}</p>
-                              <p className="text-sm font-bold text-black truncate">{pedal.model}</p>
+                              <p className="text-sm font-bold text-theme truncate">{pedal.model}</p>
                               <div className="flex items-center justify-between mt-1">
                                 <p className="text-xs text-green-700 font-bold">${pedal.reverbPrice}</p>
                                 <span 
@@ -573,8 +573,8 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-black/50 py-8">
-                <div className="text-2xl font-black mb-3" style={{ border: '3px solid black', padding: '8px 16px', backgroundColor: '#FFF9C4' }}>←</div>
+              <div className="flex flex-col items-center justify-center h-full text-theme-muted py-8">
+                <div className="text-2xl font-black mb-3" style={{ border: '3px solid var(--color-board-border)', padding: '8px 16px', backgroundColor: '#FFF9C4' }}>←</div>
                 <p className="text-center text-sm font-bold">
                   <span className="lg:hidden">Select a type or category above<br />to choose your favorite pedal</span>
                   <span className="hidden lg:inline">Select a type or category on the left<br />to choose your favorite pedal</span>

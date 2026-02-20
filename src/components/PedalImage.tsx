@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Category } from '../types';
 import { CATEGORY_INFO } from '../data/categories';
 import { getPedalImageUrl } from '../data/pedalImageMap';
@@ -40,26 +40,57 @@ export function PedalImage({
   className = '' 
 }: PedalImageProps) {
   const [imageError, setImageError] = useState(false);
-  const categoryInfo = CATEGORY_INFO[category];
-  const abbrev = CATEGORY_ABBREV[category];
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const categoryInfo = CATEGORY_INFO[category] || { color: '#888888', displayName: category };
+  const abbrev = CATEGORY_ABBREV[category] || 'PD';
   
   // Try to get pedal-specific image
   const imageUrl = pedalId ? getPedalImageUrl(pedalId, size === 'sm' ? 'small' : 'large') : null;
+  
+  // Intersection Observer for true lazy loading
+  useEffect(() => {
+    if (!containerRef.current || !imageUrl) return;
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '100px' } // Start loading 100px before visible
+    );
+    
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [imageUrl]);
   
   // Show actual image if available and not errored
   if (imageUrl && !imageError) {
     return (
       <div 
+        ref={containerRef}
         className={`${SIZE_CLASSES[size]} rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden ${className}`}
         style={{ backgroundColor: `${categoryInfo.color}10` }}
       >
-        <img 
-          src={imageUrl}
-          alt=""
-          className="w-full h-full object-cover"
-          onError={() => setImageError(true)}
-          loading="lazy"
-        />
+        {/* Loading skeleton */}
+        {!imageLoaded && (
+          <div 
+            className="absolute inset-0 animate-pulse"
+            style={{ backgroundColor: `${categoryInfo.color}30` }}
+          />
+        )}
+        {isVisible && (
+          <img 
+            src={imageUrl}
+            alt=""
+            className={`w-full h-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onError={() => setImageError(true)}
+            onLoad={() => setImageLoaded(true)}
+          />
+        )}
       </div>
     );
   }

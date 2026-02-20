@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Check, X, ChevronDown } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
+import { useTheme } from '../context/ThemeContext';
 import { GENRES, GENRE_CATEGORIES, GenreProfile, GenreCategoryId, getGenreById } from '../data/genres';
 import { GenreIcon } from '../components/GenreIcon';
 
@@ -9,12 +10,20 @@ interface GenrePageProps {
   onCreateOwn?: () => void;
 }
 
-const CATEGORY_COLORS: Record<GenreCategoryId, string> = {
+const CATEGORY_COLORS_LIGHT: Record<GenreCategoryId, string> = {
   'rock-roots': '#FFCCBC',
   'heavy': '#FFCDD2',
   'atmospheric': '#BBDEFB',
   'groove': '#C8E6C9',
   'contemporary': '#E1BEE7',
+};
+
+const CATEGORY_COLORS_DARK: Record<GenreCategoryId, string> = {
+  'rock-roots': '#5D3A2A',
+  'heavy': '#5D2A2A',
+  'atmospheric': '#1A3A5C',
+  'groove': '#1A3D1A',
+  'contemporary': '#3D2A4A',
 };
 
 function useIsMobile() {
@@ -38,9 +47,12 @@ function useIsMobile() {
 export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
   const { state, dispatch } = useBoard();
   const { selectedGenres } = state;
+  const { theme } = useTheme();
   const [hoveredCategory, setHoveredCategory] = useState<GenreCategoryId | null>(null);
   const [expandedCategory, setExpandedCategory] = useState<GenreCategoryId | null>(null);
   const isMobile = useIsMobile();
+  
+  const CATEGORY_COLORS = theme === 'dark' ? CATEGORY_COLORS_DARK : CATEGORY_COLORS_LIGHT;
   
   const handleToggleGenre = (genreId: string) => {
     dispatch({ type: 'TOGGLE_GENRE', genreId });
@@ -68,16 +80,16 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
   };
   
   return (
-    <div className="h-full p-4 lg:p-6 overflow-auto" style={{ backgroundColor: '#FFFEF0' }}>
+    <div className="h-full p-4 lg:p-6 overflow-auto" style={{ backgroundColor: 'var(--color-board-dark)' }}>
       {/* Header */}
-      <div className="max-w-4xl mx-auto mb-6 text-center">
+      <div className="max-w-6xl mx-auto mb-6 text-center">
         <h1 
-          className="text-2xl sm:text-4xl font-black text-black mb-2 uppercase tracking-tight"
-          style={{ fontFamily: '"Space Grotesk", sans-serif' }}
+          className="text-2xl sm:text-4xl font-black mb-2 uppercase tracking-tight"
+          style={{ fontFamily: '"Space Grotesk", sans-serif', color: 'var(--color-board-text)' }}
         >
           Pick Your Style
         </h1>
-        <p className="text-sm sm:text-base text-black/70 max-w-2xl mx-auto font-bold">
+        <p className="text-sm sm:text-base max-w-2xl mx-auto font-bold" style={{ color: 'var(--color-board-text-muted)' }}>
           Select up to <span className="text-board-accent">3 genres</span> or{' '}
           <button 
             onClick={onCreateOwn} 
@@ -92,16 +104,17 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
       {selectedGenres.length > 0 && (
         <div className="max-w-4xl mx-auto mb-6">
           <div className="flex items-center justify-center gap-2 flex-wrap">
-            <span className="text-sm font-bold text-black/60 uppercase">Selected:</span>
+            <span className="text-sm font-bold uppercase" style={{ color: 'var(--color-board-text-muted)' }}>Selected:</span>
             {selectedGenreObjects.map(genre => (
               <button
                 key={genre.id}
                 onClick={() => handleToggleGenre(genre.id)}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-bold text-black transition-all hover:-translate-y-0.5"
+                className="flex items-center gap-2 px-3 py-2 text-sm font-bold transition-all hover:-translate-y-0.5"
                 style={{ 
                   backgroundColor: genre.color,
-                  border: '3px solid black',
-                  boxShadow: '3px 3px 0px black',
+                  color: 'var(--color-board-text)',
+                  border: '3px solid var(--color-board-border)',
+                  boxShadow: '3px 3px 0px var(--color-board-shadow)',
                 }}
               >
                 <GenreIcon genre={genre} size="sm" />
@@ -112,58 +125,67 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
             {selectedGenres.length > 1 && (
               <button
                 onClick={handleClearGenres}
-                className="px-3 py-2 text-xs font-bold text-black bg-white uppercase transition-all hover:-translate-y-0.5"
-                style={{ border: '2px solid black', boxShadow: '2px 2px 0px black' }}
+                className="px-3 py-2 text-xs font-bold uppercase transition-all hover:-translate-y-0.5"
+                style={{ 
+                  backgroundColor: 'var(--color-board-surface)',
+                  color: 'var(--color-board-text)',
+                  border: '2px solid var(--color-board-border)', 
+                  boxShadow: '2px 2px 0px var(--color-board-shadow)' 
+                }}
               >
                 Clear All
               </button>
             )}
           </div>
-          <p className="text-center text-xs font-bold text-black/50 mt-2 uppercase">
+          <p className="text-center text-xs font-bold mt-2 uppercase" style={{ color: 'var(--color-board-text-muted)' }}>
             {3 - selectedGenres.length} {3 - selectedGenres.length === 1 ? 'slot' : 'slots'} remaining
           </p>
         </div>
       )}
       
       {/* Category Grid */}
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Create Your Own Card */}
           <button
             onClick={onCreateOwn}
-            className="relative h-64 p-4 text-left transition-all hover:-translate-y-1 overflow-hidden group"
+            className="relative h-72 p-5 text-left transition-all hover:-translate-y-1 overflow-hidden group"
             style={{
-              backgroundColor: '#FFF9C4',
-              border: '4px solid black',
-              boxShadow: '6px 6px 0px black',
+              backgroundColor: theme === 'dark' ? '#4A3D1A' : '#FFF9C4',
+              border: '4px solid var(--color-board-border)',
+              boxShadow: '6px 6px 0px var(--color-board-shadow)',
             }}
           >
             <div className="relative z-10 h-full flex flex-col justify-between">
               <div>
                 <div 
-                  className="w-12 h-12 bg-white flex items-center justify-center text-xl font-black"
-                  style={{ border: '3px solid black' }}
+                  className="w-12 h-12 flex items-center justify-center text-xl font-black"
+                  style={{ 
+                    backgroundColor: 'var(--color-board-surface)',
+                    color: 'var(--color-board-text)',
+                    border: '3px solid var(--color-board-border)' 
+                  }}
                 >
                   +
                 </div>
               </div>
               <div>
                 <h3 
-                  className="font-black text-black text-xl mb-1 uppercase"
-                  style={{ fontFamily: '"Space Grotesk", sans-serif' }}
+                  className="font-black text-2xl mb-1 uppercase"
+                  style={{ fontFamily: '"Space Grotesk", sans-serif', color: 'var(--color-board-text)' }}
                 >
                   Create Your Own
                 </h3>
-                <p className="text-sm text-black/70 font-bold mb-3">
+                <p className="text-base font-bold mb-3" style={{ color: 'var(--color-board-text-muted)' }}>
                   No limits — build freely
                 </p>
                 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-xs font-bold text-black">
+                  <div className="flex items-center gap-2 text-xs font-bold" style={{ color: 'var(--color-board-text)' }}>
                     <Check className="w-4 h-4" />
                     <span>Skip to building</span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs font-bold text-black">
+                  <div className="flex items-center gap-2 text-xs font-bold" style={{ color: 'var(--color-board-text)' }}>
                     <Check className="w-4 h-4" />
                     <span>Top 3 genre matches</span>
                   </div>
@@ -173,13 +195,14 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
             
             {/* Arrow */}
             <div 
-              className="absolute bottom-4 right-4 w-10 h-10 bg-black flex items-center justify-center transition-transform group-hover:rotate-0"
+              className="absolute bottom-4 right-4 w-10 h-10 flex items-center justify-center transition-transform group-hover:rotate-0"
               style={{ 
-                border: '3px solid black',
+                backgroundColor: 'var(--color-board-border)',
+                border: '3px solid var(--color-board-border)',
                 transform: 'rotate(-45deg)',
               }}
             >
-              <span className="text-white text-xl font-black">→</span>
+              <span style={{ color: 'var(--color-board-dark)' }} className="text-xl font-black">→</span>
             </div>
           </button>
           
@@ -188,27 +211,29 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
             const isOpen = isCategoryOpen(category.id);
             const selectedInCategory = genres.filter(g => selectedGenres.includes(g.id)).length;
             const bgColor = CATEGORY_COLORS[category.id];
+            const highlightColor = theme === 'dark' ? '#4A3D1A' : '#FFF9C4';
             
             return (
               <div
                 key={category.id}
-                className={`relative h-64 text-left transition-all overflow-visible ${
+                className={`relative h-72 text-left transition-all overflow-visible ${
                   isOpen ? '' : 'hover:-translate-y-1'
                 }`}
                 style={{
                   backgroundColor: bgColor,
-                  border: '4px solid black',
-                  boxShadow: selectedInCategory > 0 ? `6px 6px 0px #FFF9C4` : '6px 6px 0px black',
+                  border: '4px solid var(--color-board-border)',
+                  boxShadow: selectedInCategory > 0 ? `6px 6px 0px ${highlightColor}` : '6px 6px 0px var(--color-board-shadow)',
                 }}
                 onMouseEnter={() => !isMobile && setHoveredCategory(category.id)}
                 onMouseLeave={() => !isMobile && setHoveredCategory(null)}
               >
                 {selectedInCategory > 0 && (
                   <div 
-                    className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-sm font-black text-black z-20"
+                    className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-sm font-black z-20"
                     style={{ 
-                      backgroundColor: '#FFF9C4',
-                      border: '3px solid black',
+                      backgroundColor: highlightColor,
+                      color: 'var(--color-board-text)',
+                      border: '3px solid var(--color-board-border)',
                     }}
                   >
                     {selectedInCategory}
@@ -223,37 +248,48 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span 
-                        className="text-sm font-black w-12 h-12 flex items-center justify-center bg-white text-black"
-                        style={{ border: '3px solid black' }}
+                        className="text-sm font-black w-12 h-12 flex items-center justify-center"
+                        style={{ 
+                          backgroundColor: 'var(--color-board-surface)',
+                          color: 'var(--color-board-text)',
+                          border: '3px solid var(--color-board-border)' 
+                        }}
                       >
                         {category.name.substring(0, 2).toUpperCase()}
                       </span>
                       <h3 
-                        className="font-black text-black text-lg uppercase"
+                        className="font-black text-lg uppercase"
                         style={{ 
                           fontFamily: '"Space Grotesk", sans-serif',
+                          color: 'var(--color-board-text)',
                         }}
                       >
                         {category.name}
                       </h3>
                     </div>
                     <div 
-                      className="w-10 h-10 bg-white flex items-center justify-center"
-                      style={{ border: '3px solid black' }}
+                      className="w-10 h-10 flex items-center justify-center"
+                      style={{ 
+                        backgroundColor: 'var(--color-board-surface)',
+                        border: '3px solid var(--color-board-border)' 
+                      }}
                     >
                       <ChevronDown 
-                        className={`w-6 h-6 text-black transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        className={`w-6 h-6 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        style={{ color: 'var(--color-board-text)' }}
                       />
                     </div>
                   </div>
                   <div>
                     <p 
-                      className="text-sm text-black font-bold"
+                      className="text-sm font-bold"
+                      style={{ color: 'var(--color-board-text)' }}
                     >
                       {category.description}
                     </p>
                     <p 
-                      className="text-xs text-black/70 mt-2 font-bold uppercase"
+                      className="text-xs mt-2 font-bold uppercase"
+                      style={{ color: 'var(--color-board-text-muted)' }}
                     >
                       {genres.length} genres • {isMobile ? 'Tap' : 'Click'} to explore
                     </p>
@@ -273,15 +309,20 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1.5">
                       <span 
-                        className="text-[10px] font-black w-7 h-7 flex items-center justify-center bg-white text-black"
-                        style={{ border: '2px solid black' }}
+                        className="text-[10px] font-black w-7 h-7 flex items-center justify-center"
+                        style={{ 
+                          backgroundColor: 'var(--color-board-surface)',
+                          color: 'var(--color-board-text)',
+                          border: '2px solid var(--color-board-border)' 
+                        }}
                       >
                         {category.name.substring(0, 2).toUpperCase()}
                       </span>
                       <h3 
-                        className="font-black text-black text-sm uppercase"
+                        className="font-black text-sm uppercase"
                         style={{ 
                           fontFamily: '"Space Grotesk", sans-serif',
+                          color: 'var(--color-board-text)',
                         }}
                       >
                         {category.name}
@@ -289,10 +330,13 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                     </div>
                     <button
                       onClick={() => handleCategoryClick(category.id)}
-                      className="w-7 h-7 bg-white flex items-center justify-center"
-                      style={{ border: '2px solid black' }}
+                      className="w-7 h-7 flex items-center justify-center"
+                      style={{ 
+                        backgroundColor: 'var(--color-board-surface)',
+                        border: '2px solid var(--color-board-border)' 
+                      }}
                     >
-                      <X className="w-4 h-4 text-black" />
+                      <X className="w-4 h-4" style={{ color: 'var(--color-board-text)' }} />
                     </button>
                   </div>
                   
@@ -312,14 +356,18 @@ export function GenrePage({ onContinue, onCreateOwn }: GenrePageProps) {
                           disabled={isDisabled}
                           className={`w-full px-2 py-1.5 text-left transition-all font-bold text-xs ${
                             isDisabled 
-                              ? 'opacity-40 cursor-not-allowed bg-white/50 text-black/50'
-                              : isSelected
-                                ? 'bg-white text-black'
-                                : 'bg-white/70 text-black hover:bg-white'
+                              ? 'opacity-40 cursor-not-allowed'
+                              : ''
                           }`}
                           style={{ 
-                            border: '2px solid black',
-                            boxShadow: isSelected ? '2px 2px 0px black' : 'none',
+                            backgroundColor: isDisabled 
+                              ? 'rgba(var(--color-board-surface), 0.5)' 
+                              : isSelected 
+                                ? 'var(--color-board-surface)' 
+                                : theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.7)',
+                            color: 'var(--color-board-text)',
+                            border: '2px solid var(--color-board-border)',
+                            boxShadow: isSelected ? '2px 2px 0px var(--color-board-shadow)' : 'none',
                           }}
                         >
                           <div className="flex items-center justify-between">
