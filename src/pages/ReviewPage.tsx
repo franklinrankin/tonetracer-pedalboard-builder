@@ -9,7 +9,7 @@ import { getPlayersForSubtype } from '../data/pedalPlayers';
 import { selectBoardForPedals, BoardSize } from '../data/boardSizes';
 import { formatInches, formatArea } from '../utils/measurements';
 import { BoardRecommendations } from '../components/BoardRecommendations';
-import { recommendPowerSupply, PowerSupply } from '../data/powerSupplies';
+import { recommendPowerSupply, PowerSupply, getBestPowerSupply } from '../data/powerSupplies';
 import { BoardVisualizer } from '../components/BoardVisualizer';
 import { GenreIcon } from '../components/GenreIcon';
 import { SavedBoard } from '../types';
@@ -315,6 +315,7 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
     name: string;
     brand: string;
   } | null>(null);
+  const [selectedPowerSupplyOverride, setSelectedPowerSupplyOverride] = useState<PowerSupply | null>(null);
   
   const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
   const maxArea = board.constraints.maxWidthMm * board.constraints.maxDepthMm * 0.85;
@@ -336,6 +337,12 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
     if (board.slots.length === 0) return null;
     return selectBoardForPedals(totalArea);
   }, [board.slots.length, totalArea]);
+
+  // Calculate recommended power supply based on pedal count and current draw
+  const recommendedPowerSupply = useMemo((): PowerSupply | null => {
+    if (board.slots.length === 0) return null;
+    return getBestPowerSupply(board.slots.length, totalCurrent);
+  }, [board.slots.length, totalCurrent]);
   
   // Calculate "Shades of" - top 3 players that represent this board's overall sound
   const shadesOfPlayers = useMemo(() => {
@@ -879,6 +886,9 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
                   });
                 }
               }}
+              suggestedPowerSupply={selectedPowerSupplyOverride || recommendedPowerSupply}
+              pedalCount={board.slots.length}
+              onPowerSupplyChange={(ps) => setSelectedPowerSupplyOverride(ps)}
             />
           </div>
         )}

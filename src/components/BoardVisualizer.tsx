@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { RotateCw, Move, ZoomIn, ZoomOut, RotateCcw, ChevronDown, Check, Sparkles, Ruler, X } from 'lucide-react';
+import { RotateCw, Move, ZoomIn, ZoomOut, RotateCcw, ChevronDown, Check, Sparkles, Ruler, X, Zap } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { BoardSlot } from '../types';
 import { CATEGORY_INFO } from '../data/categories';
 import { getYouTubeReviewUrl } from '../utils/youtube';
 import { POPULAR_BOARDS, BoardSize } from '../data/boardSizes';
+import { POWER_SUPPLIES, PowerSupply } from '../data/powerSupplies';
 
 interface PedalPosition {
   id: string;
@@ -34,9 +35,12 @@ interface BoardVisualizerProps {
   boardDimensions?: string;
   suggestedBoard?: BoardSize | null;
   onBoardChange?: (board: BoardSize | { widthMm: number; depthMm: number; name: string; brand: string }) => void;
+  suggestedPowerSupply?: PowerSupply | null;
+  pedalCount?: number;
+  onPowerSupplyChange?: (ps: PowerSupply) => void;
 }
 
-export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, boardDimensions, suggestedBoard, onBoardChange }: BoardVisualizerProps = {}) {
+export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, boardDimensions, suggestedBoard, onBoardChange, suggestedPowerSupply, pedalCount = 0, onPowerSupplyChange }: BoardVisualizerProps = {}) {
   const { state, dispatch } = useBoard();
   const { board } = state;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,6 +56,29 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
   const [customWidth, setCustomWidth] = useState('18');
   const [customDepth, setCustomDepth] = useState('12');
   const boardMenuRef = useRef<HTMLDivElement>(null);
+  const [showPowerSupplyMenu, setShowPowerSupplyMenu] = useState(false);
+  const [selectedPowerSupply, setSelectedPowerSupply] = useState<PowerSupply | null>(null);
+  const [showPowerSupplyOnBoard, setShowPowerSupplyOnBoard] = useState(false);
+  const [powerSupplyPosition, setPowerSupplyPosition] = useState({ x: 50, y: 85 }); // Position as percentage
+  const [isDraggingPowerSupply, setIsDraggingPowerSupply] = useState(false);
+  const [powerSupplyDragOffset, setPowerSupplyDragOffset] = useState({ x: 0, y: 0 });
+  const powerSupplyMenuRef = useRef<HTMLDivElement>(null);
+
+  // Use selected or suggested power supply
+  const currentPowerSupply = selectedPowerSupply || suggestedPowerSupply;
+
+  // Group power supplies by category
+  const powerSuppliesByCategory = {
+    'Compact': POWER_SUPPLIES.filter(ps => ps.totalOutputs <= 5),
+    'Mid-Size': POWER_SUPPLIES.filter(ps => ps.totalOutputs > 5 && ps.totalOutputs <= 10),
+    'Large': POWER_SUPPLIES.filter(ps => ps.totalOutputs > 10),
+  };
+
+  const handlePowerSupplySelect = (ps: PowerSupply) => {
+    setSelectedPowerSupply(ps);
+    onPowerSupplyChange?.(ps);
+    setShowPowerSupplyMenu(false);
+  };
 
   // Close board menu when clicking outside
   useEffect(() => {
@@ -322,14 +349,29 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
   };
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging || !selectedPedal || !containerRef.current) return;
-    
-    setHasMoved(true);
-    setShowPedalCard(null); // Close card when dragging
+    if (!containerRef.current) return;
     
     const rect = containerRef.current.getBoundingClientRect();
     const boardW = boardWidthMm * displayScale * scale;
     const boardH = boardDepthMm * displayScale * scale;
+    
+    // Handle power supply dragging
+    if (isDraggingPowerSupply) {
+      const newX = ((e.clientX - rect.left - powerSupplyDragOffset.x) / boardW) * 100;
+      const newY = ((e.clientY - rect.top - powerSupplyDragOffset.y) / boardH) * 100;
+      
+      // Clamp to board bounds (allow going slightly outside for under-board mounting)
+      const clampedX = Math.max(10, Math.min(90, newX));
+      const clampedY = Math.max(10, Math.min(120, newY));
+      
+      setPowerSupplyPosition({ x: clampedX, y: clampedY });
+      return;
+    }
+    
+    if (!isDragging || !selectedPedal) return;
+    
+    setHasMoved(true);
+    setShowPedalCard(null); // Close card when dragging
     
     const newX = ((e.clientX - rect.left - dragOffset.x) / boardW) * 100;
     const newY = ((e.clientY - rect.top - dragOffset.y) / boardH) * 100;
@@ -346,21 +388,35 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
       }
       return newMap;
     });
-  }, [isDragging, selectedPedal, dragOffset, boardWidthMm, boardDepthMm, displayScale, scale]);
+  }, [isDragging, isDraggingPowerSupply, selectedPedal, dragOffset, powerSupplyDragOffset, boardWidthMm, boardDepthMm, displayScale, scale]);
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
-    if (!isDragging || !selectedPedal || !containerRef.current) return;
+    if (!containerRef.current) return;
     if (e.touches.length !== 1) return;
     
     e.preventDefault(); // Prevent scrolling while dragging
     const touch = e.touches[0];
     
-    setHasMoved(true);
-    setShowPedalCard(null); // Close card when dragging
-    
     const rect = containerRef.current.getBoundingClientRect();
     const boardW = boardWidthMm * displayScale * scale;
     const boardH = boardDepthMm * displayScale * scale;
+    
+    // Handle power supply dragging
+    if (isDraggingPowerSupply) {
+      const newX = ((touch.clientX - rect.left - powerSupplyDragOffset.x) / boardW) * 100;
+      const newY = ((touch.clientY - rect.top - powerSupplyDragOffset.y) / boardH) * 100;
+      
+      const clampedX = Math.max(10, Math.min(90, newX));
+      const clampedY = Math.max(10, Math.min(120, newY));
+      
+      setPowerSupplyPosition({ x: clampedX, y: clampedY });
+      return;
+    }
+    
+    if (!isDragging || !selectedPedal) return;
+    
+    setHasMoved(true);
+    setShowPedalCard(null); // Close card when dragging
     
     const newX = ((touch.clientX - rect.left - dragOffset.x) / boardW) * 100;
     const newY = ((touch.clientY - rect.top - dragOffset.y) / boardH) * 100;
@@ -377,9 +433,15 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
       }
       return newMap;
     });
-  }, [isDragging, selectedPedal, dragOffset, boardWidthMm, boardDepthMm, displayScale, scale]);
+  }, [isDragging, isDraggingPowerSupply, selectedPedal, dragOffset, powerSupplyDragOffset, boardWidthMm, boardDepthMm, displayScale, scale]);
 
   const handleMouseUp = useCallback(() => {
+    // Handle power supply drag end
+    if (isDraggingPowerSupply) {
+      setIsDraggingPowerSupply(false);
+      return;
+    }
+    
     if (!hasMoved && selectedPedal) {
       // It was a click, not a drag - show the pedal card
       setShowPedalCard(prev => prev === selectedPedal ? null : selectedPedal);
@@ -393,9 +455,15 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
     }
     setIsDragging(false);
     setHasMoved(false);
-  }, [hasMoved, selectedPedal, positions, dispatch]);
+  }, [hasMoved, selectedPedal, positions, dispatch, isDraggingPowerSupply]);
 
   const handleTouchEnd = useCallback(() => {
+    // Handle power supply drag end
+    if (isDraggingPowerSupply) {
+      setIsDraggingPowerSupply(false);
+      return;
+    }
+    
     if (!hasMoved && selectedPedal) {
       // It was a tap, not a drag - show the pedal card
       setShowPedalCard(prev => prev === selectedPedal ? null : selectedPedal);
@@ -409,10 +477,10 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
     }
     setIsDragging(false);
     setHasMoved(false);
-  }, [hasMoved, selectedPedal, positions, dispatch]);
+  }, [hasMoved, selectedPedal, positions, dispatch, isDraggingPowerSupply]);
 
   useEffect(() => {
-    if (isDragging) {
+    if (isDragging || isDraggingPowerSupply) {
       // Mouse events
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
@@ -428,7 +496,7 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
         window.removeEventListener('touchcancel', handleTouchEnd);
       };
     }
-  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
+  }, [isDragging, isDraggingPowerSupply, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   // Rotate selected pedal
   const rotatePedal = (direction: 'cw' | 'ccw') => {
@@ -572,7 +640,13 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
       <div 
         ref={containerRef}
         className="relative p-6 overflow-visible"
-        style={{ minHeight: '500px', paddingTop: '80px', paddingBottom: '80px', backgroundColor: '#e5e5e5', border: '4px solid black' }}
+        style={{ 
+          minHeight: '500px', 
+          paddingTop: '80px', 
+          paddingBottom: '80px',
+          backgroundColor: '#e5e5e5', 
+          border: '4px solid black' 
+        }}
       >
         {/* Board Surface */}
         <div
@@ -1099,31 +1173,193 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
               </div>
             );
           })}
+
+          {/* Power Supply Visualization - Draggable */}
+          {showPowerSupplyOnBoard && currentPowerSupply && (() => {
+            // Convert power supply dimensions from inches to mm, then to pixels
+            const psWidthMm = currentPowerSupply.widthIn * 25.4;
+            const psDepthMm = currentPowerSupply.depthIn * 25.4;
+            const psWidthPx = psWidthMm * actualScale;
+            const psDepthPx = psDepthMm * actualScale;
+            
+            // Calculate position based on percentage
+            const left = (powerSupplyPosition.x / 100) * boardDisplayW - psWidthPx / 2;
+            const top = (powerSupplyPosition.y / 100) * boardDisplayH - psDepthPx / 2;
+            
+            const handlePowerSupplyMouseDown = (e: React.MouseEvent) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsDraggingPowerSupply(true);
+              setSelectedPedal(null); // Deselect any pedal
+              setShowPedalCard(null);
+              
+              const rect = containerRef.current?.getBoundingClientRect();
+              if (rect) {
+                const boardW = boardWidthMm * displayScale * scale;
+                const boardH = boardDepthMm * displayScale * scale;
+                setPowerSupplyDragOffset({
+                  x: e.clientX - rect.left - (powerSupplyPosition.x / 100) * boardW,
+                  y: e.clientY - rect.top - (powerSupplyPosition.y / 100) * boardH,
+                });
+              }
+            };
+            
+            const handlePowerSupplyTouchStart = (e: React.TouchEvent) => {
+              if (e.touches.length !== 1) return;
+              e.stopPropagation();
+              const touch = e.touches[0];
+              setIsDraggingPowerSupply(true);
+              setSelectedPedal(null);
+              setShowPedalCard(null);
+              
+              const rect = containerRef.current?.getBoundingClientRect();
+              if (rect) {
+                const boardW = boardWidthMm * displayScale * scale;
+                const boardH = boardDepthMm * displayScale * scale;
+                setPowerSupplyDragOffset({
+                  x: touch.clientX - rect.left - (powerSupplyPosition.x / 100) * boardW,
+                  y: touch.clientY - rect.top - (powerSupplyPosition.y / 100) * boardH,
+                });
+              }
+            };
+            
+            return (
+              <div
+                className={`absolute cursor-move select-none transition-shadow z-[5] ${
+                  isDraggingPowerSupply ? 'ring-2 ring-green-400 ring-offset-2' : 'hover:ring-2 hover:ring-green-400/50'
+                }`}
+                style={{
+                  left,
+                  top,
+                  width: psWidthPx,
+                  height: psDepthPx,
+                  touchAction: 'none',
+                }}
+                onMouseDown={handlePowerSupplyMouseDown}
+                onTouchStart={handlePowerSupplyTouchStart}
+              >
+                {/* Power supply body */}
+                <div
+                  className="w-full h-full rounded-md shadow-lg relative"
+                  style={{
+                    background: 'linear-gradient(145deg, #444, #222)',
+                    border: '2px solid #555',
+                    boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  {/* Output jacks indicator */}
+                  <div className="absolute top-1 left-0 right-0 flex justify-center gap-0.5">
+                    {Array.from({ length: Math.min(currentPowerSupply.totalOutputs, 12) }).map((_, i) => (
+                      <div 
+                        key={i}
+                        className="rounded-full bg-yellow-500"
+                        style={{ 
+                          width: Math.max(3, Math.min(6, psWidthPx / 25)), 
+                          height: Math.max(3, Math.min(6, psWidthPx / 25)) 
+                        }}
+                      />
+                    ))}
+                    {currentPowerSupply.totalOutputs > 12 && (
+                      <span className="text-yellow-500" style={{ fontSize: 6 }}>+{currentPowerSupply.totalOutputs - 12}</span>
+                    )}
+                  </div>
+                  {/* Label */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-1 pt-3">
+                    <div 
+                      className="text-white font-bold truncate w-full px-1"
+                      style={{ fontSize: Math.max(8, Math.min(11, psWidthPx / 14)) }}
+                    >
+                      {currentPowerSupply.brand}
+                    </div>
+                    <div 
+                      className="text-gray-400 truncate w-full px-1"
+                      style={{ fontSize: Math.max(7, Math.min(9, psWidthPx / 16)) }}
+                    >
+                      {currentPowerSupply.model}
+                    </div>
+                    <div 
+                      className="text-green-400 font-mono"
+                      style={{ fontSize: Math.max(6, Math.min(8, psWidthPx / 18)) }}
+                    >
+                      {currentPowerSupply.totalOutputs} out
+                    </div>
+                  </div>
+                </div>
+                {/* Dimensions label */}
+                <div 
+                  className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-center whitespace-nowrap pointer-events-none"
+                  style={{ fontSize: 9 }}
+                >
+                  <span className="text-gray-500">{currentPowerSupply.widthIn}" × {currentPowerSupply.depthIn}"</span>
+                </div>
+              </div>
+            );
+          })()}
         </div>
         
-        {/* Board name and dimensions label - clickable to change board */}
-        <button 
-          onClick={() => onBoardChange && setShowBoardMenu(true)}
-          className={`text-center mt-4 px-4 py-2 mx-auto w-fit flex items-center gap-2 transition-all ${onBoardChange ? 'hover:scale-[1.02] cursor-pointer' : ''}`}
-          style={{ backgroundColor: '#FFFEF0', border: '2px solid black' }}
-          disabled={!onBoardChange}
-        >
-          <div>
-            {boardName ? (
-              <>
-                <div className="text-base font-black text-black">{boardName}</div>
-                <div className="text-sm font-bold text-black/70">{boardDimensions}</div>
-              </>
-            ) : (
-              <div className="text-sm font-black text-black">
-                {(boardWidthMm / 25.4).toFixed(1)}" × {(boardDepthMm / 25.4).toFixed(1)}" pedalboard
-              </div>
+        {/* Board name and Power Supply buttons */}
+        <div className="flex flex-wrap items-stretch justify-center gap-2 mt-4">
+          {/* Board name and dimensions label - clickable to change board */}
+          <button 
+            onClick={() => onBoardChange && setShowBoardMenu(true)}
+            className={`text-center px-4 py-2 flex items-center gap-2 transition-all ${onBoardChange ? 'hover:scale-[1.02] cursor-pointer' : ''}`}
+            style={{ backgroundColor: '#FFFEF0', border: '2px solid black' }}
+            disabled={!onBoardChange}
+          >
+            <Ruler className="w-4 h-4 text-black" />
+            <div>
+              {boardName ? (
+                <>
+                  <div className="text-sm font-black text-black">{boardName}</div>
+                  <div className="text-xs font-bold text-black/70">{boardDimensions}</div>
+                </>
+              ) : (
+                <div className="text-sm font-black text-black">
+                  {(boardWidthMm / 25.4).toFixed(1)}" × {(boardDepthMm / 25.4).toFixed(1)}"
+                </div>
+              )}
+            </div>
+            {onBoardChange && (
+              <div className="text-xs text-black/60 font-bold uppercase">Change</div>
             )}
-          </div>
-          {onBoardChange && (
-            <div className="text-xs text-black/60 font-bold uppercase">Change</div>
+          </button>
+
+          {/* Power Supply button */}
+          {onPowerSupplyChange && (
+            <button 
+              onClick={() => setShowPowerSupplyMenu(true)}
+              className="text-center px-4 py-2 flex items-center gap-2 transition-all hover:scale-[1.02] cursor-pointer"
+              style={{ backgroundColor: '#E8F5E9', border: '2px solid black' }}
+            >
+              <Zap className="w-4 h-4 text-black" />
+              <div>
+                <div className="text-sm font-black text-black">
+                  {currentPowerSupply ? `${currentPowerSupply.brand} ${currentPowerSupply.model}` : 'Select Power'}
+                </div>
+                <div className="text-xs font-bold text-black/70">
+                  {currentPowerSupply ? `${currentPowerSupply.totalOutputs} outputs • ${currentPowerSupply.totalMa}mA` : 'Choose power supply'}
+                </div>
+              </div>
+              <div className="text-xs text-black/60 font-bold uppercase">Change</div>
+            </button>
           )}
-        </button>
+
+          {/* Show Power Supply Checkbox */}
+          {currentPowerSupply && (
+            <label 
+              className="flex items-center gap-2 px-3 py-2 cursor-pointer select-none"
+              style={{ backgroundColor: showPowerSupplyOnBoard ? '#E8F5E9' : '#f5f5f5', border: '2px solid black' }}
+            >
+              <input
+                type="checkbox"
+                checked={showPowerSupplyOnBoard}
+                onChange={(e) => setShowPowerSupplyOnBoard(e.target.checked)}
+                className="w-4 h-4 accent-green-600"
+              />
+              <span className="text-sm font-bold text-black">Show Power Supply</span>
+            </label>
+          )}
+        </div>
 
         {/* Board Selection Modal */}
         {showBoardMenu && (
@@ -1260,6 +1496,115 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Power Supply Selection Modal */}
+        {showPowerSupplyMenu && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <div 
+              className="absolute inset-0 bg-black/60"
+              onClick={() => setShowPowerSupplyMenu(false)}
+            />
+            
+            {/* Modal */}
+            <div 
+              ref={powerSupplyMenuRef}
+              className="relative w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col"
+              style={{ backgroundColor: '#E8F5E9', border: '4px solid black', boxShadow: '8px 8px 0px black' }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b-4 border-black bg-black text-white">
+                <div className="flex items-center gap-2">
+                  <Zap className="w-5 h-5" />
+                  <h2 className="font-black uppercase">Choose Power Supply</h2>
+                </div>
+                <button
+                  onClick={() => setShowPowerSupplyMenu(false)}
+                  className="p-1 hover:bg-white/20 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Pedal count info */}
+              <div className="px-4 py-2 bg-yellow-100 border-b-2 border-black">
+                <div className="text-sm font-bold text-black">
+                  Your board has <span className="font-black">{pedalCount} pedals</span> — power supply needs at least {pedalCount} outputs
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto">
+                {/* Suggested Power Supply */}
+                {suggestedPowerSupply && (
+                  <div className="p-3 border-b-2 border-black bg-green-100">
+                    <div className="text-xs font-bold text-black/60 uppercase mb-2 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" />
+                      Recommended for your pedals
+                    </div>
+                    <button
+                      onClick={() => handlePowerSupplySelect(suggestedPowerSupply)}
+                      className="w-full text-left p-3 bg-white hover:bg-green-200 transition-colors flex items-center justify-between"
+                      style={{ border: '2px solid black' }}
+                    >
+                      <div>
+                        <div className="font-black text-black">{suggestedPowerSupply.brand} {suggestedPowerSupply.model}</div>
+                        <div className="text-sm text-black/70">
+                          {suggestedPowerSupply.totalOutputs} outputs • {suggestedPowerSupply.totalMa}mA • ${suggestedPowerSupply.reverbPrice}
+                        </div>
+                      </div>
+                      {currentPowerSupply?.id === suggestedPowerSupply.id && (
+                        <Check className="w-5 h-5 text-green-600" />
+                      )}
+                    </button>
+                  </div>
+                )}
+
+                {/* All Power Supplies by Category */}
+                {Object.entries(powerSuppliesByCategory).map(([category, supplies]) => (
+                  <div key={category}>
+                    <div className="px-4 py-2 text-xs font-black text-black/60 uppercase bg-black/10 sticky top-0">
+                      {category} ({supplies.length})
+                    </div>
+                    <div className="p-2 space-y-1">
+                      {supplies.map((ps) => {
+                        const hasEnoughOutputs = ps.totalOutputs >= pedalCount;
+                        return (
+                          <button
+                            key={ps.id}
+                            onClick={() => hasEnoughOutputs && handlePowerSupplySelect(ps)}
+                            disabled={!hasEnoughOutputs}
+                            className={`w-full text-left px-3 py-2 transition-colors flex items-center justify-between ${
+                              hasEnoughOutputs 
+                                ? 'hover:bg-green-200 cursor-pointer' 
+                                : 'opacity-40 cursor-not-allowed'
+                            }`}
+                            style={{ border: '2px solid transparent' }}
+                          >
+                            <div>
+                              <div className={`font-bold ${hasEnoughOutputs ? 'text-black' : 'text-black/50'}`}>
+                                {ps.brand} {ps.model}
+                              </div>
+                              <div className={`text-xs ${hasEnoughOutputs ? 'text-black/70' : 'text-black/40'}`}>
+                                <span className={`font-bold ${!hasEnoughOutputs ? 'text-red-500' : ''}`}>
+                                  {ps.totalOutputs} outputs
+                                </span>
+                                {' • '}{ps.totalMa}mA • ${ps.reverbPrice}
+                              </div>
+                            </div>
+                            {currentPowerSupply?.id === ps.id && (
+                              <Check className="w-5 h-5 text-green-600" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
