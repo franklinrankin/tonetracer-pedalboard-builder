@@ -45,7 +45,7 @@ export const POWER_SUPPLIES: PowerSupply[] = [
     mountable: true,
     features: ['Isolated outputs', 'Compact size', 'Switchable voltage on 2 outputs'],
   },
-  // MXR Iso-Brick M238: 4.7" x 2.9" x 1.8" (verified Sweetwater)
+  // MXR Iso-Brick M238: 4.76" x 2.98" x 1.81" (verified via web search)
   {
     id: 'ps-mxr-iso-brick',
     brand: 'MXR',
@@ -61,9 +61,9 @@ export const POWER_SUPPLIES: PowerSupply[] = [
     isolated: true,
     msrp: 200,
     reverbPrice: 150,
-    widthIn: 4.7,
-    depthIn: 2.9,
-    heightIn: 1.8,
+    widthIn: 4.76,
+    depthIn: 2.98,
+    heightIn: 1.81,
     mountable: true,
     features: ['Fully isolated', '18V outputs', 'Toroidal transformer'],
   },
@@ -172,7 +172,7 @@ export const POWER_SUPPLIES: PowerSupply[] = [
     mountable: true,
     features: ['10 isolated outputs', 'Expandable', 'Studio-grade'],
   },
-  // Strymon Zuma R300: 6.8" x 3.3" x 1.8" (same brick as Zuma)
+  // Strymon Zuma R300: 7.25" x 3.5" x 1.18" (verified via web search - rack version)
   {
     id: 'ps-strymon-zuma-r300',
     brand: 'Strymon',
@@ -185,13 +185,13 @@ export const POWER_SUPPLIES: PowerSupply[] = [
     isolated: true,
     msrp: 449,
     reverbPrice: 400,
-    widthIn: 6.8,
-    depthIn: 3.3,
-    heightIn: 1.8,
+    widthIn: 7.25,
+    depthIn: 3.5,
+    heightIn: 1.18,
     mountable: true,
     features: ['9 high current outputs', 'Rack mountable', 'Expandable'],
   },
-  // Voodoo Lab Pedal Power 3 Plus: 7" x 3.4" x 1.38" (verified Sweetwater)
+  // Voodoo Lab Pedal Power 3 Plus: 7" x 3.5" x 1.5" (verified voodoolab.com)
   {
     id: 'ps-voodoo-lab-pp3-plus',
     brand: 'Voodoo Lab',
@@ -206,8 +206,8 @@ export const POWER_SUPPLIES: PowerSupply[] = [
     msrp: 299,
     reverbPrice: 270,
     widthIn: 7.0,
-    depthIn: 3.4,
-    heightIn: 1.38,
+    depthIn: 3.5,
+    heightIn: 1.5,
     mountable: true,
     features: ['Advanced digital control', 'Automatic ground loops prevention'],
   },
