@@ -119,30 +119,6 @@ export const BOARD_TEMPLATES: BoardTemplate[] = [
     brand: 'Temple Audio',
     suggestedBudget: 700,
   },
-  {
-    id: 'custom-small',
-    name: 'Custom Small',
-    description: 'Define your own small board',
-    widthMm: 400,
-    depthMm: 150,
-    suggestedBudget: 500,
-  },
-  {
-    id: 'custom-medium',
-    name: 'Custom Medium',
-    description: 'Define your own medium board',
-    widthMm: 550,
-    depthMm: 250,
-    suggestedBudget: 1000,
-  },
-  {
-    id: 'custom-large',
-    name: 'Custom Large',
-    description: 'Define your own large board',
-    widthMm: 700,
-    depthMm: 350,
-    suggestedBudget: 2000,
-  },
 ];
 
 // Helper to get display dimensions in inches

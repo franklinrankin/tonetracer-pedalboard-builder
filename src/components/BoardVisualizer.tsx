@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { RotateCw, Move, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { RotateCw, Move, ZoomIn, ZoomOut, RotateCcw, ChevronDown, Check, Sparkles, Ruler, X } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { BoardSlot } from '../types';
 import { CATEGORY_INFO } from '../data/categories';
 import { getYouTubeReviewUrl } from '../utils/youtube';
+import { POPULAR_BOARDS, BoardSize } from '../data/boardSizes';
 
 interface PedalPosition {
   id: string;
@@ -31,9 +32,11 @@ interface BoardVisualizerProps {
   overrideDepth?: number;
   boardName?: string;
   boardDimensions?: string;
+  suggestedBoard?: BoardSize | null;
+  onBoardChange?: (board: BoardSize | { widthMm: number; depthMm: number; name: string; brand: string }) => void;
 }
 
-export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, boardDimensions }: BoardVisualizerProps = {}) {
+export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, boardDimensions, suggestedBoard, onBoardChange }: BoardVisualizerProps = {}) {
   const { state, dispatch } = useBoard();
   const { board } = state;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,6 +47,51 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [hasMoved, setHasMoved] = useState(false);
   const [showPedalCard, setShowPedalCard] = useState<string | null>(null);
+  const [showBoardMenu, setShowBoardMenu] = useState(false);
+  const [showCustomSize, setShowCustomSize] = useState(false);
+  const [customWidth, setCustomWidth] = useState('18');
+  const [customDepth, setCustomDepth] = useState('12');
+  const boardMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close board menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (boardMenuRef.current && !boardMenuRef.current.contains(event.target as Node)) {
+        setShowBoardMenu(false);
+        setShowCustomSize(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Group boards by brand
+  const boardsByBrand = POPULAR_BOARDS.reduce((acc, b) => {
+    if (!acc[b.brand]) acc[b.brand] = [];
+    acc[b.brand].push(b);
+    return acc;
+  }, {} as Record<string, BoardSize[]>);
+
+  const handleBoardSelect = (selectedBoard: BoardSize) => {
+    onBoardChange?.(selectedBoard);
+    setShowBoardMenu(false);
+    setShowCustomSize(false);
+  };
+
+  const handleCustomSizeSubmit = () => {
+    const widthIn = parseFloat(customWidth);
+    const depthIn = parseFloat(customDepth);
+    if (widthIn > 0 && depthIn > 0) {
+      onBoardChange?.({
+        widthMm: widthIn * 25.4,
+        depthMm: depthIn * 25.4,
+        name: `${widthIn}" × ${depthIn}"`,
+        brand: 'Custom',
+      });
+      setShowBoardMenu(false);
+      setShowCustomSize(false);
+    }
+  };
 
   // Board dimensions in mm - use overrides if provided
   const boardWidthMm = overrideWidth || board.constraints.maxWidthMm;
@@ -1053,22 +1101,169 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
           })}
         </div>
         
-        {/* Board name and dimensions label */}
-        <div 
-          className="text-center mt-4 px-4 py-2 mx-auto w-fit"
+        {/* Board name and dimensions label - clickable to change board */}
+        <button 
+          onClick={() => onBoardChange && setShowBoardMenu(true)}
+          className={`text-center mt-4 px-4 py-2 mx-auto w-fit flex items-center gap-2 transition-all ${onBoardChange ? 'hover:scale-[1.02] cursor-pointer' : ''}`}
           style={{ backgroundColor: '#FFFEF0', border: '2px solid black' }}
+          disabled={!onBoardChange}
         >
-          {boardName ? (
-            <>
-              <div className="text-base font-black text-theme">{boardName}</div>
-              <div className="text-sm font-bold text-theme-muted">{boardDimensions}</div>
-            </>
-          ) : (
-            <div className="text-sm font-black text-theme">
-              {(boardWidthMm / 25.4).toFixed(1)}" × {(boardDepthMm / 25.4).toFixed(1)}" pedalboard
-            </div>
+          <div>
+            {boardName ? (
+              <>
+                <div className="text-base font-black text-black">{boardName}</div>
+                <div className="text-sm font-bold text-black/70">{boardDimensions}</div>
+              </>
+            ) : (
+              <div className="text-sm font-black text-black">
+                {(boardWidthMm / 25.4).toFixed(1)}" × {(boardDepthMm / 25.4).toFixed(1)}" pedalboard
+              </div>
+            )}
+          </div>
+          {onBoardChange && (
+            <div className="text-xs text-black/60 font-bold uppercase">Change</div>
           )}
-        </div>
+        </button>
+
+        {/* Board Selection Modal */}
+        {showBoardMenu && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <div 
+              className="absolute inset-0 bg-black/60"
+              onClick={() => {
+                setShowBoardMenu(false);
+                setShowCustomSize(false);
+              }}
+            />
+            
+            {/* Modal */}
+            <div 
+              ref={boardMenuRef}
+              className="relative w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col"
+              style={{ backgroundColor: '#FFFEF0', border: '4px solid black', boxShadow: '8px 8px 0px black' }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b-4 border-black bg-black text-white">
+                <div className="flex items-center gap-2">
+                  <Ruler className="w-5 h-5" />
+                  <h2 className="font-black uppercase">Choose Board Size</h2>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowBoardMenu(false);
+                    setShowCustomSize(false);
+                  }}
+                  className="p-1 hover:bg-white/20 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto">
+                {/* Suggested Board */}
+                {suggestedBoard && (
+                  <div className="p-3 border-b-2 border-black bg-yellow-100">
+                    <div className="text-xs font-bold text-black/60 uppercase mb-2 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" />
+                      Recommended for your pedals
+                    </div>
+                    <button
+                      onClick={() => handleBoardSelect(suggestedBoard)}
+                      className="w-full text-left p-3 bg-white hover:bg-yellow-200 transition-colors flex items-center justify-between"
+                      style={{ border: '2px solid black' }}
+                    >
+                      <div>
+                        <div className="font-black text-black">{suggestedBoard.brand} {suggestedBoard.name}</div>
+                        <div className="text-sm text-black/70">{suggestedBoard.widthIn}" × {suggestedBoard.depthIn}" • {suggestedBoard.pedalCapacity} pedals</div>
+                      </div>
+                      {boardName === `${suggestedBoard.brand} ${suggestedBoard.name}` && (
+                        <Check className="w-5 h-5 text-green-600" />
+                      )}
+                    </button>
+                  </div>
+                )}
+
+                {/* All Boards by Brand */}
+                {Object.entries(boardsByBrand).map(([brand, boards]) => (
+                  <div key={brand}>
+                    <div className="px-4 py-2 text-xs font-black text-black/60 uppercase bg-black/10 sticky top-0">{brand}</div>
+                    <div className="p-2 space-y-1">
+                      {boards.map((b) => (
+                        <button
+                          key={b.id}
+                          onClick={() => handleBoardSelect(b)}
+                          className="w-full text-left px-3 py-2 hover:bg-yellow-200 transition-colors flex items-center justify-between"
+                          style={{ border: '2px solid transparent' }}
+                        >
+                          <div>
+                            <div className="font-bold text-black">{b.name}</div>
+                            <div className="text-xs text-black/70">{b.widthIn}" × {b.depthIn}" • {b.pedalCapacity} pedals</div>
+                          </div>
+                          {boardName === `${b.brand} ${b.name}` && (
+                            <Check className="w-5 h-5 text-green-600" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Custom Size Option */}
+                <div className="p-3 border-t-4 border-black bg-gray-100">
+                  {!showCustomSize ? (
+                    <button
+                      onClick={() => setShowCustomSize(true)}
+                      className="w-full text-left p-3 bg-white hover:bg-yellow-200 transition-colors flex items-center gap-3"
+                      style={{ border: '2px solid black' }}
+                    >
+                      <Ruler className="w-5 h-5 text-black" />
+                      <div>
+                        <div className="font-black text-black">Custom Size</div>
+                        <div className="text-sm text-black/70">Enter your own dimensions</div>
+                      </div>
+                    </button>
+                  ) : (
+                    <div className="p-3 bg-white space-y-4" style={{ border: '2px solid black' }}>
+                      <div className="text-sm font-black text-black uppercase">Custom Dimensions</div>
+                      <div className="flex gap-3">
+                        <div className="flex-1">
+                          <label className="text-xs text-black/70 block mb-1 font-bold">Width (inches)</label>
+                          <input
+                            type="number"
+                            step="0.5"
+                            value={customWidth}
+                            onChange={(e) => setCustomWidth(e.target.value)}
+                            className="w-full px-3 py-2 text-base border-2 border-black bg-white text-black font-bold"
+                            placeholder="18"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <label className="text-xs text-black/70 block mb-1 font-bold">Depth (inches)</label>
+                          <input
+                            type="number"
+                            step="0.5"
+                            value={customDepth}
+                            onChange={(e) => setCustomDepth(e.target.value)}
+                            className="w-full px-3 py-2 text-base border-2 border-black bg-white text-black font-bold"
+                            placeholder="12"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        onClick={handleCustomSizeSubmit}
+                        className="w-full py-3 bg-black text-white font-black uppercase hover:bg-gray-800 transition-colors"
+                      >
+                        Apply Custom Size
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Instructions - Hidden on mobile */}
@@ -1076,8 +1271,8 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
         className="hidden sm:block p-4"
         style={{ backgroundColor: '#FFFEF0', border: '3px solid black' }}
       >
-        <h3 className="text-sm font-black text-theme mb-2 uppercase">Tips</h3>
-        <ul className="text-xs text-theme space-y-1">
+        <h3 className="text-sm font-black text-black mb-2 uppercase">Tips</h3>
+        <ul className="text-xs text-black space-y-1">
           <li>• <strong>Click</strong> a pedal to select it and view details</li>
           <li>• <strong>Drag</strong> pedals to reposition them on the board</li>
           <li>• <strong>Rotate</strong> – click a pedal first, then use rotate buttons above</li>

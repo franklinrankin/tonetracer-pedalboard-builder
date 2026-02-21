@@ -307,6 +307,14 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [saveName, setSaveName] = useState(board.name || 'My Pedalboard');
+  const [selectedBoardOverride, setSelectedBoardOverride] = useState<{
+    widthMm: number;
+    depthMm: number;
+    widthIn: number;
+    depthIn: number;
+    name: string;
+    brand: string;
+  } | null>(null);
   
   const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
   const maxArea = board.constraints.maxWidthMm * board.constraints.maxDepthMm * 0.85;
@@ -835,10 +843,42 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
               <span className="text-xs opacity-60">Drag to arrange • Click for details</span>
             </div>
             <BoardVisualizer 
-              overrideWidth={recommendedBoard?.widthMm}
-              overrideDepth={recommendedBoard?.depthMm}
-              boardName={recommendedBoard ? `${recommendedBoard.brand} ${recommendedBoard.name}` : undefined}
-              boardDimensions={recommendedBoard ? `${recommendedBoard.widthIn}" × ${recommendedBoard.depthIn}"` : undefined}
+              overrideWidth={selectedBoardOverride?.widthMm ?? recommendedBoard?.widthMm}
+              overrideDepth={selectedBoardOverride?.depthMm ?? recommendedBoard?.depthMm}
+              boardName={selectedBoardOverride 
+                ? `${selectedBoardOverride.brand} ${selectedBoardOverride.name}` 
+                : recommendedBoard 
+                  ? `${recommendedBoard.brand} ${recommendedBoard.name}` 
+                  : undefined}
+              boardDimensions={selectedBoardOverride 
+                ? `${selectedBoardOverride.widthIn}" × ${selectedBoardOverride.depthIn}"` 
+                : recommendedBoard 
+                  ? `${recommendedBoard.widthIn}" × ${recommendedBoard.depthIn}"` 
+                  : undefined}
+              suggestedBoard={recommendedBoard}
+              onBoardChange={(newBoard) => {
+                if ('id' in newBoard) {
+                  // It's a BoardSize from POPULAR_BOARDS
+                  setSelectedBoardOverride({
+                    widthMm: newBoard.widthMm,
+                    depthMm: newBoard.depthMm,
+                    widthIn: newBoard.widthIn,
+                    depthIn: newBoard.depthIn,
+                    name: newBoard.name,
+                    brand: newBoard.brand,
+                  });
+                } else {
+                  // It's a custom size
+                  setSelectedBoardOverride({
+                    widthMm: newBoard.widthMm,
+                    depthMm: newBoard.depthMm,
+                    widthIn: Math.round(newBoard.widthMm / 25.4 * 10) / 10,
+                    depthIn: Math.round(newBoard.depthMm / 25.4 * 10) / 10,
+                    name: newBoard.name,
+                    brand: newBoard.brand,
+                  });
+                }
+              }}
             />
           </div>
         )}
