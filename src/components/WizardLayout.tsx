@@ -1,5 +1,5 @@
 import { ReactNode, useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Check, Music2, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X, Menu, Home, Ruler, DollarSign } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X, Menu, Home, Ruler, DollarSign } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
 import { BOARD_TEMPLATES } from '../data/boardTemplates';
@@ -10,7 +10,7 @@ import { GenreIcon } from './GenreIcon';
 import { UserMenu } from './UserMenu';
 import { ThemeToggle } from './ThemeToggle';
 
-export type WizardStep = 'genre' | 'build' | 'review';
+export type WizardStep = 'build' | 'review';
 
 interface WizardLayoutProps {
   currentStep: WizardStep;
@@ -25,7 +25,6 @@ interface WizardLayoutProps {
 }
 
 const STEPS: { id: WizardStep; label: string; shortLabel: string; icon: ReactNode }[] = [
-  { id: 'genre', label: 'Style', shortLabel: 'Style', icon: <Music2 className="w-4 h-4" /> },
   { id: 'build', label: 'Build', shortLabel: 'Build', icon: <Sliders className="w-4 h-4" /> },
   { id: 'review', label: 'Review', shortLabel: 'Review', icon: <ListChecks className="w-4 h-4" /> },
 ];
@@ -109,8 +108,6 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
   
   const canGoNext = () => {
     switch (currentStep) {
-      case 'genre':
-        return selectedGenres.length > 0;
       case 'build':
         return (board.buildSlots?.some(slot => slot.selectedPedalId) ?? false);
       case 'review':

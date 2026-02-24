@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { ChevronRight, Plus, X, Check, ArrowUpDown, Youtube, RotateCcw, Search, ChevronDown, Zap, Volume2 } from 'lucide-react';
+import { ChevronRight, Plus, X, Check, ArrowUpDown, Youtube, RotateCcw, Search, ChevronDown, Zap, Volume2, Music } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { useTheme } from '../context/ThemeContext';
-import { getGenreById } from '../data/genres';
+import { getGenreById, GENRES, GENRE_CATEGORIES, GenreCategoryId } from '../data/genres';
 import { Category, PedalWithStatus } from '../types';
 import { PedalImage } from '../components/PedalImage';
 import { CATEGORY_INFO, getRatingLabel } from '../data/categories';
 import { getYouTubeReviewUrl } from '../utils/youtube';
 import { generateUUID } from '../utils/uuid';
+import { GenreIcon } from '../components/GenreIcon';
 
 
 interface BuildPageProps {
@@ -199,9 +200,10 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   }), []);
 
   // Helper function to generate slots based on genre
-  const generateSlotsForGenre = (existingSlots: TypeSlot[], targetCount: number): TypeSlot[] => {
+  const generateSlotsForGenre = (existingSlots: TypeSlot[], targetCount: number, overrideGenre?: typeof genre): TypeSlot[] => {
     const slots = [...existingSlots];
     const usedTypes = new Set(slots.map(s => s.type));
+    const targetGenre = overrideGenre !== undefined ? overrideGenre : genre;
     
     const addSlot = (typeName: string): boolean => {
       if (usedTypes.has(typeName)) return false;
@@ -224,10 +226,10 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       addSlot('Tuner');
     }
     
-    if (genre) {
+    if (targetGenre) {
       // Build preferred types from genre's preferredSubtypes
       const preferredTypes = new Set<string>();
-      genre.preferredSubtypes.forEach(subtype => {
+      targetGenre.preferredSubtypes.forEach(subtype => {
         for (const [typeName, subtypes] of Object.entries(TYPE_TO_SUBTYPES)) {
           if (subtypes.includes(subtype)) {
             preferredTypes.add(typeName);
@@ -237,7 +239,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       });
       
       // Phase 1: Add essential categories
-      for (const category of genre.essentialCategories) {
+      for (const category of targetGenre.essentialCategories) {
         if (slots.length >= targetCount) break;
         if (category === 'amp') continue;
         
@@ -250,7 +252,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       }
       
       // Phase 2: Add extra categories
-      for (const category of genre.extraCategories) {
+      for (const category of targetGenre.extraCategories) {
         if (slots.length >= targetCount) break;
         if (category === 'amp') continue;
         
@@ -272,14 +274,14 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       
       // Phase 3: Fill remaining with genre-ranked types
       const categoryRatings: [Category, number][] = [
-        ['gain', genre.gainRating],
-        ['modulation', genre.modulationRating],
-        ['delay', genre.ambienceRating],
-        ['reverb', genre.ambienceRating],
-        ['dynamics', genre.dynamicsRating],
-        ['filter', genre.modulationRating],
-        ['pitch', genre.modulationRating],
-        ['eq', genre.dynamicsRating],
+        ['gain', targetGenre.gainRating],
+        ['modulation', targetGenre.modulationRating],
+        ['delay', targetGenre.ambienceRating],
+        ['reverb', targetGenre.ambienceRating],
+        ['dynamics', targetGenre.dynamicsRating],
+        ['filter', targetGenre.modulationRating],
+        ['pitch', targetGenre.modulationRating],
+        ['eq', targetGenre.dynamicsRating],
         ['volume', 3],
         ['utility', 2],
       ];
@@ -352,15 +354,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     });
   }, [maxSlots, genre, categoryToType]);
   
-  // Generate initial type slots when first starting (no slots exist)
-  useEffect(() => {
-    if (typeSlots.length > 0) return;
-    
-    // Target slots: fill to maxSlots
-    const targetSlots = maxSlots;
-    const newSlots = generateSlotsForGenre([], targetSlots);
-    setTypeSlots(newSlots);
-  }, [genre, maxSlots, typeSlots.length]);
+  // Don't auto-generate slots - let user add manually or select a genre
   
   // Sorted slots by signal order
   const sortedSlots = useMemo(() => 
@@ -842,8 +836,153 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   
   const canContinue = selectedCount > 0;
   
+  // Genre selector state
+  const [showGenreSelector, setShowGenreSelector] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState<GenreCategoryId | null>(null);
+  
+  const handleToggleGenre = (genreId: string) => {
+    const isAdding = !selectedGenres.includes(genreId);
+    dispatch({ type: 'TOGGLE_GENRE', genreId });
+    
+    // When adding first genre, generate recommended slots immediately
+    if (isAdding && selectedGenres.length === 0) {
+      const newGenre = getGenreById(genreId);
+      if (newGenre) {
+        const newSlots = generateSlotsForGenre([], maxSlots, newGenre);
+        setTypeSlots(newSlots);
+      }
+    }
+  };
+  
+  const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
+  const isAtMax = selectedGenres.length >= 3;
+  
+  const genresByCategory = GENRE_CATEGORIES.map(category => ({
+    category,
+    genres: GENRES.filter(g => g.category === category.id),
+  }));
+  
   return (
     <div className="min-h-full flex flex-col" style={{ backgroundColor: 'var(--color-board-dark)' }}>
+      {/* Genre Selector - Collapsible */}
+      <div 
+        className="border-b-4"
+        style={{ borderColor: 'var(--color-board-border)', backgroundColor: 'var(--color-board-surface)' }}
+      >
+        <div className="max-w-7xl mx-auto px-4 py-2">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowGenreSelector(!showGenreSelector)}
+              className="flex items-center gap-2 px-3 py-1.5 font-bold text-xs uppercase"
+              style={{ 
+                backgroundColor: 'var(--color-board-dark)',
+                border: '2px solid var(--color-board-border)',
+                boxShadow: '2px 2px 0px var(--color-board-shadow)',
+                color: 'var(--color-board-text)',
+              }}
+            >
+              <Music className="w-3 h-3" />
+              Style
+              <ChevronDown className={`w-3 h-3 transition-transform ${showGenreSelector ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {/* Selected genres chips */}
+            {selectedGenreObjects.length > 0 ? (
+              <div className="flex items-center gap-2 flex-wrap">
+                {selectedGenreObjects.map(genre => genre && (
+                  <button
+                    key={genre.id}
+                    onClick={() => handleToggleGenre(genre.id)}
+                    className="flex items-center gap-1.5 px-2 py-1 text-xs font-bold transition-all hover:-translate-y-0.5"
+                    style={{ 
+                      backgroundColor: genre.color,
+                      color: 'var(--color-board-text)',
+                      border: '2px solid var(--color-board-border)',
+                      boxShadow: '2px 2px 0px var(--color-board-shadow)',
+                    }}
+                  >
+                    <GenreIcon genre={genre} size="sm" />
+                    <span>{genre.name}</span>
+                    <X className="w-3 h-3" />
+                  </button>
+                ))}
+                <span className="text-[10px] font-bold text-theme-muted uppercase">
+                  {3 - selectedGenres.length} left
+                </span>
+              </div>
+            ) : (
+              <span className="text-xs font-bold text-theme-muted">
+                Select a style to get pedal recommendations
+              </span>
+            )}
+          </div>
+          
+          {/* Expanded genre selector */}
+          {showGenreSelector && (
+            <div className="mt-3 pb-2">
+              <div className="flex flex-wrap gap-2">
+                {genresByCategory.map(({ category, genres }) => (
+                  <div key={category.id} className="relative">
+                    <button
+                      onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
+                      className="px-3 py-1.5 text-xs font-bold uppercase flex items-center gap-1"
+                      style={{ 
+                        backgroundColor: expandedCategory === category.id ? 'var(--color-board-accent)' : 'var(--color-board-dark)',
+                        color: expandedCategory === category.id ? 'white' : 'var(--color-board-text)',
+                        border: '2px solid var(--color-board-border)',
+                        boxShadow: '2px 2px 0px var(--color-board-shadow)',
+                      }}
+                    >
+                      {category.name}
+                      <ChevronDown className={`w-3 h-3 transition-transform ${expandedCategory === category.id ? 'rotate-180' : ''}`} />
+                    </button>
+                    
+                    {/* Genre dropdown */}
+                    {expandedCategory === category.id && (
+                      <div 
+                        className="absolute top-full left-0 mt-1 z-50 min-w-48"
+                        style={{ 
+                          backgroundColor: 'var(--color-board-surface)',
+                          border: '3px solid var(--color-board-border)',
+                          boxShadow: '4px 4px 0px var(--color-board-shadow)',
+                        }}
+                      >
+                        {genres.map(g => {
+                          const isSelected = selectedGenres.includes(g.id);
+                          const isDisabled = !isSelected && isAtMax;
+                          return (
+                            <button
+                              key={g.id}
+                              onClick={() => {
+                                if (!isDisabled) {
+                                  handleToggleGenre(g.id);
+                                  if (!isSelected) setExpandedCategory(null);
+                                }
+                              }}
+                              disabled={isDisabled}
+                              className={`w-full px-3 py-2 text-left text-sm font-bold flex items-center justify-between ${
+                                isDisabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-yellow-200 dark:hover:bg-yellow-900'
+                              }`}
+                              style={{ 
+                                borderBottom: '1px solid var(--color-board-border)',
+                                color: 'var(--color-board-text)',
+                              }}
+                            >
+                              <span>{g.name}</span>
+                              {isSelected && <Check className="w-4 h-4" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      
       {/* Two Column Layout */}
       <div className="flex-1 max-w-7xl mx-auto w-full p-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
@@ -871,31 +1010,26 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                       Add Pedal
                     </button>
                     
-                    {/* Add Pedal Menu */}
+                    {/* Add Pedal Menu - sorted by signal chain order */}
                     {showAddMenu && (
                       <div 
                         className="absolute left-0 top-full mt-2 bg-theme-surface z-30 w-48 max-h-64 overflow-y-auto"
                         style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
                       >
-                        {(['gain', 'dynamics', 'modulation', 'delay', 'reverb', 'filter', 'pitch', 'eq', 'volume', 'utility'] as Category[]).map(category => {
-                          const typesInCategory = availableToAdd.filter(t => t.category === category);
-                          if (typesInCategory.length === 0) return null;
-                          
-                          return (
-                            <div key={category} className="p-2" style={{ borderBottom: '2px solid black' }}>
-                              <p className="text-[10px] text-theme-muted uppercase tracking-wider px-2 mb-1 font-bold">{category}</p>
-                              {typesInCategory.map(t => (
-                                <button
-                                  key={t.type}
-                                  onClick={() => handleAddType(t.type)}
-                                  className="w-full px-2 py-1.5 text-left text-sm text-theme hover:bg-board-highlight font-bold"
-                                >
-                                  {t.type}
-                                </button>
-                              ))}
-                            </div>
-                          );
-                        })}
+                        <div className="p-1">
+                          {[...availableToAdd]
+                            .sort((a, b) => a.signalOrder - b.signalOrder)
+                            .map(t => (
+                              <button
+                                key={t.type}
+                                onClick={() => handleAddType(t.type)}
+                                className="w-full px-2 py-1.5 text-left text-sm text-theme hover:bg-yellow-200 dark:hover:bg-yellow-900 font-bold flex items-center justify-between"
+                              >
+                                <span>{t.type}</span>
+                                <span className="text-[9px] text-theme-muted uppercase">{t.category}</span>
+                              </button>
+                            ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1056,6 +1190,39 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
             
             {/* Snake Grid Layout - 4 boxes per row with arrows between */}
             {/* Sized to fit 12 boxes (3 rows) without scrolling */}
+            {sortedSlots.length === 0 ? (
+              /* Empty state - Add A Pedal card */
+              <button
+                onClick={() => {
+                  setShowAddMenu(true);
+                  setShowMultiMenu(false);
+                  setShowSimMenu(false);
+                }}
+                className="w-full aspect-[4/3] flex flex-col items-center justify-center gap-4 transition-all hover:-translate-y-1 hover:rotate-1"
+                style={{
+                  backgroundColor: 'var(--color-board-surface)',
+                  border: '4px dashed var(--color-board-border)',
+                  boxShadow: '6px 6px 0px var(--color-board-shadow)',
+                }}
+              >
+                <div 
+                  className="w-16 h-16 flex items-center justify-center text-3xl font-black"
+                  style={{ 
+                    backgroundColor: 'var(--color-board-accent)',
+                    color: 'white',
+                    border: '3px solid var(--color-board-border)',
+                  }}
+                >
+                  +
+                </div>
+                <div className="text-center">
+                  <h3 className="text-xl font-black text-theme uppercase mb-1">Add A Pedal!</h3>
+                  <p className="text-sm font-bold text-theme-muted">
+                    Or select a style above for recommendations
+                  </p>
+                </div>
+              </button>
+            ) : (
             <div>
               {(() => {
                 // Group slots into rows of 4 with original indices
@@ -1081,8 +1248,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                   const categoryColor = categoryInfo?.color || '#9e9e9e';
                   
                   return (
-                    <button
-                      onClick={() => handleSelectSlot(item.slot.id)}
+                    <div
                       className={`flex-1 aspect-[4/5] relative p-1 transition-all ${
                         isSelected ? 'scale-105' : hasPedal ? '' : 'hover:-translate-y-1 hover:rotate-1'
                       }`}
@@ -1092,6 +1258,18 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                         boxShadow: isSelected ? '4px 4px 0px black' : '3px 3px 0px black',
                       }}
                     >
+                      {/* Remove Button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveSlot(item.slot.id);
+                        }}
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 flex items-center justify-center bg-red-500 text-white z-20 hover:bg-red-600 transition-colors"
+                        style={{ border: '2px solid black' }}
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                      
                       {/* Category Badge */}
                       <div 
                         className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 text-[7px] font-black uppercase tracking-wide z-10 bg-theme-surface text-theme whitespace-nowrap"
@@ -1100,8 +1278,9 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                         {item.slot.type}
                       </div>
                       
-                      {/* Inner Card */}
-                      <div 
+                      {/* Inner Card - clickable to select */}
+                      <button 
+                        onClick={() => handleSelectSlot(item.slot.id)}
                         className="w-full h-full bg-theme-surface flex flex-col items-center justify-center p-1 overflow-hidden"
                         style={{ border: '2px solid black' }}
                       >
@@ -1149,8 +1328,8 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                             </div>
                           </>
                         )}
-                      </div>
-                    </button>
+                      </button>
+                    </div>
                   );
                 };
 
@@ -1158,14 +1337,19 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                   const isRightToLeft = rowIndex % 2 === 0;
                   const isLastRow = rowIndex === rows.length - 1;
                   
+                  // For right-to-left rows, pad the start with empty slots so items appear on the right
+                  const paddedRow = isRightToLeft 
+                    ? [...Array(4 - row.length).fill(undefined), ...row]
+                    : [...row, ...Array(4 - row.length).fill(undefined)];
+                  
                   return (
                     <div key={rowIndex}>
                       {/* Row with 4 boxes and 3 arrows */}
                       <div className="flex items-center justify-center">
-                        {renderBox(row[0])}
+                        {renderBox(paddedRow[0])}
                         
                         <div className="w-8 flex items-center justify-center flex-shrink-0">
-                          {row[0] && row[1] && (
+                          {paddedRow[0] && paddedRow[1] && (
                             <ChevronRight 
                               className={`w-5 h-5 text-board-accent ${isRightToLeft ? 'rotate-180' : ''}`} 
                               strokeWidth={3} 
@@ -1173,10 +1357,10 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                           )}
                         </div>
                         
-                        {renderBox(row[1])}
+                        {renderBox(paddedRow[1])}
                         
                         <div className="w-8 flex items-center justify-center flex-shrink-0">
-                          {row[1] && row[2] && (
+                          {paddedRow[1] && paddedRow[2] && (
                             <ChevronRight 
                               className={`w-5 h-5 text-board-accent ${isRightToLeft ? 'rotate-180' : ''}`} 
                               strokeWidth={3} 
@@ -1184,10 +1368,10 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                           )}
                         </div>
                         
-                        {renderBox(row[2])}
+                        {renderBox(paddedRow[2])}
                         
                         <div className="w-8 flex items-center justify-center flex-shrink-0">
-                          {row[2] && row[3] && (
+                          {paddedRow[2] && paddedRow[3] && (
                             <ChevronRight 
                               className={`w-5 h-5 text-board-accent ${isRightToLeft ? 'rotate-180' : ''}`} 
                               strokeWidth={3} 
@@ -1195,7 +1379,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                           )}
                         </div>
                         
-                        {renderBox(row[3])}
+                        {renderBox(paddedRow[3])}
                       </div>
                       
                       {/* Down arrow row */}
@@ -1219,6 +1403,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                 });
               })()}
             </div>
+            )}
             
             </div>
           

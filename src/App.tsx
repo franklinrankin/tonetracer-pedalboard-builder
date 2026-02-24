@@ -3,7 +3,7 @@ import { BoardProvider, useBoard } from './context/BoardContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
-import { GenrePage, BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
+import { BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
 import { SavedBoardsPage } from './pages/SavedBoardsPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { CollectionPage } from './pages/CollectionPage';
@@ -210,7 +210,7 @@ function getInitialPage(): AppPage {
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState<AppPage>(getInitialPage);
-  const [currentStep, setCurrentStep] = useState<WizardStep>('genre');
+  const [currentStep, setCurrentStep] = useState<WizardStep>('build');
   const [selectedProBoard, setSelectedProBoard] = useState<ProBoard | null>(null);
   const [selectedCommunityBoard, setSelectedCommunityBoard] = useState<PublicBoard | null>(null);
   const [selectedCommunityCollection, setSelectedCommunityCollection] = useState<PublicCollection | null>(null);
@@ -619,7 +619,7 @@ function AppContent() {
       dispatch({ type: 'CLEAR_BOARD' });
       dispatch({ type: 'CLEAR_BUILD_SLOTS' });
       dispatch({ type: 'CLEAR_GENRES' });
-      setCurrentStep('genre');
+      setCurrentStep('build');
       setCurrentPage('home');
       setSelectedProBoard(null);
       setCurrentSavedBoardId(null);
@@ -627,10 +627,6 @@ function AppContent() {
     }
   };
   
-  const handleCreateOwn = () => {
-    dispatch({ type: 'CLEAR_GENRES' });
-    handleStepChange('build');
-  };
   
   const handleGoHome = () => {
     // Check if there's anything to lose (pedals on board or genres selected)
@@ -655,7 +651,7 @@ function AppContent() {
   const handleBuildBoard = () => {
     setCurrentSavedBoardId(null); // Clear saved board ID for new builds
     setCurrentPage('wizard');
-    setCurrentStep('genre');
+    setCurrentStep('build');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -1010,8 +1006,6 @@ function AppContent() {
 
   const renderPage = () => {
     switch (currentStep) {
-      case 'genre':
-        return <GenrePage onContinue={() => handleStepChange('build')} onCreateOwn={handleCreateOwn} />;
       case 'build':
         return <BuildPage onContinue={() => handleStepChange('review')} collection={collection} />;
       case 'review':
@@ -1024,7 +1018,7 @@ function AppContent() {
           />
         );
       default:
-        return <GenrePage onContinue={() => handleStepChange('build')} onCreateOwn={handleCreateOwn} />;
+        return <BuildPage onContinue={() => handleStepChange('review')} collection={collection} />;
     }
   };
 
