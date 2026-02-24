@@ -532,8 +532,8 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
   if (board.slots.length === 0) {
     return (
       <div 
-        className="flex items-center justify-center h-96"
-        style={{ backgroundColor: '#FFFEF0', border: '3px solid black' }}
+        className="flex items-center justify-center h-96 bg-theme-surface"
+        style={{ border: '3px solid var(--color-board-border)' }}
       >
         <p className="text-theme font-bold">Add pedals to your board to visualize the signal flow</p>
       </div>
@@ -1302,8 +1302,8 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
           {/* Board name and dimensions label - clickable to change board */}
           <button 
             onClick={() => onBoardChange && setShowBoardMenu(true)}
-            className={`text-center px-4 py-2 flex items-center gap-2 transition-all ${onBoardChange ? 'hover:scale-[1.02] cursor-pointer' : ''}`}
-            style={{ backgroundColor: '#FFFEF0', border: '2px solid black' }}
+            className={`text-center px-4 py-2 flex items-center gap-2 transition-all bg-theme-surface ${onBoardChange ? 'hover:scale-[1.02] cursor-pointer' : ''}`}
+            style={{ border: '2px solid var(--color-board-border)' }}
             disabled={!onBoardChange}
           >
             <Ruler className="w-4 h-4 text-black" />
@@ -1376,8 +1376,8 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
             {/* Modal */}
             <div 
               ref={boardMenuRef}
-              className="relative w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col"
-              style={{ backgroundColor: '#FFFEF0', border: '4px solid black', boxShadow: '8px 8px 0px black' }}
+              className="relative w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col bg-theme-surface"
+              style={{ border: '4px solid var(--color-board-border)', boxShadow: '8px 8px 0px var(--color-board-shadow)' }}
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b-4 border-black bg-black text-white">
@@ -1613,10 +1613,10 @@ export function BoardVisualizer({ overrideWidth, overrideDepth, boardName, board
 
       {/* Instructions - Hidden on mobile */}
       <div 
-        className="hidden sm:block p-4"
-        style={{ backgroundColor: '#FFFEF0', border: '3px solid black' }}
+        className="hidden sm:block p-4 bg-theme-surface"
+        style={{ border: '3px solid var(--color-board-border)' }}
       >
-        <h3 className="text-sm font-black text-black mb-2 uppercase">Tips</h3>
+        <h3 className="text-sm font-black text-theme mb-2 uppercase">Tips</h3>
         <ul className="text-xs text-black space-y-1">
           <li>• <strong>Click</strong> a pedal to select it and view details</li>
           <li>• <strong>Drag</strong> pedals to reposition them on the board</li>

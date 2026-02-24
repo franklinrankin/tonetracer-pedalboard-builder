@@ -478,7 +478,7 @@ export function CommunityPage({ onBack, onViewBoard, onViewCollection, onSignInC
   }, [forumPosts, forumFilter, forumSearch]);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FFFBEB' }}>
+    <div className="min-h-screen bg-theme-dark">
       {/* Header */}
       <div className="bg-theme-surface border-b-4 brutal-border p-4">
         <div className="max-w-6xl mx-auto flex items-center gap-4">

@@ -150,7 +150,7 @@ export function SavedBoardsPage({
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#FFFEF0] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-theme-dark flex items-center justify-center p-4">
         <div className="text-center">
           <h2 className="text-2xl font-extrabold text-theme uppercase tracking-tight mb-4">Sign in to view saved boards</h2>
           <button
@@ -165,7 +165,7 @@ export function SavedBoardsPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFEF0]">
+    <div className="min-h-screen bg-theme-dark">
       {/* Header */}
       <div className="bg-theme-surface border-b-4 brutal-border">
         <div className="max-w-6xl mx-auto px-4 py-6">

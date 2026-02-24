@@ -6,40 +6,40 @@ interface ProBoardsPageProps {
   onSelectBoard: (board: ProBoard) => void;
 }
 
-// Genre colors - muted pastels
+// Genre colors - dark muted tones
 const GENRE_COLORS: Record<string, string> = {
-  'Rock': '#FFCDD2',
-  'Blues': '#B2EBF2',
-  'Metal': '#CFD8DC',
-  'Jazz': '#E1BEE7',
-  'Country': '#FFE0B2',
-  'Alternative': '#FFCCBC',
-  'Indie': '#C8E6C9',
-  'Pop': '#F8BBD9',
-  'Funk': '#FFE0B2',
-  'Soul': '#E1BEE7',
+  'Rock': '#8B4A4A',
+  'Blues': '#2D5A6A',
+  'Metal': '#3A3A3A',
+  'Jazz': '#5A3D6A',
+  'Country': '#6A5A3D',
+  'Alternative': '#5A4A3D',
+  'Indie': '#3D5A4A',
+  'Pop': '#6A3D5A',
+  'Funk': '#6A5A3D',
+  'Soul': '#5A3D6A',
 };
 
-// Accent colors for cards without images - muted pastels
+// Accent colors for cards without images - dark tones matching homepage
 const CARD_COLORS = [
-  '#FFF9C4', // soft yellow
-  '#FFCDD2', // soft coral
-  '#B2DFDB', // soft teal
-  '#FFE0B2', // soft orange
-  '#C8E6C9', // soft mint
-  '#E1BEE7', // soft plum
-  '#BBDEFB', // soft blue
-  '#F5F5F5', // soft gray
+  '#8B6B4A', // dark gold/brown
+  '#8B4A5A', // dark rose
+  '#2D6A6A', // dark teal
+  '#6A5A3D', // dark tan
+  '#3D5A4A', // dark forest
+  '#5A3D6A', // dark plum
+  '#3D4A6A', // dark slate blue
+  '#4A4A4A', // dark gray
 ];
 
 export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
   return (
-    <div className="min-h-screen p-4 sm:p-6" style={{ backgroundColor: '#FFFEF0' }}>
+    <div className="min-h-screen p-4 sm:p-6 bg-theme-dark">
       {/* Header */}
       <div className="max-w-5xl mx-auto mb-8">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-theme font-bold uppercase tracking-wide hover:bg-yellow-300 px-3 py-2 transition-colors mb-6"
+          className="flex items-center gap-2 text-theme font-bold uppercase tracking-wide hover:bg-yellow-300 hover:text-black px-3 py-2 transition-colors mb-6"
           style={{ border: '3px solid var(--color-board-border)' }}
         >
           <ArrowLeft className="w-4 h-4" />
@@ -52,7 +52,7 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
         >
           Pro Boards
         </h1>
-        <p className="text-base sm:text-lg text-theme font-medium">
+        <p className="text-base sm:text-lg text-theme-muted font-medium">
           Explore pedalboards used by professional guitarists. Click any board to see the full breakdown.
         </p>
       </div>
@@ -82,19 +82,44 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
                 {/* Background Image */}
                 <div className="aspect-[4/3] relative">
                   {board.image ? (
-                    <img 
-                      src={board.image} 
-                      alt={`${board.artist} ${board.name}`}
-                      className="absolute inset-0 w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
+                    <>
+                      <img 
+                        src={board.image} 
+                        alt={`${board.artist} ${board.name}`}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                      {/* Artist name overlay on image */}
+                      <div className="absolute inset-0 flex items-end justify-start p-4">
+                        <h2 
+                          className="text-2xl sm:text-3xl font-black uppercase leading-tight px-3 py-1"
+                          style={{ 
+                            color: 'white',
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                          }}
+                        >
+                          {board.artist}
+                        </h2>
+                      </div>
+                    </>
                   ) : (
                     <div 
-                      className="absolute inset-0"
+                      className="absolute inset-0 flex items-center justify-center"
                       style={{ backgroundColor: cardColor }}
-                    />
+                    >
+                      {/* Artist name in colored box - white text on dark backgrounds */}
+                      <h2 
+                        className="text-2xl sm:text-3xl font-black uppercase text-center px-4 leading-tight"
+                        style={{ 
+                          color: 'white',
+                          textShadow: '2px 2px 0px rgba(0,0,0,0.5)'
+                        }}
+                      >
+                        {board.artist}
+                      </h2>
+                    </div>
                   )}
                   
                   {/* Year badge */}
@@ -106,13 +131,13 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
                     <span className="text-xs font-black">{board.year}</span>
                   </div>
 
-                  {/* Genre badge */}
+                  {/* Genre badge - black text always */}
                   <div 
                     className="absolute top-3 left-3 px-3 py-1 flex items-center gap-1.5"
                     style={{ 
-                      backgroundColor: genreColor,
+                      backgroundColor: '#FFE600',
                       border: '2px solid black',
-                      color: board.genre === 'Metal' ? 'white' : 'black'
+                      color: 'black'
                     }}
                   >
                     <Music className="w-3 h-3" />
@@ -121,18 +146,15 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
                 </div>
 
                 {/* Content */}
-                <div className="p-4 border-t-4 border-black" style={{ backgroundColor: '#FFFEF0' }}>
-                  <h3 className="text-xl font-black text-theme uppercase mb-1">
-                    {board.artist}
-                  </h3>
-                  <p className="text-sm font-bold text-theme-muted mb-3">
+                <div className="p-4 border-t-4 brutal-border bg-theme-surface">
+                  <h3 className="text-lg font-black text-theme uppercase mb-1">
                     {board.name}
-                  </p>
+                  </h3>
                   
                   <div className="flex items-center justify-between">
                     <span 
-                      className="text-xs font-black px-2 py-1"
-                      style={{ backgroundColor: '#FFE600', border: '2px solid black' }}
+                      className="text-xs font-black px-2 py-1 text-black"
+                      style={{ backgroundColor: '#FFE600', border: '2px solid var(--color-board-border)' }}
                     >
                       {board.pedalIds.length} PEDALS
                     </span>
@@ -152,12 +174,12 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
           <div 
             className="relative overflow-hidden bg-theme-surface"
             style={{ 
-              border: '4px dashed black',
+              border: '4px dashed var(--color-board-border)',
             }}
           >
-            <div className="aspect-[4/3] flex flex-col items-center justify-center p-6 text-center" style={{ backgroundColor: '#f5f5f5' }}>
+            <div className="aspect-[4/3] flex flex-col items-center justify-center p-6 text-center bg-theme-elevated">
               <div 
-                className="w-16 h-16 flex items-center justify-center mb-4 font-black text-3xl"
+                className="w-16 h-16 flex items-center justify-center mb-4 font-black text-3xl text-black"
                 style={{ backgroundColor: '#FFE600', border: '3px solid var(--color-board-border)' }}
               >
                 +
@@ -170,7 +192,7 @@ export function ProBoardsPage({ onBack, onSelectBoard }: ProBoardsPageProps) {
               </p>
             </div>
             {/* Bottom section to match other cards */}
-            <div className="p-4 border-t-4 border-dashed border-black" style={{ backgroundColor: '#FFFEF0' }}>
+            <div className="p-4 border-t-4 border-dashed brutal-border bg-theme-surface">
               <div className="h-8"></div>
             </div>
           </div>

@@ -1306,9 +1306,8 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                             >
                               {/* Category Badge */}
                               <div 
-                                className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide"
+                                className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide bg-theme-surface text-theme"
                                 style={{
-                                  backgroundColor: '#FFFEF0',
                                   border: '2px solid var(--color-board-border)',
                                   whiteSpace: 'nowrap',
                                 }}
@@ -1561,7 +1560,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
             </div>
             
             {/* Content */}
-            <div className="p-4" style={{ backgroundColor: '#FFFEF0' }}>
+            <div className="p-4 bg-theme-dark">
               <p className="text-sm font-bold text-theme mb-4">
                 This unit can cover multiple effects. What else is it handling on your board?
               </p>

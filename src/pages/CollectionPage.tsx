@@ -170,7 +170,7 @@ export function CollectionPage({
   const categories = ['all', 'gain', 'modulation', 'delay', 'reverb', 'dynamics', 'filter', 'pitch', 'eq', 'volume', 'utility'];
 
   return (
-    <div className="min-h-screen p-4 sm:p-8" style={{ backgroundColor: '#FFFEF0' }}>
+    <div className="min-h-screen p-4 sm:p-8 bg-theme-dark">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6">
@@ -349,9 +349,8 @@ export function CollectionPage({
                   >
                     {/* Category Badge */}
                     <div 
-                      className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide"
+                      className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide bg-theme-surface text-theme"
                       style={{
-                        backgroundColor: '#FFFEF0',
                         border: '2px solid var(--color-board-border)',
                         whiteSpace: 'nowrap',
                       }}
@@ -485,7 +484,7 @@ export function CollectionPage({
           />
           
           <div 
-            className="relative bg-[#FFFEF0] w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col"
+            className="relative bg-theme-surface w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col"
             style={{ border: '4px solid var(--color-board-border)', boxShadow: '8px 8px 0px black' }}
           >
             {/* Modal Header */}
@@ -582,9 +581,8 @@ export function CollectionPage({
                       >
                         {/* Category Badge */}
                         <div 
-                          className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide"
+                          className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide bg-theme-surface text-theme"
                           style={{
-                            backgroundColor: '#FFFEF0',
                             border: '2px solid var(--color-board-border)',
                             whiteSpace: 'nowrap',
                           }}

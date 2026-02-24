@@ -1458,7 +1458,7 @@ function AppContent() {
   // Community Collection page (read-only)
   if (currentPage === 'community-collection' && selectedCommunityCollection) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: '#FFFEF0' }}>
+      <div className="min-h-screen bg-theme-dark">
         <CollectionPage
           collection={selectedCommunityCollection.pedal_ids}
           allPedals={PEDALS}

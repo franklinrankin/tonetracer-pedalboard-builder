@@ -422,7 +422,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
               </button>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-4" style={{ backgroundColor: '#FFFEF0' }}>
+            <div className="flex-1 overflow-y-auto p-4 bg-theme-dark">
               <PedalCatalog />
             </div>
           </div>

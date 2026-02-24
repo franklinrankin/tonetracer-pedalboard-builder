@@ -729,7 +729,7 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
   const topGenreMatch = genreMatches.length > 0 ? genreMatches[0] : null;
   
   return (
-    <div className="min-h-full p-6 lg:p-12" style={{ backgroundColor: '#FFFEF0' }}>
+    <div className="min-h-full p-6 lg:p-12 bg-theme-dark">
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-12 text-center">
         <div 

@@ -219,7 +219,7 @@ export function UserMenu({ onSignInClick, onSavedBoards, onPedalRequest, onFeedb
           onPointerDown={(e) => e.stopPropagation()}
         >
           {/* User Info */}
-          <div className="px-4 py-3" style={{ borderBottom: '2px solid black', backgroundColor: '#FFF9C4' }}>
+          <div className="px-4 py-3" style={{ borderBottom: '2px solid var(--color-board-border)', backgroundColor: '#FFF9C4' }}>
             <p className="font-bold text-theme truncate">
               {getDisplayName()}
             </p>

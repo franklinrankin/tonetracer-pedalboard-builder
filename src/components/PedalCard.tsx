@@ -108,9 +108,8 @@ export function PedalCard({ pedal, isOnBoard = false, compact = false, showAsEna
       >
         {/* Category Badge */}
         <div 
-          className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide z-10"
+          className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wide z-10 bg-theme-surface text-theme"
           style={{
-            backgroundColor: '#FFFEF0',
             border: '2px solid var(--color-board-border)',
             whiteSpace: 'nowrap',
           }}

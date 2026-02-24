@@ -243,7 +243,7 @@ export function ProfilePage({ onBack, favorites, onUpdateFavorites }: ProfilePag
   const favoritesCount = Object.values(localFavorites).filter(Boolean).length;
   
   return (
-    <div className="min-h-screen bg-[#FFFEF0]">
+    <div className="min-h-screen bg-theme-dark">
       {/* Header - sticky with high z-index */}
       <div className="sticky top-0 bg-theme-surface border-b-4 brutal-border z-50">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
