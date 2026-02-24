@@ -125,14 +125,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   
   const genre = selectedGenres.length > 0 ? getGenreById(selectedGenres[0]) : null;
   
-  // Multi-FX inline prompt state
-  const [multiFxPrompt, setMultiFxPrompt] = useState<{
-    pedal: PedalWithStatus;
-    slotId: string | null; // null when adding via "Add Multi" button (no specific slot)
-    selectedSlotIds: string[]; // Track selected slots by ID
-    addAmpSim: boolean; // Whether to add an Amp Sim slot
-  } | null>(null);
-  
   // Type slots state - persist in board context
   const [typeSlots, setTypeSlots] = useState<TypeSlot[]>(() => {
     // Restore from board.buildSlots if available
@@ -144,7 +136,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   const [randomSeed, setRandomSeed] = useState(0); // Forces pedal list to re-randomize
   const [showAddMenu, setShowAddMenu] = useState(false);
-  const [showMultiMenu, setShowMultiMenu] = useState(false);
   const [showSimMenu, setShowSimMenu] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>('recommended');
   const [hoveredPedal, setHoveredPedal] = useState<PedalWithStatus | null>(null);
@@ -413,11 +404,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
           return p.subtype === selectedFlavor;
         }
         
-        // Don't show Multi-FX in regular categories - they have their own "Add Multi" button
-        if (p.subtype === 'Multi-FX / Modeler' && selectedSlot.type !== 'Amp Sim') {
-          return false;
-        }
-        
         const matchesSubtype = subtypes.includes(p.subtype || '') || p.category === selectedSlot.category;
         return matchesSubtype;
       });
@@ -601,33 +587,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     // Don't allow selecting a pedal that's used by another slot
     if (isUsedByOther) return;
     
-    const currentSlot = typeSlots.find(s => s.id === selectedSlotId);
-    
-    // Check if this is a multi-FX pedal being selected (not deselected)
-    const isMultiFx = pedal.subtype === 'Multi-FX / Modeler';
-    const isNewSelection = currentSlot?.selectedPedalId !== pedal.id;
-    
-    if (isMultiFx && isNewSelection) {
-      // Find slots already filled by this multi-FX
-      const alreadyFilledSlotIds = typeSlots
-        .filter(slot => slot.selectedPedalId === pedal.id && slot.id !== selectedSlotId)
-        .map(slot => slot.id);
-      
-      // Check if there's already an amp sim slot with this multi-FX
-      const hasAmpSimWithMulti = typeSlots.some(slot => 
-        slot.type === 'Amp Sim' && slot.selectedPedalId === pedal.id
-      );
-      
-      // Show the multi-FX prompt with pre-selected slots
-      setMultiFxPrompt({
-        pedal,
-        slotId: selectedSlotId,
-        selectedSlotIds: alreadyFilledSlotIds,
-        addAmpSim: hasAmpSimWithMulti,
-      });
-      return;
-    }
-    
     setTypeSlots(prev => prev.map(slot => {
       if (slot.id !== selectedSlotId) return slot;
       
@@ -635,114 +594,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       const newPedalId = slot.selectedPedalId === pedal.id ? undefined : pedal.id;
       return { ...slot, selectedPedalId: newPedalId };
     }));
-  };
-  
-  // Handle multi-FX prompt confirmation
-  const handleMultiFxConfirm = () => {
-    if (!multiFxPrompt) return;
-    
-    const { pedal, slotId, selectedSlotIds, addAmpSim } = multiFxPrompt;
-    
-    setTypeSlots(prev => {
-      // First, remove Tuner slot since multi-FX units have built-in tuners
-      let newSlots = prev.filter(slot => slot.type !== 'Tuner');
-      
-      newSlots = newSlots.map(slot => {
-        // If this is the original slot (when selecting from pedal list)
-        if (slotId && slot.id === slotId) {
-          return { ...slot, selectedPedalId: pedal.id };
-        }
-        
-        const isSelectedSlot = selectedSlotIds.includes(slot.id);
-        const hasThisMultiFx = slot.selectedPedalId === pedal.id;
-        
-        if (isSelectedSlot && !hasThisMultiFx) {
-          // Fill selected slots with multi-FX
-          return { ...slot, selectedPedalId: pedal.id };
-        } else if (!isSelectedSlot && hasThisMultiFx && slot.id !== slotId) {
-          // Clear slots that had this multi-FX but are no longer selected
-          // But don't clear Amp Sim slots if addAmpSim is still checked
-          if (slot.type === 'Amp Sim' && addAmpSim) {
-            return slot;
-          }
-          return { ...slot, selectedPedalId: undefined };
-        }
-        
-        return slot;
-      });
-      
-      // Handle Amp Sim slot
-      const existingAmpSimSlot = newSlots.find(s => s.type === 'Amp Sim');
-      
-      if (addAmpSim) {
-        if (existingAmpSimSlot) {
-          // Update existing Amp Sim slot with this multi-FX
-          newSlots = newSlots.map(slot => 
-            slot.type === 'Amp Sim' ? { ...slot, selectedPedalId: pedal.id } : slot
-          );
-        } else {
-          // Add new Amp Sim slot
-          const ampSimInfo = getTypeInfo('Amp Sim');
-          if (ampSimInfo) {
-            newSlots.push({
-              id: generateUUID(),
-              type: 'Amp Sim',
-              category: ampSimInfo.category,
-              signalOrder: ampSimInfo.signalOrder,
-              selectedPedalId: pedal.id,
-            });
-            newSlots = newSlots.sort((a, b) => a.signalOrder - b.signalOrder);
-          }
-        }
-      } else {
-        // If addAmpSim is unchecked but there's an Amp Sim with this multi-FX, clear it
-        if (existingAmpSimSlot && existingAmpSimSlot.selectedPedalId === pedal.id) {
-          newSlots = newSlots.map(slot => 
-            slot.type === 'Amp Sim' && slot.selectedPedalId === pedal.id
-              ? { ...slot, selectedPedalId: undefined }
-              : slot
-          );
-        }
-      }
-      
-      return newSlots;
-    });
-    
-    // Get the categories being covered for the context
-    const coveringCategories = typeSlots
-      .filter(s => selectedSlotIds.includes(s.id) || s.id === slotId)
-      .map(s => s.category);
-    
-    if (addAmpSim) {
-      coveringCategories.push('amp');
-    }
-    
-    // Update multi-FX state in context for Review page badges
-    dispatch({
-      type: 'SET_MULTI_EFFECTS',
-      multiEffects: {
-        pedalId: pedal.id,
-        coveringCategories,
-        isAmpSimOnly: false,
-      },
-    });
-    
-    setMultiFxPrompt(null);
-  };
-  
-  // Toggle slot in multi-FX prompt
-  const toggleMultiFxSlot = (slotId: string) => {
-    if (!multiFxPrompt) return;
-    setMultiFxPrompt(prev => {
-      if (!prev) return null;
-      const isSelected = prev.selectedSlotIds.includes(slotId);
-      return {
-        ...prev,
-        selectedSlotIds: isSelected
-          ? prev.selectedSlotIds.filter(id => id !== slotId)
-          : [...prev.selectedSlotIds, slotId],
-      };
-    });
   };
   
   const handleClearBoard = () => {
@@ -999,7 +850,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                     <button
                       onClick={() => {
                         setShowAddMenu(!showAddMenu);
-                        setShowMultiMenu(false);
                         setShowSimMenu(false);
                         setSelectedSlotId(null);
                       }}
@@ -1034,80 +884,12 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                     )}
                   </div>
                   
-                  {/* Add Multi Button */}
-                  <div className="relative">
-                    <button
-                      onClick={() => {
-                        setShowMultiMenu(!showMultiMenu);
-                        setShowAddMenu(false);
-                        setShowSimMenu(false);
-                        setSelectedSlotId(null);
-                      }}
-                      className="px-3 py-1.5 bg-cyan-400 text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all whitespace-nowrap flex-shrink-0"
-                      style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
-                    >
-                      <Zap className="w-3 h-3" />
-                      Add Multi
-                    </button>
-                    
-                    {/* Add Multi Menu */}
-                    {showMultiMenu && (
-                      <div 
-                        className="absolute right-0 top-full mt-2 bg-theme-surface z-30 w-56 max-h-80 overflow-y-auto"
-                        style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
-                      >
-                        <div className="p-2 bg-cyan-100" style={{ borderBottom: '2px solid black' }}>
-                          <p className="text-[10px] text-theme-muted font-bold uppercase">Multi-FX / Modelers</p>
-                        </div>
-                        {allPedals
-                          .filter(p => p.subtype === 'Multi-FX / Modeler')
-                          .sort((a, b) => a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model))
-                          .map(pedal => (
-                            <button
-                              key={pedal.id}
-                              onClick={() => {
-                                // Find slots already filled by this multi-FX
-                                const alreadyFilledSlotIds = typeSlots
-                                  .filter(slot => slot.selectedPedalId === pedal.id)
-                                  .map(slot => slot.id);
-                                
-                                // Check if there's already an amp sim slot with this multi-FX
-                                const hasAmpSimWithMulti = typeSlots.some(slot => 
-                                  slot.type === 'Amp Sim' && slot.selectedPedalId === pedal.id
-                                );
-                                
-                                // Show the multi-FX prompt
-                                setMultiFxPrompt({
-                                  pedal,
-                                  slotId: null, // No specific slot, just filling existing slots
-                                  selectedSlotIds: alreadyFilledSlotIds,
-                                  addAmpSim: hasAmpSimWithMulti,
-                                });
-                                setShowMultiMenu(false);
-                              }}
-                              className="w-full px-3 py-2 text-left hover:bg-cyan-50 flex items-center gap-2"
-                              style={{ borderBottom: '1px solid #e5e7eb' }}
-                            >
-                              <div className="w-8 h-8 bg-gradient-to-br from-cyan-100 to-blue-100 flex items-center justify-center flex-shrink-0" style={{ border: '2px solid var(--color-board-border)' }}>
-                                <Zap className="w-4 h-4 text-cyan-600" />
-                              </div>
-                              <div className="min-w-0">
-                                <div className="text-sm font-black text-theme truncate">{pedal.model}</div>
-                                <div className="text-[10px] text-theme-muted font-bold truncate">{pedal.brand}</div>
-                              </div>
-                            </button>
-                          ))}
-                      </div>
-                    )}
-                  </div>
-                  
                   {/* Add Sim Button */}
                   <div className="relative">
                     <button
                       onClick={() => {
                         setShowSimMenu(!showSimMenu);
                         setShowAddMenu(false);
-                        setShowMultiMenu(false);
                         setSelectedSlotId(null);
                       }}
                       className="px-3 py-1.5 bg-orange-400 text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all whitespace-nowrap flex-shrink-0"
@@ -1173,9 +955,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                       setTypeSlots([]);
                       setSelectedSlotId(null);
                       setShowAddMenu(false);
-                      setShowMultiMenu(false);
                       setShowSimMenu(false);
-                      setMultiFxPrompt(null);
                       // Clear multi-FX from context
                       dispatch({ type: 'CLEAR_MULTI_EFFECTS' });
                     }}
@@ -1195,7 +975,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
               <button
                 onClick={() => {
                   setShowAddMenu(true);
-                  setShowMultiMenu(false);
                   setShowSimMenu(false);
                 }}
                 className="w-full aspect-[4/3] flex flex-col items-center justify-center gap-4 transition-all hover:-translate-y-1 hover:rotate-1"
@@ -1736,177 +1515,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
         </div>
       )}
       
-      {/* Multi-FX Prompt Modal */}
-      {multiFxPrompt && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div 
-            className="absolute inset-0 bg-black/70"
-            onClick={handleMultiFxConfirm}
-          />
-          <div 
-            className="relative bg-theme-surface w-full max-w-md"
-            style={{ border: '4px solid var(--color-board-border)', boxShadow: '8px 8px 0px black' }}
-          >
-            {/* Header */}
-            <div 
-              className="p-4 bg-cyan-400"
-              style={{ borderBottom: '4px solid black' }}
-            >
-              <div className="flex items-center gap-3">
-                <div 
-                  className="w-12 h-12 bg-theme-surface flex items-center justify-center"
-                  style={{ border: '3px solid var(--color-board-border)' }}
-                >
-                  <Zap className="w-6 h-6 text-theme" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-black text-theme uppercase">
-                    Multi-FX Detected
-                  </h2>
-                  <p className="text-sm font-bold text-theme-muted">
-                    {multiFxPrompt.pedal.brand} {multiFxPrompt.pedal.model}
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Content */}
-            <div className="p-4 bg-theme-dark">
-              <p className="text-sm font-bold text-theme mb-4">
-                This unit can cover multiple effects. What else is it handling on your board?
-              </p>
-              
-              {/* Show actual slots on the board */}
-              {(() => {
-                const thisMultiFxId = multiFxPrompt.pedal.id;
-                
-                // Get all coverable slots (excluding the current one if any)
-                // Only include slots with categories that multi-FX can cover
-                const coverableCategories = ['gain', 'modulation', 'delay', 'reverb', 'dynamics', 'pitch', 'filter', 'eq'];
-                const slotsOnBoard = typeSlots.filter(slot => 
-                  slot.id !== multiFxPrompt.slotId &&
-                  coverableCategories.includes(slot.category)
-                );
-                
-                if (slotsOnBoard.length === 0) {
-                  return (
-                    <p className="text-xs text-theme-muted font-bold text-center py-4">
-                      No other slots on your board to fill with this multi-FX.
-                    </p>
-                  );
-                }
-                
-                // Get category colors
-                const categoryColors: Record<string, string> = {
-                  gain: '#EF4444',
-                  modulation: '#8B5CF6',
-                  delay: '#3B82F6',
-                  reverb: '#06B6D4',
-                  dynamics: '#F59E0B',
-                  pitch: '#EC4899',
-                  filter: '#10B981',
-                  eq: '#6366F1',
-                };
-                
-                return (
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    {slotsOnBoard.map(slot => {
-                      const isSelected = multiFxPrompt.selectedSlotIds.includes(slot.id);
-                      const hasOtherPedal = slot.selectedPedalId && slot.selectedPedalId !== thisMultiFxId;
-                      const isAvailable = !hasOtherPedal;
-                      
-                      // Find what pedal is in this slot (if any)
-                      const occupyingPedal = hasOtherPedal
-                        ? allPedals.find(p => p.id === slot.selectedPedalId)
-                        : null;
-                      
-                      const color = categoryColors[slot.category] || '#666';
-                      
-                      return (
-                        <button
-                          key={slot.id}
-                          onClick={() => isAvailable && toggleMultiFxSlot(slot.id)}
-                          disabled={!isAvailable}
-                          className={`p-3 text-center transition-all ${
-                            !isAvailable 
-                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-                              : isSelected 
-                                ? 'text-white' 
-                                : 'bg-theme-surface text-theme hover:bg-gray-100'
-                          }`}
-                          style={{
-                            border: '3px solid var(--color-board-border)',
-                            backgroundColor: isSelected ? color : undefined,
-                            boxShadow: isSelected ? '3px 3px 0px black' : 'none',
-                            opacity: !isAvailable ? 0.6 : 1,
-                          }}
-                        >
-                          <div className="text-sm font-black uppercase">{slot.type}</div>
-                          {isSelected && <Check className="w-4 h-4 mx-auto mt-1" />}
-                          {!isAvailable && occupyingPedal && (
-                            <div className="text-[10px] mt-1 truncate">
-                              ({occupyingPedal.model})
-                            </div>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                );
-              })()}
-              
-              {/* Amp Sim Checkbox */}
-              <label 
-                className="flex items-center gap-3 p-3 mb-4 cursor-pointer transition-all hover:bg-orange-50"
-                style={{ border: '3px solid var(--color-board-border)', backgroundColor: multiFxPrompt.addAmpSim ? '#FB923C' : 'white' }}
-              >
-                <input
-                  type="checkbox"
-                  checked={multiFxPrompt.addAmpSim}
-                  onChange={(e) => setMultiFxPrompt(prev => prev ? { ...prev, addAmpSim: e.target.checked } : null)}
-                  className="w-5 h-5 accent-black"
-                />
-                <div>
-                  <span className={`text-sm font-black uppercase ${multiFxPrompt.addAmpSim ? 'text-white' : 'text-theme'}`}>
-                    Also use as Amp Sim
-                  </span>
-                  <p className={`text-[10px] ${multiFxPrompt.addAmpSim ? 'text-white/70' : 'text-theme-muted'}`}>
-                    Add an Amp Sim slot with this multi-FX
-                  </p>
-                </div>
-              </label>
-              
-              {/* Summary */}
-              {(multiFxPrompt.selectedSlotIds.length > 0 || multiFxPrompt.addAmpSim) && (
-                <div 
-                  className="p-3 mb-4 bg-black text-white"
-                  style={{ border: '3px solid var(--color-board-border)' }}
-                >
-                  <p className="text-xs font-bold">
-                    {multiFxPrompt.pedal.model} will fill your{' '}
-                    {[
-                      ...multiFxPrompt.selectedSlotIds.map(id => typeSlots.find(s => s.id === id)?.type),
-                      ...(multiFxPrompt.addAmpSim ? ['Amp Sim'] : [])
-                    ].filter(Boolean).join(', ')}{' '}
-                    {(multiFxPrompt.selectedSlotIds.length + (multiFxPrompt.addAmpSim ? 1 : 0)) === 1 ? 'slot' : 'slots'}.
-                  </p>
-                </div>
-              )}
-              
-              {/* Actions */}
-              <div className="flex gap-2">
-                <button
-                  onClick={handleMultiFxConfirm}
-                  className="flex-1 py-3 bg-green-500 text-white font-black uppercase text-sm transition-all hover:-translate-y-0.5"
-                  style={{ border: '3px solid var(--color-board-border)', boxShadow: '3px 3px 0px var(--color-board-shadow)' }}
-                >
-                  Done
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
