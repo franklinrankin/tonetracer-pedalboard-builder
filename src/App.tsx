@@ -3,7 +3,7 @@ import { BoardProvider, useBoard } from './context/BoardContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { WizardLayout, WizardStep } from './components/WizardLayout';
-import { GenrePage, ConstraintsPage, BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
+import { GenrePage, BuildPage, ReviewPage, HomePage, ProBoardsPage } from './pages';
 import { SavedBoardsPage } from './pages/SavedBoardsPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { CollectionPage } from './pages/CollectionPage';
@@ -629,7 +629,7 @@ function AppContent() {
   
   const handleCreateOwn = () => {
     dispatch({ type: 'CLEAR_GENRES' });
-    handleStepChange('constraints');
+    handleStepChange('build');
   };
   
   const handleGoHome = () => {
@@ -1011,9 +1011,7 @@ function AppContent() {
   const renderPage = () => {
     switch (currentStep) {
       case 'genre':
-        return <GenrePage onContinue={() => handleStepChange('constraints')} onCreateOwn={handleCreateOwn} />;
-      case 'constraints':
-        return <ConstraintsPage onContinue={() => handleStepChange('build')} />;
+        return <GenrePage onContinue={() => handleStepChange('build')} onCreateOwn={handleCreateOwn} />;
       case 'build':
         return <BuildPage onContinue={() => handleStepChange('review')} collection={collection} />;
       case 'review':
@@ -1026,7 +1024,7 @@ function AppContent() {
           />
         );
       default:
-        return <GenrePage onContinue={() => handleStepChange('constraints')} onCreateOwn={handleCreateOwn} />;
+        return <GenrePage onContinue={() => handleStepChange('build')} onCreateOwn={handleCreateOwn} />;
     }
   };
 

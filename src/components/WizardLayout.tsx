@@ -1,5 +1,5 @@
-import { ReactNode, useState } from 'react';
-import { ChevronLeft, ChevronRight, Check, Music2, Settings2, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X, Menu, Home } from 'lucide-react';
+import { ReactNode, useState, useMemo } from 'react';
+import { ChevronLeft, ChevronRight, Check, Music2, Sliders, ListChecks, RotateCcw, HelpCircle, Database, X, Menu, Home, Ruler, DollarSign } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { getGenreById } from '../data/genres';
 import { BOARD_TEMPLATES } from '../data/boardTemplates';
@@ -10,7 +10,7 @@ import { GenreIcon } from './GenreIcon';
 import { UserMenu } from './UserMenu';
 import { ThemeToggle } from './ThemeToggle';
 
-export type WizardStep = 'genre' | 'constraints' | 'build' | 'review';
+export type WizardStep = 'genre' | 'build' | 'review';
 
 interface WizardLayoutProps {
   currentStep: WizardStep;
@@ -26,14 +26,77 @@ interface WizardLayoutProps {
 
 const STEPS: { id: WizardStep; label: string; shortLabel: string; icon: ReactNode }[] = [
   { id: 'genre', label: 'Style', shortLabel: 'Style', icon: <Music2 className="w-4 h-4" /> },
-  { id: 'constraints', label: 'Limits', shortLabel: 'Limits', icon: <Settings2 className="w-4 h-4" /> },
   { id: 'build', label: 'Build', shortLabel: 'Build', icon: <Sliders className="w-4 h-4" /> },
   { id: 'review', label: 'Review', shortLabel: 'Review', icon: <ListChecks className="w-4 h-4" /> },
 ];
 
+// Size options for board
+const SIZE_OPTIONS = [
+  { id: 'small', label: 'S', fullLabel: 'Small', range: '3-5', pedals: 5 },
+  { id: 'medium', label: 'M', fullLabel: 'Medium', range: '6-9', pedals: 8 },
+  { id: 'large', label: 'L', fullLabel: 'Large', range: '10+', pedals: 12 },
+] as const;
+
 export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome, onSignInClick, onSavedBoards, onPedalRequest, onFeedback, children }: WizardLayoutProps) {
-  const { state } = useBoard();
-  const { selectedGenres, board, totalCost, sectionScores } = state;
+  const { state, dispatch } = useBoard();
+  const { selectedGenres, board, totalCost, sectionScores, allPedals } = state;
+  
+  // Calculate build cost from buildSlots (for Build page) or use totalCost (for Review page)
+  const buildCost = useMemo(() => {
+    if (!board.buildSlots || board.buildSlots.length === 0) return totalCost;
+    const uniquePedalIds = new Set(
+      board.buildSlots
+        .map((s: { selectedPedalId?: string }) => s.selectedPedalId)
+        .filter(Boolean)
+    );
+    return Array.from(uniquePedalIds).reduce((sum, pedalId) => {
+      const pedal = allPedals.find(p => p.id === pedalId);
+      return sum + (pedal?.reverbPrice || 0);
+    }, 0);
+  }, [board.buildSlots, allPedals, totalCost]);
+  
+  // Size/Budget controls (for Build step)
+  const getCurrentSizeId = () => {
+    const count = board.constraints.maxPedalCount ?? 8;
+    if (count <= 5) return 'small';
+    if (count <= 9) return 'medium';
+    return 'large';
+  };
+  const currentSizeId = getCurrentSizeId();
+  const budgetEnabled = !board.constraints.applyAfterBudget;
+  
+  const handleSizeSelect = (sizeId: 'small' | 'medium' | 'large') => {
+    const size = SIZE_OPTIONS.find(s => s.id === sizeId);
+    if (!size) return;
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        ...board.constraints,
+        maxPedalCount: size.pedals,
+        applyAfterSize: true,
+      },
+    });
+  };
+  
+  const handleBudgetChange = (value: number) => {
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        ...board.constraints,
+        maxBudget: value,
+      },
+    });
+  };
+  
+  const toggleBudgetEnabled = () => {
+    dispatch({
+      type: 'SET_CONSTRAINTS',
+      constraints: {
+        ...board.constraints,
+        applyAfterBudget: !board.constraints.applyAfterBudget,
+      },
+    });
+  };
   const [showAbout, setShowAbout] = useState(false);
   const [showPedalIndex, setShowPedalIndex] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -48,8 +111,6 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
     switch (currentStep) {
       case 'genre':
         return selectedGenres.length > 0;
-      case 'constraints':
-        return true;
       case 'build':
         return (board.buildSlots?.some(slot => slot.selectedPedalId) ?? false);
       case 'review':
@@ -113,7 +174,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                 className="flex items-center gap-2 px-4 py-2 bg-black text-white font-bold text-sm"
                 style={{ border: '3px solid var(--color-board-border)' }}
               >
-                <span>{currentStepIndex + 1}/4</span>
+                <span>{currentStepIndex + 1}/3</span>
                 <span className="uppercase">{STEPS[currentStepIndex].shortLabel}</span>
               </div>
             </div>
@@ -357,6 +418,89 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
                   </div>
                 )}
                 
+                {/* Size/Budget controls on Build step */}
+                {currentStep === 'build' && (
+                  <>
+                    <span className="opacity-30">|</span>
+                    <div className="flex items-center gap-2">
+                      <Ruler className="w-3.5 h-3.5 opacity-60" />
+                      <div className="flex">
+                        {SIZE_OPTIONS.map(size => (
+                          <button
+                            key={size.id}
+                            onClick={() => handleSizeSelect(size.id)}
+                            className="px-2 py-0.5 text-xs font-black uppercase transition-all"
+                            style={{
+                              backgroundColor: currentSizeId === size.id ? 'white' : 'transparent',
+                              color: currentSizeId === size.id ? 'var(--color-board-highlight)' : 'white',
+                              border: '2px solid white',
+                              marginLeft: size.id !== 'small' ? '-2px' : '0',
+                            }}
+                            title={`${size.fullLabel} (${size.range} pedals)`}
+                          >
+                            {size.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <span className="opacity-30">|</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={toggleBudgetEnabled}
+                        className="flex items-center gap-1 px-2 py-0.5 text-xs font-black uppercase transition-all"
+                        style={{
+                          backgroundColor: budgetEnabled ? 'white' : 'transparent',
+                          color: budgetEnabled ? 'var(--color-board-highlight)' : 'white',
+                          border: '2px solid white',
+                        }}
+                      >
+                        <DollarSign className="w-3 h-3" />
+                        {budgetEnabled ? 'ON' : 'OFF'}
+                      </button>
+                      {budgetEnabled && (
+                        <>
+                          <input
+                            type="range"
+                            min="200"
+                            max="3000"
+                            step="100"
+                            value={board.constraints.maxBudget}
+                            onChange={(e) => handleBudgetChange(parseInt(e.target.value))}
+                            className="w-20 h-1.5 appearance-none cursor-pointer bg-white/30 rounded"
+                          />
+                          <span className="text-xs font-black">${board.constraints.maxBudget}</span>
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-32 h-3 bg-white/30 overflow-hidden rounded"
+                              style={{ border: '2px solid white' }}
+                            >
+                              <div 
+                                className={`h-full transition-all duration-300 ${
+                                  buildCost > board.constraints.maxBudget 
+                                    ? 'bg-red-500' 
+                                    : buildCost > board.constraints.maxBudget * 0.8 
+                                      ? 'bg-orange-400'
+                                      : 'bg-green-400'
+                                }`}
+                                style={{ width: `${Math.min((buildCost / board.constraints.maxBudget) * 100, 100)}%` }}
+                              />
+                            </div>
+                            {buildCost > board.constraints.maxBudget ? (
+                              <span className="text-xs font-black text-red-300 uppercase whitespace-nowrap">
+                                Over Budget
+                              </span>
+                            ) : (
+                              <span className="text-xs font-black">
+                                ${buildCost}
+                              </span>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
+                
                 {board.slots.length > 0 && (
                   <>
                     <span className="opacity-30">|</span>
@@ -378,7 +522,7 @@ export function WizardLayout({ currentStep, onStepChange, onStartOver, onGoHome,
       </header>
       
       {/* Main Content */}
-      <main className="flex-1 pt-20 sm:pt-24">
+      <main className={`flex-1 ${hasProgress ? 'pt-32 sm:pt-36' : 'pt-20 sm:pt-24'}`}>
         {children}
       </main>
       

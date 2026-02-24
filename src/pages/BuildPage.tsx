@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { ChevronRight, Plus, X, Check, ArrowUpDown, Youtube, RotateCcw, Search, ChevronDown, Zap, Volume2 } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { useTheme } from '../context/ThemeContext';
@@ -150,6 +150,8 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null);
   
+  const budgetEnabled = !board.constraints.applyAfterBudget;
+  
   // Calculate current cost from BUILD PAGE selections (not board state)
   // Only count each unique pedal once (multi-FX covering multiple slots is one pedal)
   const currentBuildCost = useMemo(() => {
@@ -180,51 +182,28 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     }
   }, [board.buildSlots, typeSlots.length]);
   
-  // Track previous maxSlots to detect changes
-  const prevMaxSlotsRef = useRef(maxSlots);
-  
-  // Handle maxSlots changes - truncate if reduced, regenerate if empty
-  useEffect(() => {
-    const prevMaxSlots = prevMaxSlotsRef.current;
-    prevMaxSlotsRef.current = maxSlots;
+  // Category to type mapping for slot generation
+  const categoryToType: Record<Category, string[]> = useMemo(() => ({
+    gain: ['Overdrive', 'Distortion', 'Fuzz', 'Boost'],
+    modulation: ['Chorus', 'Phaser', 'Tremolo', 'Flanger', 'Vibrato'],
+    delay: ['Analog Delay', 'Digital Delay', 'Tape Delay'],
+    reverb: ['Hall Reverb', 'Spring Reverb', 'Plate Reverb', 'Ambient Reverb'],
+    dynamics: ['Compressor', 'Noise Gate'],
+    filter: ['Wah', 'Envelope Filter'],
+    pitch: ['Octave', 'Pitch Shifter', 'Harmonizer'],
+    eq: ['EQ'],
+    volume: ['Volume'],
+    utility: ['Tuner', 'Looper'],
+    amp: [],
+    synth: [],
+  }), []);
+
+  // Helper function to generate slots based on genre
+  const generateSlotsForGenre = (existingSlots: TypeSlot[], targetCount: number): TypeSlot[] => {
+    const slots = [...existingSlots];
+    const usedTypes = new Set(slots.map(s => s.type));
     
-    // If maxSlots decreased and we have more slots than allowed, truncate
-    if (typeSlots.length > maxSlots) {
-      const sortedSlots = [...typeSlots].sort((a, b) => a.signalOrder - b.signalOrder);
-      setTypeSlots(sortedSlots.slice(0, maxSlots));
-      setSelectedSlotId(null);
-    }
-  }, [maxSlots]);
-  
-  // Generate initial type slots based on genre and slot count
-  // Rules: 4/6/8 pedals = recommend exactly that many
-  //        10/12 pedals = recommend 8 with option to add more
-  useEffect(() => {
-    if (typeSlots.length > 0) return;
-    
-    // Target slots: exact match for 4/6/8, cap at 8 for 10/12
-    const targetSlots = maxSlots <= 8 ? maxSlots : 8;
-    
-    const slots: TypeSlot[] = [];
-    const usedTypes = new Set<string>();
-    
-    const categoryToType: Record<Category, string[]> = {
-      gain: ['Overdrive', 'Distortion', 'Fuzz', 'Boost'],
-      modulation: ['Chorus', 'Phaser', 'Tremolo', 'Flanger', 'Vibrato'],
-      delay: ['Analog Delay', 'Digital Delay', 'Tape Delay'],
-      reverb: ['Hall Reverb', 'Spring Reverb', 'Plate Reverb', 'Ambient Reverb'],
-      dynamics: ['Compressor', 'Noise Gate'],
-      filter: ['Wah', 'Envelope Filter'],
-      pitch: ['Octave', 'Pitch Shifter', 'Harmonizer'],
-      eq: ['EQ'],
-      volume: ['Volume'],
-      utility: ['Tuner', 'Looper'],
-      amp: [],
-      synth: [],
-    };
-    
-    // Helper to add a type slot
-    const addSlot = (typeName: string) => {
+    const addSlot = (typeName: string): boolean => {
       if (usedTypes.has(typeName)) return false;
       const info = getTypeInfo(typeName);
       if (info) {
@@ -240,8 +219,10 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
       return false;
     };
     
-    // Always start with tuner
-    addSlot('Tuner');
+    // Always start with tuner if not present
+    if (!usedTypes.has('Tuner')) {
+      addSlot('Tuner');
+    }
     
     if (genre) {
       // Build preferred types from genre's preferredSubtypes
@@ -255,13 +236,12 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
         }
       });
       
-      // Phase 1: Add essential categories (genre requirements)
+      // Phase 1: Add essential categories
       for (const category of genre.essentialCategories) {
-        if (slots.length >= targetSlots) break;
+        if (slots.length >= targetCount) break;
         if (category === 'amp') continue;
         
         const typesForCategory = categoryToType[category] || [];
-        // Prefer genre-preferred types first
         let typeToAdd = typesForCategory.find(t => preferredTypes.has(t) && !usedTypes.has(t));
         if (!typeToAdd) {
           typeToAdd = typesForCategory.find(t => !usedTypes.has(t));
@@ -269,14 +249,13 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
         if (typeToAdd) addSlot(typeToAdd);
       }
       
-      // Phase 2: Add extra categories (genre requirements)
+      // Phase 2: Add extra categories
       for (const category of genre.extraCategories) {
-        if (slots.length >= targetSlots) break;
+        if (slots.length >= targetCount) break;
         if (category === 'amp') continue;
         
         const typesForCategory = categoryToType[category] || [];
         
-        // For gain, try to add another gain type if one exists
         if (category === 'gain') {
           const gainTypes = ['Overdrive', 'Distortion', 'Fuzz', 'Boost'];
           const unusedGain = gainTypes.find(t => !usedTypes.has(t));
@@ -291,11 +270,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
         if (typeToAdd) addSlot(typeToAdd);
       }
       
-      // Phase 3: Fill remaining slots with genre-appropriate types
-      // Build a comprehensive list of all types sorted by genre relevance
-      const allTypesRanked: { type: string; category: Category }[] = [];
-      
-      // Sort categories by genre rating (highest first)
+      // Phase 3: Fill remaining with genre-ranked types
       const categoryRatings: [Category, number][] = [
         ['gain', genre.gainRating],
         ['modulation', genre.modulationRating],
@@ -305,40 +280,86 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
         ['filter', genre.modulationRating],
         ['pitch', genre.modulationRating],
         ['eq', genre.dynamicsRating],
-        ['volume', 3], // Default priority for volume
-        ['utility', 2], // Default priority for utility (looper)
+        ['volume', 3],
+        ['utility', 2],
       ];
       categoryRatings.sort((a, b) => b[1] - a[1]);
       
-      // Build ranked list of all available types with their categories
+      const allTypesRanked: string[] = [];
       for (const [category] of categoryRatings) {
         const typesForCategory = categoryToType[category] || [];
         for (const typeName of typesForCategory) {
-          if (!allTypesRanked.some(t => t.type === typeName)) {
-            allTypesRanked.push({ type: typeName, category });
+          if (!allTypesRanked.includes(typeName)) {
+            allTypesRanked.push(typeName);
           }
         }
       }
       
-      // Keep filling until we reach target
-      for (const { type: typeName } of allTypesRanked) {
-        if (slots.length >= targetSlots) break;
+      for (const typeName of allTypesRanked) {
+        if (slots.length >= targetCount) break;
         addSlot(typeName);
       }
     } else {
-      // No genre selected - use sensible defaults
+      // No genre - use sensible defaults
       const defaultTypes = [
         'Compressor', 'Overdrive', 'Chorus', 'Analog Delay', 'Hall Reverb',
         'Distortion', 'Tremolo', 'EQ', 'Wah', 'Fuzz', 'Phaser', 'Digital Delay',
       ];
       for (const typeName of defaultTypes) {
-        if (slots.length >= targetSlots) break;
+        if (slots.length >= targetCount) break;
         addSlot(typeName);
       }
     }
     
-    slots.sort((a, b) => a.signalOrder - b.signalOrder);
-    setTypeSlots(slots);
+    return slots.sort((a, b) => a.signalOrder - b.signalOrder);
+  };
+
+  // Track previous maxSlots to detect changes
+  const prevMaxSlotsRef = useRef(maxSlots);
+
+  // Handle maxSlots changes - REGENERATE optimal slots for the new size
+  // Preserve pedal selections where the type still exists in the new config
+  useEffect(() => {
+    const prevMaxSlots = prevMaxSlotsRef.current;
+    prevMaxSlotsRef.current = maxSlots;
+    
+    // Only run when maxSlots actually changes (not on initial render)
+    if (prevMaxSlots === maxSlots) return;
+    
+    setTypeSlots(currentSlots => {
+      if (currentSlots.length === 0) return currentSlots; // Let initial generation handle it
+      
+      // Save current pedal selections by type
+      const selectedPedalsByType: Record<string, string> = {};
+      currentSlots.forEach(slot => {
+        if (slot.selectedPedalId) {
+          selectedPedalsByType[slot.type] = slot.selectedPedalId;
+        }
+      });
+      
+      // Generate fresh optimal slots for the new size
+      const newSlots = generateSlotsForGenre([], maxSlots);
+      
+      // Restore pedal selections for types that still exist
+      newSlots.forEach(slot => {
+        if (selectedPedalsByType[slot.type]) {
+          slot.selectedPedalId = selectedPedalsByType[slot.type];
+        }
+      });
+      
+      setSelectedSlotId(null);
+      return newSlots;
+    });
+  }, [maxSlots, genre, categoryToType]);
+  
+  // Generate initial type slots when first starting (no slots exist)
+  useEffect(() => {
+    if (typeSlots.length > 0) return;
+    
+    // Target slots: fill to maxSlots
+    const targetSlots = maxSlots;
+    const newSlots = generateSlotsForGenre([], targetSlots);
+    setTypeSlots(newSlots);
   }, [genre, maxSlots, typeSlots.length]);
   
   // Sorted slots by signal order
@@ -823,63 +844,17 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   
   return (
     <div className="min-h-full flex flex-col" style={{ backgroundColor: 'var(--color-board-dark)' }}>
-      {/* Budget Bar - Sticky below fixed header */}
-      <div 
-        className="sticky top-20 sm:top-24 z-20"
-        style={{ borderBottom: '4px solid var(--color-board-border)', backgroundColor: theme === 'dark' ? '#1A3A5C' : '#B8D4E3' }}
-      >
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center gap-4">
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-black text-theme flex items-center gap-2 uppercase">
-                  💰 Budget
-                </span>
-                <span className={`text-sm font-black ${
-                  budgetRemaining < 0 ? 'text-red-600' : budgetRemaining < 100 ? 'text-orange-600' : 'text-green-700'
-                }`}>
-                  ${currentBuildCost} / ${board.constraints.maxBudget}
-                </span>
-              </div>
-              <div 
-                className="h-4 bg-theme-surface overflow-hidden"
-                style={{ border: '3px solid var(--color-board-border)' }}
-              >
-                <div 
-                  className={`h-full transition-all duration-300 ${
-                    budgetRemaining < 0 
-                      ? 'bg-red-500' 
-                      : budgetRemaining < 100 
-                        ? 'bg-orange-300'
-                        : 'bg-green-300'
-                  }`}
-                  style={{ width: `${Math.min((currentBuildCost / board.constraints.maxBudget) * 100, 100)}%` }}
-                />
-              </div>
-              <div className="flex justify-between mt-1">
-                <span className="text-xs text-theme-muted font-bold">
-                  {selectedCount} pedals selected
-                </span>
-                <span className={`text-xs font-bold ${budgetRemaining < 0 ? 'text-red-600' : 'text-theme-muted'}`}>
-                  {budgetRemaining >= 0 ? `$${budgetRemaining} remaining` : `$${Math.abs(budgetRemaining)} over budget`}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
       {/* Two Column Layout */}
       <div className="flex-1 max-w-7xl mx-auto w-full p-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
           {/* LEFT COLUMN - Type Slots */}
           <div className="space-y-3">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-black text-theme uppercase">
+              <h2 className="text-sm font-black text-theme uppercase whitespace-nowrap flex-shrink-0">
                 Pedal Types ({typeSlots.length}/{maxSlots})
               </h2>
               
-              <div className="flex gap-2 relative">
+              <div className="flex gap-2 flex-shrink-0">
                   {/* Add Pedal Button */}
                   <div className="relative">
                     <button
@@ -889,7 +864,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                         setShowSimMenu(false);
                         setSelectedSlotId(null);
                       }}
-                      className="px-3 py-1.5 bg-theme-surface text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all"
+                      className="px-3 py-1.5 bg-theme-surface text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all whitespace-nowrap flex-shrink-0"
                       style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
                     >
                       <Plus className="w-3 h-3" />
@@ -934,7 +909,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                         setShowSimMenu(false);
                         setSelectedSlotId(null);
                       }}
-                      className="px-3 py-1.5 bg-cyan-400 text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all"
+                      className="px-3 py-1.5 bg-cyan-400 text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all whitespace-nowrap flex-shrink-0"
                       style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
                     >
                       <Zap className="w-3 h-3" />
@@ -1001,7 +976,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                         setShowMultiMenu(false);
                         setSelectedSlotId(null);
                       }}
-                      className="px-3 py-1.5 bg-orange-400 text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all"
+                      className="px-3 py-1.5 bg-orange-400 text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all whitespace-nowrap flex-shrink-0"
                       style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
                     >
                       <Volume2 className="w-3 h-3" />
@@ -1070,7 +1045,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                       // Clear multi-FX from context
                       dispatch({ type: 'CLEAR_MULTI_EFFECTS' });
                     }}
-                    className="px-3 py-1.5 bg-red-500 text-white font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all"
+                    className="px-3 py-1.5 bg-red-500 text-white font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all whitespace-nowrap flex-shrink-0"
                     style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
                   >
                     <RotateCcw className="w-3 h-3" />
@@ -1079,120 +1054,171 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                 </div>
             </div>
             
-            {sortedSlots.map((slot) => {
-              const isSelected = selectedSlotId === slot.id;
-              const selectedPedal = getSelectedPedal(slot.selectedPedalId);
-              const hasPedal = !!selectedPedal;
-              
-              return (
-                <div
-                  key={slot.id}
-                  className={`transition-all ${
-                    isSelected 
-                      ? 'bg-board-accent' 
-                      : hasPedal
-                        ? 'bg-board-success'
-                        : 'bg-theme-surface hover:-translate-y-0.5'
-                  }`}
-                  style={{
-                    border: '3px solid var(--color-board-border)',
-                    boxShadow: isSelected ? '4px 4px 0px black' : '3px 3px 0px black',
-                  }}
-                >
-                  {/* Type Header - Always clickable */}
-                  <button
-                    onClick={() => handleSelectSlot(slot.id)}
-                    className="w-full p-4 flex items-center gap-4 text-left"
-                  >
-                    {/* Type Initial */}
-                    <div 
-                      className={`w-12 h-12 flex items-center justify-center text-base font-black ${
-                        isSelected ? 'bg-theme-surface text-theme' : hasPedal ? 'bg-theme-surface text-theme' : 'bg-black/10 dark:bg-white/10 text-theme'
+            {/* Snake Grid Layout - 4 boxes per row with arrows between */}
+            {/* Sized to fit 12 boxes (3 rows) without scrolling */}
+            <div>
+              {(() => {
+                // Group slots into rows of 4 with original indices
+                type SlotWithIndex = { slot: typeof sortedSlots[0]; originalIndex: number };
+                const rows: SlotWithIndex[][] = [];
+                for (let i = 0; i < sortedSlots.length; i += 4) {
+                  const rowSlots = sortedSlots.slice(i, i + 4).map((slot, idx) => ({
+                    slot,
+                    originalIndex: i + idx
+                  }));
+                  const rowIndex = Math.floor(i / 4);
+                  // First row right-to-left (like real pedalboard), alternating after
+                  rows.push(rowIndex % 2 === 0 ? [...rowSlots].reverse() : rowSlots);
+                }
+                
+                // Helper to render a mini card box (4:5 aspect ratio like real cards)
+                const renderBox = (item: SlotWithIndex | undefined) => {
+                  if (!item) return <div className="flex-1 aspect-[4/5]" />;
+                  const isSelected = selectedSlotId === item.slot.id;
+                  const selectedPedal = getSelectedPedal(item.slot.selectedPedalId);
+                  const hasPedal = !!selectedPedal;
+                  const categoryInfo = CATEGORY_INFO[item.slot.category as keyof typeof CATEGORY_INFO];
+                  const categoryColor = categoryInfo?.color || '#9e9e9e';
+                  
+                  return (
+                    <button
+                      onClick={() => handleSelectSlot(item.slot.id)}
+                      className={`flex-1 aspect-[4/5] relative p-1 transition-all ${
+                        isSelected ? 'scale-105' : hasPedal ? '' : 'hover:-translate-y-1 hover:rotate-1'
                       }`}
-                      style={{ border: '2px solid var(--color-board-border)' }}
+                      style={{
+                        backgroundColor: hasPedal ? '#A5D6A7' : isSelected ? categoryColor : `${categoryColor}40`,
+                        border: '3px solid black',
+                        boxShadow: isSelected ? '4px 4px 0px black' : '3px 3px 0px black',
+                      }}
                     >
-                      {slot.type.substring(0, 2).toUpperCase()}
-                    </div>
-                    
-                    {/* Type Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className={`text-lg font-bold flex items-center gap-1 ${isSelected || hasPedal ? 'text-white' : 'text-theme'}`}>
-                        {slot.type}
-                        {/* Show indicator if there are alternative types in this category */}
-                        {(() => {
-                          const altCount = TYPE_OPTIONS.filter(t => t.category === slot.category && t.type !== slot.type).length;
-                          return altCount > 0 && (
-                            <span className={`text-xs font-bold flex items-center ${isSelected || hasPedal ? 'text-white/60' : 'text-theme-muted'}`}>
-                              <ChevronDown className="w-4 h-4" />
-                              <span className="hidden sm:inline">+{altCount}</span>
-                            </span>
-                          );
-                        })()}
-                        {slot.type === 'Tuner' && (
-                          <span className="text-xs font-bold ml-1 text-theme">
-                            (not necessary but generally a good idea)
-                          </span>
+                      {/* Category Badge */}
+                      <div 
+                        className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 text-[7px] font-black uppercase tracking-wide z-10 bg-theme-surface text-theme whitespace-nowrap"
+                        style={{ border: '2px solid black' }}
+                      >
+                        {item.slot.type}
+                      </div>
+                      
+                      {/* Inner Card */}
+                      <div 
+                        className="w-full h-full bg-theme-surface flex flex-col items-center justify-center p-1 overflow-hidden"
+                        style={{ border: '2px solid black' }}
+                      >
+                        {hasPedal ? (
+                          <>
+                            {/* Pedal Image */}
+                            <div 
+                              className="flex-1 w-full overflow-hidden flex items-center justify-center"
+                              style={{ border: '1px solid black' }}
+                            >
+                              <PedalImage 
+                                pedalId={selectedPedal.id} 
+                                category={selectedPedal.category} 
+                                size="sm" 
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                            {/* Pedal Name */}
+                            <div className="text-[7px] font-black text-black truncate w-full text-center mt-0.5 leading-tight">
+                              {selectedPedal.model}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            {/* Slot Number */}
+                            <div className="text-[9px] font-black text-theme-muted">
+                              #{item.originalIndex + 1}
+                            </div>
+                            
+                            {/* Type Icon Box */}
+                            <div 
+                              className="w-8 h-8 flex items-center justify-center text-[11px] font-black my-1"
+                              style={{ 
+                                backgroundColor: `${categoryColor}30`,
+                                border: '2px solid black',
+                                color: categoryColor,
+                              }}
+                            >
+                              {item.slot.type.substring(0, 2).toUpperCase()}
+                            </div>
+                            
+                            {/* Empty State */}
+                            <div className="text-[8px] font-bold text-theme-muted">
+                              Tap to select
+                            </div>
+                          </>
                         )}
                       </div>
-                      {hasPedal ? (
-                        <div className="text-sm text-white/80 truncate font-bold">
-                          {selectedPedal.brand} {selectedPedal.model} · ${selectedPedal.reverbPrice}
-                        </div>
-                      ) : (
-                        <div className={`text-sm ${isSelected ? 'text-white/70' : 'text-theme-muted'} font-bold`}>Tap to select a pedal</div>
-                      )}
-                    </div>
-                    
-                    {/* Status indicator */}
-                    {hasPedal && (
-                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    )}
-                  </button>
+                    </button>
+                  );
+                };
+
+                return rows.map((row, rowIndex) => {
+                  const isRightToLeft = rowIndex % 2 === 0;
+                  const isLastRow = rowIndex === rows.length - 1;
                   
-                  {/* Expanded actions when selected */}
-                  {isSelected && (
-                    <div className="px-3 pb-3 pt-2 relative">
-                      {/* Type selector boxes */}
-                      {(() => {
-                        const allTypesInCategory = TYPE_OPTIONS.filter(t => t.category === slot.category);
-                        return allTypesInCategory.length > 1 && (
-                          <div className="flex flex-wrap gap-1.5 pr-16">
-                            {allTypesInCategory.map(typeOpt => {
-                              const isCurrentType = typeOpt.type === slot.type;
-                              return (
-                                <button
-                                  key={typeOpt.type}
-                                  onClick={() => !isCurrentType && handleChangeType(slot.id, typeOpt.type)}
-                                  className={`px-2.5 py-1.5 text-xs font-black uppercase transition-all ${
-                                    isCurrentType
-                                      ? 'bg-green-500 text-white'
-                                      : 'bg-theme-surface text-theme hover:bg-gray-100'
-                                  }`}
-                                  style={{ border: '2px solid var(--color-board-border)' }}
-                                >
-                                  {typeOpt.type}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        );
-                      })()}
+                  return (
+                    <div key={rowIndex}>
+                      {/* Row with 4 boxes and 3 arrows */}
+                      <div className="flex items-center justify-center">
+                        {renderBox(row[0])}
+                        
+                        <div className="w-8 flex items-center justify-center flex-shrink-0">
+                          {row[0] && row[1] && (
+                            <ChevronRight 
+                              className={`w-5 h-5 text-board-accent ${isRightToLeft ? 'rotate-180' : ''}`} 
+                              strokeWidth={3} 
+                            />
+                          )}
+                        </div>
+                        
+                        {renderBox(row[1])}
+                        
+                        <div className="w-8 flex items-center justify-center flex-shrink-0">
+                          {row[1] && row[2] && (
+                            <ChevronRight 
+                              className={`w-5 h-5 text-board-accent ${isRightToLeft ? 'rotate-180' : ''}`} 
+                              strokeWidth={3} 
+                            />
+                          )}
+                        </div>
+                        
+                        {renderBox(row[2])}
+                        
+                        <div className="w-8 flex items-center justify-center flex-shrink-0">
+                          {row[2] && row[3] && (
+                            <ChevronRight 
+                              className={`w-5 h-5 text-board-accent ${isRightToLeft ? 'rotate-180' : ''}`} 
+                              strokeWidth={3} 
+                            />
+                          )}
+                        </div>
+                        
+                        {renderBox(row[3])}
+                      </div>
                       
-                      {/* Remove button - bottom right */}
-                      {typeSlots.length > 1 && (
-                        <button
-                          onClick={() => handleRemoveSlot(slot.id)}
-                          className="absolute bottom-3 right-3 px-2 py-1 text-[10px] font-black text-black bg-board-highlight uppercase hover:bg-yellow-500"
-                          style={{ border: '2px solid var(--color-board-border)' }}
-                        >
-                          Remove
-                        </button>
+                      {/* Down arrow row */}
+                      {!isLastRow && (
+                        <div className="flex items-center justify-center h-8">
+                          <div className={`flex-1 flex justify-center ${isRightToLeft ? '' : 'invisible'}`}>
+                            <ChevronRight className="w-5 h-5 rotate-90 text-board-accent" strokeWidth={3} />
+                          </div>
+                          <div className="w-8 flex-shrink-0" />
+                          <div className="flex-1" />
+                          <div className="w-8 flex-shrink-0" />
+                          <div className="flex-1" />
+                          <div className="w-8 flex-shrink-0" />
+                          <div className={`flex-1 flex justify-center ${!isRightToLeft ? '' : 'invisible'}`}>
+                            <ChevronRight className="w-5 h-5 rotate-90 text-board-accent" strokeWidth={3} />
+                          </div>
+                        </div>
                       )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                  );
+                });
+              })()}
+            </div>
             
             </div>
           
