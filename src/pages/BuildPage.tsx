@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { ChevronRight, Plus, X, Check, ArrowUpDown, Youtube, RotateCcw, Search, ChevronDown, Zap, Volume2, Music } from 'lucide-react';
+import { ChevronRight, Plus, X, Check, ArrowUpDown, Youtube, RotateCcw, Search, ChevronDown, Zap, Music } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { useTheme } from '../context/ThemeContext';
 import { getGenreById, GENRES, GENRE_CATEGORIES, GenreCategoryId } from '../data/genres';
@@ -136,7 +136,8 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   const [randomSeed, setRandomSeed] = useState(0); // Forces pedal list to re-randomize
   const [showAddMenu, setShowAddMenu] = useState(false);
-  const [showSimMenu, setShowSimMenu] = useState(false);
+  const [draggedSlotId, setDraggedSlotId] = useState<string | null>(null);
+  const [touchDragSlotId, setTouchDragSlotId] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>('recommended');
   const [hoveredPedal, setHoveredPedal] = useState<PedalWithStatus | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -628,6 +629,91 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
     }
   };
   
+  // Drag and drop handlers for reordering
+  const handleDragStart = (slotId: string) => {
+    setDraggedSlotId(slotId);
+  };
+  
+  const handleDragOver = (e: React.DragEvent, targetSlotId: string) => {
+    e.preventDefault();
+    if (!draggedSlotId || draggedSlotId === targetSlotId) return;
+  };
+  
+  const handleDrop = (targetSlotId: string) => {
+    if (!draggedSlotId || draggedSlotId === targetSlotId) {
+      setDraggedSlotId(null);
+      return;
+    }
+    
+    setTypeSlots(prev => {
+      const draggedIndex = prev.findIndex(s => s.id === draggedSlotId);
+      const targetIndex = prev.findIndex(s => s.id === targetSlotId);
+      
+      if (draggedIndex === -1 || targetIndex === -1) return prev;
+      
+      // Remove dragged item and insert at target position
+      const newSlots = [...prev];
+      const [draggedSlot] = newSlots.splice(draggedIndex, 1);
+      newSlots.splice(targetIndex, 0, draggedSlot);
+      
+      // Update signal orders to match new positions
+      return newSlots.map((slot, index) => ({
+        ...slot,
+        signalOrder: index * 10 + 1, // New signal order based on position
+      }));
+    });
+    
+    setDraggedSlotId(null);
+  };
+  
+  const handleDragEnd = () => {
+    setDraggedSlotId(null);
+  };
+  
+  // Touch drag handlers for mobile
+  const handleTouchStart = (e: React.TouchEvent, slotId: string) => {
+    setTouchDragSlotId(slotId);
+    setDraggedSlotId(slotId); // Reuse visual state
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchDragSlotId) return;
+    
+    const touch = e.touches[0];
+    const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    // Find the slot element we're hovering over
+    if (elementAtPoint) {
+      const slotElement = elementAtPoint.closest('[data-slot-id]') as HTMLElement;
+      if (slotElement) {
+        const targetSlotId = slotElement.dataset.slotId;
+        if (targetSlotId && targetSlotId !== touchDragSlotId) {
+          // Swap positions in real-time as user drags
+          setTypeSlots(prev => {
+            const draggedIndex = prev.findIndex(s => s.id === touchDragSlotId);
+            const targetIndex = prev.findIndex(s => s.id === targetSlotId);
+            
+            if (draggedIndex === -1 || targetIndex === -1) return prev;
+            
+            const newSlots = [...prev];
+            const [draggedSlot] = newSlots.splice(draggedIndex, 1);
+            newSlots.splice(targetIndex, 0, draggedSlot);
+            
+            return newSlots.map((slot, index) => ({
+              ...slot,
+              signalOrder: index * 10 + 1,
+            }));
+          });
+        }
+      }
+    }
+  };
+  
+  const handleTouchEnd = () => {
+    setTouchDragSlotId(null);
+    setDraggedSlotId(null);
+  };
+  
   const handleAddType = (typeName: string) => {
     const info = getTypeInfo(typeName);
     if (!info) return;
@@ -841,7 +927,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
           <div className="space-y-3">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-sm font-black text-theme uppercase whitespace-nowrap flex-shrink-0">
-                Pedal Types ({typeSlots.length}/{maxSlots})
+                Pedal Types{genre ? ` (${typeSlots.length}/${maxSlots})` : ''}
               </h2>
               
               <div className="flex gap-2 flex-shrink-0">
@@ -850,7 +936,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                     <button
                       onClick={() => {
                         setShowAddMenu(!showAddMenu);
-                        setShowSimMenu(false);
                         setSelectedSlotId(null);
                       }}
                       className="px-3 py-1.5 bg-theme-surface text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all whitespace-nowrap flex-shrink-0"
@@ -884,70 +969,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                     )}
                   </div>
                   
-                  {/* Add Sim Button */}
-                  <div className="relative">
-                    <button
-                      onClick={() => {
-                        setShowSimMenu(!showSimMenu);
-                        setShowAddMenu(false);
-                        setSelectedSlotId(null);
-                      }}
-                      className="px-3 py-1.5 bg-orange-400 text-theme font-bold text-xs uppercase flex items-center gap-1 hover:-translate-y-0.5 transition-all whitespace-nowrap flex-shrink-0"
-                      style={{ border: '2px solid var(--color-board-border)', boxShadow: '2px 2px 0px var(--color-board-shadow)' }}
-                    >
-                      <Volume2 className="w-3 h-3" />
-                      Add Sim
-                    </button>
-                    
-                    {/* Add Sim Menu */}
-                    {showSimMenu && (
-                      <div 
-                        className="absolute right-0 top-full mt-2 bg-theme-surface z-30 w-56 max-h-80 overflow-y-auto"
-                        style={{ border: '3px solid var(--color-board-border)', boxShadow: '4px 4px 0px var(--color-board-shadow)' }}
-                      >
-                        <div className="p-2 bg-orange-100" style={{ borderBottom: '2px solid black' }}>
-                          <p className="text-[10px] text-theme-muted font-bold uppercase">Amp Sims & Cab IRs</p>
-                        </div>
-                        {allPedals
-                          .filter(p => p.subtype === 'Amp-in-a-Box' || p.subtype === 'Cab Sim / IR Loader')
-                          .sort((a, b) => a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model))
-                          .map(pedal => (
-                            <button
-                              key={pedal.id}
-                              onClick={() => {
-                                // Add an Amp Sim slot with this pedal selected
-                                const newSlotId = generateUUID();
-                                const ampSimInfo = getTypeInfo('Amp Sim');
-                                if (ampSimInfo) {
-                                  setTypeSlots(prev => {
-                                    const newSlots = [...prev, {
-                                      id: newSlotId,
-                                      type: 'Amp Sim',
-                                      category: ampSimInfo.category,
-                                      signalOrder: ampSimInfo.signalOrder,
-                                      selectedPedalId: pedal.id,
-                                    }];
-                                    return newSlots.sort((a, b) => a.signalOrder - b.signalOrder);
-                                  });
-                                }
-                                setShowSimMenu(false);
-                              }}
-                              className="w-full px-3 py-2 text-left hover:bg-orange-50 flex items-center gap-2"
-                              style={{ borderBottom: '1px solid #e5e7eb' }}
-                            >
-                              <div className="w-8 h-8 bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center flex-shrink-0" style={{ border: '2px solid var(--color-board-border)' }}>
-                                <Volume2 className="w-4 h-4 text-orange-600" />
-                              </div>
-                              <div className="min-w-0">
-                                <div className="text-sm font-black text-theme truncate">{pedal.model}</div>
-                                <div className="text-[10px] text-theme-muted font-bold truncate">{pedal.brand}</div>
-                              </div>
-                            </button>
-                          ))}
-                      </div>
-                    )}
-                  </div>
-                  
                   {/* Reset Board Button */}
                   <button
                     onClick={() => {
@@ -955,7 +976,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                       setTypeSlots([]);
                       setSelectedSlotId(null);
                       setShowAddMenu(false);
-                      setShowSimMenu(false);
                       // Clear multi-FX from context
                       dispatch({ type: 'CLEAR_MULTI_EFFECTS' });
                     }}
@@ -975,7 +995,6 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
               <button
                 onClick={() => {
                   setShowAddMenu(true);
-                  setShowSimMenu(false);
                 }}
                 className="w-full aspect-[4/3] flex flex-col items-center justify-center gap-4 transition-all hover:-translate-y-1 hover:rotate-1"
                 style={{
@@ -1025,10 +1044,23 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                   const hasPedal = !!selectedPedal;
                   const categoryInfo = CATEGORY_INFO[item.slot.category as keyof typeof CATEGORY_INFO];
                   const categoryColor = categoryInfo?.color || '#9e9e9e';
+                  const isDragging = draggedSlotId === item.slot.id;
+                  const isDragTarget = draggedSlotId && draggedSlotId !== item.slot.id;
                   
                   return (
                     <div
-                      className={`flex-1 aspect-[4/5] relative p-1 transition-all ${
+                      data-slot-id={item.slot.id}
+                      draggable
+                      onDragStart={() => handleDragStart(item.slot.id)}
+                      onDragOver={(e) => handleDragOver(e, item.slot.id)}
+                      onDrop={() => handleDrop(item.slot.id)}
+                      onDragEnd={handleDragEnd}
+                      onTouchStart={(e) => handleTouchStart(e, item.slot.id)}
+                      onTouchMove={handleTouchMove}
+                      onTouchEnd={handleTouchEnd}
+                      className={`flex-1 aspect-[4/5] relative p-1 transition-all cursor-grab active:cursor-grabbing touch-none ${
+                        isDragging ? 'opacity-50 scale-95' : ''
+                      } ${isDragTarget ? 'ring-2 ring-purple-500 ring-offset-2' : ''} ${
                         isSelected ? 'scale-105' : hasPedal ? '' : 'hover:-translate-y-1 hover:rotate-1'
                       }`}
                       style={{
@@ -1051,47 +1083,47 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                       
                       {/* Category Badge */}
                       <div 
-                        className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 text-[7px] font-black uppercase tracking-wide z-10 bg-theme-surface text-theme whitespace-nowrap"
+                        className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 text-[7px] font-black uppercase tracking-wide z-10 bg-theme-surface text-theme whitespace-nowrap pointer-events-none select-none"
                         style={{ border: '2px solid black' }}
                       >
                         {item.slot.type}
                       </div>
                       
-                      {/* Inner Card - clickable to select */}
-                      <button 
+                      {/* Inner Card - clickable to select, but draggable from anywhere */}
+                      <div 
                         onClick={() => handleSelectSlot(item.slot.id)}
-                        className="w-full h-full bg-theme-surface flex flex-col items-center justify-center p-1 overflow-hidden"
+                        className="w-full h-full bg-theme-surface flex flex-col items-center justify-center p-1 overflow-hidden cursor-grab active:cursor-grabbing"
                         style={{ border: '2px solid black' }}
                       >
                         {hasPedal ? (
                           <>
                             {/* Pedal Image */}
                             <div 
-                              className="flex-1 w-full overflow-hidden flex items-center justify-center"
+                              className="flex-1 w-full overflow-hidden flex items-center justify-center pointer-events-none"
                               style={{ border: '1px solid black' }}
                             >
                               <PedalImage 
                                 pedalId={selectedPedal.id} 
                                 category={selectedPedal.category} 
                                 size="sm" 
-                                className="w-full h-full object-contain"
+                                className="w-full h-full object-contain pointer-events-none select-none"
                               />
                             </div>
                             {/* Pedal Name */}
-                            <div className="text-[7px] font-black text-black truncate w-full text-center mt-0.5 leading-tight">
+                            <div className="text-[7px] font-black text-black truncate w-full text-center mt-0.5 leading-tight pointer-events-none select-none">
                               {selectedPedal.model}
                             </div>
                           </>
                         ) : (
                           <>
                             {/* Slot Number */}
-                            <div className="text-[9px] font-black text-theme-muted">
+                            <div className="text-[9px] font-black text-theme-muted pointer-events-none select-none">
                               #{item.originalIndex + 1}
                             </div>
                             
                             {/* Type Icon Box */}
                             <div 
-                              className="w-8 h-8 flex items-center justify-center text-[11px] font-black my-1"
+                              className="w-8 h-8 flex items-center justify-center text-[11px] font-black my-1 pointer-events-none select-none"
                               style={{ 
                                 backgroundColor: `${categoryColor}30`,
                                 border: '2px solid black',
@@ -1102,30 +1134,65 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                             </div>
                             
                             {/* Empty State */}
-                            <div className="text-[8px] font-bold text-theme-muted">
-                              Tap to select
+                            <div className="text-[8px] font-bold text-theme-muted pointer-events-none select-none">
+                              Drag to reorder
                             </div>
                           </>
                         )}
-                      </button>
+                      </div>
                     </div>
                   );
                 };
 
-                return rows.map((row, rowIndex) => {
+                // Render an "Add" box
+                const renderAddBox = () => (
+                  <button
+                    onClick={() => setShowAddMenu(true)}
+                    className="flex-1 aspect-[4/5] relative p-1 transition-all hover:-translate-y-1 cursor-pointer"
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: '3px dashed var(--color-board-border)',
+                      boxShadow: 'none',
+                    }}
+                  >
+                    <div className="w-full h-full flex flex-col items-center justify-center">
+                      <Plus className="w-6 h-6 text-theme-muted mb-1" />
+                      <div className="text-[8px] font-bold text-theme-muted">Add</div>
+                    </div>
+                  </button>
+                );
+
+                // Check if we need an extra row for the add box
+                const lastRow = rows[rows.length - 1];
+                const lastRowFull = lastRow && lastRow.length === 4;
+                const needsAddRow = lastRowFull;
+                
+                // Add an extra row for the add box if the last row is full
+                const allRows = needsAddRow ? [...rows, []] : rows;
+
+                return allRows.map((row, rowIndex) => {
                   const isRightToLeft = rowIndex % 2 === 0;
-                  const isLastRow = rowIndex === rows.length - 1;
+                  const isLastRow = rowIndex === allRows.length - 1;
+                  const isAddOnlyRow = needsAddRow && isLastRow;
                   
                   // For right-to-left rows, pad the start with empty slots so items appear on the right
+                  // But leave room for the add box on the last row
+                  const emptySlots = isAddOnlyRow ? 3 : (4 - row.length - (isLastRow ? 1 : 0));
                   const paddedRow = isRightToLeft 
-                    ? [...Array(4 - row.length).fill(undefined), ...row]
-                    : [...row, ...Array(4 - row.length).fill(undefined)];
+                    ? [...Array(Math.max(0, emptySlots)).fill(undefined), ...row, ...(isLastRow ? ['ADD'] : [])]
+                    : [...row, ...(isLastRow ? ['ADD'] : []), ...Array(Math.max(0, emptySlots)).fill(undefined)];
+                  
+                  // Render a slot or the add box
+                  const renderSlot = (item: SlotWithIndex | undefined | 'ADD', index: number) => {
+                    if (item === 'ADD') return renderAddBox();
+                    return renderBox(item);
+                  };
                   
                   return (
                     <div key={rowIndex}>
                       {/* Row with 4 boxes and 3 arrows */}
                       <div className="flex items-center justify-center">
-                        {renderBox(paddedRow[0])}
+                        {renderSlot(paddedRow[0], 0)}
                         
                         <div className="w-8 flex items-center justify-center flex-shrink-0">
                           {paddedRow[0] && paddedRow[1] && (
@@ -1136,7 +1203,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                           )}
                         </div>
                         
-                        {renderBox(paddedRow[1])}
+                        {renderSlot(paddedRow[1], 1)}
                         
                         <div className="w-8 flex items-center justify-center flex-shrink-0">
                           {paddedRow[1] && paddedRow[2] && (
@@ -1147,7 +1214,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                           )}
                         </div>
                         
-                        {renderBox(paddedRow[2])}
+                        {renderSlot(paddedRow[2], 2)}
                         
                         <div className="w-8 flex items-center justify-center flex-shrink-0">
                           {paddedRow[2] && paddedRow[3] && (
@@ -1158,7 +1225,7 @@ export function BuildPage({ onContinue, collection = [] }: BuildPageProps) {
                           )}
                         </div>
                         
-                        {renderBox(paddedRow[3])}
+                        {renderSlot(paddedRow[3], 3)}
                       </div>
                       
                       {/* Down arrow row */}

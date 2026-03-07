@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef } from 'react';
-import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Settings2, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid, GripVertical, ArrowUp, ArrowDown, Save, ShoppingBag, Youtube } from 'lucide-react';
+import { ListChecks, Download, Share2, DollarSign, Square, Zap, Music, Sparkles, ArrowRight, Battery, Check, ChevronDown, ChevronUp, Target, LayoutGrid, GripVertical, ArrowUp, ArrowDown, Save, ShoppingBag, Youtube } from 'lucide-react';
 import { useBoard } from '../context/BoardContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -8,7 +8,6 @@ import { CATEGORY_INFO } from '../data/categories';
 import { getPlayersForSubtype } from '../data/pedalPlayers';
 import { selectBoardForPedals, BoardSize } from '../data/boardSizes';
 import { formatInches, formatArea } from '../utils/measurements';
-import { BoardRecommendations } from '../components/BoardRecommendations';
 import { recommendPowerSupply, PowerSupply, getBestPowerSupply } from '../data/powerSupplies';
 import { BoardVisualizer } from '../components/BoardVisualizer';
 import { GenreIcon } from '../components/GenreIcon';
@@ -304,7 +303,6 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
   const { state, dispatch } = useBoard();
   const { user } = useAuth();
   const { board, totalCost, totalArea, totalCurrent, sectionScores, genres, selectedGenres, multiEffects } = state;
-  const [showRecommendations, setShowRecommendations] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [saveName, setSaveName] = useState(board.name || 'My Pedalboard');
   const [selectedBoardOverride, setSelectedBoardOverride] = useState<{
@@ -316,6 +314,9 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
     brand: string;
   } | null>(null);
   const [selectedPowerSupplyOverride, setSelectedPowerSupplyOverride] = useState<PowerSupply | null>(null);
+  const [showLayout, setShowLayout] = useState(false);
+  const [showAchievements, setShowAchievements] = useState(false);
+  const [showBadgeTooltip, setShowBadgeTooltip] = useState(false);
   
   const selectedGenreObjects = selectedGenres.map(id => getGenreById(id)).filter(Boolean);
   const maxArea = board.constraints.maxWidthMm * board.constraints.maxDepthMm * 0.85;
@@ -814,82 +815,75 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
       </div>
       
       <div className="max-w-7xl mx-auto">
-        {/* Adjust Setup Button */}
-        <div className="flex justify-center mb-8">
-          <button
-            onClick={() => setShowRecommendations(!showRecommendations)}
-            className={`px-6 py-3 font-bold uppercase transition-all flex items-center gap-2 border-3 brutal-border brutal-shadow hover:brutal-shadow-lg hover:-translate-x-0.5 hover:-translate-y-0.5 ${
-              showRecommendations
-                ? 'bg-teal-400 text-black'
-                : 'bg-theme-surface text-theme'
-            }`}
-          >
-            <Settings2 className="w-5 h-5" />
-            {showRecommendations ? 'Hide Setup Recommendations' : 'Adjust Board, Budget & Power'}
-          </button>
-        </div>
-        
-        {/* Recommendations Panel */}
-        {showRecommendations && (
-          <div className="mb-8 animate-fadeIn">
-            <BoardRecommendations />
-          </div>
-        )}
-        
-        {/* Board Layout - Interactive */}
+        {/* Adjust Layout Dropdown */}
         {board.slots.length > 0 && (
-          <div 
-            className="mb-8 bg-theme-surface overflow-hidden"
-            style={{ border: '4px solid black', boxShadow: '8px 8px 0px black' }}
-          >
-            <div 
-              className="p-3 flex items-center gap-2 bg-black text-white"
+          <div className="mb-8">
+            <button
+              onClick={() => setShowLayout(!showLayout)}
+              className={`w-full px-4 py-3 font-bold uppercase transition-all flex items-center justify-between gap-2 ${
+                showLayout ? 'bg-purple-400 text-black' : 'bg-theme-surface text-theme'
+              }`}
+              style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
             >
-              <LayoutGrid className="w-4 h-4" />
-              <h3 className="text-sm font-black uppercase">Board Layout</h3>
-              <span className="text-xs opacity-60">Drag to arrange • Click for details</span>
-            </div>
-            <BoardVisualizer 
-              overrideWidth={selectedBoardOverride?.widthMm ?? recommendedBoard?.widthMm}
-              overrideDepth={selectedBoardOverride?.depthMm ?? recommendedBoard?.depthMm}
-              boardName={selectedBoardOverride 
-                ? `${selectedBoardOverride.brand} ${selectedBoardOverride.name}` 
-                : recommendedBoard 
-                  ? `${recommendedBoard.brand} ${recommendedBoard.name}` 
-                  : undefined}
-              boardDimensions={selectedBoardOverride 
-                ? `${selectedBoardOverride.widthIn}" × ${selectedBoardOverride.depthIn}"` 
-                : recommendedBoard 
-                  ? `${recommendedBoard.widthIn}" × ${recommendedBoard.depthIn}"` 
-                  : undefined}
-              suggestedBoard={recommendedBoard}
-              onBoardChange={(newBoard) => {
-                if ('id' in newBoard) {
-                  // It's a BoardSize from POPULAR_BOARDS
-                  setSelectedBoardOverride({
-                    widthMm: newBoard.widthMm,
-                    depthMm: newBoard.depthMm,
-                    widthIn: newBoard.widthIn,
-                    depthIn: newBoard.depthIn,
-                    name: newBoard.name,
-                    brand: newBoard.brand,
-                  });
-                } else {
-                  // It's a custom size
-                  setSelectedBoardOverride({
-                    widthMm: newBoard.widthMm,
-                    depthMm: newBoard.depthMm,
-                    widthIn: Math.round(newBoard.widthMm / 25.4 * 10) / 10,
-                    depthIn: Math.round(newBoard.depthMm / 25.4 * 10) / 10,
-                    name: newBoard.name,
-                    brand: newBoard.brand,
-                  });
-                }
-              }}
-              suggestedPowerSupply={selectedPowerSupplyOverride || recommendedPowerSupply}
-              pedalCount={board.slots.length}
-              onPowerSupplyChange={(ps) => setSelectedPowerSupplyOverride(ps)}
-            />
+              <div className="flex items-center gap-2">
+                <LayoutGrid className="w-5 h-5" />
+                Adjust Layout
+                <span className="text-xs opacity-70">
+                  ({selectedBoardOverride?.brand || recommendedBoard?.brand || 'Board'} {selectedBoardOverride?.name || recommendedBoard?.name || ''})
+                </span>
+              </div>
+              {showLayout ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            </button>
+            
+            {showLayout && (
+              <div 
+                className="bg-theme-surface p-4"
+                style={{ border: '3px solid black', borderTop: 'none', boxShadow: '4px 4px 0px black' }}
+              >
+                <p className="text-sm text-theme-muted font-medium mb-4 text-center">
+                  Drag pedals to arrange • Click board name to change size • Click power supply to change
+                </p>
+                <BoardVisualizer 
+                  overrideWidth={selectedBoardOverride?.widthMm ?? recommendedBoard?.widthMm}
+                  overrideDepth={selectedBoardOverride?.depthMm ?? recommendedBoard?.depthMm}
+                  boardName={selectedBoardOverride 
+                    ? `${selectedBoardOverride.brand} ${selectedBoardOverride.name}` 
+                    : recommendedBoard 
+                      ? `${recommendedBoard.brand} ${recommendedBoard.name}` 
+                      : undefined}
+                  boardDimensions={selectedBoardOverride 
+                    ? `${selectedBoardOverride.widthIn}" × ${selectedBoardOverride.depthIn}"` 
+                    : recommendedBoard 
+                      ? `${recommendedBoard.widthIn}" × ${recommendedBoard.depthIn}"` 
+                      : undefined}
+                  suggestedBoard={recommendedBoard}
+                  onBoardChange={(newBoard) => {
+                    if ('id' in newBoard) {
+                      setSelectedBoardOverride({
+                        widthMm: newBoard.widthMm,
+                        depthMm: newBoard.depthMm,
+                        widthIn: newBoard.widthIn,
+                        depthIn: newBoard.depthIn,
+                        name: newBoard.name,
+                        brand: newBoard.brand,
+                      });
+                    } else {
+                      setSelectedBoardOverride({
+                        widthMm: newBoard.widthMm,
+                        depthMm: newBoard.depthMm,
+                        widthIn: Math.round(newBoard.widthMm / 25.4 * 10) / 10,
+                        depthIn: Math.round(newBoard.depthMm / 25.4 * 10) / 10,
+                        name: newBoard.name,
+                        brand: newBoard.brand,
+                      });
+                    }
+                  }}
+                  suggestedPowerSupply={selectedPowerSupplyOverride || recommendedPowerSupply}
+                  pedalCount={board.slots.length}
+                  onPowerSupplyChange={(ps) => setSelectedPowerSupplyOverride(ps)}
+                />
+              </div>
+            )}
           </div>
         )}
         
@@ -978,146 +972,163 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
           </div>
         </div>
         
-        {/* Achievement Badges & Shades Of - Side by side */}
-        <div className="grid lg:grid-cols-[1fr_200px] gap-6 mb-8">
-          {/* Achievement Badges - Compact */}
-          {sectionScores.length > 0 && (
-            <div className="brutal-card p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div 
-                    className="w-8 h-8 bg-board-highlight flex items-center justify-center font-black text-theme text-sm"
-                    style={{ border: '2px solid black' }}
-                  >
-                    A+
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-black text-theme uppercase">Achievements</h3>
-                  </div>
-                </div>
-                
-                {/* Cyborg / Old School Badge */}
+        {/* Achievements Dropdown */}
+        {sectionScores.length > 0 && (
+          <div className="mb-8">
+            <button
+              onClick={() => setShowAchievements(!showAchievements)}
+              className={`w-full px-4 py-3 font-bold uppercase transition-all flex items-center justify-between gap-2 ${
+                showAchievements ? 'bg-yellow-400 text-black' : 'bg-theme-surface text-theme'
+              }`}
+              style={{ border: '3px solid black', boxShadow: '4px 4px 0px black' }}
+            >
+              <div className="flex items-center gap-2">
                 <div 
-                  className="flex items-center gap-2 px-3 py-1.5 transition-all hover:-translate-y-0.5"
-                  style={{
-                    backgroundColor: multiEffects.pedalId ? '#06B6D4' : '#F59E0B',
-                    border: '2px solid black',
-                    boxShadow: '3px 3px 0px black',
-                  }}
-                >
-                  <span className="font-black text-white text-xs uppercase" style={{ textShadow: '1px 1px 0px black' }}>
-                    {multiEffects.pedalId ? 'Cyborg' : 'Old School'}
-                  </span>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {sectionScores.map(score => {
-                  const catInfo = CATEGORY_INFO[score.category];
-                  const percentage = (score.totalScore / score.maxScore) * 100;
-                  const isHighScore = percentage >= 100;
-                  return (
-                    <div 
-                      key={score.category} 
-                      className="relative p-2 text-center transition-all hover:-translate-y-0.5"
-                      style={{
-                        backgroundColor: isHighScore ? catInfo.color : `${catInfo.color}25`,
-                        border: '2px solid black',
-                        boxShadow: isHighScore ? '3px 3px 0px black' : '2px 2px 0px black',
-                      }}
-                    >
-                      {isHighScore && (
-                        <div 
-                          className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-yellow-400 flex items-center justify-center text-[8px] font-black text-theme"
-                          style={{ border: '1.5px solid black' }}
-                        >
-                          MAX
-                        </div>
-                      )}
-                      
-                      {/* Category Name */}
-                      <div 
-                        className="px-2 py-1 mx-auto mb-1 text-xs font-black text-theme bg-theme-surface uppercase truncate"
-                        style={{ border: '1.5px solid black' }}
-                      >
-                        {catInfo.displayName}
-                      </div>
-                      
-                      {/* Tag/Title */}
-                      <div 
-                        className="font-black text-sm mb-1 capitalize truncate"
-                        style={{ color: isHighScore ? 'white' : 'black', textShadow: isHighScore ? '1px 1px 0px black' : 'none' }}
-                      >
-                        "{score.tag}"
-                      </div>
-                      
-                      {/* Score */}
-                      <div className="flex items-center justify-center gap-0.5">
-                        <div 
-                          className="text-lg font-black"
-                          style={{ color: isHighScore ? 'white' : 'black' }}
-                        >
-                          {score.totalScore}
-                        </div>
-                        <div 
-                          className="text-xs font-bold"
-                          style={{ color: isHighScore ? 'rgba(255,255,255,0.8)' : 'black' }}
-                        >
-                          /{score.maxScore}
-                        </div>
-                      </div>
-                      
-                      {/* Mini progress bar */}
-                      <div className="h-1.5 bg-theme-surface overflow-hidden mt-1" style={{ border: '1.5px solid black' }}>
-                        <div 
-                          className="h-full transition-all"
-                          style={{ 
-                            width: `${Math.min(percentage, 100)}%`,
-                            backgroundColor: isHighScore ? 'white' : catInfo.color,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-          
-          {/* Shades Of - Top 3 players this board sounds like */}
-          {shadesOfPlayers.length > 0 && (
-            <div className="brutal-card p-4 flex flex-col">
-              <div className="flex items-center gap-2 mb-3">
-                <div 
-                  className="w-8 h-8 bg-purple-400 flex items-center justify-center font-black text-theme text-sm"
+                  className="w-6 h-6 bg-board-highlight flex items-center justify-center font-black text-theme text-xs"
                   style={{ border: '2px solid black' }}
                 >
-                  <Music className="w-4 h-4" />
+                  A+
                 </div>
-                <div>
-                  <h3 className="text-sm font-black text-theme uppercase">Shades Of</h3>
-                </div>
-              </div>
-              <div 
-                className="p-4 h-full flex-1"
-                style={{ 
-                  backgroundColor: '#f5f0e6',
-                  border: '3px solid black',
-                }}
-              >
-                <div className="flex flex-col justify-evenly h-full min-h-[120px]">
-                  {shadesOfPlayers.map((player, i) => (
+                Achievements
+                {/* Cyborg / Old School Badge inline with tooltip - tap or hover to show */}
+                <div className="relative">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowBadgeTooltip(!showBadgeTooltip);
+                    }}
+                    className="px-2 py-0.5 text-xs font-black text-white uppercase cursor-help"
+                    style={{
+                      backgroundColor: multiEffects.pedalId ? '#06B6D4' : '#F59E0B',
+                      border: '2px solid black',
+                      textShadow: '1px 1px 0px black',
+                    }}
+                  >
+                    {multiEffects.pedalId ? 'Cyborg' : 'Old School'}
+                  </button>
+                  {showBadgeTooltip && (
                     <div 
-                      key={player}
-                      className="text-center text-lg font-black text-theme"
+                      className="absolute left-0 top-full mt-2 w-48 p-2 bg-theme-surface text-theme text-xs font-medium z-50"
+                      style={{ border: '2px solid black', boxShadow: '3px 3px 0px black' }}
                     >
-                      {player}
+                      {multiEffects.pedalId 
+                        ? 'Your board includes a multi-FX unit - embracing modern technology!'
+                        : 'All individual pedals - keeping it classic with dedicated stompboxes!'
+                      }
+                      <div className="text-[10px] text-theme-muted mt-1">(tap again to close)</div>
                     </div>
-                  ))}
+                  )}
+                </div>
+                {shadesOfPlayers.length > 0 && (
+                  <span className="text-xs opacity-70">+ Shades of {shadesOfPlayers[0]}</span>
+                )}
+              </div>
+              {showAchievements ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            </button>
+            
+            {showAchievements && (
+              <div 
+                className="bg-theme-surface p-4"
+                style={{ border: '3px solid black', borderTop: 'none', boxShadow: '4px 4px 0px black' }}
+              >
+                <div className="grid lg:grid-cols-[1fr_200px] gap-6">
+                  {/* Achievement Badges */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {sectionScores.map(score => {
+                      const catInfo = CATEGORY_INFO[score.category];
+                      const percentage = (score.totalScore / score.maxScore) * 100;
+                      const isHighScore = percentage >= 100;
+                      return (
+                        <div 
+                          key={score.category} 
+                          className="relative p-2 text-center transition-all hover:-translate-y-0.5"
+                          style={{
+                            backgroundColor: isHighScore ? catInfo.color : `${catInfo.color}25`,
+                            border: '2px solid black',
+                            boxShadow: isHighScore ? '3px 3px 0px black' : '2px 2px 0px black',
+                          }}
+                        >
+                          {isHighScore && (
+                            <div 
+                              className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-yellow-400 flex items-center justify-center text-[8px] font-black text-theme"
+                              style={{ border: '1.5px solid black' }}
+                            >
+                              MAX
+                            </div>
+                          )}
+                          
+                          <div 
+                            className="px-2 py-1 mx-auto mb-1 text-xs font-black text-theme bg-theme-surface uppercase truncate"
+                            style={{ border: '1.5px solid black' }}
+                          >
+                            {catInfo.displayName}
+                          </div>
+                          
+                          <div 
+                            className="font-black text-sm mb-1 capitalize truncate"
+                            style={{ color: isHighScore ? 'white' : 'black', textShadow: isHighScore ? '1px 1px 0px black' : 'none' }}
+                          >
+                            "{score.tag}"
+                          </div>
+                          
+                          <div className="flex items-center justify-center gap-0.5">
+                            <div 
+                              className="text-lg font-black"
+                              style={{ color: isHighScore ? 'white' : 'black' }}
+                            >
+                              {score.totalScore}
+                            </div>
+                            <div 
+                              className="text-xs font-bold"
+                              style={{ color: isHighScore ? 'rgba(255,255,255,0.8)' : 'black' }}
+                            >
+                              /{score.maxScore}
+                            </div>
+                          </div>
+                          
+                          <div className="h-1.5 bg-theme-surface overflow-hidden mt-1" style={{ border: '1.5px solid black' }}>
+                            <div 
+                              className="h-full transition-all"
+                              style={{ 
+                                width: `${Math.min(percentage, 100)}%`,
+                                backgroundColor: isHighScore ? 'white' : catInfo.color,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Shades Of */}
+                  {shadesOfPlayers.length > 0 && (
+                    <div 
+                      className="p-4"
+                      style={{ 
+                        backgroundColor: '#f5f0e6',
+                        border: '3px solid black',
+                      }}
+                    >
+                      <h4 className="text-xs font-black text-theme uppercase mb-2 flex items-center gap-2">
+                        <Music className="w-3 h-3" /> Shades Of
+                      </h4>
+                      <div className="flex flex-col gap-2">
+                        {shadesOfPlayers.map((player) => (
+                          <div 
+                            key={player}
+                            className="text-center text-lg font-black text-theme"
+                          >
+                            {player}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
         
         {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-6">
@@ -1480,6 +1491,7 @@ export function ReviewPage({ onSaveBoard, savedBoards = [], currentSavedBoardId,
           </div>
         </div>
       )}
+      
     </div>
   );
 }
